@@ -427,6 +427,13 @@ FUNCTION_PASS_WITH_PARAMS("msan",
                            },
                           parseMSanPassOptions,
                           "recover;kernel;eager-checks;track-origins=N")
+FUNCTION_PASS_WITH_PARAMS("odef",
+                          "OverflowDefensePass",
+                           [](OverflowDefenseOptions Opts) {
+                             return OverflowDefensePass(Opts);
+                           },
+                          parseOdefPassOptions,
+                          "recover;kernel")
 FUNCTION_PASS_WITH_PARAMS("simplifycfg",
                           "SimplifyCFGPass",
                            [](SimplifyCFGOptions Opts) {

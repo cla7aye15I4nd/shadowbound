@@ -67,6 +67,12 @@ SANITIZER("memory", Memory)
 // Kernel MemorySanitizer (KMSAN)
 SANITIZER("kernel-memory", KernelMemory)
 
+// OverflowDefense
+SANITIZER("overflow-defense", OverflowDefense)
+
+// Kernel OverflowDefense (KOD)
+SANITIZER("kernel-overflow-defense", KernelOverflowDefense)
+
 // libFuzzer
 SANITIZER("fuzzer", Fuzzer)
 
