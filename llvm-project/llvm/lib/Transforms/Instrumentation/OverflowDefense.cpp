@@ -47,8 +47,8 @@ private:
 
   bool filterToInstrument(Function &F, Instruction *I);
   bool NeverEscaped(Instruction *I);
-  bool NeverEscapedInternal(Instruction *I,
-                            SmallPtrSet<Instruction *, 16> &Visited);
+  bool NeverEscapedImpl(Instruction *I,
+                        SmallPtrSet<Instruction *, 16> &Visited);
   bool isShrinkBitCast(Instruction *I);
   bool isSafeFieldAccess(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
@@ -63,6 +63,12 @@ private:
   dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                            PostDominatorTree &PDT, ScalarEvolution &SE);
   void instrumentSubFieldAccess(Function &F, ScalarEvolution &SE);
+  void instrumentBitCast(Function &F);
+  void instrumentGep(Function &F);
+
+  Value *getSource(Instruction *I);
+  Value *getSourceImpl(Value *V);
+  bool getPhiSource(Value *V, Value *&Src, SmallPtrSet<Value *, 16> &Visited);
 
   bool Kernel;
   bool Recover;
@@ -71,6 +77,8 @@ private:
   SmallVector<BitCastInst *, 16> BcToInstrument;
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
+
+  DenseMap<Value *, Value *> SourceCache;
 
   const DataLayout *DL;
 
@@ -196,6 +204,8 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   // Instrument subfield access
   instrumentSubFieldAccess(F, SE);
+  instrumentBitCast(F);
+  instrumentGep(F);
 
   return false;
 }
@@ -237,10 +247,10 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I) {
 
 bool OverflowDefense::NeverEscaped(Instruction *I) {
   SmallPtrSet<Instruction *, 16> Visited;
-  return NeverEscapedInternal(I, Visited);
+  return NeverEscapedImpl(I, Visited);
 }
 
-bool OverflowDefense::NeverEscapedInternal(
+bool OverflowDefense::NeverEscapedImpl(
     Instruction *I, SmallPtrSet<Instruction *, 16> &Visited) {
   if (Visited.count(I))
     return true;
@@ -252,7 +262,7 @@ bool OverflowDefense::NeverEscapedInternal(
       if (isEscapeInstruction(UI))
         return false;
 
-      if (!NeverEscapedInternal(UI, Visited))
+      if (!NeverEscapedImpl(UI, Visited))
         return false;
     } else {
       // TODO: handle non-instruction user
@@ -333,6 +343,7 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument =
       dependencyOptimizeForGep(F, DT, PDT, SE);
 
+  // TODO: optimize for subfield access
   BcToInstrument.swap(NewBcToInstrument);
   GepToInstrument.swap(NewGepToInstrument);
 }
@@ -440,4 +451,99 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
   }
 
   return NewGepToInstrument;
+}
+
+Value *OverflowDefense::getSource(Instruction *I) {
+  if (SourceCache.count(I))
+    return SourceCache[I];
+
+  return SourceCache[I] = getSourceImpl(I);
+}
+
+Value *OverflowDefense::getSourceImpl(Value *V) {
+  if (SourceCache.count(V))
+    return SourceCache[V];
+
+  if (auto *BC = dyn_cast<BitCastInst>(V))
+    return SourceCache[V] = getSourceImpl(BC->getOperand(0));
+
+  if (auto *GEP = dyn_cast<GetElementPtrInst>(V))
+    return SourceCache[V] = getSourceImpl(GEP->getPointerOperand());
+
+  if (auto *GEPO = dyn_cast<GEPOperator>(V))
+    return SourceCache[V] = getSourceImpl(GEPO->getPointerOperand());
+
+  if (auto *BCO = dyn_cast<BitCastOperator>(V))
+    return SourceCache[V] = getSourceImpl(BCO->getOperand(0));
+
+  if (auto *Phi = dyn_cast<PHINode>(V)) {
+    Value *Source = nullptr;
+    SmallPtrSet<Value *, 16> Visited;
+    if (getPhiSource(Phi, Source, Visited))
+      return SourceCache[V] = Source;
+    return SourceCache[V] = Phi;
+  }
+
+  return nullptr;
+}
+
+bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
+                                   SmallPtrSet<Value *, 16> &Visited) {
+  if (Visited.count(V))
+    return true;
+  Visited.insert(V);
+  if (PHINode *Phi = dyn_cast<PHINode>(V)) {
+    for (size_t i = 0; i < Phi->getNumIncomingValues(); ++i) {
+      if (!getPhiSource(Phi->getIncomingValue(i), Src, Visited))
+        return false;
+    }
+    return true;
+  }
+  if (GetElementPtrInst *GEP = dyn_cast<GetElementPtrInst>(V)) {
+    return getPhiSource(GEP->getPointerOperand(), Src, Visited);
+  }
+  if (BitCastInst *BC = dyn_cast<BitCastInst>(V)) {
+    return getPhiSource(BC->getOperand(0), Src, Visited);
+  }
+  if (GEPOperator *GEPO = dyn_cast<GEPOperator>(V)) {
+    return getPhiSource(GEPO->getPointerOperand(), Src, Visited);
+  }
+
+  if (Src == nullptr) {
+    Src = V;
+    return true;
+  }
+  return Src == V;
+}
+
+void OverflowDefense::instrumentBitCast(Function &F) {
+  // Instrument bitcast
+  // ShadowAddr = Shadow(BC);
+  // BackSize = *(int32_t *)ShadowAddr;
+  // if (BackSize < TypeSze(BC))
+  //   report_overflow();
+
+  for (auto &I : BcToInstrument) {
+    // TODO: instrument bitcast
+  }
+}
+
+void OverflowDefense::instrumentGep(Function &F) {
+  // Instrument gep
+  // ShadowAddr = Shadow(GEP);
+  // Packed = *(int32_t *)ShadowAddr;
+  // FrontSize = Packed & 0xffffffff;
+  // BackSize = Packed >> 32;
+  // ChunkStart = Addr - FrontSize;
+  // ChunkEnd = Addr + BackSize;
+  // if (ChunkStart < Addr && Addr < ChunkEnd)
+  //  report_overflow();
+
+  DenseMap<Value *, SmallVector<GetElementPtrInst *, 16>> SourceMap;
+  for (auto &I : GepToInstrument) {
+    Value *Source = getSource(I);
+    SourceMap[Source].push_back(I);
+  }
+
+  // TODO: instrument gep
 }
