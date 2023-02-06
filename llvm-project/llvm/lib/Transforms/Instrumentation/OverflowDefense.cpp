@@ -2,12 +2,17 @@
 //------------===//
 
 #include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/Analysis/ScalarEvolution.h"
+#include "llvm/IR/Constant.h"
 #include "llvm/IR/Instructions.h"
+#include "llvm/IR/Operator.h"
 #include "llvm/Support/CommandLine.h"
 
 using namespace llvm;
 
 #define DEBUG_TYPE "odef"
+
+static const int kReservedBytes = 8;
 
 static cl::opt<bool>
     ClEnableKodef("odef-kernel",
@@ -32,7 +37,7 @@ public:
   OverflowDefense(const OverflowDefense &) = delete;
   OverflowDefense &operator=(const OverflowDefense &) = delete;
 
-  bool sanitizeFunction(Function &F);
+  bool sanitizeFunction(Function &F, FunctionAnalysisManager &FAM);
 
 private:
   void initializeModule(Module &M);
@@ -43,6 +48,9 @@ private:
   bool NeverEscapedInternal(Instruction *I,
                             SmallPtrSet<Instruction *, 16> &Visited);
   bool isShrinkBitCast(Instruction *I);
+  bool isSafeFieldAccess(Instruction *I);
+
+  void instrumentSubFieldAccess(Function &F, ScalarEvolution &SE);
 
   bool Kernel;
   bool Recover;
@@ -82,6 +90,40 @@ bool isUnionType(Type *Ty) {
   return false;
 }
 
+bool isZeroAccessGep(Instruction *I) {
+  if (auto *Gep = dyn_cast<GetElementPtrInst>(I)) {
+    for (auto &Op : Gep->indices()) {
+      if (auto *C = dyn_cast<ConstantInt>(&Op)) {
+        if (0 != C->getSExtValue())
+          return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+bool isVirtualTableGep(Instruction *I) {
+  // TODO: check the condition of virtual table access is correct
+  if (auto *Gep = dyn_cast<GetElementPtrInst>(I)) {
+    if (auto *pty = dyn_cast<PointerType>(
+            Gep->getPointerOperand()->getType()->getPointerElementType())) {
+      if (auto *fty = dyn_cast<FunctionType>(pty->getPointerElementType())) {
+        if (fty->getNumParams() >= 1) {
+          if (auto *fpty = dyn_cast<PointerType>(fty->getParamType(0))) {
+            if (fpty->getPointerElementType()->isStructTy()) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  return false;
+}
+
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
   return (Opt.getNumOccurrences() > 0) ? Opt : Default;
 }
@@ -94,7 +136,7 @@ OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover)
 PreservedAnalyses OverflowDefensePass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
   OverflowDefense Odef(*F.getParent(), Options);
-  if (Odef.sanitizeFunction(F))
+  if (Odef.sanitizeFunction(F, FAM))
     return PreservedAnalyses::none();
   return PreservedAnalyses::all();
 }
@@ -106,8 +148,14 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
 
 void OverflowDefense::initializeModule(Module &M) { DL = &M.getDataLayout(); }
 
-bool OverflowDefense::sanitizeFunction(Function &F) {
+bool OverflowDefense::sanitizeFunction(Function &F, FunctionAnalysisManager &AM) {
+  auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
+
+  // Collect all instructions to instrument
   collectToInstrument(F);
+
+  // Instrument subfield access
+  instrumentSubFieldAccess(F, SE);
 
   return false;
 }
@@ -134,6 +182,12 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I) {
     return true;
 
   if (isShrinkBitCast(I))
+    return true;
+
+  if (isZeroAccessGep(I))
+    return true;
+
+  if (isVirtualTableGep(I))
     return true;
 
   return false;
@@ -174,6 +228,9 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
     Type *srcTy = BC->getSrcTy()->getPointerElementType();
     Type *dstTy = BC->getDestTy()->getPointerElementType();
 
+    if (isUnionType(srcTy) || isUnionType(dstTy))
+      return false;
+
     if (!srcTy->isSized() || !dstTy->isSized())
       return false;
 
@@ -184,4 +241,47 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
   }
 
   return false;
+}
+
+void OverflowDefense::instrumentSubFieldAccess(Function &F,
+                                               ScalarEvolution &SE) {
+  for (auto *Gep : GepToInstrument) {
+    if (StructType *STy = dyn_cast<StructType>(
+            Gep->getSourceElementType()->getPointerElementType())) {
+      if (!isUnionType(STy)) {
+        bool isFirstField = true;
+        Type *Ty = STy;
+        for (auto &Op : Gep->indices()) {
+          if (isFirstField) {
+            isFirstField = false;
+            continue;
+          }
+
+          auto value = Op.get();
+
+          // determine the type of value is int32 or int64
+          if (value->getType()->isIntegerTy(32)) {
+            assert(Ty->isStructTy());
+            assert(isa<ConstantInt>(value));
+            assert(cast<ConstantInt>(value)->getZExtValue() <
+                   STy->getNumElements());
+
+            Ty = cast<StructType>(Ty)->getElementType(
+                cast<ConstantInt>(value)->getZExtValue());
+          } else {
+            assert(value->getType()->isIntegerTy(64));
+            assert(Ty->isArrayTy());
+
+            auto Aty = cast<ArrayType>(Ty);
+            if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
+                Aty->getNumElements()) {
+              // TODO: Instrument a subfield access checking
+            }
+
+            Ty = Aty->getArrayElementType();
+          }
+        }
+      }
+    }
+  }
 }
