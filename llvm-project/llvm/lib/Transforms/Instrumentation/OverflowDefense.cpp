@@ -27,6 +27,13 @@ static cl::opt<bool> ClKeepGoing("odef-keep-going",
 
 namespace {
 
+enum AddrLoc {
+  kAddrLocStack = 0,
+  kAddrLocGlobal,
+  kAddrLocAny,
+  kAddrLocUnknown,
+};
+
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
@@ -70,6 +77,10 @@ private:
   Value *getSourceImpl(Value *V);
   bool getPhiSource(Value *V, Value *&Src, SmallPtrSet<Value *, 16> &Visited);
 
+  AddrLoc getLocation(Instruction *I);
+  void getLocationImpl(Value *V, AddrLoc &Loc,
+                       SmallPtrSet<Value *, 16> &Visited);
+
   bool Kernel;
   bool Recover;
 
@@ -79,6 +90,7 @@ private:
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
   DenseMap<Value *, Value *> SourceCache;
+  DenseMap<Value *, AddrLoc> LocationCache;
 
   const DataLayout *DL;
 
@@ -514,6 +526,49 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
     return true;
   }
   return Src == V;
+}
+
+AddrLoc OverflowDefense::getLocation(Instruction *I) {
+  if (LocationCache.count(I))
+    return LocationCache[I];
+
+  AddrLoc AL = AddrLoc::kAddrLocUnknown;
+  SmallPtrSet<Value *, 16> Visited;
+  getLocationImpl(I, AL, Visited);
+
+  assert(AL != AddrLoc::kAddrLocUnknown);
+  return LocationCache[I] = AL;
+}
+
+void OverflowDefense::getLocationImpl(Value *V, AddrLoc &AL,
+                                      SmallPtrSet<Value *, 16> &Visited) {
+
+  Value *S = getSourceImpl(V);
+  if (Visited.count(S))
+    return;
+  Visited.insert(S);
+
+  AddrLoc _AL = AddrLoc::kAddrLocUnknown;
+
+  if (isa<GlobalVariable>(S))
+    _AL = AddrLoc::kAddrLocGlobal;
+  else if (isa<AllocaInst>(S))
+    _AL = AddrLoc::kAddrLocStack;
+  else if (auto Phi = dyn_cast<PHINode>(S)) {
+    for (size_t i = 0; i < Phi->getNumIncomingValues(); ++i) {
+      getLocationImpl(Phi->getIncomingValue(i), _AL, Visited);
+      if (_AL == kAddrLocAny)
+        break;
+    }
+  } else {
+    // TODO: Sometimes S is Constant, which is not handled here.
+    _AL = AddrLoc::kAddrLocAny;
+  }
+
+  if (AL == AddrLoc::kAddrLocUnknown)
+    AL = _AL;
+  else if (AL != _AL)
+    AL = AddrLoc::kAddrLocAny;
 }
 
 void OverflowDefense::instrumentBitCast(Function &F) {
