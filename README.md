@@ -8,3 +8,4 @@ make -j`nproc`
 
 ## Reference
 - https://llvm.org/docs/OpaquePointers.html
+- https://llvm.org/docs/Vectorizers.html
