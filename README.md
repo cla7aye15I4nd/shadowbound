@@ -18,7 +18,10 @@ LLVM has two type of pointer computing instructions, both of them may result in 
 - `bitcast`: BitCast can transfer a value of one type to a value of another type. However, if the target type is not large enough to contain the original value, a truncation will occur. This can lead to an overflow.
 
 ### Heap Overflow Checking
-Shadow memory is used to store the distance of each byte to its chunk head and tail, with every 8 bytes stored once to save memory. 
+The shadow memory serves to store the distance of each 8-byte block of memory from the beginning and end of its corresponding chunk. The shadow memory is divided into two 4-byte segments, one for the distance to the start of the chunk and the other for the distance to the end, enabling the system to perform a single comparison for checking both the start and end of the chunk for out-of-bounds access.
+
+In a previous experiment, we discovered that most chunks are less than 4 GB in size, with the largest chunk being 8 GB ($2^{33}$ bytes). In the event that the program allocates an extremely large chunk, we can use the shadow memory to store the chunk size divided by 8, as every chunk size is aligned to 8 bytes
+
 Then for every GEP instruction, we insert following checking code:
 ```c
 // %result = getelementptr %pointer, ...
