@@ -70,6 +70,7 @@ private:
   dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                            PostDominatorTree &PDT, ScalarEvolution &SE);
   void instrumentSubFieldAccess(Function &F, ScalarEvolution &SE);
+  void instrumentGepAndBc(Function &F);
   void instrumentBitCast(Function &F);
   void instrumentGep(Function &F);
 
@@ -88,6 +89,7 @@ private:
   SmallVector<BitCastInst *, 16> BcToInstrument;
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
+  SmallVector<AllocaInst *, 16> AllocaToReplace;
 
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Value *, AddrLoc> LocationCache;
@@ -215,9 +217,12 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   dependencyOptimize(F, DT, PDT, SE);
 
   // Instrument subfield access
+  // TODO: instrument subfield access do not require *any* runtime support, but
+  // we still need to know how much they cost
   instrumentSubFieldAccess(F, SE);
-  instrumentBitCast(F);
-  instrumentGep(F);
+
+  // Instrument GEP and BC
+  instrumentGepAndBc(F);
 
   return false;
 }
@@ -571,6 +576,20 @@ void OverflowDefense::getLocationImpl(Value *V, AddrLoc &AL,
     AL = AddrLoc::kAddrLocAny;
 }
 
+void OverflowDefense::instrumentGepAndBc(Function &F) {
+  DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
+
+  for (auto &I : GepToInstrument) {
+    Value *Source = getSource(I);
+    SourceMap[Source].push_back(I);
+  }
+
+  for (auto &I : BcToInstrument) {
+    Value *Source = getSource(I);
+    SourceMap[Source].push_back(I);
+  }
+}
+
 void OverflowDefense::instrumentBitCast(Function &F) {
   // Instrument bitcast
   // ShadowAddr = Shadow(BC);
@@ -593,12 +612,6 @@ void OverflowDefense::instrumentGep(Function &F) {
   // ChunkEnd = Addr + BackSize;
   // if (ChunkStart < Addr && Addr < ChunkEnd)
   //  report_overflow();
-
-  DenseMap<Value *, SmallVector<GetElementPtrInst *, 16>> SourceMap;
-  for (auto &I : GepToInstrument) {
-    Value *Source = getSource(I);
-    SourceMap[Source].push_back(I);
-  }
 
   // TODO: instrument gep
 }
