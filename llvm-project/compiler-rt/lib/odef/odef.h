@@ -3,6 +3,9 @@
 
 #include "sanitizer_common/sanitizer_flags.h"
 #include "sanitizer_common/sanitizer_internal_defs.h"
+
+#include "odef_interface_internal.h"
+
 using namespace __sanitizer;
 
 struct MappingDesc {
@@ -44,6 +47,10 @@ addr_is_type(uptr addr, MappingDesc::Type mapping_type) {
 
 namespace __odef {
 
+void InitializeInterceptors();
+void OdefAllocatorInit();
+bool InitShadow();
+
 void *odef_malloc(uptr size);
 void *odef_calloc(uptr nmemb, uptr size);
 void *odef_realloc(void *ptr, uptr size);
@@ -53,6 +60,9 @@ void *odef_pvalloc(uptr size);
 void *odef_aligned_alloc(uptr alignment, uptr size);
 void *odef_memalign(uptr alignment, uptr size);
 int odef_posix_memalign(void **memptr, uptr alignment, uptr size);
+
+void OdefTSDInit(void (*destructor)(void *tsd));
+void OdefTSDDtor(void *tsd);
 
 } // namespace __odef
 

@@ -4,6 +4,7 @@ set(ODEF_RTL_SOURCES
   odef.cpp
   odef_allocator.cpp
   odef_thread.cpp
+  odef_linux.cpp
   )
 
 set(ODEF_RTL_CXX_SOURCES
@@ -14,6 +15,7 @@ set(ODEF_RTL_HEADERS
   odef.h
   odef_allocator.h
   odef_interceptors.h
+  odef_interface_internal.h
   odef_thread.h
   )
 
