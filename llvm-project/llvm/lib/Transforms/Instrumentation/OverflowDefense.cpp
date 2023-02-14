@@ -206,8 +206,8 @@ OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover)
 PreservedAnalyses OverflowDefensePass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
   OverflowDefense Odef(*F.getParent(), Options);
-  // if (Odef.sanitizeFunction(F, FAM))
-  //   return PreservedAnalyses::none();
+  if (Odef.sanitizeFunction(F, FAM))
+    return PreservedAnalyses::none();
   return PreservedAnalyses::all();
 }
 
@@ -241,7 +241,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   instrumentSubFieldAccess(F, SE);
 
   // Instrument GEP and BC
-  instrumentGepAndBc(F);
+  // instrumentGepAndBc(F);
 
   return false;
 }
@@ -334,7 +334,7 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
 void OverflowDefense::instrumentSubFieldAccess(Function &F,
                                                ScalarEvolution &SE) {
   for (auto *Gep : SubFieldToInstrument) {
-    Type *Ty = Gep->getSourceElementType()->getPointerElementType();
+    Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
     if (isFixedSizeType(Ty)) {
       bool isFirstField = true;
       for (auto &Op : Gep->indices()) {
