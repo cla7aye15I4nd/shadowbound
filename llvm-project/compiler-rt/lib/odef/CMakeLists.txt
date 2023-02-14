@@ -41,9 +41,6 @@ foreach(arch ${ODEF_SUPPORTED_ARCH})
     STATIC
 		ARCHS ${arch}
     SOURCES ${ODEF_RTL_CXX_SOURCES}
-            $<TARGET_OBJECTS:RTInterception.${arch}>
-            $<TARGET_OBJECTS:RTSanitizerCommon.${arch}>
-            $<TARGET_OBJECTS:RTSanitizerCommonLibc.${arch}>
     ADDITIONAL_HEADERS ${ODEF_RTL_HEADERS}
     CFLAGS ${ODEF_RTL_CFLAGS}
     PARENT_TARGET odef)
