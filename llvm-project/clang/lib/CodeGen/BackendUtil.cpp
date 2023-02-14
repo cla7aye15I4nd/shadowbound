@@ -72,6 +72,7 @@
 #include "llvm/Transforms/Instrumentation/InstrProfiling.h"
 #include "llvm/Transforms/Instrumentation/MemProfiler.h"
 #include "llvm/Transforms/Instrumentation/MemorySanitizer.h"
+#include "llvm/Transforms/Instrumentation/OverflowDefense.h"
 #include "llvm/Transforms/Instrumentation/SanitizerCoverage.h"
 #include "llvm/Transforms/Instrumentation/ThreadSanitizer.h"
 #include "llvm/Transforms/ObjCARC.h"
@@ -145,7 +146,7 @@ class EmitAssemblyHelper {
   std::unique_ptr<llvm::ToolOutputFile> openOutputFile(StringRef Path) {
     std::error_code EC;
     auto F = std::make_unique<llvm::ToolOutputFile>(Path, EC,
-                                                     llvm::sys::fs::OF_None);
+                                                    llvm::sys::fs::OF_None);
     if (EC) {
       Diags.Report(diag::err_fe_unable_to_open_output) << Path << EC.message();
       F.reset();
@@ -193,7 +194,7 @@ public:
   void EmitAssembly(BackendAction Action,
                     std::unique_ptr<raw_pwrite_stream> OS);
 };
-}
+} // namespace
 
 static SanitizerCoverageOptions
 getSancovOptsFromCGOpts(const CodeGenOptions &CGOpts) {
@@ -253,13 +254,13 @@ static TargetLibraryInfoImpl *createTLII(llvm::Triple &TargetTriple,
     TLII->addVectorizableFunctionsFromVecLib(TargetLibraryInfoImpl::Accelerate);
     break;
   case CodeGenOptions::LIBMVEC:
-    switch(TargetTriple.getArch()) {
-      default:
-        break;
-      case llvm::Triple::x86_64:
-        TLII->addVectorizableFunctionsFromVecLib
-                (TargetLibraryInfoImpl::LIBMVEC_X86);
-        break;
+    switch (TargetTriple.getArch()) {
+    default:
+      break;
+    case llvm::Triple::x86_64:
+      TLII->addVectorizableFunctionsFromVecLib(
+          TargetLibraryInfoImpl::LIBMVEC_X86);
+      break;
     }
     break;
   case CodeGenOptions::MASSV:
@@ -532,8 +533,7 @@ static void setCommandLineOpts(const CodeGenOptions &CodeGenOpts) {
   // FIXME: The command line parser below is not thread-safe and shares a global
   // state, so this call might crash or overwrite the options of another Clang
   // instance in the same process.
-  llvm::cl::ParseCommandLineOptions(BackendArgs.size() - 1,
-                                    BackendArgs.data());
+  llvm::cl::ParseCommandLineOptions(BackendArgs.size() - 1, BackendArgs.data());
 }
 
 void EmitAssemblyHelper::CreateTargetMachine(bool MustCreateTM) {
@@ -659,6 +659,23 @@ static void addSanitizers(const Triple &TargetTriple,
     };
     MSanPass(SanitizerKind::Memory, false);
     MSanPass(SanitizerKind::KernelMemory, true);
+
+    auto ODefPass = [&](SanitizerMask Mask, bool CompileKernel) {
+      if (LangOpts.Sanitize.has(Mask)) {
+        bool Recover = CodeGenOpts.SanitizeRecover.has(Mask);
+        OverflowDefenseOptions Opts(Recover, CompileKernel);
+
+        MPM.addPass(ModuleOverflowDefensePass(Opts));
+        FunctionPassManager FPM;
+        FPM.addPass(OverflowDefensePass(Opts));
+        if (Level != OptimizationLevel::O0) {
+          FPM.addPass(EarlyCSEPass());
+        }
+        MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
+      }
+    };
+    ODefPass(SanitizerKind::OverflowDefense, false);
+    ODefPass(SanitizerKind::KernelOverflowDefense, true);
 
     if (LangOpts.Sanitize.has(SanitizerKind::Thread)) {
       MPM.addPass(ModuleThreadSanitizerPass());
@@ -838,12 +855,11 @@ void EmitAssemblyHelper::RunOptimizationPipeline(
     bool IsLTO = CodeGenOpts.PrepareForLTO;
 
     if (LangOpts.ObjCAutoRefCount) {
-      PB.registerPipelineStartEPCallback(
-          [](ModulePassManager &MPM, OptimizationLevel Level) {
-            if (Level != OptimizationLevel::O0)
-              MPM.addPass(
-                  createModuleToFunctionPassAdaptor(ObjCARCExpandPass()));
-          });
+      PB.registerPipelineStartEPCallback([](ModulePassManager &MPM,
+                                            OptimizationLevel Level) {
+        if (Level != OptimizationLevel::O0)
+          MPM.addPass(createModuleToFunctionPassAdaptor(ObjCARCExpandPass()));
+      });
       PB.registerPipelineEarlySimplificationEPCallback(
           [](ModulePassManager &MPM, OptimizationLevel Level) {
             if (Level != OptimizationLevel::O0)
@@ -1144,9 +1160,8 @@ void clang::EmitBackendOutput(DiagnosticsEngine &Diags,
                               const HeaderSearchOptions &HeaderOpts,
                               const CodeGenOptions &CGOpts,
                               const clang::TargetOptions &TOpts,
-                              const LangOptions &LOpts,
-                              StringRef TDesc, Module *M,
-                              BackendAction Action,
+                              const LangOptions &LOpts, StringRef TDesc,
+                              Module *M, BackendAction Action,
                               std::unique_ptr<raw_pwrite_stream> OS) {
 
   llvm::TimeTraceScope TimeScope("Backend");
@@ -1163,7 +1178,7 @@ void clang::EmitBackendOutput(DiagnosticsEngine &Diags,
                       .moveInto(CombinedIndex)) {
       logAllUnhandledErrors(std::move(E), errs(),
                             "Error loading index file '" +
-                            CGOpts.ThinLTOIndexFile + "': ");
+                                CGOpts.ThinLTOIndexFile + "': ");
       return;
     }
 

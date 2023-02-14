@@ -8,6 +8,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Operator.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
 
 using namespace llvm;
@@ -24,6 +25,9 @@ static cl::opt<bool>
 static cl::opt<bool> ClKeepGoing("odef-keep-going",
                                  cl::desc("keep going after reporting a error"),
                                  cl::Hidden, cl::init(false));
+
+const char kOdefModuleCtorName[] = "odef.module_ctor";
+const char kOdefInitName[] = "__odef_init";
 
 namespace {
 
@@ -178,6 +182,18 @@ bool isFixedSizeType(Type *Ty) {
   return false;
 }
 
+void insertModuleCtor(Module &M) {
+  getOrCreateSanitizerCtorAndInitFunctions(
+      M, kOdefModuleCtorName, kOdefInitName,
+      /*InitArgTypes=*/{},
+      /*InitArgs=*/{},
+      // This callback is invoked when the functions are created the first
+      // time. Hook them into the global ctors list in that case:
+      [&](Function *Ctor, FunctionCallee) {
+        appendToGlobalCtors(M, Ctor, 0, Ctor);
+      });
+}
+
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
   return (Opt.getNumOccurrences() > 0) ? Opt : Default;
 }
@@ -190,14 +206,17 @@ OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover)
 PreservedAnalyses OverflowDefensePass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
   OverflowDefense Odef(*F.getParent(), Options);
-  if (Odef.sanitizeFunction(F, FAM))
-    return PreservedAnalyses::none();
+  // if (Odef.sanitizeFunction(F, FAM))
+  //   return PreservedAnalyses::none();
   return PreservedAnalyses::all();
 }
 
 PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
                                                  ModuleAnalysisManager &AM) {
-  return PreservedAnalyses::all();
+  if (Options.Kernel)
+    return PreservedAnalyses::all();
+  insertModuleCtor(M);
+  return PreservedAnalyses::none();
 }
 
 void OverflowDefense::initializeModule(Module &M) {
