@@ -338,7 +338,7 @@ void OverflowDefense::instrumentSubFieldAccess(Function &F,
     if (isFixedSizeType(Ty)) {
       bool isFirstField = true;
       for (auto &Op : Gep->indices()) {
-        if (isFirstField && Ty->isStructTy()) {
+        if (isFirstField) {
           isFirstField = false;
           continue;
         }
