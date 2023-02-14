@@ -1,5 +1,6 @@
 #include "odef.h"
 #include "odef_thread.h"
+#include "odef_interface_internal.h"
 
 #include <elf.h>
 #include <link.h>
@@ -47,12 +48,6 @@ static bool ProtectMemoryRange(uptr beg, uptr size, const char *name) {
 }
 
 bool InitShadow() {
-  if (!MEM_IS_APP(&__odef_init)) {
-    Printf("FATAL: Code %p is out of application range. Non-PIE build?\n",
-           reinterpret_cast<void *>(&__odef_init));
-    return false;
-  }
-
   const uptr maxVirtualAddress = GetMaxUserVirtualAddress();
 
   for (unsigned i = 0; i < kMemoryLayoutSize; ++i) {

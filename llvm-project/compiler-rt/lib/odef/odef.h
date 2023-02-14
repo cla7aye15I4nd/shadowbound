@@ -18,7 +18,8 @@ struct MappingDesc {
 const MappingDesc kMemoryLayout[] = {
     {0x000000000000ULL, 0x200000000000ULL, MappingDesc::INVALID, "invalid-1"},
     {0x200000000000ULL, 0x400000000000ULL, MappingDesc::SHADOW, "shadow"},
-    {0x400000000000ULL, 0x600000000000ULL, MappingDesc::INVALID, "invalid-2"},
+    // FIXME: This is a hack to work around the fact that we can't map the code section
+    // {0x400000000000ULL, 0x600000000000ULL, MappingDesc::INVALID, "invalid-2"},
     {0x600000000000ULL, 0x800000000000ULL, MappingDesc::APP, "app"}};
 
 #define MEM_TO_SHADOW(mem) (((uptr)(mem)) & ~0x400000000007ULL)

@@ -6,6 +6,7 @@
 #include "sanitizer_common/sanitizer_allocator.h"
 #include "sanitizer_common/sanitizer_allocator_checks.h"
 #include "sanitizer_common/sanitizer_errno.h"
+#include "sanitizer_common/sanitizer_libc.h"
 
 namespace __odef {
 
@@ -96,7 +97,7 @@ static void *OdefReallocate(void *old_p, uptr new_size, uptr alignment) {
   uptr memcpy_size = Min(new_size, old_size);
   void *new_p = OdefAllocate(new_size, alignment);
   if (new_p) {
-    REAL(memcpy)(new_p, old_p, memcpy_size);
+    internal_memcpy(new_p, old_p, memcpy_size);
     OdefDeallocate(old_p);
   }
   return new_p;
@@ -106,7 +107,7 @@ static void *OdefCalloc(uptr nmemb, uptr size) {
   uptr bytes = nmemb * size;
   void *p = OdefAllocate(bytes, sizeof(u64));
   if (p)
-    REAL(memset)(p, 0, bytes);
+    internal_memset(p, 0, bytes);
   return p;
 }
 

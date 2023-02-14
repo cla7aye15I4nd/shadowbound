@@ -4,6 +4,7 @@ set(ODEF_RTL_SOURCES
   odef.cpp
   odef_allocator.cpp
   odef_thread.cpp
+  odef_interceptors.cpp
   odef_linux.cpp
   )
 
@@ -20,6 +21,7 @@ set(ODEF_RTL_HEADERS
   )
 
 set(ODEF_RTL_CFLAGS ${SANITIZER_COMMON_CFLAGS})
+append_rtti_flag(OFF MSAN_RTL_CFLAGS)
 append_list_if(COMPILER_RT_HAS_FPIE_FLAG -fPIE ODEF_CFLAGS)
 
 add_compiler_rt_component(odef)

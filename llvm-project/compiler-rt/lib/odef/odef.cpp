@@ -12,6 +12,10 @@
 
 namespace __odef {
 
+} // namespace __odef
+
+using namespace __odef;
+
 int odef_inited = 0;
 bool odef_init_is_running;
 
@@ -37,5 +41,3 @@ void __odef_init() {
   odef_init_is_running = 0;
   odef_inited = 1;
 }
-
-} // namespace __odef
