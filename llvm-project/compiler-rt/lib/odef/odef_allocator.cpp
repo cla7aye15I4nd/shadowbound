@@ -1,11 +1,11 @@
-#include "sanitizer_common/sanitizer_allocator.h"
-#include "sanitizer_common/sanitizer_allocator_checks.h"
-#include "sanitizer_common/sanitizer_errno.h"
-#include "sanitizer_common/sanitizer_libc.h"
 #include "odef_allocator.h"
 #include "odef.h"
 #include "odef_interceptors.h"
 #include "odef_thread.h"
+#include "sanitizer_common/sanitizer_allocator.h"
+#include "sanitizer_common/sanitizer_allocator_checks.h"
+#include "sanitizer_common/sanitizer_errno.h"
+#include "sanitizer_common/sanitizer_libc.h"
 namespace __odef {
 
 struct OdefMapUnmapCallback {
@@ -141,6 +141,11 @@ void *odef_aligned_alloc(uptr alignment, uptr size) {
 
 void *odef_memalign(uptr alignment, uptr size) {
   return OdefAllocate(size, alignment);
+}
+
+uptr odef_allocated_size(void *p) {
+  // FIXME: May me we need return requested size instead of actually allocated
+  return allocator.GetActuallyAllocatedSize(p);
 }
 
 int odef_posix_memalign(void **memptr, uptr alignment, uptr size) {

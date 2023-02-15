@@ -65,6 +65,7 @@ void *odef_valloc(uptr size);
 void *odef_pvalloc(uptr size);
 void *odef_aligned_alloc(uptr alignment, uptr size);
 void *odef_memalign(uptr alignment, uptr size);
+uptr odef_allocated_size(void *ptr);
 int odef_posix_memalign(void **memptr, uptr alignment, uptr size);
 
 void OdefTSDInit(void (*destructor)(void *tsd));

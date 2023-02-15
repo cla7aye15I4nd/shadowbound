@@ -10,6 +10,8 @@
 
 using namespace __odef;
 
+DECLARE_REAL(void *, memset, void *dest, int c, uptr n)
+
 static THREADLOCAL int in_interceptor_scope;
 
 struct InterceptorScope {
@@ -96,6 +98,22 @@ INTERCEPTOR(void *, malloc, SIZE_T size) {
   if (DlsymAlloc::Use())
     return DlsymAlloc::Allocate(size);
   return odef_malloc(size);
+}
+
+INTERCEPTOR(void, mallinfo, __sanitizer_struct_mallinfo *sret) {
+  REAL(memset)(sret, 0, sizeof(*sret));
+}
+
+INTERCEPTOR(int, mallopt, int cmd, int value) {
+  return 0;
+}
+
+INTERCEPTOR(void, malloc_stats, void) {
+  // FIXME: implement, but don't call REAL(malloc_stats)!
+}
+
+INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
+  return odef_allocated_size(ptr);
 }
 
 #define ODEF_INTERCEPT_FUNC(name)                                              \
@@ -190,6 +208,10 @@ void InitializeInterceptors() {
   INTERCEPT_FUNCTION(calloc);
   INTERCEPT_FUNCTION(realloc);
   INTERCEPT_FUNCTION(reallocarray);
+  INTERCEPT_FUNCTION(mallopt);
+  INTERCEPT_FUNCTION(malloc_stats);
+  INTERCEPT_FUNCTION(mallinfo);
+  INTERCEPT_FUNCTION(malloc_usable_size);
 
   inited = 1;
 }
