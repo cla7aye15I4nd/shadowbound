@@ -48,9 +48,14 @@ addr_is_type(uptr addr, MappingDesc::Type mapping_type) {
 
 namespace __odef {
 
+extern bool odef_inited;
+extern bool odef_init_is_running;
+
 void InitializeInterceptors();
 void OdefAllocatorInit();
 bool InitShadow();
+
+void OdefDeallocate(void *ptr);
 
 void *odef_malloc(uptr size);
 void *odef_calloc(uptr nmemb, uptr size);

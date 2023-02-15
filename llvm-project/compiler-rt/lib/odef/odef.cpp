@@ -12,12 +12,12 @@
 
 namespace __odef {
 
+bool odef_inited = false;
+bool odef_init_is_running = false;
+
 } // namespace __odef
 
 using namespace __odef;
-
-int odef_inited = 0;
-bool odef_init_is_running;
 
 void __odef_init() {
   if (odef_inited)
@@ -25,6 +25,8 @@ void __odef_init() {
 
   if (odef_init_is_running)
     return;
+
+  odef_init_is_running = true;
 
   InitializeInterceptors();
 
@@ -38,6 +40,6 @@ void __odef_init() {
   SetCurrentThread(main_thread);
   main_thread->Init();
 
-  odef_init_is_running = 0;
-  odef_inited = 1;
+  odef_init_is_running = false;
+  odef_inited = true;
 }

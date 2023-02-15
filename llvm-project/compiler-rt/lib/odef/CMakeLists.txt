@@ -34,6 +34,7 @@ foreach(arch ${ODEF_SUPPORTED_ARCH})
             $<TARGET_OBJECTS:RTInterception.${arch}>
             $<TARGET_OBJECTS:RTSanitizerCommon.${arch}>
             $<TARGET_OBJECTS:RTSanitizerCommonLibc.${arch}>
+            $<TARGET_OBJECTS:RTSanitizerCommonSymbolizer.${arch}>
     ADDITIONAL_HEADERS ${ODEF_RTL_HEADERS}
 		CFLAGS ${ODEF_RTL_CFLAGS}
 		PARENT_TARGET odef)
