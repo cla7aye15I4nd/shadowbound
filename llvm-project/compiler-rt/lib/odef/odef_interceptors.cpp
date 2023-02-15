@@ -10,14 +10,6 @@
 
 using namespace __odef;
 
-struct DlsymAlloc : public DlSymAllocator<DlsymAlloc> {
-  static bool UseImpl() { return !odef_inited; }
-};
-
-struct OdefInterceptorContext {
-  bool in_interceptor_scope;
-};
-
 static THREADLOCAL int in_interceptor_scope;
 
 struct InterceptorScope {
@@ -26,6 +18,14 @@ struct InterceptorScope {
 };
 
 bool IsInInterceptorScope() { return in_interceptor_scope; }
+
+struct DlsymAlloc : public DlSymAllocator<DlsymAlloc> {
+  static bool UseImpl() { return !odef_inited; }
+};
+
+struct OdefInterceptorContext {
+  bool in_interceptor_scope;
+};
 
 #define ENSURE_ODEF_INITED()                                                   \
   do {                                                                         \
@@ -74,6 +74,23 @@ INTERCEPTOR(void, cfree, void *ptr) {
     return DlsymAlloc::Free(ptr);
   OdefDeallocate(ptr);
 }
+
+INTERCEPTOR(void *, calloc, SIZE_T nmemb, SIZE_T size) {
+  if (DlsymAlloc::Use())
+    return DlsymAlloc::Callocate(nmemb, size);
+  return odef_calloc(nmemb, size);
+}
+
+INTERCEPTOR(void *, realloc, void *ptr, SIZE_T size) {
+  if (DlsymAlloc::Use() || DlsymAlloc::PointerIsMine(ptr))
+    return DlsymAlloc::Realloc(ptr, size);
+  return odef_realloc(ptr, size);
+}
+
+INTERCEPTOR(void *, reallocarray, void *ptr, SIZE_T nmemb, SIZE_T size) {
+  return odef_reallocarray(ptr, nmemb, size);
+}
+
 
 INTERCEPTOR(void *, malloc, SIZE_T size) {
   if (DlsymAlloc::Use())
@@ -170,6 +187,9 @@ void InitializeInterceptors() {
   INTERCEPT_FUNCTION(free);
   INTERCEPT_FUNCTION(cfree);
   INTERCEPT_FUNCTION(malloc);
+  INTERCEPT_FUNCTION(calloc);
+  INTERCEPT_FUNCTION(realloc);
+  INTERCEPT_FUNCTION(reallocarray);
 
   inited = 1;
 }

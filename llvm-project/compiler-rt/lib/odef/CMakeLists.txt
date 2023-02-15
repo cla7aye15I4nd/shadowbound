@@ -23,6 +23,7 @@ set(ODEF_RTL_HEADERS
 set(ODEF_RTL_CFLAGS ${SANITIZER_COMMON_CFLAGS})
 append_rtti_flag(OFF ODEF_RTL_CFLAGS)
 append_list_if(COMPILER_RT_HAS_FPIE_FLAG -fPIE ODEF_CFLAGS)
+append_list_if(COMPILER_RT_HAS_FFREESTANDING_FLAG -ffreestanding ODEF_RTL_CFLAGS)
 
 add_compiler_rt_component(odef)
 
