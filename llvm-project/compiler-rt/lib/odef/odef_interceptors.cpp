@@ -93,7 +93,6 @@ INTERCEPTOR(void *, reallocarray, void *ptr, SIZE_T nmemb, SIZE_T size) {
   return odef_reallocarray(ptr, nmemb, size);
 }
 
-
 INTERCEPTOR(void *, malloc, SIZE_T size) {
   if (DlsymAlloc::Use())
     return DlsymAlloc::Allocate(size);
@@ -104,9 +103,7 @@ INTERCEPTOR(void, mallinfo, __sanitizer_struct_mallinfo *sret) {
   REAL(memset)(sret, 0, sizeof(*sret));
 }
 
-INTERCEPTOR(int, mallopt, int cmd, int value) {
-  return 0;
-}
+INTERCEPTOR(int, mallopt, int cmd, int value) { return 0; }
 
 INTERCEPTOR(void, malloc_stats, void) {
   // FIXME: implement, but don't call REAL(malloc_stats)!
@@ -135,7 +132,7 @@ INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
               #name, ver, #name);                                              \
   } while (0)
 
-#define DO_NOTHING                                                             \
+#define PASS                                                             \
   do {                                                                         \
   } while (false)
 #define COMMON_INTERCEPT_FUNCTION(name) ODEF_INTERCEPT_FUNC(name)
@@ -143,11 +140,11 @@ INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
   ODEF_INTERCEPT_FUNC_VER(name, ver)
 #define COMMON_INTERCEPT_FUNCTION_VER_UNVERSIONED_FALLBACK(name, ver)          \
   ODEF_INTERCEPT_FUNC_VER_UNVERSIONED_FALLBACK(name, ver)
-#define COMMON_INTERCEPTOR_UNPOISON_PARAM(count) DO_NOTHING
-#define COMMON_INTERCEPTOR_WRITE_RANGE(ctx, ptr, size) DO_NOTHING
-#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size) DO_NOTHING
-#define COMMON_INTERCEPTOR_READ_RANGE(ctx, ptr, size) DO_NOTHING
-#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size) DO_NOTHING
+#define COMMON_INTERCEPTOR_UNPOISON_PARAM(count) PASS
+#define COMMON_INTERCEPTOR_WRITE_RANGE(ctx, ptr, size) PASS
+#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size) PASS
+#define COMMON_INTERCEPTOR_READ_RANGE(ctx, ptr, size) PASS
+#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size) PASS
 #define COMMON_INTERCEPTOR_ENTER(ctx, func, ...)                               \
   if (odef_init_is_running)                                                    \
     return REAL(func)(__VA_ARGS__);                                            \
@@ -156,14 +153,12 @@ INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
   ctx = (void *)&odef_ctx;                                                     \
   (void)ctx;                                                                   \
   InterceptorScope interceptor_scope;
-#define COMMON_INTERCEPTOR_DIR_ACQUIRE(ctx, path)                              \
-  do {                                                                         \
-  } while (false)
-#define COMMON_INTERCEPTOR_FD_ACQUIRE(ctx, fd) DO_NOTHING
-#define COMMON_INTERCEPTOR_FD_RELEASE(ctx, fd) DO_NOTHING
-#define COMMON_INTERCEPTOR_FD_SOCKET_ACCEPT(ctx, fd, newfd) DO_NOTHING
-#define COMMON_INTERCEPTOR_SET_THREAD_NAME(ctx, name) DO_NOTHING
-#define COMMON_INTERCEPTOR_SET_PTHREAD_NAME(ctx, thread, name) DO_NOTHING
+#define COMMON_INTERCEPTOR_DIR_ACQUIRE(ctx, path) PASS
+#define COMMON_INTERCEPTOR_FD_ACQUIRE(ctx, fd) PASS
+#define COMMON_INTERCEPTOR_FD_RELEASE(ctx, fd) PASS
+#define COMMON_INTERCEPTOR_FD_SOCKET_ACCEPT(ctx, fd, newfd) PASS
+#define COMMON_INTERCEPTOR_SET_THREAD_NAME(ctx, name) PASS
+#define COMMON_INTERCEPTOR_SET_PTHREAD_NAME(ctx, thread, name) PASS
 #define COMMON_INTERCEPTOR_BLOCK_REAL(name) REAL(name)
 #define COMMON_INTERCEPTOR_ON_EXIT(ctx) (0)
 
