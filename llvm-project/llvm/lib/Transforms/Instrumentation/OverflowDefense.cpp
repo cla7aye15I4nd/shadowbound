@@ -15,6 +15,15 @@ using namespace llvm;
 
 #define DEBUG_TYPE "odef"
 
+// Please use this macro instead of assert()
+#define ASSERT(X)                                                              \
+  do {                                                                         \
+    if (!(X)) {                                                                \
+      printf("Assertion failed: " #X "\n");                                    \
+      abort();                                                                 \
+    }                                                                          \
+  } while (0)
+
 static const int kReservedBytes = 8;
 
 static cl::opt<bool>
@@ -55,6 +64,7 @@ public:
 private:
   void initializeModule(Module &M);
   void collectToInstrument(Function &F);
+  void collectToReplace(Function &F);
 
   bool filterToInstrument(Function &F, Instruction *I);
   bool NeverEscaped(Instruction *I);
@@ -64,6 +74,9 @@ private:
   bool isSafeFieldAccess(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
+  bool isInterestingPointer(Function &F, Value *V);
+  bool isInterestingPointerImpl(Function &F, Value *V,
+                                SmallPtrSet<Value *, 16> &Visited);
 
   SmallVector<BitCastInst *, 16> dependencyOptimizeForBc(Function &F,
                                                          DominatorTree &DT,
@@ -77,6 +90,7 @@ private:
   void instrumentGepAndBc(Function &F);
   void instrumentBitCast(Function &F);
   void instrumentGep(Function &F);
+  void replaceAlloca(Function &F);
 
   Value *getSource(Instruction *I);
   Value *getSourceImpl(Value *V);
@@ -97,6 +111,7 @@ private:
 
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Value *, AddrLoc> LocationCache;
+  DenseMap<Value *, bool> InterestingPointerCache;
 
   const DataLayout *DL;
 
@@ -112,14 +127,15 @@ bool isEscapeInstruction(Instruction *I) {
 
   if (auto *CI = dyn_cast<CallInst>(I)) {
     Function *F = CI->getCalledFunction();
-    if (F != nullptr) {
-      for (auto &name : whitelist) {
-        if (F->getName().startswith(name))
-          return false;
-      }
-
+    if (F == nullptr)
       return true;
+
+    for (auto &name : whitelist) {
+      if (F->getName().startswith(name))
+        return false;
     }
+
+    return true;
   }
 
   return false;
@@ -232,6 +248,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   // Collect all instructions to instrument
   collectToInstrument(F);
+  collectToReplace(F);
 
   dependencyOptimize(F, DT, PDT, SE);
 
@@ -242,6 +259,9 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   // Instrument GEP and BC
   // instrumentGepAndBc(F);
+
+  // Replace alloca with malloc
+  replaceAlloca(F);
 
   return false;
 }
@@ -263,8 +283,66 @@ void OverflowDefense::collectToInstrument(Function &F) {
   }
 }
 
+void OverflowDefense::collectToReplace(Function &F) {
+  // Check all Alloca instructions
+
+  for (auto &BB : F)
+    for (auto &I : BB)
+      if (auto *Alloca = dyn_cast<AllocaInst>(&I))
+        if (isInterestingPointer(F, Alloca))
+          AllocaToReplace.push_back(Alloca);
+}
+
+bool OverflowDefense::isInterestingPointer(Function &F, Value *V) {
+  if (InterestingPointerCache.count(V))
+    return InterestingPointerCache[V];
+
+  SmallPtrSet<Value *, 16> Visited;
+  return InterestingPointerCache[V] = isInterestingPointerImpl(F, V, Visited);
+}
+
+bool OverflowDefense::isInterestingPointerImpl(
+    Function &F, Value *V, SmallPtrSet<Value *, 16> &Visited) {
+  if (Visited.count(V))
+    return false;
+
+  Visited.insert(V);
+
+  for (auto *U : V->users()) {
+    if (isa<GetElementPtrInst>(U) || isa<BitCastInst>(U) || isa<PHINode>(U) ||
+        isa<SelectInst>(U))
+      return isInterestingPointerImpl(F, U, Visited);
+
+    if (auto *SI = dyn_cast<StoreInst>(U))
+      return SI->getValueOperand() == V;
+
+    if (isa<ReturnInst>(U))
+      return true;
+
+    if (auto *CI = dyn_cast<CallBase>(U)) {
+      Function *F = CI->getCalledFunction();
+      return F == nullptr || !F->isIntrinsic();
+    }
+
+    if (isa<ICmpInst>(U) || isa<LoadInst>(U))
+      return false;
+
+    // TODO: handle more cases
+    if (isa<PtrToIntInst>(U)) {
+      // FIXME: PtrToIntInst is not handled yet
+      return false;
+    }
+
+    errs() << "[Unhandled Instruction] " << *U << "\n";
+    __builtin_unreachable();
+  }
+
+  return false;
+}
+
 bool OverflowDefense::filterToInstrument(Function &F, Instruction *I) {
-  assert(I->getType()->isPointerTy());
+  if (!I->getType()->isPointerTy())
+    return true;
 
   if (NeverEscaped(I))
     return true;
@@ -347,16 +425,16 @@ void OverflowDefense::instrumentSubFieldAccess(Function &F,
 
         // determine the type of value is int32 or int64
         if (value->getType()->isIntegerTy(32)) {
-          assert(Ty->isStructTy());
-          assert(isa<ConstantInt>(value));
-          assert(cast<ConstantInt>(value)->getZExtValue() <
-                 STy->getNumElements());
+          ASSERT(Ty->isStructTy());
+          ASSERT(isa<ConstantInt>(value));
+          ASSERT(cast<ConstantInt>(value)->getZExtValue() <
+                 cast<StructType>(Ty)->getNumElements());
 
           Ty = cast<StructType>(Ty)->getElementType(
               cast<ConstantInt>(value)->getZExtValue());
         } else {
-          assert(value->getType()->isIntegerTy(64));
-          assert(Ty->isArrayTy());
+          ASSERT(value->getType()->isIntegerTy(64));
+          ASSERT(Ty->isArrayTy());
 
           auto Aty = cast<ArrayType>(Ty);
           if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
@@ -560,7 +638,7 @@ AddrLoc OverflowDefense::getLocation(Instruction *I) {
   SmallPtrSet<Value *, 16> Visited;
   getLocationImpl(I, AL, Visited);
 
-  assert(AL != AddrLoc::kAddrLocUnknown);
+  ASSERT(AL != AddrLoc::kAddrLocUnknown);
   return LocationCache[I] = AL;
 }
 
@@ -633,4 +711,12 @@ void OverflowDefense::instrumentGep(Function &F) {
   //  report_overflow();
 
   // TODO: instrument gep
+}
+
+void OverflowDefense::replaceAlloca(Function &F) {
+  if (AllocaToReplace.empty())
+    return;
+
+  dbgs() << "[" << F.getName()
+         << "] AllocaToReplace: " << AllocaToReplace.size() << "\n";
 }
