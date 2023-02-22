@@ -68,14 +68,19 @@ public:
 
 private:
   void initializeModule(Module &M);
-  void collectToInstrument(Function &F);
+  void collectToInstrument(Function &F, ObjectSizeOffsetEvaluator &ObjSizeEval,
+                           ScalarEvolution &SE);
   void collectToReplace(Function &F);
 
-  bool filterToInstrument(Function &F, Instruction *I);
+  bool filterToInstrument(Function &F, Instruction *I,
+                          ObjectSizeOffsetEvaluator &ObjSizeEval,
+                          ScalarEvolution &SE);
   bool NeverEscaped(Instruction *I);
   bool NeverEscapedImpl(Instruction *I,
                         SmallPtrSet<Instruction *, 16> &Visited);
   bool isShrinkBitCast(Instruction *I);
+  bool isSafePointer(Instruction *Ptr, ObjectSizeOffsetEvaluator &ObjSizeEval,
+                     ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
@@ -266,7 +271,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   ObjectSizeOffsetEvaluator ObjSizeEval(*DL, &TLI, F.getContext(), EvalOpts);
 
   // Collect all instructions to instrument
-  collectToInstrument(F);
+  collectToInstrument(F, ObjSizeEval, SE);
   collectToReplace(F);
 
   dependencyOptimize(F, DT, PDT, SE);
@@ -285,17 +290,18 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   return false;
 }
 
-void OverflowDefense::collectToInstrument(Function &F) {
+void OverflowDefense::collectToInstrument(
+    Function &F, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
   // TODO: collect glibc function call
   for (auto &BB : F) {
     for (auto &I : BB) {
       if (auto *Gep = dyn_cast<GetElementPtrInst>(&I)) {
-        if (!filterToInstrument(F, Gep)) {
+        if (!filterToInstrument(F, Gep, ObjSizeEval, SE)) {
           GepToInstrument.push_back(Gep);
           SubFieldToInstrument.push_back(Gep);
         }
       } else if (auto *Bc = dyn_cast<BitCastInst>(&I)) {
-        if (!filterToInstrument(F, Bc))
+        if (!filterToInstrument(F, Bc, ObjSizeEval, SE))
           BcToInstrument.push_back(Bc);
       }
     }
@@ -359,7 +365,9 @@ bool OverflowDefense::isInterestingPointerImpl(
   return false;
 }
 
-bool OverflowDefense::filterToInstrument(Function &F, Instruction *I) {
+bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
+                                         ObjectSizeOffsetEvaluator &ObjSizeEval,
+                                         ScalarEvolution &SE) {
   if (!I->getType()->isPointerTy())
     return true;
 
@@ -375,7 +383,58 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I) {
   if (isVirtualTableGep(I))
     return true;
 
+  if (isSafePointer(I, ObjSizeEval, SE))
+    return true;
+
   return false;
+}
+
+bool OverflowDefense::isSafePointer(Instruction *Ptr,
+                                    ObjectSizeOffsetEvaluator &ObjSizeEval,
+                                    ScalarEvolution &SE) {
+  SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Ptr);
+
+  if (!ObjSizeEval.bothKnown(SizeOffsetEval))
+    return false;
+
+  Value *Size = SizeOffsetEval.first;
+  Value *Offset = SizeOffsetEval.second;
+
+  BuilderTy IRB(Ptr->getParent(), Ptr->getIterator(), TargetFolder(*DL));
+  ConstantInt *SizeCI = dyn_cast<ConstantInt>(Size);
+
+  Type *IntTy = DL->getIntPtrType(Ptr->getType());
+  uint32_t NeededSize = DL->getTypeStoreSize(Ptr->getType());            
+  Value *NeededSizeVal = ConstantInt::get(IntTy, NeededSize);
+
+  auto SizeRange = SE.getUnsignedRange(SE.getSCEV(Size));
+  auto OffsetRange = SE.getUnsignedRange(SE.getSCEV(Offset));
+  auto NeededSizeRange = SE.getUnsignedRange(SE.getSCEV(NeededSizeVal));
+
+  // three checks are required to ensure safety:
+  // . Offset >= 0  (since the offset is given from the base ptr)
+  // . Size >= Offset  (unsigned)
+  // . Size - Offset >= NeededSize  (unsigned)
+  //
+  // optimization: if Size >= 0 (signed), skip 1st check
+  Value *ObjSize = IRB.CreateSub(Size, Offset);
+  Value *Cmp2 = SizeRange.getUnsignedMin().uge(OffsetRange.getUnsignedMax())
+                    ? ConstantInt::getFalse(Ptr->getContext())
+                    : IRB.CreateICmpULT(Size, Offset);
+  Value *Cmp3 = SizeRange.sub(OffsetRange)
+                        .getUnsignedMin()
+                        .uge(NeededSizeRange.getUnsignedMax())
+                    ? ConstantInt::getFalse(Ptr->getContext())
+                    : IRB.CreateICmpULT(ObjSize, NeededSizeVal);
+  Value *Or = IRB.CreateOr(Cmp2, Cmp3);
+  if ((!SizeCI || SizeCI->getValue().slt(0)) &&
+      !SizeRange.getSignedMin().isNonNegative()) {
+    Value *Cmp1 = IRB.CreateICmpSLT(Offset, ConstantInt::get(IntTy, 0));
+    Or = IRB.CreateOr(Cmp1, Or);
+  }
+
+  ConstantInt *C = dyn_cast_or_null<ConstantInt>(Or);
+  return C && !C->getZExtValue();
 }
 
 bool OverflowDefense::NeverEscaped(Instruction *I) {
@@ -732,7 +791,8 @@ bool OverflowDefense::tryRuntimeFreeCheck(
           ? cast<Instruction>(Src)->getInsertionPointAfterDef()
           : &*F.getEntryBlock().getFirstInsertionPt();
 
-  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(), TargetFolder(*DL));
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, IRB.getInt64Ty());
   Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
@@ -746,9 +806,10 @@ bool OverflowDefense::tryRuntimeFreeCheck(
 
     Value *Addr = IRB.CreatePtrToInt(I, IRB.getInt64Ty());
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    Value *CmpEnd = IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+    Value *CmpEnd =
+        IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
-    
+
     // TODO: report overflow
   }
 
