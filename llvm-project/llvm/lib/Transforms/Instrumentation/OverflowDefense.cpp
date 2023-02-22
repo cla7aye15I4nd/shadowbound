@@ -2,6 +2,8 @@
 //------------===//
 
 #include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/Analysis/LoopInfo.h"
+#include "llvm/Analysis/MemoryBuiltins.h"
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/IR/Constant.h"
@@ -12,6 +14,7 @@
 #include <algorithm>
 
 using namespace llvm;
+using BuilderTy = IRBuilder<TargetFolder>;
 
 #define DEBUG_TYPE "odef"
 
@@ -25,6 +28,8 @@ using namespace llvm;
   } while (0)
 
 static const int kReservedBytes = 8;
+static const uint64_t kAllocatorSpaceBegin = 0x600000000000;
+static const uint64_t kAllocatorSpaceEnd = 0x800000000000;
 
 static cl::opt<bool>
     ClEnableKodef("odef-kernel",
@@ -87,7 +92,15 @@ private:
   dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                            PostDominatorTree &PDT, ScalarEvolution &SE);
   void instrumentSubFieldAccess(Function &F, ScalarEvolution &SE);
-  void instrumentGepAndBc(Function &F);
+  void instrumentGepAndBc(Function &F, LoopInfo &LI,
+                          ObjectSizeOffsetEvaluator &ObjSizeEval);
+  void instrumentCluster(Function &F, Value *Src,
+                         SmallVector<Instruction *, 16> &Insts, LoopInfo &LI,
+                         ObjectSizeOffsetEvaluator &ObjSizeEval);
+  bool tryRuntimeFreeCheck(Function &F, Value *Src,
+                           SmallVector<Instruction *, 16> &Insts,
+                           ObjectSizeOffsetEvaluator &ObjSizeEval);
+
   void instrumentBitCast(Function &F);
   void instrumentGep(Function &F);
   void replaceAlloca(Function &F);
@@ -245,6 +258,12 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
   auto &DT = AM.getResult<DominatorTreeAnalysis>(F);
   auto &PDT = AM.getResult<PostDominatorTreeAnalysis>(F);
+  auto &LI = AM.getResult<LoopAnalysis>(F);
+  auto &TLI = AM.getResult<TargetLibraryAnalysis>(F);
+
+  ObjectSizeOpts EvalOpts;
+  EvalOpts.RoundToAlign = true;
+  ObjectSizeOffsetEvaluator ObjSizeEval(*DL, &TLI, F.getContext(), EvalOpts);
 
   // Collect all instructions to instrument
   collectToInstrument(F);
@@ -258,7 +277,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   instrumentSubFieldAccess(F, SE);
 
   // Instrument GEP and BC
-  // instrumentGepAndBc(F);
+  instrumentGepAndBc(F, LI, ObjSizeEval);
 
   // Replace alloca with malloc
   replaceAlloca(F);
@@ -579,26 +598,26 @@ Value *OverflowDefense::getSourceImpl(Value *V) {
     return SourceCache[V];
 
   if (auto *BC = dyn_cast<BitCastInst>(V))
-    return SourceCache[V] = getSourceImpl(BC->getOperand(0));
+    return getSourceImpl(BC->getOperand(0));
 
   if (auto *GEP = dyn_cast<GetElementPtrInst>(V))
-    return SourceCache[V] = getSourceImpl(GEP->getPointerOperand());
+    return getSourceImpl(GEP->getPointerOperand());
 
   if (auto *GEPO = dyn_cast<GEPOperator>(V))
-    return SourceCache[V] = getSourceImpl(GEPO->getPointerOperand());
+    return getSourceImpl(GEPO->getPointerOperand());
 
   if (auto *BCO = dyn_cast<BitCastOperator>(V))
-    return SourceCache[V] = getSourceImpl(BCO->getOperand(0));
+    return getSourceImpl(BCO->getOperand(0));
 
   if (auto *Phi = dyn_cast<PHINode>(V)) {
     Value *Source = nullptr;
     SmallPtrSet<Value *, 16> Visited;
     if (getPhiSource(Phi, Source, Visited))
-      return SourceCache[V] = Source;
-    return SourceCache[V] = Phi;
+      return Source;
+    return Phi;
   }
 
-  return nullptr;
+  return V;
 }
 
 bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
@@ -673,7 +692,8 @@ void OverflowDefense::getLocationImpl(Value *V, AddrLoc &AL,
     AL = AddrLoc::kAddrLocAny;
 }
 
-void OverflowDefense::instrumentGepAndBc(Function &F) {
+void OverflowDefense::instrumentGepAndBc(
+    Function &F, LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
@@ -685,6 +705,57 @@ void OverflowDefense::instrumentGepAndBc(Function &F) {
     Value *Source = getSource(I);
     SourceMap[Source].push_back(I);
   }
+
+  for (auto &[Src, Insts] : SourceMap) {
+    ASSERT(Src != nullptr);
+    instrumentCluster(F, Src, Insts, LI, ObjSizeEval);
+  }
+}
+
+void OverflowDefense::instrumentCluster(
+    Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
+    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
+  if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval))
+    return;
+}
+
+bool OverflowDefense::tryRuntimeFreeCheck(
+    Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
+    ObjectSizeOffsetEvaluator &ObjSizeEval) {
+  SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
+
+  if (!ObjSizeEval.bothKnown(SizeOffsetEval))
+    return false;
+
+  Value *Size = SizeOffsetEval.first;
+  Value *Offset = SizeOffsetEval.second;
+
+  Instruction *InsertPt =
+      isa<Instruction>(Src)
+          ? cast<Instruction>(Src)->getInsertionPointAfterDef()
+          : &*F.getEntryBlock().getFirstInsertionPt();
+
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(), TargetFolder(*DL));
+
+  Value *Ptr = IRB.CreatePtrToInt(Src, IRB.getInt64Ty());
+  Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
+  Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
+
+  for (auto &I : Insts) {
+    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+
+    uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
+    Value *NeededSizeVal = ConstantInt::get(IRB.getInt64Ty(), NeededSize);
+
+    Value *Addr = IRB.CreatePtrToInt(I, IRB.getInt64Ty());
+    Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
+    Value *CmpEnd = IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+    Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+    
+    // TODO: report overflow
+  }
+
+  return true;
 }
 
 void OverflowDefense::instrumentBitCast(Function &F) {
