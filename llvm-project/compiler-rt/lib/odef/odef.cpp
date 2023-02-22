@@ -23,8 +23,8 @@ void SetShadow(const void *ptr, uptr size) {
 #pragma unroll
 #endif
   while (shadow_beg < shadow_end) {
-    *(shadow_beg + 0) = a++;
-    *(shadow_beg + 1) = b--;
+    *(shadow_beg + 0) = b--;
+    *(shadow_beg + 1) = a++;
     shadow_beg += 2;
   }
 }
@@ -59,4 +59,7 @@ void __odef_init() {
 
   odef_init_is_running = false;
   odef_inited = true;
+}
+
+void __odef_report() {
 }
