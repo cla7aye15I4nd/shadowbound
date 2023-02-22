@@ -594,9 +594,6 @@ Value *OverflowDefense::getSource(Instruction *I) {
 }
 
 Value *OverflowDefense::getSourceImpl(Value *V) {
-  if (SourceCache.count(V))
-    return SourceCache[V];
-
   if (auto *BC = dyn_cast<BitCastInst>(V))
     return getSourceImpl(BC->getOperand(0));
 
