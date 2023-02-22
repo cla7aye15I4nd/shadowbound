@@ -99,15 +99,18 @@ private:
   void instrumentSubFieldAccess(Function &F, ScalarEvolution &SE);
   void instrumentGepAndBc(Function &F, LoopInfo &LI,
                           ObjectSizeOffsetEvaluator &ObjSizeEval);
+  void instrumentGepAndBcImpl(Function &F, Value *Src,
+                              SmallVector<Instruction *, 16> &Insts,
+                              LoopInfo &LI,
+                              ObjectSizeOffsetEvaluator &ObjSizeEval);
   void instrumentCluster(Function &F, Value *Src,
-                         SmallVector<Instruction *, 16> &Insts, LoopInfo &LI,
-                         ObjectSizeOffsetEvaluator &ObjSizeEval);
+                         SmallVector<Instruction *, 16> &Insts);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
-  void instrumentBitCast(Function &F);
-  void instrumentGep(Function &F);
+  void instrumentBitCast(BitCastInst *BC);
+  void instrumentGep(GetElementPtrInst *GEP);
   void replaceAlloca(Function &F);
 
   Value *getSource(Instruction *I);
@@ -404,7 +407,7 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
   ConstantInt *SizeCI = dyn_cast<ConstantInt>(Size);
 
   Type *IntTy = DL->getIntPtrType(Ptr->getType());
-  uint32_t NeededSize = DL->getTypeStoreSize(Ptr->getType());            
+  uint32_t NeededSize = DL->getTypeStoreSize(Ptr->getType());
   Value *NeededSizeVal = ConstantInt::get(IntTy, NeededSize);
 
   auto SizeRange = SE.getUnsignedRange(SE.getSCEV(Size));
@@ -764,15 +767,36 @@ void OverflowDefense::instrumentGepAndBc(
 
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    instrumentCluster(F, Src, Insts, LI, ObjSizeEval);
+    instrumentGepAndBcImpl(F, Src, Insts, LI, ObjSizeEval);
   }
 }
 
-void OverflowDefense::instrumentCluster(
+void OverflowDefense::instrumentGepAndBcImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
     LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
   if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval))
     return;
+
+  int weight = 0;
+  for (auto *I : Insts)
+    weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+
+  if (weight > 2) {
+    instrumentCluster(F, Src, Insts);
+  } else {
+    for (auto *I : Insts) {
+      if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
+        instrumentGep(GEP);
+      } else if (auto *BC = dyn_cast<BitCastInst>(I)) {
+        instrumentBitCast(BC);
+      }
+    }
+  }
+}
+
+void OverflowDefense::instrumentCluster(Function &F, Value *Src,
+                                        SmallVector<Instruction *, 16> &Insts) {
+  // Fetch Src Range from shadow memory.
 }
 
 bool OverflowDefense::tryRuntimeFreeCheck(
@@ -816,19 +840,17 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   return true;
 }
 
-void OverflowDefense::instrumentBitCast(Function &F) {
+void OverflowDefense::instrumentBitCast(BitCastInst *BC) {
   // Instrument bitcast
   // ShadowAddr = Shadow(BC);
   // BackSize = *(int32_t *)ShadowAddr;
   // if (BackSize < TypeSze(BC))
   //   report_overflow();
 
-  for (auto &I : BcToInstrument) {
-    // TODO: instrument bitcast
-  }
+  // TODO: instrument bitcast
 }
 
-void OverflowDefense::instrumentGep(Function &F) {
+void OverflowDefense::instrumentGep(GetElementPtrInst *GEP) {
   // Instrument gep
   // ShadowAddr = Shadow(GEP);
   // Packed = *(int32_t *)ShadowAddr;
