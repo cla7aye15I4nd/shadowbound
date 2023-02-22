@@ -10,6 +10,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Operator.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
 
@@ -28,8 +29,11 @@ using BuilderTy = IRBuilder<TargetFolder>;
   } while (0)
 
 static const int kReservedBytes = 8;
-static const uint64_t kAllocatorSpaceBegin = 0x600000000000;
-static const uint64_t kAllocatorSpaceEnd = 0x800000000000;
+
+static const uint64_t kShadowBase = ~0x7ULL;
+static const uint64_t kShadowMask = ~0x400000000007ULL;
+static const uint64_t kAllocatorSpaceBegin = 0x600000000000ULL;
+static const uint64_t kAllocatorSpaceEnd = 0x800000000000ULL;
 
 static cl::opt<bool>
     ClEnableKodef("odef-kernel",
@@ -42,6 +46,7 @@ static cl::opt<bool> ClKeepGoing("odef-keep-going",
 
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
+const char kOdefReportName[] = "__odef_report";
 
 namespace {
 
@@ -82,6 +87,7 @@ private:
   bool isSafePointer(Instruction *Ptr, ObjectSizeOffsetEvaluator &ObjSizeEval,
                      ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
+  bool isAccessMember(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   bool isInterestingPointer(Function &F, Value *V);
@@ -102,15 +108,16 @@ private:
   void instrumentGepAndBcImpl(Function &F, Value *Src,
                               SmallVector<Instruction *, 16> &Insts,
                               LoopInfo &LI,
-                              ObjectSizeOffsetEvaluator &ObjSizeEval);
+                              ObjectSizeOffsetEvaluator &ObjSizeEval,
+                              int Counter[3]);
   void instrumentCluster(Function &F, Value *Src,
                          SmallVector<Instruction *, 16> &Insts);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
-  void instrumentBitCast(BitCastInst *BC);
-  void instrumentGep(GetElementPtrInst *GEP);
+  void instrumentBitCast(Value *Src, BitCastInst *BC);
+  void instrumentGep(Value *Src, GetElementPtrInst *GEP);
   void replaceAlloca(Function &F);
 
   Value *getSource(Instruction *I);
@@ -120,6 +127,8 @@ private:
   AddrLoc getLocation(Instruction *I);
   void getLocationImpl(Value *V, AddrLoc &Loc,
                        SmallPtrSet<Value *, 16> &Visited);
+
+  void CreateTrapBB(BuilderTy &B, Value *Cond);
 
   bool Kernel;
   bool Recover;
@@ -136,7 +145,12 @@ private:
 
   const DataLayout *DL;
 
+  Type *int32Type;
   Type *int64Type;
+  Type *int32PtrType;
+  Type *int64PtrType;
+
+  Function *TrapFn;
 };
 
 bool isEscapeInstruction(Instruction *I) {
@@ -231,6 +245,11 @@ void insertModuleCtor(Module &M) {
       });
 }
 
+void insertRuntimeFunction(Module &M) {
+  LLVMContext &C = M.getContext();
+  M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
+}
+
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
   return (Opt.getNumOccurrences() > 0) ? Opt : Default;
 }
@@ -253,16 +272,31 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
   if (Options.Kernel)
     return PreservedAnalyses::all();
   insertModuleCtor(M);
+  insertRuntimeFunction(M);
   return PreservedAnalyses::none();
 }
 
 void OverflowDefense::initializeModule(Module &M) {
   DL = &M.getDataLayout();
+  TrapFn = M.getFunction(kOdefReportName);
+
+  int32Type = Type::getInt32Ty(M.getContext());
   int64Type = Type::getInt64Ty(M.getContext());
+  int32PtrType = Type::getInt32PtrTy(M.getContext());
+  int64PtrType = Type::getInt64PtrTy(M.getContext());
 }
 
 bool OverflowDefense::sanitizeFunction(Function &F,
                                        FunctionAnalysisManager &AM) {
+  if (F.isIntrinsic())
+    return false;
+  
+  if (F.getInstructionCount() == 0)
+    return false;
+
+  if (F.getName() == kOdefInitName || F.getName() == kOdefModuleCtorName)
+    return false;
+
   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
   auto &DT = AM.getResult<DominatorTreeAnalysis>(F);
   auto &PDT = AM.getResult<PostDominatorTreeAnalysis>(F);
@@ -290,7 +324,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   // Replace alloca with malloc
   replaceAlloca(F);
 
-  return false;
+  return true;
 }
 
 void OverflowDefense::collectToInstrument(
@@ -756,6 +790,8 @@ void OverflowDefense::instrumentGepAndBc(
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
+    if (isAccessMember(I))
+      continue;
     Value *Source = getSource(I);
     SourceMap[Source].push_back(I);
   }
@@ -765,30 +801,52 @@ void OverflowDefense::instrumentGepAndBc(
     SourceMap[Source].push_back(I);
   }
 
+  int Counter[3] = {0, 0, 0};
+
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    instrumentGepAndBcImpl(F, Src, Insts, LI, ObjSizeEval);
+    instrumentGepAndBcImpl(F, Src, Insts, LI, ObjSizeEval, Counter);
   }
+
+  dbgs() << "[" << F.getName() << "]\n"
+         << "  Builtin Check: " << Counter[0] << "\n"
+         << "  Cluster Check: " << Counter[1] << "\n"
+         << "  Runtime Check: " << Counter[2] << "\n";
+}
+
+bool OverflowDefense::isAccessMember(Instruction *I) {
+  ASSERT(isa<GetElementPtrInst>(I));
+  auto *GEP = cast<GetElementPtrInst>(I);
+  if (!isFixedSizeType(GEP->getSourceElementType()))
+    return false;
+
+  if (auto C = dyn_cast<ConstantInt>(GEP->getOperand(1)))
+    return C->getZExtValue() == 0;
+  return false;
 }
 
 void OverflowDefense::instrumentGepAndBcImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
-    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
-  if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval))
+    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, int Counter[3]) {
+  if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval)) {
+    Counter[0] += Insts.size();
     return;
+  }
 
   int weight = 0;
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
 
-  if (weight > 2) {
+  if (weight >= 2) {
+    Counter[1]++;
     instrumentCluster(F, Src, Insts);
   } else {
+    Counter[2] += Insts.size();
     for (auto *I : Insts) {
       if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
-        instrumentGep(GEP);
+        instrumentGep(Src, GEP);
       } else if (auto *BC = dyn_cast<BitCastInst>(I)) {
-        instrumentBitCast(BC);
+        instrumentBitCast(Src, BC);
       }
     }
   }
@@ -797,18 +855,7 @@ void OverflowDefense::instrumentGepAndBcImpl(
 void OverflowDefense::instrumentCluster(Function &F, Value *Src,
                                         SmallVector<Instruction *, 16> &Insts) {
   // Fetch Src Range from shadow memory.
-}
-
-bool OverflowDefense::tryRuntimeFreeCheck(
-    Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
-    ObjectSizeOffsetEvaluator &ObjSizeEval) {
-  SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
-
-  if (!ObjSizeEval.bothKnown(SizeOffsetEval))
-    return false;
-
-  Value *Size = SizeOffsetEval.first;
-  Value *Offset = SizeOffsetEval.second;
+  ASSERT(isa<Instruction>(Src) || isa<Argument>(Src));
 
   Instruction *InsertPt =
       isa<Instruction>(Src)
@@ -818,50 +865,181 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
-  Value *Ptr = IRB.CreatePtrToInt(Src, IRB.getInt64Ty());
-  Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
-  Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
+  // Shadow = Ptr & kShadowMask;
+  // Base = Ptr & kShadowBase;
+  // Packed = *(int64_t *) Shadow;
+  // Front = Packed & 0xffffffff;
+  // Back = Packed >> 32;
+  // Begin = Base - (Front << 3);
+  // End = Base + (Back << 3);
 
-  for (auto &I : Insts) {
+  Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+
+  // The final version of the code is commented out. The reason is that the
+  // compiler is not able to support stack and global variables checking now
+  /*
+    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+    Value *Shadow = IRB.CreateAnd(Ptr,
+                                  ConstantInt::get(int64Type, kShadowMask));
+    Value *Packed = IRB.CreateLoad(int64Type,
+                                   IRB.CreateIntToPtr(Shadow, int64PtrType));
+    Value *Front = IRB.CreateAnd(Packed,
+                                 ConstantInt::get(int64Type, 0xffffffff));
+    Value *Back = IRB.CreateLShr(Packed, 32);
+    Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
+    Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  */
+
+  Value *IsApp = IRB.CreateAnd(
+      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+
+  ASSERT(isa<Instruction>(IsApp));
+  Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
+  IRB.SetInsertPoint(ThenInsertPt);
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Packed =
+      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+  Value *Front = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *Back = IRB.CreateLShr(Packed, 32);
+  Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
+  Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+
+  IRB.SetInsertPoint(InsertPt);
+  PHINode *Begin = IRB.CreatePHI(int64Type, 2);
+  Begin->addIncoming(ThenBegin, ThenInsertPt->getParent());
+  Begin->addIncoming(ConstantInt::get(int64Type, 0),
+                     cast<Instruction>(IsApp)->getParent());
+
+  PHINode *End = IRB.CreatePHI(int64Type, 2);
+  End->addIncoming(ThenEnd, ThenInsertPt->getParent());
+  End->addIncoming(ConstantInt::get(int64Type, -1),
+                   cast<Instruction>(IsApp)->getParent());
+
+  // Check if Ptr is in [Begin, End).
+  for (auto *I : Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+    Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
+    Value *IsIn = IRB.CreateAnd(IRB.CreateICmpUGE(Ptr, Begin),
+                                IRB.CreateICmpULT(Ptr, End));
+    CreateTrapBB(IRB, IsIn);
+  }
+}
 
-    uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
-    Value *NeededSizeVal = ConstantInt::get(IRB.getInt64Ty(), NeededSize);
+bool OverflowDefense::tryRuntimeFreeCheck(
+    Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
+    ObjectSizeOffsetEvaluator &ObjSizeEval) {
+  SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
-    Value *Addr = IRB.CreatePtrToInt(I, IRB.getInt64Ty());
-    Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    Value *CmpEnd =
-        IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
-    Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+  if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
+    Value *Size = SizeOffsetEval.first;
+    Value *Offset = SizeOffsetEval.second;
 
-    // TODO: report overflow
+    Instruction *InsertPt =
+        isa<Instruction>(Src)
+            ? cast<Instruction>(Src)->getInsertionPointAfterDef()
+            : &*F.getEntryBlock().getFirstInsertionPt();
+
+    BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                  TargetFolder(*DL));
+
+    Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+    Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
+    Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
+
+    for (auto &I : Insts) {
+      IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+
+      uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
+      Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+
+      Value *Addr = IRB.CreatePtrToInt(I, int64Type);
+      Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
+      Value *CmpEnd =
+          IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+      Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+
+      // TODO: report overflow
+    }
+
+    return true;
+  } else if (auto *G = dyn_cast<GlobalVariable>(Src)) {
+    // FIXME: handle global variable
+    return true;
   }
 
-  return true;
+  return false;
 }
 
-void OverflowDefense::instrumentBitCast(BitCastInst *BC) {
-  // Instrument bitcast
-  // ShadowAddr = Shadow(BC);
-  // BackSize = *(int32_t *)ShadowAddr;
-  // if (BackSize < TypeSze(BC))
+void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
+  // ShadowAddr = BC & kShadowMask;
+  // Base = BC & kShadowBase;
+  // BackSize = *(int32_t *) ShadowAddr;
+  // if (BC >= Base + BackSize - NeededSize)
   //   report_overflow();
 
-  // TODO: instrument bitcast
+  Instruction *InsertPt = BC->getInsertionPointAfterDef();
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+
+  // TODO: this part will be removed
+  Value *IsApp = IRB.CreateAnd(
+      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *BackSize = IRB.CreateZExt(
+      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+      int64Type);
+
+  uint64_t NeededSize = DL->getTypeStoreSize(BC->getType());
+  Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+
+  Value *Cmp = IRB.CreateICmpUGE(
+      Ptr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
+  CreateTrapBB(IRB, Cmp);
 }
 
-void OverflowDefense::instrumentGep(GetElementPtrInst *GEP) {
-  // Instrument gep
-  // ShadowAddr = Shadow(GEP);
-  // Packed = *(int32_t *)ShadowAddr;
-  // FrontSize = Packed & 0xffffffff;
-  // BackSize = Packed >> 32;
-  // ChunkStart = Addr - FrontSize;
-  // ChunkEnd = Addr + BackSize;
-  // if (ChunkStart < Addr && Addr < ChunkEnd)
-  //  report_overflow();
+void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
+  // ShadowAddr = GEP & kShadowMask;
+  // Base = GEP & kShadowBase;
+  // Packed = *(int32_t *) ShadowAddr;
+  // Front = Packed & 0xffffffff;
+  // Back = Packed >> 32;
+  // Begin = Base - (Front << 3);
+  // End = Base + (Back << 3);
+  // if (GEP < Begin || GEP + NeededSize >= End)
+  //   report_overflow();
 
-  // TODO: instrument gep
+  Instruction *InsertPt = GEP->getInsertionPointAfterDef();
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+
+  // TODO: this part will be removed
+  Value *IsApp = IRB.CreateAnd(
+      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *Packed =
+      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+  Value *Front = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *Back = IRB.CreateLShr(Packed, 32);
+  Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
+  Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  Value *CmpBegin = IRB.CreateICmpULT(Ptr, Begin);
+  Value *CmpEnd = IRB.CreateICmpUGE(Ptr, End);
+  Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+  CreateTrapBB(IRB, Cmp);
 }
 
 void OverflowDefense::replaceAlloca(Function &F) {
@@ -870,4 +1048,10 @@ void OverflowDefense::replaceAlloca(Function &F) {
 
   dbgs() << "[" << F.getName()
          << "] AllocaToReplace: " << AllocaToReplace.size() << "\n";
+}
+
+void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond) {
+  IRB.SetInsertPoint(
+      SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), false));
+  IRB.CreateCall(TrapFn);
 }
