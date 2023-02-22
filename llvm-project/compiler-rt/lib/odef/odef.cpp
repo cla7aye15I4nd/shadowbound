@@ -12,6 +12,23 @@
 
 namespace __odef {
 
+void SetShadow(const void *ptr, uptr size) {
+  u32 *shadow_beg = (u32 *) MEM_TO_SHADOW(ptr);
+  u32 *shadow_end = shadow_beg + size / sizeof(u32);
+  
+  u32 a = 0;
+  u32 b = size / sizeof(uptr);
+
+#ifdef __clang__
+#pragma unroll
+#endif
+  while (shadow_beg < shadow_end) {
+    *(shadow_beg + 0) = a++;
+    *(shadow_beg + 1) = b--;
+    shadow_beg += 2;
+  }
+}
+
 bool odef_inited = false;
 bool odef_init_is_running = false;
 

@@ -10,7 +10,10 @@ namespace __odef {
 
 struct OdefMapUnmapCallback {
   void OnMap(uptr p, uptr size) const {}
-  void OnUnmap(uptr p, uptr size) const {}
+  void OnUnmap(uptr p, uptr size) const {
+    uptr shadow_p = MEM_TO_SHADOW(p);
+    ReleaseMemoryPagesToOS(shadow_p, shadow_p + size);
+  }
 };
 
 static const uptr kAllocatorSpace = 0x600000000000ULL;
@@ -68,7 +71,7 @@ static void *OdefAllocate(uptr size, uptr alignment) {
     allocated = allocator.Allocate(cache, size, alignment);
   }
   // FIXME: CHECK if out of memory.
-
+  SetShadow(allocated, size);
   RunMallocHooks(allocated, size);
   return allocated;
 }

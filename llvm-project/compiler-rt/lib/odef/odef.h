@@ -55,6 +55,7 @@ void InitializeInterceptors();
 void OdefAllocatorInit();
 bool InitShadow();
 
+void SetShadow(const void* ptr, uptr size);
 void OdefDeallocate(void *ptr);
 
 void *odef_malloc(uptr size);
