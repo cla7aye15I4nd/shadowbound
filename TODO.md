@@ -3,3 +3,4 @@
 ### Todo
 
 - [ ] Investigate the cause of the 70% time consumption in ReleaseMemoryToOS of `602.gcc_s`.
+- [ ] Add loop optimization to monotonous loop and strlen style loop.
