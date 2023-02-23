@@ -44,6 +44,26 @@ static cl::opt<bool> ClKeepGoing("odef-keep-going",
                                  cl::desc("keep going after reporting a error"),
                                  cl::Hidden, cl::init(false));
 
+static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
+                                      cl::desc("skip instrumenting"),
+                                      cl::Hidden, cl::init(false));
+
+static cl::opt<bool> ClCheckHeap("odef-check-heap",
+                                 cl::desc("check heap memory"), cl::Hidden,
+                                 cl::init(true));
+
+static cl::opt<bool> ClCheckStack("odef-check-stack",
+                                  cl::desc("check stack memory"), cl::Hidden,
+                                  cl::init(true));
+
+static cl::opt<bool> ClCheckGlobal("odef-check-global",
+                                   cl::desc("check global memory"), cl::Hidden,
+                                   cl::init(true));
+
+static cl::opt<bool> ClCheckInField("odef-check-in-field",
+                                    cl::desc("check in-field memory"),
+                                    cl::Hidden, cl::init(true));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -290,11 +310,14 @@ bool OverflowDefense::sanitizeFunction(Function &F,
                                        FunctionAnalysisManager &AM) {
   if (F.isIntrinsic())
     return false;
-  
+
   if (F.getInstructionCount() == 0)
     return false;
 
   if (F.getName() == kOdefInitName || F.getName() == kOdefModuleCtorName)
+    return false;
+
+  if (ClSkipInstrument.getNumOccurrences() > 0 && ClSkipInstrument)
     return false;
 
   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
@@ -316,7 +339,8 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
   // we still need to know how much they cost
-  instrumentSubFieldAccess(F, SE);
+  if (ClCheckInField.getNumOccurrences() > 0 && ClCheckInField)
+    instrumentSubFieldAccess(F, SE);
 
   // Instrument GEP and BC
   instrumentGepAndBc(F, LI, ObjSizeEval);
