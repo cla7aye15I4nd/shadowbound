@@ -25,13 +25,15 @@ In a previous experiment, we discovered that most chunks are less than 4 GB in s
 Then for every GEP instruction, we insert following checking code:
 ```c
 // %result = getelementptr %pointer, ...
-uint64_t Packed = *(uint64_t*)ShadowAddr(pointer)
-uint32_t front = Packed >> 32;
-uint32_t back  = Packed & ((uint32_t)-1);
-void* start  = pointer - front;
-void* end = pointer + back;
-if (result < start || result + TypeSize(result) >= end)
-  report_error();
+ShadowAddr = GEP & kShadowMask;
+Base = GEP & kShadowBase;
+Packed = *(int32_t *) ShadowAddr;
+Front = Packed & 0xffffffff;
+Back = Packed >> 32;
+Begin = Base - (Front << 3);
+End = Base + (Back << 3);
+if (GEP < Begin || GEP + NeededSize >= End)
+  report_overflow();
 ```
 
 ### Stack/Global Overflow Checking
