@@ -48,9 +48,10 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
                                       cl::desc("skip instrumenting"),
                                       cl::Hidden, cl::init(false));
 
-// Due to the limitation of the current implementation, we cannot guarantee that
-// all corresponding checking when `odef-check-[heap|stack|global]` is set to
-// false, but most of them will be skipped.
+// Please note that due to limitations in the current implementation, we cannot
+// guarantee that all corresponding checks will be disabled when the
+// odef-check-[heap|stack|global] option is set to false. However, in most
+// cases, the majority of these checks will be skipped.
 
 static cl::opt<bool> ClCheckHeap("odef-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
