@@ -85,5 +85,6 @@ void __odef_init() {
 void __odef_report() {}
 
 void __odef_abort() {
+  Report(" Overflow detected\n");
   Die();
 }
