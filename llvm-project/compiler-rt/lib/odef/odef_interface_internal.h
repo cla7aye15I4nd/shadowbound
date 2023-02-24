@@ -7,6 +7,8 @@ extern "C" {
 SANITIZER_INTERFACE_ATTRIBUTE
 void __odef_init();
 void __odef_report();
+void __odef_abort();
+
 }
 
 #endif // ODEF_INTERFACE_INTERNAL_H

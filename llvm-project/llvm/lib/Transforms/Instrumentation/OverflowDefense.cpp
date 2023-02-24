@@ -48,6 +48,10 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
                                       cl::desc("skip instrumenting"),
                                       cl::Hidden, cl::init(false));
 
+// Due to the limitation of the current implementation, we cannot guarantee that
+// all corresponding checking when `odef-check-[heap|stack|global]` is set to
+// false, but most of them will be skipped.
+
 static cl::opt<bool> ClCheckHeap("odef-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
                                  cl::init(true));
@@ -67,6 +71,7 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
+const char kOdefAbortName[] = "__odef_abort";
 
 namespace {
 
@@ -148,7 +153,7 @@ private:
   void getLocationImpl(Value *V, AddrLoc &Loc,
                        SmallPtrSet<Value *, 16> &Visited);
 
-  void CreateTrapBB(BuilderTy &B, Value *Cond);
+  void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
 
   bool Kernel;
   bool Recover;
@@ -170,7 +175,8 @@ private:
   Type *int32PtrType;
   Type *int64PtrType;
 
-  Function *TrapFn;
+  Function *ReportFn;
+  Function *AbortFn;
 };
 
 bool isEscapeInstruction(Instruction *I) {
@@ -268,6 +274,7 @@ void insertModuleCtor(Module &M) {
 void insertRuntimeFunction(Module &M) {
   LLVMContext &C = M.getContext();
   M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
 }
 
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
@@ -298,7 +305,8 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
 
 void OverflowDefense::initializeModule(Module &M) {
   DL = &M.getDataLayout();
-  TrapFn = M.getFunction(kOdefReportName);
+  ReportFn = M.getFunction(kOdefReportName);
+  AbortFn = M.getFunction(kOdefAbortName);
 
   int32Type = Type::getInt32Ty(M.getContext());
   int64Type = Type::getInt64Ty(M.getContext());
@@ -601,7 +609,7 @@ void OverflowDefense::instrumentSubFieldAccess(Function &F,
         }
       }
       if (Cond)
-        CreateTrapBB(IRB, Cond);
+        CreateTrapBB(IRB, Cond, true);
     }
   }
 }
@@ -875,6 +883,9 @@ void OverflowDefense::instrumentGepAndBcImpl(
     return;
   }
 
+  if (ClCheckHeap.getNumOccurrences() > 0 && !ClCheckHeap)
+    return;
+
   int weight = 0;
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
@@ -965,7 +976,7 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
     Value *IsIn = IRB.CreateAnd(IRB.CreateICmpUGE(Ptr, Begin),
                                 IRB.CreateICmpULT(Ptr, End));
-    CreateTrapBB(IRB, IsIn);
+    CreateTrapBB(IRB, IsIn, false);
   }
 }
 
@@ -1044,7 +1055,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
 
   Value *Cmp = IRB.CreateICmpUGE(
       Ptr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
-  CreateTrapBB(IRB, Cmp);
+  CreateTrapBB(IRB, Cmp, false);
 }
 
 void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
@@ -1081,7 +1092,7 @@ void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
   Value *CmpBegin = IRB.CreateICmpULT(Ptr, Begin);
   Value *CmpEnd = IRB.CreateICmpUGE(Ptr, End);
   Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
-  CreateTrapBB(IRB, Cmp);
+  CreateTrapBB(IRB, Cmp, false);
 }
 
 void OverflowDefense::replaceAlloca(Function &F) {
@@ -1092,8 +1103,29 @@ void OverflowDefense::replaceAlloca(Function &F) {
          << "] AllocaToReplace: " << AllocaToReplace.size() << "\n";
 }
 
-void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond) {
-  IRB.SetInsertPoint(
-      SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), false));
-  IRB.CreateCall(TrapFn);
+void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
+  static BasicBlock *TrapBB = nullptr;
+  auto GetTrapBB = [&TrapBB](BuilderTy &IRB) {
+    if (!TrapBB) {
+      TrapBB = BasicBlock::Create(IRB.GetInsertBlock()->getContext(), "trap",
+                                  IRB.GetInsertBlock()->getParent());
+      IRB.SetInsertPoint(TrapBB);
+      IRB.CreateUnreachable();
+    }
+    return TrapBB;
+  };
+
+  if (!Abort) {
+    IRB.SetInsertPoint(
+        SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), false));
+
+    IRB.CreateCall(ReportFn);
+  } else {
+    BasicBlock::iterator SplitI = IRB.GetInsertPoint();
+    BasicBlock *OldBB = SplitI->getParent();
+    BasicBlock *Cont = OldBB->splitBasicBlock(SplitI);
+    OldBB->getTerminator()->eraseFromParent();
+
+    BranchInst::Create(GetTrapBB(IRB), Cont, Cond, OldBB);
+  }
 }
