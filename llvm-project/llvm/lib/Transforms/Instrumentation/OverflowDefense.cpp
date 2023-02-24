@@ -83,6 +83,14 @@ enum AddrLoc {
   kAddrLocUnknown,
 };
 
+enum CheckType {
+  kRuntimeCheck = 0,
+  kClusterCheck = 1,
+  kBuiltInCheck = 2,
+  kInFieldCheck = 3,
+  kCheckTypeEnd
+};
+
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
@@ -134,8 +142,7 @@ private:
   void instrumentGepAndBcImpl(Function &F, Value *Src,
                               SmallVector<Instruction *, 16> &Insts,
                               LoopInfo &LI,
-                              ObjectSizeOffsetEvaluator &ObjSizeEval,
-                              int Counter[3]);
+                              ObjectSizeOffsetEvaluator &ObjSizeEval);
   void instrumentCluster(Function &F, Value *Src,
                          SmallVector<Instruction *, 16> &Insts);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
@@ -170,6 +177,8 @@ private:
   DenseMap<Value *, bool> InterestingPointerCache;
 
   const DataLayout *DL;
+
+  int Counter[kCheckTypeEnd];
 
   Type *int32Type;
   Type *int64Type;
@@ -216,11 +225,15 @@ bool isZeroAccessGep(Instruction *I) {
       if (auto *C = dyn_cast<ConstantInt>(&Op)) {
         if (0 != C->getSExtValue())
           return false;
+      } else {
+        return false;
       }
     }
+
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -313,6 +326,8 @@ void OverflowDefense::initializeModule(Module &M) {
   int64Type = Type::getInt64Ty(M.getContext());
   int32PtrType = Type::getInt32PtrTy(M.getContext());
   int64PtrType = Type::getInt64PtrTy(M.getContext());
+
+  memset(Counter, 0, sizeof(Counter));
 }
 
 bool OverflowDefense::sanitizeFunction(Function &F,
@@ -326,7 +341,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   if (F.getName() == kOdefInitName || F.getName() == kOdefModuleCtorName)
     return false;
 
-  if (ClSkipInstrument.getNumOccurrences() > 0 && ClSkipInstrument)
+  if (ClSkipInstrument)
     return false;
 
   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
@@ -348,7 +363,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
   // we still need to know how much they cost
-  if (ClCheckInField.getNumOccurrences() > 0 && ClCheckInField)
+  if (ClCheckInField)
     instrumentSubFieldAccess(F, SE);
 
   // Instrument GEP and BC
@@ -356,6 +371,12 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   // Replace alloca with malloc
   replaceAlloca(F);
+
+  dbgs() << "[" << F.getName() << "]\n"
+         << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n"
+         << "  Cluster Check: " << Counter[kClusterCheck] << "\n"
+         << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n"
+         << "  InField Check: " << Counter[kInFieldCheck] << "\n";
 
   return true;
 }
@@ -609,8 +630,10 @@ void OverflowDefense::instrumentSubFieldAccess(Function &F,
           Ty = Aty->getArrayElementType();
         }
       }
-      if (Cond)
+      if (Cond) {
+        Counter[kInFieldCheck]++;
         CreateTrapBB(IRB, Cond, true);
+      }
     }
   }
 }
@@ -852,17 +875,10 @@ void OverflowDefense::instrumentGepAndBc(
     SourceMap[Source].push_back(I);
   }
 
-  int Counter[3] = {0, 0, 0};
-
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    instrumentGepAndBcImpl(F, Src, Insts, LI, ObjSizeEval, Counter);
+    instrumentGepAndBcImpl(F, Src, Insts, LI, ObjSizeEval);
   }
-
-  dbgs() << "[" << F.getName() << "]\n"
-         << "  Builtin Check: " << Counter[0] << "\n"
-         << "  Cluster Check: " << Counter[1] << "\n"
-         << "  Runtime Check: " << Counter[2] << "\n";
 }
 
 bool OverflowDefense::isAccessMember(Instruction *I) {
@@ -878,13 +894,13 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
 
 void OverflowDefense::instrumentGepAndBcImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
-    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, int Counter[3]) {
+    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
   if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval)) {
-    Counter[0] += Insts.size();
+    Counter[kBuiltInCheck] += Insts.size();
     return;
   }
 
-  if (ClCheckHeap.getNumOccurrences() > 0 && !ClCheckHeap)
+  if (!ClCheckHeap)
     return;
 
   int weight = 0;
@@ -892,10 +908,10 @@ void OverflowDefense::instrumentGepAndBcImpl(
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
 
   if (weight >= 2) {
-    Counter[1]++;
+    Counter[kClusterCheck]++;
     instrumentCluster(F, Src, Insts);
   } else {
-    Counter[2] += Insts.size();
+    Counter[kRuntimeCheck] += Insts.size();
     for (auto *I : Insts) {
       if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
         instrumentGep(Src, GEP);
@@ -987,7 +1003,7 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
   if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
-    if (ClCheckStack.getNumOccurrences() > 0 && !ClCheckStack)
+    if (!ClCheckStack)
       return true;
 
     Value *Size = SizeOffsetEval.first;
@@ -1022,7 +1038,7 @@ bool OverflowDefense::tryRuntimeFreeCheck(
 
     return true;
   } else if (auto *G = dyn_cast<GlobalVariable>(Src)) {
-    if (ClCheckGlobal.getNumOccurrences() > 0 && !ClCheckGlobal)
+    if (!ClCheckGlobal)
       return true;
 
     // FIXME: handle global variable
@@ -1044,6 +1060,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+  Value *CmpPtr = IRB.CreatePtrToInt(BC, int64Type);  
 
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
@@ -1061,7 +1078,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
   Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
   Value *Cmp = IRB.CreateICmpUGE(
-      Ptr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
+      CmpPtr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
   CreateTrapBB(IRB, Cmp, false);
 }
 
@@ -1081,6 +1098,7 @@ void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+  Value *CmpPtr = IRB.CreatePtrToInt(GEP, int64Type);
 
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
@@ -1096,8 +1114,8 @@ void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
   Value *Back = IRB.CreateLShr(Packed, 32);
   Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
   Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
-  Value *CmpBegin = IRB.CreateICmpULT(Ptr, Begin);
-  Value *CmpEnd = IRB.CreateICmpUGE(Ptr, End);
+  Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
+  Value *CmpEnd = IRB.CreateICmpUGE(CmpPtr, End);
   Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   CreateTrapBB(IRB, Cmp, false);
 }
@@ -1112,11 +1130,12 @@ void OverflowDefense::replaceAlloca(Function &F) {
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   static BasicBlock *TrapBB = nullptr;
-  auto GetTrapBB = [&TrapBB](BuilderTy &IRB) {
+  auto GetTrapBB = [&](BuilderTy &IRB) {
     if (!TrapBB) {
       TrapBB = BasicBlock::Create(IRB.GetInsertBlock()->getContext(), "trap",
                                   IRB.GetInsertBlock()->getParent());
       IRB.SetInsertPoint(TrapBB);
+      IRB.CreateCall(AbortFn);
       IRB.CreateUnreachable();
     }
     return TrapBB;
