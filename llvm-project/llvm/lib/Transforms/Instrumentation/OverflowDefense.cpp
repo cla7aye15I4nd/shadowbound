@@ -550,9 +550,16 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
 
 void OverflowDefense::instrumentSubFieldAccess(Function &F,
                                                ScalarEvolution &SE) {
+  Instruction *InsertPt = &*F.getEntryBlock().getFirstInsertionPt();
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
   for (auto *Gep : SubFieldToInstrument) {
     Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
+
     if (isFixedSizeType(Ty)) {
+      IRB.SetInsertPoint(Gep);
+      Value *Cond = nullptr;
       bool isFirstField = true;
       for (auto &Op : Gep->indices()) {
         if (isFirstField) {
@@ -578,12 +585,23 @@ void OverflowDefense::instrumentSubFieldAccess(Function &F,
           auto Aty = cast<ArrayType>(Ty);
           if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
               Aty->getNumElements()) {
-            // TODO: Instrument a subfield access checking
+            Cond =
+                Cond == nullptr
+                    ? IRB.CreateICmpUGE(value,
+                                        ConstantInt::get(value->getType(),
+                                                         Aty->getNumElements()))
+                    : IRB.CreateOr(
+                          Cond,
+                          IRB.CreateICmpUGE(
+                              value, ConstantInt::get(value->getType(),
+                                                      Aty->getNumElements())));
           }
 
           Ty = Aty->getArrayElementType();
         }
       }
+      if (Cond)
+        CreateTrapBB(IRB, Cond);
     }
   }
 }
