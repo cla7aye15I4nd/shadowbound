@@ -91,6 +91,32 @@ enum CheckType {
   kCheckTypeEnd
 };
 
+struct FieldCheck {
+  GetElementPtrInst *Gep;
+  SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
+
+  FieldCheck(GetElementPtrInst *Gep,
+             SmallVector<std::pair<Value *, uint64_t>, 16> SubFields)
+      : Gep(Gep), SubFields(SubFields) {}
+};
+
+struct ChunkCheck {
+  CheckType Type;
+  Value *Src;
+  SmallVector<Instruction *, 16> Insts;
+
+  // Used for built-in checks
+  Value *Size;
+  Value *Offset;
+
+  ChunkCheck(CheckType Type, Value *Src, SmallVector<Instruction *, 16> Insts)
+      : Type(Type), Src(Src), Insts(Insts), Size(nullptr), Offset(nullptr) {}
+
+  ChunkCheck(CheckType Type, Value *Src, SmallVector<Instruction *, 16> Insts,
+             Value *Size, Value *Offset)
+      : Type(Type), Src(Src), Insts(Insts), Size(Size), Offset(Offset) {}
+};
+
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
@@ -136,18 +162,26 @@ private:
   SmallVector<GetElementPtrInst *, 16>
   dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                            PostDominatorTree &PDT, ScalarEvolution &SE);
-  void instrumentSubFieldAccess(Function &F, ScalarEvolution &SE);
-  void instrumentGepAndBc(Function &F, LoopInfo &LI,
-                          ObjectSizeOffsetEvaluator &ObjSizeEval);
-  void instrumentGepAndBcImpl(Function &F, Value *Src,
-                              SmallVector<Instruction *, 16> &Insts,
-                              LoopInfo &LI,
-                              ObjectSizeOffsetEvaluator &ObjSizeEval);
+  void collectSubFieldCheck(Function &F, ScalarEvolution &SE);
+  void collectChunkCheck(Function &F, LoopInfo &LI,
+                         ObjectSizeOffsetEvaluator &ObjSizeEval);
+  void collectChunkCheckImpl(Function &F, Value *Src,
+                             SmallVector<Instruction *, 16> &Insts,
+                             LoopInfo &LI,
+                             ObjectSizeOffsetEvaluator &ObjSizeEval);
   void instrumentCluster(Function &F, Value *Src,
                          SmallVector<Instruction *, 16> &Insts);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
+
+  void commitInstrument(Function &F);
+  void commitFieldCheck(Function &F, FieldCheck &Check);
+  void commitChunkCheck(Function &F, ChunkCheck &Check);
+
+  void commitBuiltInCheck(Function &F, ChunkCheck &Check);
+  void commitClusterCheck(Function &F, ChunkCheck &Check);
+  void commitRuntimeCheck(Function &F, ChunkCheck &Check);
 
   void instrumentBitCast(Value *Src, BitCastInst *BC);
   void instrumentGep(Value *Src, GetElementPtrInst *GEP);
@@ -175,6 +209,9 @@ private:
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Value *, AddrLoc> LocationCache;
   DenseMap<Value *, bool> InterestingPointerCache;
+
+  SmallVector<ChunkCheck, 16> ChunkChecks;
+  SmallVector<FieldCheck, 16> FieldChecks;
 
   const DataLayout *DL;
 
@@ -363,14 +400,12 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
   // we still need to know how much they cost
-  if (ClCheckInField)
-    instrumentSubFieldAccess(F, SE);
+  collectSubFieldCheck(F, SE);
 
   // Instrument GEP and BC
-  instrumentGepAndBc(F, LI, ObjSizeEval);
+  collectChunkCheck(F, LI, ObjSizeEval);
 
-  // Replace alloca with malloc
-  replaceAlloca(F);
+  commitInstrument(F);
 
   dbgs() << "[" << F.getName() << "]\n"
          << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n"
@@ -578,19 +613,14 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
   return false;
 }
 
-void OverflowDefense::instrumentSubFieldAccess(Function &F,
-                                               ScalarEvolution &SE) {
-  Instruction *InsertPt = &*F.getEntryBlock().getFirstInsertionPt();
-  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
-                TargetFolder(*DL));
-
+void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
   for (auto *Gep : SubFieldToInstrument) {
     Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
 
     if (isFixedSizeType(Ty)) {
-      IRB.SetInsertPoint(Gep);
-      Value *Cond = nullptr;
       bool isFirstField = true;
+      SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
+
       for (auto &Op : Gep->indices()) {
         if (isFirstField) {
           isFirstField = false;
@@ -615,24 +645,15 @@ void OverflowDefense::instrumentSubFieldAccess(Function &F,
           auto Aty = cast<ArrayType>(Ty);
           if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
               Aty->getNumElements()) {
-            Cond =
-                Cond == nullptr
-                    ? IRB.CreateICmpUGE(value,
-                                        ConstantInt::get(value->getType(),
-                                                         Aty->getNumElements()))
-                    : IRB.CreateOr(
-                          Cond,
-                          IRB.CreateICmpUGE(
-                              value, ConstantInt::get(value->getType(),
-                                                      Aty->getNumElements())));
+            SubFields.push_back(std::make_pair(value, Aty->getNumElements()));
           }
 
           Ty = Aty->getArrayElementType();
         }
       }
-      if (Cond) {
-        Counter[kInFieldCheck]++;
-        CreateTrapBB(IRB, Cond, true);
+
+      if (SubFields.size() > 0) {
+        FieldChecks.push_back(FieldCheck(Gep, SubFields));
       }
     }
   }
@@ -859,7 +880,7 @@ void OverflowDefense::getLocationImpl(Value *V, AddrLoc &AL,
     AL = AddrLoc::kAddrLocAny;
 }
 
-void OverflowDefense::instrumentGepAndBc(
+void OverflowDefense::collectChunkCheck(
     Function &F, LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
@@ -877,7 +898,7 @@ void OverflowDefense::instrumentGepAndBc(
 
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    instrumentGepAndBcImpl(F, Src, Insts, LI, ObjSizeEval);
+    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval);
   }
 }
 
@@ -892,33 +913,21 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
   return false;
 }
 
-void OverflowDefense::instrumentGepAndBcImpl(
+void OverflowDefense::collectChunkCheckImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
     LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
   if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval)) {
-    Counter[kBuiltInCheck] += Insts.size();
     return;
   }
-
-  if (!ClCheckHeap)
-    return;
 
   int weight = 0;
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
 
   if (weight >= 2) {
-    Counter[kClusterCheck]++;
-    instrumentCluster(F, Src, Insts);
+    ChunkChecks.push_back(ChunkCheck(kRuntimeCheck, Src, Insts));
   } else {
-    Counter[kRuntimeCheck] += Insts.size();
-    for (auto *I : Insts) {
-      if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
-        instrumentGep(Src, GEP);
-      } else if (auto *BC = dyn_cast<BitCastInst>(I)) {
-        instrumentBitCast(Src, BC);
-      }
-    }
+    ChunkChecks.push_back(ChunkCheck(kClusterCheck, Src, Insts));
   }
 }
 
@@ -1003,44 +1012,11 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
   if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
-    if (!ClCheckStack)
-      return true;
-
-    Value *Size = SizeOffsetEval.first;
-    Value *Offset = SizeOffsetEval.second;
-
-    Instruction *InsertPt =
-        isa<Instruction>(Src)
-            ? cast<Instruction>(Src)->getInsertionPointAfterDef()
-            : &*F.getEntryBlock().getFirstInsertionPt();
-
-    BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
-                  TargetFolder(*DL));
-
-    Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-    Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
-    Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
-
-    for (auto &I : Insts) {
-      IRB.SetInsertPoint(I->getInsertionPointAfterDef());
-
-      uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
-      Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-
-      Value *Addr = IRB.CreatePtrToInt(I, int64Type);
-      Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-      Value *CmpEnd =
-          IRB.CreateICmpUGE(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
-      Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
-
-      CreateTrapBB(IRB, Cmp, true);
-    }
-
+    ChunkChecks.push_back(ChunkCheck(kBuiltInCheck, Src, Insts,
+                                     SizeOffsetEval.first,
+                                     SizeOffsetEval.second));
     return true;
   } else if (auto *G = dyn_cast<GlobalVariable>(Src)) {
-    if (!ClCheckGlobal)
-      return true;
-
     // FIXME: handle global variable
     return true;
   }
@@ -1060,7 +1036,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-  Value *CmpPtr = IRB.CreatePtrToInt(BC, int64Type);  
+  Value *CmpPtr = IRB.CreatePtrToInt(BC, int64Type);
 
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
@@ -1129,29 +1105,191 @@ void OverflowDefense::replaceAlloca(Function &F) {
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
-  static BasicBlock *TrapBB = nullptr;
-  auto GetTrapBB = [&](BuilderTy &IRB) {
-    if (!TrapBB) {
-      TrapBB = BasicBlock::Create(IRB.GetInsertBlock()->getContext(), "trap",
-                                  IRB.GetInsertBlock()->getParent());
-      IRB.SetInsertPoint(TrapBB);
-      IRB.CreateCall(AbortFn);
-      IRB.CreateUnreachable();
-    }
-    return TrapBB;
-  };
+  if (Abort) {
+    IRB.SetInsertPoint(
+        SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), true));
 
-  if (!Abort) {
+    IRB.CreateCall(AbortFn);
+  } else {
     IRB.SetInsertPoint(
         SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), false));
 
     IRB.CreateCall(ReportFn);
-  } else {
-    BasicBlock::iterator SplitI = IRB.GetInsertPoint();
-    BasicBlock *OldBB = SplitI->getParent();
-    BasicBlock *Cont = OldBB->splitBasicBlock(SplitI);
-    OldBB->getTerminator()->eraseFromParent();
+  }
+}
 
-    BranchInst::Create(GetTrapBB(IRB), Cont, Cond, OldBB);
+void OverflowDefense::commitInstrument(Function &F) {
+  for (auto &FC : FieldChecks)
+    commitFieldCheck(F, FC);
+
+  for (auto &CC : ChunkChecks)
+    commitChunkCheck(F, CC);
+
+  // Replace alloca with malloc
+  replaceAlloca(F);
+}
+
+void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
+  if (!ClCheckInField)
+    return;
+
+  Counter[kInFieldCheck]++;
+
+  Instruction *InsertPt = FC.Gep;
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Cond = nullptr;
+  for (auto &SF : FC.SubFields) {
+    Value *Cmp =
+        IRB.CreateICmpUGE(SF.first, ConstantInt::get(int64Type, SF.second));
+    Cond = Cond ? IRB.CreateOr(Cond, Cmp) : Cmp;
+  }
+
+  CreateTrapBB(IRB, Cond, false);
+}
+
+void OverflowDefense::commitChunkCheck(Function &F, ChunkCheck &CC) {
+  if (CC.Type == kBuiltInCheck) {
+    commitBuiltInCheck(F, CC);
+  } else if (CC.Type == kClusterCheck) {
+    commitClusterCheck(F, CC);
+  } else if (CC.Type == kRuntimeCheck) {
+    commitRuntimeCheck(F, CC);
+  }
+}
+
+void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
+  if (!ClCheckStack)
+    return;
+
+  Counter[CC.Type]++;
+
+  Value *Src = CC.Src;
+  Instruction *InsertPt =
+      isa<Instruction>(Src)
+          ? cast<Instruction>(Src)->getInsertionPointAfterDef()
+          : &*F.getEntryBlock().getFirstInsertionPt();
+
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Size = CC.Size;
+  Value *Offset = CC.Offset;
+
+  Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+  Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
+  Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
+
+  for (auto &I : CC.Insts) {
+    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+
+    uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+
+    Value *Addr = IRB.CreatePtrToInt(I, int64Type);
+    Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
+    Value *CmpEnd =
+        IRB.CreateICmpUGE(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+    Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+
+    CreateTrapBB(IRB, Cmp, false);
+  }
+}
+
+void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
+  if (!ClCheckHeap)
+    return;
+
+  Counter[CC.Type]++;
+
+  Value *Src = CC.Src;
+  Instruction *InsertPt =
+      isa<Instruction>(Src)
+          ? cast<Instruction>(Src)->getInsertionPointAfterDef()
+          : &*F.getEntryBlock().getFirstInsertionPt();
+
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Size = CC.Size;
+  Value *Offset = CC.Offset;
+
+  // Shadow = Ptr & kShadowMask;
+  // Base = Ptr & kShadowBase;
+  // Packed = *(int64_t *) Shadow;
+  // Front = Packed & 0xffffffff;
+  // Back = Packed >> 32;
+  // Begin = Base - (Front << 3);
+  // End = Base + (Back << 3);
+
+  Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+
+  // The final version of the code is commented out. The reason is that the
+  // compiler is not able to support stack and global variables checking now
+  /*
+    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type,
+    kShadowBase)); Value *Shadow = IRB.CreateAnd(Ptr,
+                                  ConstantInt::get(int64Type, kShadowMask));
+    Value *Packed = IRB.CreateLoad(int64Type,
+                                   IRB.CreateIntToPtr(Shadow, int64PtrType));
+    Value *Front = IRB.CreateAnd(Packed,
+                                 ConstantInt::get(int64Type, 0xffffffff));
+    Value *Back = IRB.CreateLShr(Packed, 32);
+    Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
+    Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  */
+
+  Value *IsApp = IRB.CreateAnd(
+      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+
+  ASSERT(isa<Instruction>(IsApp));
+  Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
+  IRB.SetInsertPoint(ThenInsertPt);
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Packed =
+      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+  Value *Front = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *Back = IRB.CreateLShr(Packed, 32);
+  Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
+  Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+
+  IRB.SetInsertPoint(InsertPt);
+  PHINode *Begin = IRB.CreatePHI(int64Type, 2);
+  Begin->addIncoming(ThenBegin, ThenInsertPt->getParent());
+  Begin->addIncoming(ConstantInt::get(int64Type, 0),
+                     cast<Instruction>(IsApp)->getParent());
+
+  PHINode *End = IRB.CreatePHI(int64Type, 2);
+  End->addIncoming(ThenEnd, ThenInsertPt->getParent());
+  End->addIncoming(ConstantInt::get(int64Type, -1),
+                   cast<Instruction>(IsApp)->getParent());
+
+  // Check if Ptr is in [Begin, End).
+  for (auto *I : CC.Insts) {
+    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+    Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
+    Value *IsIn = IRB.CreateAnd(IRB.CreateICmpUGE(Ptr, Begin),
+                                IRB.CreateICmpULT(Ptr, End));
+    CreateTrapBB(IRB, IsIn, false);
+  }
+}
+
+void OverflowDefense::commitRuntimeCheck(Function &F, ChunkCheck &CC) {
+  if (!ClCheckHeap)
+    return;
+
+  Counter[CC.Type] += CC.Insts.size();
+
+  Value *Src = CC.Src;
+
+  for (auto *I : CC.Insts) {
+    if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
+      instrumentGep(Src, GEP);
+    } else if (auto *BC = dyn_cast<BitCastInst>(I)) {
+      instrumentBitCast(Src, BC);
+    }
   }
 }
