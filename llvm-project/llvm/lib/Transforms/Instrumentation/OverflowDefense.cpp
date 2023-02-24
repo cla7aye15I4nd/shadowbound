@@ -986,6 +986,9 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
   if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
+    if (ClCheckStack.getNumOccurrences() > 0 && !ClCheckStack)
+      return true;
+
     Value *Size = SizeOffsetEval.first;
     Value *Offset = SizeOffsetEval.second;
 
@@ -1010,14 +1013,17 @@ bool OverflowDefense::tryRuntimeFreeCheck(
       Value *Addr = IRB.CreatePtrToInt(I, int64Type);
       Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
       Value *CmpEnd =
-          IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+          IRB.CreateICmpUGE(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
       Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
-      // TODO: report overflow
+      CreateTrapBB(IRB, Cmp, true);
     }
 
     return true;
   } else if (auto *G = dyn_cast<GlobalVariable>(Src)) {
+    if (ClCheckGlobal.getNumOccurrences() > 0 && !ClCheckGlobal)
+      return true;
+
     // FIXME: handle global variable
     return true;
   }
