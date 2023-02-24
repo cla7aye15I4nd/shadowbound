@@ -77,9 +77,11 @@
 #include "llvm/Transforms/Instrumentation/ThreadSanitizer.h"
 #include "llvm/Transforms/ObjCARC.h"
 #include "llvm/Transforms/Scalar.h"
+#include "llvm/Transforms/Scalar/DCE.h"
 #include "llvm/Transforms/Scalar/EarlyCSE.h"
 #include "llvm/Transforms/Scalar/GVN.h"
 #include "llvm/Transforms/Scalar/LowerMatrixIntrinsics.h"
+#include "llvm/Transforms/Scalar/SimplifyCFG.h"
 #include "llvm/Transforms/Utils.h"
 #include "llvm/Transforms/Utils/CanonicalizeAliases.h"
 #include "llvm/Transforms/Utils/Debugify.h"
@@ -669,7 +671,10 @@ static void addSanitizers(const Triple &TargetTriple,
         FunctionPassManager FPM;
         FPM.addPass(OverflowDefensePass(Opts));
         if (Level != OptimizationLevel::O0) {
+          FPM.addPass(DCEPass());
           FPM.addPass(EarlyCSEPass());
+          FPM.addPass(SimplifyCFGPass());
+          FPM.addPass(InstCombinePass());
         }
         MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
       }
