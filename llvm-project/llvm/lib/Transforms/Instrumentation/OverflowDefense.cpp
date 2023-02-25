@@ -302,8 +302,14 @@ bool isFixedSizeType(Type *Ty) {
     return true;
 
   if (StructType *STy = dyn_cast<StructType>(Ty)) {
-    if (ArrayType *Aty = dyn_cast<ArrayType>(STy->elements().back()))
-      return Aty->getNumElements() != 0;
+    if (ArrayType *Aty = dyn_cast<ArrayType>(STy->elements().back())) {
+      // Avoid Check Some Flexible Array Member
+      // struct page_entry {
+      //    ...
+      //    unsigned long in_use_p[1];
+      // } page_entry;
+      return Aty->getNumElements() > 1;
+    }
     return true;
   }
 
@@ -616,6 +622,11 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
 void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
   for (auto *Gep : SubFieldToInstrument) {
     Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
+
+    if (isa<GlobalVariable>(Gep->getPointerOperand())) {
+      // TODO: how to handle global variable's size?
+      continue;
+    }
 
     if (isFixedSizeType(Ty)) {
       bool isFirstField = true;
@@ -1146,7 +1157,7 @@ void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
     Cond = Cond ? IRB.CreateOr(Cond, Cmp) : Cmp;
   }
 
-  CreateTrapBB(IRB, Cond, false);
+  CreateTrapBB(IRB, Cond, true);
 }
 
 void OverflowDefense::commitChunkCheck(Function &F, ChunkCheck &CC) {
@@ -1211,9 +1222,6 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
 
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
-
-  Value *Size = CC.Size;
-  Value *Offset = CC.Offset;
 
   // Shadow = Ptr & kShadowMask;
   // Base = Ptr & kShadowBase;
