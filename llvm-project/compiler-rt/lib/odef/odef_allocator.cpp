@@ -62,8 +62,6 @@ static void *OdefAllocate(uptr size, uptr alignment) {
   // FIXME: CHECK size is larger than max_malloc_size.
   // FIXME: CHECK if RSS limit is exceeded.
 
-  size += kReservedBytes;
-
   OdefThread *t = GetCurrentThread();
   void *allocated;
   if (t) {
@@ -116,11 +114,19 @@ static void *OdefCalloc(uptr nmemb, uptr size) {
   return p;
 }
 
-void *odef_malloc(uptr size) { return OdefAllocate(size, sizeof(u64)); }
+void *odef_malloc(uptr size) { 
+  size += kReservedBytes;
+  return OdefAllocate(size, sizeof(u64)); 
+}
 
-void *odef_calloc(uptr nmemb, uptr size) { return OdefCalloc(nmemb, size); }
+void *odef_calloc(uptr nmemb, uptr size) { 
+  nmemb += (size + kReservedBytes - 1) / kReservedBytes;
+  return OdefCalloc(nmemb, size); 
+}
 
 void *odef_realloc(void *p, uptr size) {
+  size += kReservedBytes;
+
   if (!p)
     return OdefAllocate(size, sizeof(u64));
   if (!size) {
@@ -131,34 +137,43 @@ void *odef_realloc(void *p, uptr size) {
 }
 
 void *odef_reallocarray(void *p, uptr nmemb, uptr size) {
+  nmemb += (size + kReservedBytes - 1) / kReservedBytes;
   return odef_realloc(p, nmemb * size);
 }
 
-void *odef_valloc(uptr size) { return OdefAllocate(size, GetPageSizeCached()); }
+void *odef_valloc(uptr size) {
+  size += kReservedBytes;
+  return OdefAllocate(size, GetPageSizeCached()); 
+}
 
 void *odef_pvalloc(uptr size) {
   uptr PageSize = GetPageSizeCached();
+
+  size += kReservedBytes;
   size = size ? RoundUpTo(size, PageSize) : PageSize;
   return OdefAllocate(size, PageSize);
 }
 
 void *odef_aligned_alloc(uptr alignment, uptr size) {
+  size += kReservedBytes;
   return OdefAllocate(size, alignment);
 }
 
 void *odef_memalign(uptr alignment, uptr size) {
+  size += kReservedBytes;
   return OdefAllocate(size, alignment);
 }
 
 uptr odef_allocated_size(void *p) {
   // FIXME: May me we need return requested size instead of actually allocated
-  return allocator.GetActuallyAllocatedSize(p);
+  return allocator.GetActuallyAllocatedSize(p) - kReservedBytes;
 }
 
 int odef_posix_memalign(void **memptr, uptr alignment, uptr size) {
   if (UNLIKELY(!CheckPosixMemalignAlignment(alignment))) {
     return errno_EINVAL;
   }
+  size += kReservedBytes;
   void *p = OdefAllocate(size, alignment);
   if (!p)
     return errno_ENOMEM;
