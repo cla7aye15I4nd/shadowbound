@@ -1013,7 +1013,7 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
     Value *IsIn = IRB.CreateAnd(IRB.CreateICmpUGE(Ptr, Begin),
                                 IRB.CreateICmpULT(Ptr, End));
-    CreateTrapBB(IRB, IsIn, false);
+    CreateTrapBB(IRB, IsIn, true);
   }
 }
 
@@ -1066,7 +1066,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
 
   Value *Cmp = IRB.CreateICmpUGE(
       CmpPtr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
-  CreateTrapBB(IRB, Cmp, false);
+  CreateTrapBB(IRB, Cmp, true);
 }
 
 void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
@@ -1104,7 +1104,7 @@ void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
   Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
   Value *CmpEnd = IRB.CreateICmpUGE(CmpPtr, End);
   Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
-  CreateTrapBB(IRB, Cmp, false);
+  CreateTrapBB(IRB, Cmp, true);
 }
 
 void OverflowDefense::replaceAlloca(Function &F) {
@@ -1116,7 +1116,7 @@ void OverflowDefense::replaceAlloca(Function &F) {
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
-  if (Abort) {
+  if (Abort && !Recover) {
     IRB.SetInsertPoint(
         SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), true));
 
@@ -1204,7 +1204,7 @@ void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
         IRB.CreateICmpUGE(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
-    CreateTrapBB(IRB, Cmp, false);
+    CreateTrapBB(IRB, Cmp, true);
   }
 }
 
