@@ -33,7 +33,6 @@ static const int kReservedBytes = 8;
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
 static const uint64_t kAllocatorSpaceBegin = 0x600000000000ULL;
-static const uint64_t kAllocatorStackBegin = 0x7ffffffde000ULL;
 static const uint64_t kAllocatorSpaceEnd = 0x800000000000ULL;
 static const uint64_t kMaxAddress = 0x1000000000000ULL;
 
@@ -185,8 +184,8 @@ private:
   void commitClusterCheck(Function &F, ChunkCheck &Check);
   void commitRuntimeCheck(Function &F, ChunkCheck &Check);
 
-  void instrumentBitCast(Value *Src, BitCastInst *BC);
-  void instrumentGep(Value *Src, GetElementPtrInst *GEP);
+  void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
+  void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
   void replaceAlloca(Function &F);
 
   Value *getSource(Instruction *I);
@@ -198,6 +197,7 @@ private:
                        SmallPtrSet<Value *, 16> &Visited);
 
   void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
+  Value *readRegister(Function &F, BuilderTy &IRB, StringRef RegName);
 
   bool Kernel;
   bool Recover;
@@ -984,8 +984,7 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
 
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr,
-                        ConstantInt::get(int64Type, kAllocatorStackBegin)));
+      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
 
   ASSERT(isa<Instruction>(IsApp));
   Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
@@ -1038,7 +1037,7 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   return false;
 }
 
-void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
+void OverflowDefense::instrumentBitCast(Function &F, Value *Src, BitCastInst *BC) {
   // ShadowAddr = BC & kShadowMask;
   // Base = BC & kShadowBase;
   // BackSize = *(int32_t *) ShadowAddr;
@@ -1055,8 +1054,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr,
-                        ConstantInt::get(int64Type, kAllocatorStackBegin)));
+      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
   IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1073,7 +1071,7 @@ void OverflowDefense::instrumentBitCast(Value *Src, BitCastInst *BC) {
   CreateTrapBB(IRB, Cmp, true);
 }
 
-void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
+void OverflowDefense::instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP) {
   // ShadowAddr = GEP & kShadowMask;
   // Base = GEP & kShadowBase;
   // Packed = *(int32_t *) ShadowAddr;
@@ -1094,8 +1092,7 @@ void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr,
-                        ConstantInt::get(int64Type, kAllocatorStackBegin)));
+      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
   IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1255,8 +1252,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
 
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr,
-                        ConstantInt::get(int64Type, kAllocatorStackBegin)));
+      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
 
   ASSERT(isa<Instruction>(IsApp));
   Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
@@ -1301,9 +1297,19 @@ void OverflowDefense::commitRuntimeCheck(Function &F, ChunkCheck &CC) {
 
   for (auto *I : CC.Insts) {
     if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
-      instrumentGep(Src, GEP);
+      instrumentGep(F, Src, GEP);
     } else if (auto *BC = dyn_cast<BitCastInst>(I)) {
-      instrumentBitCast(Src, BC);
+      instrumentBitCast(F, Src, BC);
     }
   }
+}
+
+Value *OverflowDefense::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
+  Module *M = F.getParent();
+  Function *readReg = Intrinsic::getDeclaration(M, Intrinsic::read_register,
+                                                IRB.getIntPtrTy(*DL));
+
+  LLVMContext &C = M->getContext();
+  MDNode *MD = MDNode::get(C, {MDString::get(C, Reg)});
+  return IRB.CreateCall(readReg, {MetadataAsValue::get(C, MD)});
 }
