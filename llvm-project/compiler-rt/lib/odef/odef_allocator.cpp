@@ -22,7 +22,7 @@ static const uptr kMaxAllowedMallocSize = 8UL << 30;
 
 struct AP64 { // Allocator64 parameters. Deliberately using a short name.
   static const uptr kSpaceBeg = kAllocatorSpace;
-  static const uptr kSpaceSize = 0x40000000000; // 4T.
+  static const uptr kSpaceSize = 0x20000000000; // 2T.
   static const uptr kMetadataSize = 0;
   typedef DefaultSizeClassMap SizeClassMap;
   typedef OdefMapUnmapCallback MapUnmapCallback;
@@ -114,14 +114,15 @@ static void *OdefCalloc(uptr nmemb, uptr size) {
   return p;
 }
 
-void *odef_malloc(uptr size) { 
+void *odef_malloc(uptr size) {
   size += kReservedBytes;
-  return OdefAllocate(size, sizeof(u64)); 
+  return OdefAllocate(size, sizeof(u64));
 }
 
-void *odef_calloc(uptr nmemb, uptr size) { 
-  nmemb += (size + kReservedBytes - 1) / kReservedBytes;
-  return OdefCalloc(nmemb, size); 
+// TODO: Increasing the `nmemb` amy should be moved to the Instrumentation.
+void *odef_calloc(uptr nmemb, uptr size) {
+  nmemb += 1;
+  return OdefCalloc(nmemb, size);
 }
 
 void *odef_realloc(void *p, uptr size) {
@@ -137,13 +138,13 @@ void *odef_realloc(void *p, uptr size) {
 }
 
 void *odef_reallocarray(void *p, uptr nmemb, uptr size) {
-  nmemb += (size + kReservedBytes - 1) / kReservedBytes;
+  nmemb += 1;
   return odef_realloc(p, nmemb * size);
 }
 
 void *odef_valloc(uptr size) {
   size += kReservedBytes;
-  return OdefAllocate(size, GetPageSizeCached()); 
+  return OdefAllocate(size, GetPageSizeCached());
 }
 
 void *odef_pvalloc(uptr size) {
