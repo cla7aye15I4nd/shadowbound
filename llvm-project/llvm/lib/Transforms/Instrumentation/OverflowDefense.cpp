@@ -960,8 +960,8 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
   // Shadow = Ptr & kShadowMask;
   // Base = Ptr & kShadowBase;
   // Packed = *(int64_t *) Shadow;
-  // Front = Packed & 0xffffffff;
-  // Back = Packed >> 32;
+  // Back = Packed & 0xffffffff;
+  // Front = Packed >> 32;
   // Begin = Base - (Front << 3);
   // End = Base + (Back << 3);
 
@@ -975,9 +975,9 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
                                   ConstantInt::get(int64Type, kShadowMask));
     Value *Packed = IRB.CreateLoad(int64Type,
                                    IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *Front = IRB.CreateAnd(Packed,
+    Value *Back = IRB.CreateAnd(Packed,
                                  ConstantInt::get(int64Type, 0xffffffff));
-    Value *Back = IRB.CreateLShr(Packed, 32);
+    Value *Front = IRB.CreateLShr(Packed, 32);
     Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
     Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
   */
@@ -994,8 +994,8 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Front = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Back = IRB.CreateLShr(Packed, 32);
+  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *Front = IRB.CreateLShr(Packed, 32);
   Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
   Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
 
@@ -1102,8 +1102,8 @@ void OverflowDefense::instrumentGep(Value *Src, GetElementPtrInst *GEP) {
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Front = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Back = IRB.CreateLShr(Packed, 32);
+  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *Front = IRB.CreateLShr(Packed, 32);
   Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
   Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
   Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
@@ -1231,8 +1231,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
   // Shadow = Ptr & kShadowMask;
   // Base = Ptr & kShadowBase;
   // Packed = *(int64_t *) Shadow;
-  // Front = Packed & 0xffffffff;
-  // Back = Packed >> 32;
+  // Back = Packed & 0xffffffff;
+  // Front = Packed >> 32;
   // Begin = Base - (Front << 3);
   // End = Base + (Back << 3);
 
@@ -1246,9 +1246,9 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
                                   ConstantInt::get(int64Type, kShadowMask));
     Value *Packed = IRB.CreateLoad(int64Type,
                                    IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *Front = IRB.CreateAnd(Packed,
+    Value *Back = IRB.CreateAnd(Packed,
                                  ConstantInt::get(int64Type, 0xffffffff));
-    Value *Back = IRB.CreateLShr(Packed, 32);
+    Value *Front = IRB.CreateLShr(Packed, 32);
     Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
     Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
   */
@@ -1265,8 +1265,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Front = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Back = IRB.CreateLShr(Packed, 32);
+  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *Front = IRB.CreateLShr(Packed, 32);
   Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
   Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
 
