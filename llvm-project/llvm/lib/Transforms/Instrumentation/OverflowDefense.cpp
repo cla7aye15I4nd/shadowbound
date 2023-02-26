@@ -35,6 +35,7 @@ static const uint64_t kShadowMask = ~0x400000000007ULL;
 static const uint64_t kAllocatorSpaceBegin = 0x600000000000ULL;
 static const uint64_t kAllocatorStackBegin = 0x700000000000ULL;
 static const uint64_t kAllocatorSpaceEnd = 0x800000000000ULL;
+static const uint64_t kMaxAddress = 0x1000000000000ULL;
 
 static cl::opt<bool>
     ClEnableKodef("odef-kernel",
@@ -1005,7 +1006,7 @@ void OverflowDefense::instrumentCluster(Function &F, Value *Src,
 
   PHINode *End = IRB.CreatePHI(int64Type, 2);
   End->addIncoming(ThenEnd, ThenInsertPt->getParent());
-  End->addIncoming(ConstantInt::get(int64Type, -1),
+  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress),
                    cast<Instruction>(IsApp)->getParent());
 
   // Check if Ptr is in [Begin, End).
@@ -1273,16 +1274,16 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
 
   PHINode *End = IRB.CreatePHI(int64Type, 2);
   End->addIncoming(ThenEnd, ThenInsertPt->getParent());
-  End->addIncoming(ConstantInt::get(int64Type, -1),
+  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress),
                    cast<Instruction>(IsApp)->getParent());
 
   // Check if Ptr is in [Begin, End).
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
-    Value *IsIn = IRB.CreateAnd(IRB.CreateICmpUGE(Ptr, Begin),
-                                IRB.CreateICmpULT(Ptr, End));
-    CreateTrapBB(IRB, IsIn, true);
+    Value *NotIn = IRB.CreateAnd(IRB.CreateICmpULT(Ptr, Begin),
+                                IRB.CreateICmpUGE(Ptr, End));
+    CreateTrapBB(IRB, NotIn, true);
   }
 }
 
