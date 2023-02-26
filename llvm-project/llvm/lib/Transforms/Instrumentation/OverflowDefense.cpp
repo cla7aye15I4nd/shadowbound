@@ -1037,7 +1037,8 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   return false;
 }
 
-void OverflowDefense::instrumentBitCast(Function &F, Value *Src, BitCastInst *BC) {
+void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
+                                        BitCastInst *BC) {
   // ShadowAddr = BC & kShadowMask;
   // Base = BC & kShadowBase;
   // BackSize = *(int32_t *) ShadowAddr;
@@ -1059,9 +1060,11 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src, BitCastInst *BC
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *BackSize = IRB.CreateZExt(
-      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
-      int64Type);
+  Value *BackSize = IRB.CreateShl(
+      IRB.CreateZExt(
+          IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+          int64Type),
+      3);
 
   uint64_t NeededSize = DL->getTypeStoreSize(BC->getType());
   Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
@@ -1071,7 +1074,8 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src, BitCastInst *BC
   CreateTrapBB(IRB, Cmp, true);
 }
 
-void OverflowDefense::instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP) {
+void OverflowDefense::instrumentGep(Function &F, Value *Src,
+                                     GetElementPtrInst *GEP) {
   // ShadowAddr = GEP & kShadowMask;
   // Base = GEP & kShadowBase;
   // Packed = *(int32_t *) ShadowAddr;
@@ -1304,7 +1308,8 @@ void OverflowDefense::commitRuntimeCheck(Function &F, ChunkCheck &CC) {
   }
 }
 
-Value *OverflowDefense::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
+Value *OverflowDefense::readRegister(Function &F, BuilderTy &IRB,
+                                     StringRef Reg) {
   Module *M = F.getParent();
   Function *readReg = Intrinsic::getDeclaration(M, Intrinsic::read_register,
                                                 IRB.getIntPtrTy(*DL));
