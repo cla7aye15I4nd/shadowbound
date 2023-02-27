@@ -67,11 +67,16 @@ static void HackDynLib() {
     sscanf(buf, "%lx-%lx %4s %lx %s %ld %s", &begin, &end, perm, &foo, dev,
            &inode, mapname);
 
+    if (!MEM_IS_APP(begin))
+      continue;
+
     char *last_slash = mapname + strlen(mapname);
     while (last_slash > mapname && *last_slash != '/')
       last_slash--;
 
-    if (strcmp(last_slash, "/libc.so.6") == 0) {
+    // FIXME: I need to hook all dynamic libraries
+    last_slash[4] = '\0';
+    if (strcmp(last_slash, "/lib") == 0) {
       u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(begin);
       u32 *shadow_end = (u32 *)MEM_TO_SHADOW(end);
 #ifdef __clang__
