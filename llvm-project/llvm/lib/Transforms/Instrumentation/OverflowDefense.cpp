@@ -1069,7 +1069,7 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   uint64_t NeededSize = DL->getTypeStoreSize(BC->getType());
   Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
-  Value *Cmp = IRB.CreateICmpUGE(
+  Value *Cmp = IRB.CreateICmpUGT(
       CmpPtr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
   CreateTrapBB(IRB, Cmp, true);
 }
