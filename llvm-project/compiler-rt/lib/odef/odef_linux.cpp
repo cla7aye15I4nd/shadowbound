@@ -1,6 +1,6 @@
 #include "odef.h"
-#include "odef_thread.h"
 #include "odef_interface_internal.h"
+#include "odef_thread.h"
 
 #include <elf.h>
 #include <link.h>
@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/resource.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -47,6 +48,43 @@ static bool ProtectMemoryRange(uptr beg, uptr size, const char *name) {
   return true;
 }
 
+// Note that sometimes the program will check the global variable in the
+// library, so we need to ensure that checking will not lead any errors.
+static void HackDynLib() {
+  static const int kMaxPathLength = 1024;
+
+  FILE *f = fopen("/proc/self/maps", "r");
+
+  char buf[kMaxPathLength + 100];
+  char perm[5], dev[6];
+  char mapname[kMaxPathLength];
+  uptr begin, end, inode, foo;
+
+  while (!feof(f)) {
+    if (fgets(buf, sizeof(buf), f) == 0)
+      break;
+
+    sscanf(buf, "%lx-%lx %4s %lx %s %ld %s", &begin, &end, perm, &foo, dev,
+           &inode, mapname);
+
+    char *last_slash = mapname + strlen(mapname);
+    while (last_slash > mapname && *last_slash != '/')
+      last_slash--;
+
+    if (strcmp(last_slash, "/libc.so.6") == 0) {
+      u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(begin);
+      u32 *shadow_end = (u32 *)MEM_TO_SHADOW(end);
+#ifdef __clang__
+#pragma unroll
+#endif
+      while (shadow_beg < shadow_end)
+        *shadow_beg++ = 1 << 30;
+    }
+  }
+
+  fclose(f);
+}
+
 bool InitShadow() {
   const uptr maxVirtualAddress = GetMaxUserVirtualAddress();
 
@@ -80,6 +118,8 @@ bool InitShadow() {
         return false;
     }
   }
+
+  HackDynLib();
 
   return true;
 }
