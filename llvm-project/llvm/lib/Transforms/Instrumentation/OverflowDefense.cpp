@@ -170,8 +170,6 @@ private:
                              SmallVector<Instruction *, 16> &Insts,
                              LoopInfo &LI,
                              ObjectSizeOffsetEvaluator &ObjSizeEval);
-  void instrumentCluster(Function &F, Value *Src,
-                         SmallVector<Instruction *, 16> &Insts);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
@@ -236,13 +234,13 @@ bool isEscapeInstruction(Instruction *I) {
   static SmallVector<StringRef, 16> whitelist = {"llvm.prefetch."};
 
   if (auto *CI = dyn_cast<CallInst>(I)) {
+    // Some intrinsics function will not escape the pointer
     Function *F = CI->getCalledFunction();
-    if (F == nullptr)
-      return true;
-
-    for (auto &name : whitelist) {
-      if (F->getName().startswith(name))
-        return false;
+    if (F != nullptr) {
+      for (auto &name : whitelist) {
+        if (F->getName().startswith(name))
+          return false;
+      }
     }
 
     return true;
@@ -254,25 +252,41 @@ bool isEscapeInstruction(Instruction *I) {
 bool isUnionType(Type *Ty) {
   if (auto *STy = dyn_cast<StructType>(Ty))
     return STy->hasName() && STy->getName().startswith("union.");
+  else
+    return false;
+}
+
+bool isFlexibleStructure(StructType *STy) {
+  if (ArrayType *Aty = dyn_cast<ArrayType>(STy->elements().back())) {
+    // Avoid Check Some Flexible Array Member
+    // struct page_entry {
+    //    ...
+    //    unsigned long in_use_p[1];
+    // } page_entry;
+
+    // It the number of elements is less or equal to 1, it usually means it is
+    // a flexible structure.
+    return Aty->getNumElements() <= 1;
+  }
 
   return false;
 }
 
 bool isZeroAccessGep(Instruction *I) {
-  if (auto *Gep = dyn_cast<GetElementPtrInst>(I)) {
-    for (auto &Op : Gep->indices()) {
-      if (auto *C = dyn_cast<ConstantInt>(&Op)) {
-        if (0 != C->getSExtValue())
-          return false;
-      } else {
-        return false;
-      }
-    }
+  auto *Gep = dyn_cast<GetElementPtrInst>(I);
 
-    return true;
+  // It is not a GEP
+  if (Gep == nullptr)
+    return false;
+
+  for (auto &Op : Gep->indices()) {
+    auto *C = dyn_cast<ConstantInt>(Op);
+    // Not a constant or the constant is not zero
+    if (C == nullptr || C->getZExtValue() != 0)
+      return false;
   }
 
-  return false;
+  return true;
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -303,17 +317,8 @@ bool isFixedSizeType(Type *Ty) {
   if (Ty->isArrayTy())
     return true;
 
-  if (StructType *STy = dyn_cast<StructType>(Ty)) {
-    if (ArrayType *Aty = dyn_cast<ArrayType>(STy->elements().back())) {
-      // Avoid Check Some Flexible Array Member
-      // struct page_entry {
-      //    ...
-      //    unsigned long in_use_p[1];
-      // } page_entry;
-      return Aty->getNumElements() > 1;
-    }
-    return true;
-  }
+  if (StructType *STy = dyn_cast<StructType>(Ty))
+    return !isFlexibleStructure(STy);
 
   return false;
 }
@@ -607,15 +612,24 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
     Type *dstTy = BC->getDestTy()->getPointerElementType();
 
     if (isUnionType(srcTy) || isUnionType(dstTy))
-      return false;
+      return true;
 
     if (!srcTy->isSized() || !dstTy->isSized())
-      return false;
+      return true;
+
+    if (auto *STy = dyn_cast<StructType>(srcTy))
+      if (isFlexibleStructure(STy))
+        return true;
+
+    if (auto *STy = dyn_cast<StructType>(dstTy))
+      if (isFlexibleStructure(STy))
+        return true;
 
     TypeSize srcSize = DL->getTypeStoreSize(srcTy);
     TypeSize dstSize = DL->getTypeStoreSize(dstTy);
 
-    return dstSize <= srcSize;
+    // We always ensure every pointer holds at least 8 bytes.
+    return dstSize <= srcSize || dstSize <= kReservedBytes;
   }
 
   return false;
@@ -631,6 +645,7 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
     }
 
     if (isFixedSizeType(Ty)) {
+      bool skipOnce = false;
       bool isFirstField = true;
       SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
 
@@ -648,16 +663,24 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
           ASSERT(isa<ConstantInt>(value));
           ASSERT(cast<ConstantInt>(value)->getZExtValue() <
                  cast<StructType>(Ty)->getNumElements());
+          ASSERT(!skipOnce);
 
-          Ty = cast<StructType>(Ty)->getElementType(
-              cast<ConstantInt>(value)->getZExtValue());
+          StructType *STy = cast<StructType>(Ty);
+          auto index = cast<ConstantInt>(value)->getZExtValue();
+          Ty = STy->getElementType(index);
+
+          if (isFlexibleStructure(STy) && index == STy->getNumElements() - 1)
+            skipOnce = true;
         } else {
           ASSERT(value->getType()->isIntegerTy(64));
           ASSERT(Ty->isArrayTy());
 
           auto Aty = cast<ArrayType>(Ty);
-          if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
-              Aty->getNumElements()) {
+
+          if (skipOnce) {
+            skipOnce = false;
+          } else if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
+                     Aty->getNumElements()) {
             SubFields.push_back(std::make_pair(value, Aty->getNumElements()));
           }
 
@@ -730,53 +753,44 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
     bool optimized = false;
     auto I = GepToInstrument[i];
 
-    if (I->getPointerOperand()
-            ->getType()
-            ->getPointerElementType()
-            ->isArrayTy()) {
-      // Arraytype pointer's overflow will be detected subfield access checking
-      optimized = true;
-    } else {
-      for (size_t j = 0; j < GepToInstrument.size(); ++j) {
-        if (i != j) {
-          auto J = GepToInstrument[j];
-          if (DT.dominates(J, I) || PDT.dominates(J, I)) {
+    for (size_t j = 0; j < GepToInstrument.size(); ++j) {
+      if (i != j) {
+        auto J = GepToInstrument[j];
+        if (DT.dominates(J, I) || PDT.dominates(J, I)) {
 
-            // The pointer operand of I and J are the same
-            if (I->getPointerOperand() == J->getPointerOperand()) {
-              Type *ty =
-                  I->getPointerOperand()->getType()->getPointerElementType();
+          // The pointer operand of I and J are the same
+          if (I->getPointerOperand() == J->getPointerOperand()) {
+            Type *ty =
+                I->getPointerOperand()->getType()->getPointerElementType();
 
-              size_t numIndex =
-                  isFixedSizeType(ty)
-                      ? 1
-                      : std::max(I->getNumIndices(), J->getNumIndices());
-              bool NotGreater = true;
+            size_t numIndex =
+                isFixedSizeType(ty)
+                    ? 1
+                    : std::max(I->getNumIndices(), J->getNumIndices());
+            bool NotGreater = true;
 
-              // Compare the offset of each index if every offset of I is always
-              // smaller than J, then I is not need to be instrumented
-              for (size_t k = 0; k < numIndex; ++k) {
-                auto IOffset = k >= I->getNumIndices()
-                                   ? ConstantInt::getNullValue(int64Type)
-                                   : I->getOperand(k + 1);
-                auto JOffset = k >= J->getNumIndices()
-                                   ? ConstantInt::getNullValue(int64Type)
-                                   : J->getOperand(k + 1);
+            // Compare the offset of each index if every offset of I is always
+            // smaller than J, then I is not need to be instrumented
+            for (size_t k = 0; k < numIndex; ++k) {
+              auto IOffset = k >= I->getNumIndices()
+                                 ? ConstantInt::getNullValue(int64Type)
+                                 : I->getOperand(k + 1);
+              auto JOffset = k >= J->getNumIndices()
+                                 ? ConstantInt::getNullValue(int64Type)
+                                 : J->getOperand(k + 1);
 
-                // If the max offset of I is larger than the min offset of J,
-                // then it is possible that the offset of I is greater than the
-                // offset of J at runtime.
-                if (SE.getUnsignedRangeMax(SE.getSCEV(IOffset)).getZExtValue() >
-                    SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
-                        .getZExtValue()) {
-                  NotGreater = false;
-                  break;
-                }
-              }
-              if (NotGreater) {
-                optimized = true;
+              // If the max offset of I is larger than the min offset of J,
+              // then it is possible that the offset of I is greater than the
+              // offset of J at runtime.
+              if (SE.getUnsignedRangeMax(SE.getSCEV(IOffset)).getZExtValue() >
+                  SE.getUnsignedRangeMin(SE.getSCEV(JOffset)).getZExtValue()) {
+                NotGreater = false;
                 break;
               }
+            }
+            if (NotGreater) {
+              optimized = true;
+              break;
             }
           }
         }
@@ -944,81 +958,6 @@ void OverflowDefense::collectChunkCheckImpl(
   }
 }
 
-void OverflowDefense::instrumentCluster(Function &F, Value *Src,
-                                        SmallVector<Instruction *, 16> &Insts) {
-  // Fetch Src Range from shadow memory.
-  ASSERT(isa<Instruction>(Src) || isa<Argument>(Src));
-
-  Instruction *InsertPt =
-      isa<Instruction>(Src)
-          ? cast<Instruction>(Src)->getInsertionPointAfterDef()
-          : &*F.getEntryBlock().getFirstInsertionPt();
-
-  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
-                TargetFolder(*DL));
-
-  // Shadow = Ptr & kShadowMask;
-  // Base = Ptr & kShadowBase;
-  // Packed = *(int64_t *) Shadow;
-  // Back = Packed & 0xffffffff;
-  // Front = Packed >> 32;
-  // Begin = Base - (Front << 3);
-  // End = Base + (Back << 3);
-
-  Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-
-  // The final version of the code is commented out. The reason is that the
-  // compiler is not able to support stack and global variables checking now
-  /*
-    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-    Value *Shadow = IRB.CreateAnd(Ptr,
-                                  ConstantInt::get(int64Type, kShadowMask));
-    Value *Packed = IRB.CreateLoad(int64Type,
-                                   IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *Back = IRB.CreateAnd(Packed,
-                                 ConstantInt::get(int64Type, 0xffffffff));
-    Value *Front = IRB.CreateLShr(Packed, 32);
-    Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-    Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
-  */
-
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
-
-  ASSERT(isa<Instruction>(IsApp));
-  Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
-  IRB.SetInsertPoint(ThenInsertPt);
-  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-  Value *Packed =
-      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Front = IRB.CreateLShr(Packed, 32);
-  Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-  Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
-
-  IRB.SetInsertPoint(InsertPt);
-  PHINode *Begin = IRB.CreatePHI(int64Type, 2);
-  Begin->addIncoming(ThenBegin, ThenInsertPt->getParent());
-  Begin->addIncoming(ConstantInt::get(int64Type, 0),
-                     cast<Instruction>(IsApp)->getParent());
-
-  PHINode *End = IRB.CreatePHI(int64Type, 2);
-  End->addIncoming(ThenEnd, ThenInsertPt->getParent());
-  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress),
-                   cast<Instruction>(IsApp)->getParent());
-
-  // Check if Ptr is in [Begin, End).
-  for (auto *I : Insts) {
-    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
-    Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
-    Value *NotIn = IRB.CreateAnd(IRB.CreateICmpULT(Ptr, Begin),
-                                 IRB.CreateICmpUGE(Ptr, End));
-    CreateTrapBB(IRB, NotIn, true);
-  }
-}
-
 bool OverflowDefense::tryRuntimeFreeCheck(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
     ObjectSizeOffsetEvaluator &ObjSizeEval) {
@@ -1066,7 +1005,9 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
           int64Type),
       3);
 
-  uint64_t NeededSize = DL->getTypeStoreSize(BC->getType());
+  uint64_t NeededSize =
+      DL->getTypeStoreSize(BC->getType()->getPointerElementType());
+  ASSERT(NeededSize > kReservedBytes);
   Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
   Value *Cmp = IRB.CreateICmpUGT(
@@ -1075,7 +1016,7 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
 }
 
 void OverflowDefense::instrumentGep(Function &F, Value *Src,
-                                     GetElementPtrInst *GEP) {
+                                    GetElementPtrInst *GEP) {
   // ShadowAddr = GEP & kShadowMask;
   // Base = GEP & kShadowBase;
   // Packed = *(int32_t *) ShadowAddr;
@@ -1108,7 +1049,10 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
   Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
   Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
-  Value *CmpEnd = IRB.CreateICmpUGE(CmpPtr, End);
+  Value *CmpEnd = IRB.CreateICmpUGT(CmpPtr, End);
+  // TODO: After solving all bugs, replace the line with
+  // Value *CmpEnd = IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal),
+  // End);
   Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   CreateTrapBB(IRB, Cmp, true);
 }
@@ -1285,8 +1229,10 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
+    // TODO: After solving all bugs, replace the second part with
+    // IRB.CreateICmpUGT(IRB.CreateAdd(Ptr, NeededSizeVal), End)
     Value *NotIn = IRB.CreateAnd(IRB.CreateICmpULT(Ptr, Begin),
-                                 IRB.CreateICmpUGE(Ptr, End));
+                                 IRB.CreateICmpUGT(Ptr, End));
     CreateTrapBB(IRB, NotIn, true);
   }
 }
