@@ -1154,8 +1154,10 @@ void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
 
     Value *Addr = IRB.CreatePtrToInt(I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    Value *CmpEnd =
-        IRB.CreateICmpUGE(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+    Value *CmpEnd = IRB.CreateICmpUGT(Addr, PtrEnd);
+    // TODO: After solving all bugs, replace the line with
+    // Value *CmpEnd =
+    //     IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
     CreateTrapBB(IRB, Cmp, true);
