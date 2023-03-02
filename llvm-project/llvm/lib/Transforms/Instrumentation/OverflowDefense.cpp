@@ -13,6 +13,7 @@
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
+#include <numeric>
 
 using namespace llvm;
 using BuilderTy = IRBuilder<TargetFolder>;
@@ -420,11 +421,13 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   commitInstrument(F);
 
-  dbgs() << "[" << F.getName() << "]\n"
-         << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n"
-         << "  Cluster Check: " << Counter[kClusterCheck] << "\n"
-         << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n"
-         << "  InField Check: " << Counter[kInFieldCheck] << "\n";
+  dbgs() << "[" << F.getName() << "]\n";
+  if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
+    dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n"
+           << "  Cluster Check: " << Counter[kClusterCheck] << "\n"
+           << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n"
+           << "  InField Check: " << Counter[kInFieldCheck] << "\n";
+  }
 
   return true;
 }
