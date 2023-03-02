@@ -593,7 +593,8 @@ bool OverflowDefense::NeverEscapedImpl(
       if (isEscapeInstruction(UI))
         return false;
 
-      if (!NeverEscapedImpl(UI, Visited))
+      // TODO: handle more cases
+      if (isa<PHINode>(UI) && !NeverEscapedImpl(UI, Visited))
         return false;
     } else {
       // TODO: handle non-instruction user
