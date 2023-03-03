@@ -1237,8 +1237,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
     // TODO: After solving all bugs, replace the second part with
     // IRB.CreateICmpUGT(IRB.CreateAdd(Ptr, NeededSizeVal), End)
-    Value *NotIn = IRB.CreateAnd(IRB.CreateICmpULT(Ptr, Begin),
-                                 IRB.CreateICmpUGT(Ptr, End));
+    Value *NotIn = IRB.CreateOr(IRB.CreateICmpULT(Ptr, Begin),
+                                IRB.CreateICmpUGT(Ptr, End));
     CreateTrapBB(IRB, NotIn, true);
   }
 }
