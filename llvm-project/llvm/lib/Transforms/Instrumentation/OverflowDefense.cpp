@@ -75,6 +75,7 @@ const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
 const char kOdefAbortName[] = "__odef_abort";
+const char kOdefSetShadowName[] = "__odef_set_shadow";
 
 namespace {
 
@@ -182,10 +183,11 @@ private:
   void commitBuiltInCheck(Function &F, ChunkCheck &Check);
   void commitClusterCheck(Function &F, ChunkCheck &Check);
   void commitRuntimeCheck(Function &F, ChunkCheck &Check);
+  void commitReplaceAlloca(Function &F);
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
-  void replaceAlloca(Function &F);
+  void replaceAlloca(Function &F, AllocaInst *AI);
 
   Value *getSource(Instruction *I);
   Value *getSourceImpl(Value *V);
@@ -225,6 +227,7 @@ private:
 
   Function *ReportFn;
   Function *AbortFn;
+  Function *SetShadowFn;
 };
 
 bool isEscapeInstruction(Instruction *I) {
@@ -340,6 +343,9 @@ void insertRuntimeFunction(Module &M) {
   LLVMContext &C = M.getContext();
   M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
   M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kOdefSetShadowName, Type::getVoidTy(C),
+                        Type::getInt64Ty(C), Type::getInt64Ty(C),
+                        Type::getInt64Ty(C));
 }
 
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
@@ -372,6 +378,7 @@ void OverflowDefense::initializeModule(Module &M) {
   DL = &M.getDataLayout();
   ReportFn = M.getFunction(kOdefReportName);
   AbortFn = M.getFunction(kOdefAbortName);
+  SetShadowFn = M.getFunction(kOdefSetShadowName);
 
   int32Type = Type::getInt32Ty(M.getContext());
   int64Type = Type::getInt64Ty(M.getContext());
@@ -455,9 +462,14 @@ void OverflowDefense::collectToReplace(Function &F) {
 
   for (auto &BB : F)
     for (auto &I : BB)
-      if (auto *Alloca = dyn_cast<AllocaInst>(&I))
-        if (isInterestingPointer(F, Alloca))
-          AllocaToReplace.push_back(Alloca);
+      if (auto *Alloca = dyn_cast<AllocaInst>(&I)) {
+        auto *Ty = Alloca->getAllocatedType();
+        if (auto *ATy = dyn_cast<ArrayType>(Ty)) {
+          if (ATy->getNumElements() > 1 && isInterestingPointer(F, Alloca)) {
+            AllocaToReplace.push_back(Alloca);
+          }
+        }
+      }
 }
 
 bool OverflowDefense::isInterestingPointer(Function &F, Value *V) {
@@ -928,6 +940,12 @@ void OverflowDefense::collectChunkCheck(
   }
 
   for (auto &[Src, Insts] : SourceMap) {
+    // Omit the argv and envp parameters of main.
+    if (F.getName() == "main") {
+      if (Src == F.getArg(0) || Src == F.getArg(1))
+        continue;
+    }
+
     ASSERT(Src != nullptr);
     collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval);
   }
@@ -998,7 +1016,7 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
   IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1041,7 +1059,7 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
   IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1061,12 +1079,34 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   CreateTrapBB(IRB, Cmp, true);
 }
 
-void OverflowDefense::replaceAlloca(Function &F) {
+void OverflowDefense::commitReplaceAlloca(Function &F) {
   if (AllocaToReplace.empty())
     return;
 
   dbgs() << "[" << F.getName()
          << "] AllocaToReplace: " << AllocaToReplace.size() << "\n";
+
+  for (auto &I : AllocaToReplace)
+    replaceAlloca(F, I);
+}
+
+void OverflowDefense::replaceAlloca(Function &F, AllocaInst *AI) {
+  if (AI->getAlign().value() < sizeof(uint64_t))
+    AI->setAlignment(Align(sizeof(uint64_t)));
+
+  auto *Ty = AI->getAllocatedType();
+
+  uint64_t Size = DL->getTypeStoreSize(Ty);
+  Value *Num = AI->getArraySize();
+
+  Instruction *InsertPt = AI->getInsertionPointAfterDef();
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Ptr = IRB.CreatePtrToInt(AI, int64Type);
+  Value *NumVal = IRB.CreateZExt(Num, int64Type);
+  Value *SizeVal = ConstantInt::get(int64Type, Size);
+  IRB.CreateCall(SetShadowFn, {Ptr, NumVal, SizeVal});
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
@@ -1091,7 +1131,7 @@ void OverflowDefense::commitInstrument(Function &F) {
     commitChunkCheck(F, CC);
 
   // Replace alloca with malloc
-  replaceAlloca(F);
+  commitReplaceAlloca(F);
 }
 
 void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
@@ -1206,7 +1246,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
 
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
 
   ASSERT(isa<Instruction>(IsApp));
   Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
