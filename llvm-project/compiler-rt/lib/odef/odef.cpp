@@ -12,41 +12,20 @@
 
 namespace __odef {
 
-static const uptr kShadowBound = 0x40000000; // 1G
-
 void SetShadow(const void *ptr, uptr size) {
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 
-  if (size > kShadowBound) {
-    u32 a = 0;
-    u32 b = size / sizeof(uptr);
-
-    u32 *shadow_mid_left = shadow_beg + kShadowBound / 2 / sizeof(u32);
-    u32 *shadow_mid_right = shadow_end - kShadowBound / 2 / sizeof(u32);
-    while (shadow_beg < shadow_end) {
-      if (shadow_mid_left > shadow_beg || shadow_beg >= shadow_mid_right) {
-        *(shadow_beg + 0) = b;
-        *(shadow_beg + 1) = a;
-      }
-
-      b--;
-      a++;
-      shadow_beg += 2;
-    }
-
-  } else {
-    u32 a = 0;
-    u32 b = size / sizeof(uptr);
+  u32 a = 0;
+  u32 b = size / sizeof(uptr);
 
 #ifdef __clang__
 #pragma unroll
 #endif
-    while (shadow_beg < shadow_end) {
-      *(shadow_beg + 0) = b--;
-      *(shadow_beg + 1) = a++;
-      shadow_beg += 2;
-    }
+  while (shadow_beg < shadow_end) {
+    *(shadow_beg + 0) = b--;
+    *(shadow_beg + 1) = a++;
+    shadow_beg += 2;
   }
 }
 
