@@ -78,13 +78,6 @@ const char kOdefAbortName[] = "__odef_abort";
 
 namespace {
 
-enum AddrLoc {
-  kAddrLocStack = 0,
-  kAddrLocGlobal,
-  kAddrLocAny,
-  kAddrLocUnknown,
-};
-
 enum CheckType {
   kRuntimeCheck = 0,
   kClusterCheck = 1,
@@ -137,7 +130,6 @@ private:
   void initializeModule(Module &M);
   void collectToInstrument(Function &F, ObjectSizeOffsetEvaluator &ObjSizeEval,
                            ScalarEvolution &SE);
-  void collectToReplace(Function &F);
 
   bool filterToInstrument(Function &F, Instruction *I,
                           ObjectSizeOffsetEvaluator &ObjSizeEval,
@@ -152,9 +144,6 @@ private:
   bool isAccessMember(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
-  bool isInterestingPointer(Function &F, Value *V);
-  bool isInterestingPointerImpl(Function &F, Value *V,
-                                SmallPtrSet<Value *, 16> &Visited);
 
   SmallVector<BitCastInst *, 16> dependencyOptimizeForBc(Function &F,
                                                          DominatorTree &DT,
@@ -191,10 +180,6 @@ private:
   Value *getSourceImpl(Value *V);
   bool getPhiSource(Value *V, Value *&Src, SmallPtrSet<Value *, 16> &Visited);
 
-  AddrLoc getLocation(Instruction *I);
-  void getLocationImpl(Value *V, AddrLoc &Loc,
-                       SmallPtrSet<Value *, 16> &Visited);
-
   void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
   Value *readRegister(Function &F, BuilderTy &IRB, StringRef RegName);
 
@@ -205,11 +190,8 @@ private:
   SmallVector<BitCastInst *, 16> BcToInstrument;
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
-  SmallVector<AllocaInst *, 16> AllocaToReplace;
 
   DenseMap<Value *, Value *> SourceCache;
-  DenseMap<Value *, AddrLoc> LocationCache;
-  DenseMap<Value *, bool> InterestingPointerCache;
 
   SmallVector<ChunkCheck, 16> ChunkChecks;
   SmallVector<FieldCheck, 16> FieldChecks;
@@ -407,7 +389,6 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   // Collect all instructions to instrument
   collectToInstrument(F, ObjSizeEval, SE);
-  collectToReplace(F);
 
   dependencyOptimize(F, DT, PDT, SE);
 
@@ -448,63 +429,6 @@ void OverflowDefense::collectToInstrument(
       }
     }
   }
-}
-
-void OverflowDefense::collectToReplace(Function &F) {
-  // Check all Alloca instructions
-
-  for (auto &BB : F)
-    for (auto &I : BB)
-      if (auto *Alloca = dyn_cast<AllocaInst>(&I))
-        if (isInterestingPointer(F, Alloca))
-          AllocaToReplace.push_back(Alloca);
-}
-
-bool OverflowDefense::isInterestingPointer(Function &F, Value *V) {
-  if (InterestingPointerCache.count(V))
-    return InterestingPointerCache[V];
-
-  SmallPtrSet<Value *, 16> Visited;
-  return InterestingPointerCache[V] = isInterestingPointerImpl(F, V, Visited);
-}
-
-bool OverflowDefense::isInterestingPointerImpl(
-    Function &F, Value *V, SmallPtrSet<Value *, 16> &Visited) {
-  if (Visited.count(V))
-    return false;
-
-  Visited.insert(V);
-
-  for (auto *U : V->users()) {
-    if (isa<GetElementPtrInst>(U) || isa<BitCastInst>(U) || isa<PHINode>(U) ||
-        isa<SelectInst>(U))
-      return isInterestingPointerImpl(F, U, Visited);
-
-    if (auto *SI = dyn_cast<StoreInst>(U))
-      return SI->getValueOperand() == V;
-
-    if (isa<ReturnInst>(U))
-      return true;
-
-    if (auto *CI = dyn_cast<CallBase>(U)) {
-      Function *F = CI->getCalledFunction();
-      return F == nullptr || !F->isIntrinsic();
-    }
-
-    if (isa<ICmpInst>(U) || isa<LoadInst>(U))
-      return false;
-
-    // TODO: handle more cases
-    if (isa<PtrToIntInst>(U)) {
-      // FIXME: PtrToIntInst is not handled yet
-      return false;
-    }
-
-    errs() << "[Unhandled Instruction] " << *U << "\n";
-    __builtin_unreachable();
-  }
-
-  return false;
 }
 
 bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
@@ -868,49 +792,6 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   return Src == V;
 }
 
-AddrLoc OverflowDefense::getLocation(Instruction *I) {
-  if (LocationCache.count(I))
-    return LocationCache[I];
-
-  AddrLoc AL = AddrLoc::kAddrLocUnknown;
-  SmallPtrSet<Value *, 16> Visited;
-  getLocationImpl(I, AL, Visited);
-
-  ASSERT(AL != AddrLoc::kAddrLocUnknown);
-  return LocationCache[I] = AL;
-}
-
-void OverflowDefense::getLocationImpl(Value *V, AddrLoc &AL,
-                                      SmallPtrSet<Value *, 16> &Visited) {
-
-  Value *S = getSourceImpl(V);
-  if (Visited.count(S))
-    return;
-  Visited.insert(S);
-
-  AddrLoc _AL = AddrLoc::kAddrLocUnknown;
-
-  if (isa<GlobalVariable>(S))
-    _AL = AddrLoc::kAddrLocGlobal;
-  else if (isa<AllocaInst>(S))
-    _AL = AddrLoc::kAddrLocStack;
-  else if (auto Phi = dyn_cast<PHINode>(S)) {
-    for (size_t i = 0; i < Phi->getNumIncomingValues(); ++i) {
-      getLocationImpl(Phi->getIncomingValue(i), _AL, Visited);
-      if (_AL == kAddrLocAny)
-        break;
-    }
-  } else {
-    // TODO: Sometimes S is Constant, which is not handled here.
-    _AL = AddrLoc::kAddrLocAny;
-  }
-
-  if (AL == AddrLoc::kAddrLocUnknown)
-    AL = _AL;
-  else if (AL != _AL)
-    AL = AddrLoc::kAddrLocAny;
-}
-
 void OverflowDefense::collectChunkCheck(
     Function &F, LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
@@ -1061,14 +942,6 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   CreateTrapBB(IRB, Cmp, true);
 }
 
-void OverflowDefense::replaceAlloca(Function &F) {
-  if (AllocaToReplace.empty())
-    return;
-
-  dbgs() << "[" << F.getName()
-         << "] AllocaToReplace: " << AllocaToReplace.size() << "\n";
-}
-
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   if (Abort && !Recover) {
     IRB.SetInsertPoint(
@@ -1089,9 +962,6 @@ void OverflowDefense::commitInstrument(Function &F) {
 
   for (auto &CC : ChunkChecks)
     commitChunkCheck(F, CC);
-
-  // Replace alloca with malloc
-  replaceAlloca(F);
 }
 
 void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
