@@ -487,29 +487,38 @@ bool OverflowDefense::isInterestingPointerImpl(
 
   Visited.insert(V);
 
+  bool flag = false;
   for (auto *U : V->users()) {
     if (isa<GetElementPtrInst>(U) || isa<BitCastInst>(U) || isa<PHINode>(U) ||
-        isa<SelectInst>(U))
-      return isInterestingPointerImpl(F, U, Visited);
+        isa<SelectInst>(U)) {
+      if (isInterestingPointerImpl(F, U, Visited))
+        return true;
+      continue;
+    }
 
-    if (auto *SI = dyn_cast<StoreInst>(U))
-      return SI->getValueOperand() == V;
+    if (auto *SI = dyn_cast<StoreInst>(U)) {
+      if (SI->getValueOperand() == V)
+        return true;
+      continue;
+    }
 
     if (isa<ReturnInst>(U))
       return true;
 
     if (auto *CI = dyn_cast<CallBase>(U)) {
       Function *F = CI->getCalledFunction();
-      return F == nullptr || !F->isIntrinsic();
+      if (F == nullptr || !F->isIntrinsic())
+        return true;
+      continue;
     }
 
     if (isa<ICmpInst>(U) || isa<LoadInst>(U))
-      return false;
+      continue;
 
     // TODO: handle more cases
     if (isa<PtrToIntInst>(U)) {
       // FIXME: PtrToIntInst is not handled yet
-      return false;
+      continue;
     }
 
     errs() << "[Unhandled Instruction] " << *U << "\n";
@@ -940,12 +949,6 @@ void OverflowDefense::collectChunkCheck(
   }
 
   for (auto &[Src, Insts] : SourceMap) {
-    // Omit the argv and envp parameters of main.
-    if (F.getName() == "main") {
-      if (Src == F.getArg(0) || Src == F.getArg(1))
-        continue;
-    }
-
     ASSERT(Src != nullptr);
     collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval);
   }

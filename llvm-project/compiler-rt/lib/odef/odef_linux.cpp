@@ -70,6 +70,15 @@ static void HackDynLib() {
     if (!MEM_IS_APP(begin))
       continue;
 
+    if (strcmp(mapname, "[stack]") == 0) {
+      uptr rsp = (uptr) __builtin_frame_address(0);
+      u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(rsp);
+      u32 *shadow_end = (u32 *)MEM_TO_SHADOW(end);
+
+      while (shadow_beg < shadow_end)
+        *shadow_beg++ = 1 << 30;
+    }
+
     char *last_slash = mapname + strlen(mapname);
     while (last_slash > mapname && *last_slash != '/')
       last_slash--;
