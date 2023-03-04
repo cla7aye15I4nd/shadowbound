@@ -1019,7 +1019,10 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+      IRB.CreateICmpULT(
+          Ptr, ClCheckStack ? ConstantInt::get(int64Type, kAllocatorSpaceEnd)
+                            : readRegister(F, IRB, "rsp")));
+
   IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1062,7 +1065,9 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+      IRB.CreateICmpULT(
+          Ptr, ClCheckStack ? ConstantInt::get(int64Type, kAllocatorSpaceEnd)
+                            : readRegister(F, IRB, "rsp")));
   IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1249,7 +1254,9 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
 
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceEnd)));
+      IRB.CreateICmpULT(
+          Ptr, ClCheckStack ? ConstantInt::get(int64Type, kAllocatorSpaceEnd)
+                            : readRegister(F, IRB, "rsp")));
 
   ASSERT(isa<Instruction>(IsApp));
   Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
