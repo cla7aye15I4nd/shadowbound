@@ -72,6 +72,7 @@ foo(a);
 ```
 The code creates `a` pointer a by adding `overflow_length` to the value of ptr. Then, it passes the pointer a as an argument to the function `foo`. This practice is considered to be poor programming because it can lead to a potential memory overflow. Even though the pointer `a` is not accessed in this code snippet, any calculations based on a would be meaningless. As a result, it is best to avoid storing or passing an overflow pointer as an argument to prevent potential memory safety issues.
 
+#### PHP
 There is an [php-8.2.2](https://github.com/php/php-src/blob/b20c0e925fe401a44a99b0d34b438797be865bb0/Zend/zend_API.c#L2859) example which is the most wired case I found.
 ```c
 num_args++;
@@ -82,6 +83,48 @@ reg_function->common.arg_info = new_arg_info + 1;
 If `num_args` is initially zero, then the `new_arg_info` pointer will only allocate memory for a single `zend_arg_info` structure. When `reg_function->common.arg_info = new_arg_info + 1` is executed, `reg_function->common.arg_info` will point to the memory location at the end the allocated memory. 
 
 However, I found the code only accesses `reg_function->common.arg_info[-1]` and never accesses any memory locations beyond the allocated memory, then the buffer overflow issue will not occur. However, this still leaves room for potential bugs or errors in the future, as the code may be modified or updated to access other memory locations.
+
+#### Named
+```c++
+Type *getNewArray(int n)
+{
+  // `end` is the end of the pos
+  Type *rpos;
+  rpos = pos;
+  if ((pos += n) > end)
+  {
+    pos = new Type[blockSize];
+    push();
+    end = pos + blockSize;
+    rpos = pos;
+    pos += n;
+  }
+
+  return rpos;
+}
+```
+#### Blender
+```c++
+if (coords_sign == 1) {
+  for (i = 0; i < coords_tot; i++) {
+    indices[i].next = &indices[i + 1]; // store an overflow pointer when i == coords_tot - 1
+    indices[i].prev = &indices[i - 1]; // store an overflow pointer when i == 0
+    indices[i].index = i;
+  }
+}
+else {
+  /* reversed */
+  unsigned int n = coords_tot - 1;
+  for (i = 0; i < coords_tot; i++) {
+    indices[i].next = &indices[i + 1];
+    indices[i].prev = &indices[i - 1];
+    indices[i].index = (n - i);
+  }
+}
+
+indices[0].prev = &indices[coords_tot - 1]; // cover the overflow pointer
+indices[coords_tot - 1].next = &indices[0]; // cover the overflow pointer
+```
 
 ### End-of-the-Array Pointers
 ```c
