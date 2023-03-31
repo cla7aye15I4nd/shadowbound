@@ -912,7 +912,9 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   // if (GEP < Begin || GEP + NeededSize >= End)
   //   report_overflow();
 
-  Instruction *InsertPt = GEP->getInsertionPointAfterDef();
+  Instruction *InsertPt = GEP->hasOneUser() && !isa<PHINode>(GEP->user_back())
+                              ? GEP->user_back()
+                              : GEP->getInsertionPointAfterDef();
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
