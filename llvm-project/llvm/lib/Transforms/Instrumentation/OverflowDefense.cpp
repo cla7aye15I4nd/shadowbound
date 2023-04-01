@@ -869,7 +869,10 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   // if (BC >= Base + BackSize - NeededSize)
   //   report_overflow();
 
-  Instruction *InsertPt = BC->getInsertionPointAfterDef();
+  Instruction *InsertPt = BC->hasOneUser() && !isa<PHINode>(BC->user_back())
+                              ? BC->user_back()
+                              : BC->getInsertionPointAfterDef();
+
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
