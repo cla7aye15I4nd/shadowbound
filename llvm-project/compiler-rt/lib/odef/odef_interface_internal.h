@@ -6,7 +6,11 @@
 extern "C" {
 SANITIZER_INTERFACE_ATTRIBUTE
 void __odef_init();
+
+SANITIZER_INTERFACE_ATTRIBUTE
 void __odef_report();
+
+SANITIZER_INTERFACE_ATTRIBUTE __attribute__((noreturn))
 void __odef_abort();
 
 }
