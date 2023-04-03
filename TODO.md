@@ -8,4 +8,5 @@
 - [ ] Investigate why `kSpaceSize` in `AP64` not work.
 - [ ] Add loop optimization to monotonous loop and strlen style loop.
 - [ ] There are some false positive in `perlbench`, `gcc_s`, `xalancbmk` and `imagick`.
-- [ ] Some testcase even slower than `CAMP`, I found that some optimization in `Laid` not work.
+- [x] Some testcase even slower than `CAMP`, I found that some optimization in `Laid` not work.
+- [ ] Allocate more 50% in malloc to avoid last bytes.
