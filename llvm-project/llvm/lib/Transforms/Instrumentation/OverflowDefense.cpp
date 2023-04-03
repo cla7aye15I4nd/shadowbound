@@ -71,6 +71,10 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::desc("check in-field memory"),
                                     cl::Hidden, cl::init(true));
 
+static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
+                                      cl::desc("optimize struct field checks"),
+                                      cl::Hidden, cl::init(false));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -83,6 +87,8 @@ enum CheckType {
   kClusterCheck = 1,
   kBuiltInCheck = 2,
   kInFieldCheck = 3,
+  kRuntimeOptCheck = 4,
+  kClusterOptCheck = 5,
   kCheckTypeEnd
 };
 
@@ -182,6 +188,8 @@ private:
 
   void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
   Value *readRegister(Function &F, BuilderTy &IRB, StringRef RegName);
+
+  StructType *sourceAnalysis(Function &F, Value *Src);
 
   bool Kernel;
   bool Recover;
@@ -404,10 +412,16 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   dbgs() << "[" << F.getName() << "]\n";
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
-    dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n"
-           << "  Cluster Check: " << Counter[kClusterCheck] << "\n"
-           << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n"
-           << "  InField Check: " << Counter[kInFieldCheck] << "\n";
+    dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n";
+    dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
+
+    if (ClStructFieldOpt)
+      dbgs() << "  Cluster Optim: " << Counter[kClusterOptCheck] << "\n";
+    dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n";
+
+    if (ClStructFieldOpt)
+      dbgs() << "  Runtime Optim: " << Counter[kRuntimeOptCheck] << "\n";
+    dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n";
   }
 
   return true;
@@ -814,6 +828,50 @@ void OverflowDefense::collectChunkCheck(
   }
 }
 
+StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
+  if (auto *LI = dyn_cast<LoadInst>(Src)) {
+    if (auto *Gep = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
+      bool isFirstField = true;
+      Type *SrcTy = nullptr;
+      Type *DstTy = Gep->getSourceElementType();
+
+      if (isFixedSizeType(DstTy)) {
+        for (auto &Op : Gep->indices()) {
+          if (isFirstField) {
+            isFirstField = false;
+            continue;
+          }
+
+          auto value = Op.get();
+          if (value->getType()->isIntegerTy(32)) {
+            StructType *STy = cast<StructType>(DstTy);
+            auto index = cast<ConstantInt>(value)->getZExtValue();
+            SrcTy = DstTy;
+            DstTy = STy->getElementType(index);
+          } else {
+            auto Aty = cast<ArrayType>(DstTy);
+            SrcTy = DstTy;
+            DstTy = Aty->getArrayElementType();
+          }
+        }
+
+        ASSERT(DstTy == Src->getType());
+        if (SrcTy->isStructTy()) {
+          return cast<StructType>(SrcTy);
+        }
+      }
+    }
+  }
+
+  if (isa<Argument>(Src)) {
+    if (auto *STy = dyn_cast<StructType>(Src->getType())) {
+      return STy;
+    }
+  }
+
+  return nullptr;
+}
+
 bool OverflowDefense::isAccessMember(Instruction *I) {
   ASSERT(isa<GetElementPtrInst>(I));
   auto *GEP = cast<GetElementPtrInst>(I);
@@ -836,9 +894,14 @@ void OverflowDefense::collectChunkCheckImpl(
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
 
+  StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
+    if (STy != nullptr)
+      Counter[kRuntimeOptCheck] += Insts.size();
     ChunkChecks.push_back(ChunkCheck(kRuntimeCheck, Src, Insts));
   } else {
+    if (STy != nullptr)
+      Counter[kClusterOptCheck]++;
     ChunkChecks.push_back(ChunkCheck(kClusterCheck, Src, Insts));
   }
 }
