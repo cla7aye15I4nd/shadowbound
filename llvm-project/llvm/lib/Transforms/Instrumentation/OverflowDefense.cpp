@@ -92,30 +92,48 @@ enum CheckType {
   kCheckTypeEnd
 };
 
-struct FieldCheck {
+struct BaseCheck {
+  enum CheckType Type;
+
+  BaseCheck() = delete;
+  BaseCheck(enum CheckType Type) : Type(Type) {}
+};
+
+struct FieldCheck : public BaseCheck {
   GetElementPtrInst *Gep;
   SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
 
   FieldCheck(GetElementPtrInst *Gep,
              SmallVector<std::pair<Value *, uint64_t>, 16> SubFields)
-      : Gep(Gep), SubFields(SubFields) {}
+      : BaseCheck(kInFieldCheck), Gep(Gep), SubFields(SubFields) {}
 };
 
-struct ChunkCheck {
-  CheckType Type;
+struct ClusterCheck : public BaseCheck {
   Value *Src;
   SmallVector<Instruction *, 16> Insts;
 
-  // Used for built-in checks
+  ClusterCheck(Value *Src, SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kClusterCheck), Src(Src), Insts(Insts) {}
+};
+
+struct RuntimeCheck : public BaseCheck {
+  Value *Src;
+  SmallVector<Instruction *, 16> Insts;
+
+  RuntimeCheck(Value *Src, SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kRuntimeCheck), Src(Src), Insts(Insts) {}
+};
+
+struct BuiltinCheck : public BaseCheck {
+  Value *Src;
   Value *Size;
   Value *Offset;
+  SmallVector<Instruction *, 16> Insts;
 
-  ChunkCheck(CheckType Type, Value *Src, SmallVector<Instruction *, 16> Insts)
-      : Type(Type), Src(Src), Insts(Insts), Size(nullptr), Offset(nullptr) {}
-
-  ChunkCheck(CheckType Type, Value *Src, SmallVector<Instruction *, 16> Insts,
-             Value *Size, Value *Offset)
-      : Type(Type), Src(Src), Insts(Insts), Size(Size), Offset(Offset) {}
+  BuiltinCheck(Value *Src, Value *Size, Value *Offset,
+               SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kBuiltInCheck), Src(Src), Size(Size), Offset(Offset),
+        Insts(Insts) {}
 };
 
 class OverflowDefense {
@@ -172,11 +190,9 @@ private:
 
   void commitInstrument(Function &F);
   void commitFieldCheck(Function &F, FieldCheck &Check);
-  void commitChunkCheck(Function &F, ChunkCheck &Check);
-
-  void commitBuiltInCheck(Function &F, ChunkCheck &Check);
-  void commitClusterCheck(Function &F, ChunkCheck &Check);
-  void commitRuntimeCheck(Function &F, ChunkCheck &Check);
+  void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
+  void commitClusterCheck(Function &F, ClusterCheck &Check);
+  void commitRuntimeCheck(Function &F, RuntimeCheck &Check);
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
@@ -200,9 +216,7 @@ private:
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
   DenseMap<Value *, Value *> SourceCache;
-
-  SmallVector<ChunkCheck, 16> ChunkChecks;
-  SmallVector<FieldCheck, 16> FieldChecks;
+  SmallVector<BaseCheck *, 16> Checks;
 
   const DataLayout *DL;
 
@@ -631,7 +645,7 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
       }
 
       if (SubFields.size() > 0) {
-        FieldChecks.push_back(FieldCheck(Gep, SubFields));
+        Checks.push_back(new FieldCheck(Gep, SubFields));
       }
     }
   }
@@ -898,11 +912,11 @@ void OverflowDefense::collectChunkCheckImpl(
   if (weight <= 2) {
     if (STy != nullptr)
       Counter[kRuntimeOptCheck] += Insts.size();
-    ChunkChecks.push_back(ChunkCheck(kRuntimeCheck, Src, Insts));
+    Checks.push_back(new RuntimeCheck(Src, Insts));
   } else {
     if (STy != nullptr)
       Counter[kClusterOptCheck]++;
-    ChunkChecks.push_back(ChunkCheck(kClusterCheck, Src, Insts));
+    Checks.push_back(new ClusterCheck(Src, Insts));
   }
 }
 
@@ -912,9 +926,8 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
   if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
-    ChunkChecks.push_back(ChunkCheck(kBuiltInCheck, Src, Insts,
-                                     SizeOffsetEval.first,
-                                     SizeOffsetEval.second));
+    Checks.push_back(new BuiltinCheck(Src, SizeOffsetEval.first,
+                                      SizeOffsetEval.second, Insts));
     return true;
   } else if (auto *G = dyn_cast<GlobalVariable>(Src)) {
     // FIXME: handle global variable
@@ -1025,17 +1038,28 @@ void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
 }
 
 void OverflowDefense::commitInstrument(Function &F) {
-  for (auto &FC : FieldChecks)
-    commitFieldCheck(F, FC);
-
-  for (auto &CC : ChunkChecks)
-    commitChunkCheck(F, CC);
+  for (auto *C_ : Checks) {
+    BaseCheck &C = *C_;
+    if (C.Type == kBuiltInCheck) {
+      commitBuiltInCheck(F, (BuiltinCheck &)C);
+    } else if (C.Type == kClusterCheck) {
+      commitClusterCheck(F, (ClusterCheck &)C);
+    } else if (C.Type == kRuntimeCheck) {
+      commitRuntimeCheck(F, (RuntimeCheck &)C);
+    } else if (C.Type == kInFieldCheck) {
+      commitFieldCheck(F, (FieldCheck &)C);
+    } else {
+      ASSERT(false);
+      __builtin_unreachable();
+    }
+  }
 }
 
 void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
   if (!ClCheckInField)
     return;
 
+  ASSERT(FC.Type == kInFieldCheck);
   Counter[kInFieldCheck]++;
 
   Instruction *InsertPt = FC.Gep;
@@ -1052,23 +1076,14 @@ void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
   CreateTrapBB(IRB, Cond, true);
 }
 
-void OverflowDefense::commitChunkCheck(Function &F, ChunkCheck &CC) {
-  if (CC.Type == kBuiltInCheck) {
-    commitBuiltInCheck(F, CC);
-  } else if (CC.Type == kClusterCheck) {
-    commitClusterCheck(F, CC);
-  } else if (CC.Type == kRuntimeCheck) {
-    commitRuntimeCheck(F, CC);
-  }
-}
-
-void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
+void OverflowDefense::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   if (!ClCheckStack)
     return;
 
-  Counter[CC.Type]++;
+  ASSERT(BC.Type == kBuiltInCheck);
+  Counter[kBuiltInCheck]++;
 
-  Value *Src = CC.Src;
+  Value *Src = BC.Src;
   Instruction *InsertPt =
       isa<Instruction>(Src)
           ? cast<Instruction>(Src)->getInsertionPointAfterDef()
@@ -1077,14 +1092,14 @@ void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
-  Value *Size = CC.Size;
-  Value *Offset = CC.Offset;
+  Value *Size = BC.Size;
+  Value *Offset = BC.Offset;
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
   Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
 
-  for (auto &I : CC.Insts) {
+  for (auto &I : BC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
 
     uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
@@ -1102,11 +1117,12 @@ void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
   }
 }
 
-void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
+void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   if (!ClCheckHeap)
     return;
 
-  Counter[CC.Type]++;
+  ASSERT(CC.Type == kClusterCheck);
+  Counter[kClusterCheck]++;
 
   Value *Src = CC.Src;
   Instruction *InsertPt =
@@ -1181,15 +1197,16 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
   }
 }
 
-void OverflowDefense::commitRuntimeCheck(Function &F, ChunkCheck &CC) {
+void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
   if (!ClCheckHeap)
     return;
 
-  Counter[CC.Type] += CC.Insts.size();
+  ASSERT(RC.Type == kRuntimeCheck);
+  Counter[kRuntimeCheck] += RC.Insts.size();
 
-  Value *Src = CC.Src;
+  Value *Src = RC.Src;
 
-  for (auto *I : CC.Insts) {
+  for (auto *I : RC.Insts) {
     if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
       instrumentGep(F, Src, GEP);
     } else if (auto *BC = dyn_cast<BitCastInst>(I)) {
