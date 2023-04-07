@@ -331,6 +331,10 @@ public:
   isInductionPHI(PHINode *Phi, const Loop *L, ScalarEvolution *SE,
                  InductionDescriptor &D, const SCEV *Expr = nullptr,
                  SmallVectorImpl<Instruction *> *CastsToIgnore = nullptr);
+  
+  static bool
+  isInductionPHIBoost(PHINode *Phi, const Loop *L, ScalarEvolution *SE,
+                      InductionDescriptor &D, BasicBlock *GuardBB = nullptr);
 
   /// Returns true if \p Phi is a floating point induction in the loop \p L.
   /// If \p Phi is an induction, the induction descriptor \p D will contain

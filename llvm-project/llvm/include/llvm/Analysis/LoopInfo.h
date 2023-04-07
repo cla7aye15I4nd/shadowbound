@@ -759,6 +759,8 @@ public:
   /// zero and increments by one each time through the loop (but it can be).
   PHINode *getInductionVariable(ScalarEvolution &SE) const;
 
+  PHINode *getInductionVariableBoost(ScalarEvolution &SE, BasicBlock *GuardBB = nullptr) const;
+
   /// Get the loop induction descriptor for the loop induction variable. Return
   /// true if the loop induction variable is found.
   bool getInductionDescriptor(ScalarEvolution &SE,
