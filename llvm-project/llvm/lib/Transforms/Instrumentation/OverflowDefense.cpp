@@ -6,6 +6,7 @@
 #include "llvm/Analysis/MemoryBuiltins.h"
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
+#include "llvm/Analysis/ScalarEvolutionExpressions.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Operator.h"
@@ -168,6 +169,10 @@ private:
   bool isAccessMember(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
+  void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
+                    DominatorTree &DT, PostDominatorTree &PDT);
+  bool monotonicLoopOptimize(Function &F, Value *Addr, Loop *L,
+                             ScalarEvolution &SE);
 
   SmallVector<BitCastInst *, 16> dependencyOptimizeForBc(Function &F,
                                                          DominatorTree &DT,
@@ -179,11 +184,13 @@ private:
                            PostDominatorTree &PDT, ScalarEvolution &SE);
   void collectSubFieldCheck(Function &F, ScalarEvolution &SE);
   void collectChunkCheck(Function &F, LoopInfo &LI,
-                         ObjectSizeOffsetEvaluator &ObjSizeEval);
+                         ObjectSizeOffsetEvaluator &ObjSizeEval,
+                         ScalarEvolution &SE);
   void collectChunkCheckImpl(Function &F, Value *Src,
                              SmallVector<Instruction *, 16> &Insts,
                              LoopInfo &LI,
-                             ObjectSizeOffsetEvaluator &ObjSizeEval);
+                             ObjectSizeOffsetEvaluator &ObjSizeEval,
+                             ScalarEvolution &SE);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
@@ -399,6 +406,8 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   if (ClSkipInstrument)
     return false;
 
+  dbgs() << "[" << F.getName() << "]\n";
+
   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
   auto &DT = AM.getResult<DominatorTreeAnalysis>(F);
   auto &PDT = AM.getResult<PostDominatorTreeAnalysis>(F);
@@ -413,6 +422,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectToInstrument(F, ObjSizeEval, SE);
 
   dependencyOptimize(F, DT, PDT, SE);
+  loopOptimize(F, LI, SE, DT, PDT);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -420,11 +430,10 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectSubFieldCheck(F, SE);
 
   // Instrument GEP and BC
-  collectChunkCheck(F, LI, ObjSizeEval);
+  collectChunkCheck(F, LI, ObjSizeEval, SE);
 
   commitInstrument(F);
 
-  dbgs() << "[" << F.getName() << "]\n";
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
     dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n";
     dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
@@ -820,8 +829,9 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   return Src == V;
 }
 
-void OverflowDefense::collectChunkCheck(
-    Function &F, LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
+void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
+                                        ObjectSizeOffsetEvaluator &ObjSizeEval,
+                                        ScalarEvolution &SE) {
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
@@ -838,7 +848,7 @@ void OverflowDefense::collectChunkCheck(
 
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval);
+    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval, SE);
   }
 }
 
@@ -899,7 +909,7 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
 
 void OverflowDefense::collectChunkCheckImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
-    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
+    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
   if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval)) {
     return;
   }
@@ -917,6 +927,103 @@ void OverflowDefense::collectChunkCheckImpl(
     if (STy != nullptr)
       Counter[kClusterOptCheck]++;
     Checks.push_back(new ClusterCheck(Src, Insts));
+  }
+}
+
+bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
+                                            ScalarEvolution &SE) {
+  auto *SCEVPtr = SE.getSCEV(Addr);
+  if (auto *AR = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
+    auto *Start = AR->getStart();
+    auto *Step = AR->getStepRecurrence(SE);
+
+    dbgs() << "Start: " << *Start << "\n";
+    dbgs() << "Ind: " << *Addr << "\n";
+    dbgs() << "Step: " << *Step << "\n";
+  }
+
+  return false;
+}
+
+void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
+                                   ScalarEvolution &SE, DominatorTree &DT,
+                                   PostDominatorTree &PDT) {
+  for (auto *Loop : LI) {
+    if (!Loop->isRotatedForm())
+      continue;
+
+    auto *Preheader = Loop->getLoopPreheader(); // nullptr possible
+    auto *Header = Loop->getHeader();
+    auto *ExitCmp = Loop->getLatchCmpInst();
+
+    if (Header == nullptr || ExitCmp == nullptr)
+      continue;
+
+    auto *Latch = Loop->getLoopLatch();
+
+    // Find the possible guard block
+    BasicBlock *GuardBB = nullptr;
+    if (Preheader != nullptr)
+      GuardBB = Preheader->getUniquePredecessor();
+    else {
+      SmallVector<BasicBlock *, 4> GuardBlocks;
+      for (auto *Pred : predecessors(Header)) {
+        if (Pred == Latch)
+          continue;
+        GuardBlocks.push_back(Pred);
+      }
+      if (GuardBlocks.size() == 1)
+        GuardBB = GuardBlocks.front();
+    }
+
+    if (GuardBB == nullptr)
+      continue;
+
+    // Find the possible exit block
+    SmallVector<BasicBlock *, 4> GuardExitBlocks;
+    SmallVector<BasicBlock *, 4> LatchExitBlocks;
+    for (auto *Succ : successors(GuardBB)) {
+      if (Succ == Header || Succ == Preheader)
+        continue;
+      GuardExitBlocks.push_back(Succ);
+    }
+    for (auto *Succ : successors(Latch)) {
+      if (Succ == Header)
+        continue;
+      LatchExitBlocks.push_back(Succ);
+    }
+
+    if (GuardExitBlocks.size() != 1 || LatchExitBlocks.size() != 1)
+      continue;
+
+    auto *ExitBB = GuardExitBlocks.front();
+    auto *LatchExitBB = LatchExitBlocks.front();
+
+    if (LatchExitBB != ExitBB &&
+        (LatchExitBB->getUniqueSuccessor() == nullptr ||
+         LatchExitBB->getUniqueSuccessor()->sizeWithoutDebug() != 1 ||
+         LatchExitBB->getUniqueSuccessor()->getUniqueSuccessor() != ExitBB))
+      continue;
+
+    auto *GuardBranchInst = dyn_cast<BranchInst>(GuardBB->getTerminator());
+    if (GuardBranchInst == nullptr || GuardBranchInst->isUnconditional() ||
+        (GuardBranchInst->getSuccessor(0) != Header &&
+         GuardBranchInst->getSuccessor(0) != Preheader))
+      continue;
+    
+    auto *GuardCmp = dyn_cast<ICmpInst>(GuardBranchInst->getCondition());
+    if (GuardCmp == nullptr)
+      continue;
+
+    auto *IndVar = Loop->getInductionVariableBoost(SE, GuardBB);
+    if (IndVar == nullptr)
+      continue;
+
+    dbgs() << "[Valid Loop]\n";
+    dbgs() << "GuardCond: " << *GuardCmp << "\n";
+    dbgs() << "ExitCmp: " << *ExitCmp << "\n";
+    dbgs() << "StepInst: " << *IndVar->getIncomingValueForBlock(Latch) << "\n";
+    dbgs() << "IndVar: " << *IndVar << "\n";
   }
 }
 
