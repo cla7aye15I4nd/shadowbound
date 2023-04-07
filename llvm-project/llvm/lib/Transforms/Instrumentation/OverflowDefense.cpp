@@ -137,6 +137,26 @@ struct BuiltinCheck : public BaseCheck {
         Insts(Insts) {}
 };
 
+struct MonoLoop {
+  Loop *Lop;
+  PHINode *IndVar;
+  Value *Lower;
+  Value *Upper;
+  Value *Step;
+
+  BasicBlock *GuardBB;
+  BasicBlock *Preheader;
+
+  MonoLoop(Loop *Lop, PHINode *IndVar, Value *Lower, Value *Upper, Value *Step,
+           BasicBlock *GuardBB, BasicBlock *Preheader)
+      : Lop(Lop), IndVar(IndVar), Lower(Lower), Upper(Upper), Step(Step),
+        GuardBB(GuardBB), Preheader(Preheader) {}
+
+  Value *getStepInst() const {
+    return IndVar->getIncomingValueForBlock(Lop->getLoopLatch());
+  }
+};
+
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
@@ -171,6 +191,7 @@ private:
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
                     DominatorTree &DT, PostDominatorTree &PDT);
+  void collectMonoLoop(Function &F, LoopInfo &LI, ScalarEvolution &SE);
   bool monotonicLoopOptimize(Function &F, Value *Addr, Loop *L,
                              ScalarEvolution &SE);
 
@@ -223,6 +244,7 @@ private:
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
   DenseMap<Value *, Value *> SourceCache;
+  DenseMap<Loop *, MonoLoop *> MonoLoopMap;
   SmallVector<BaseCheck *, 16> Checks;
 
   const DataLayout *DL;
@@ -933,12 +955,16 @@ void OverflowDefense::collectChunkCheckImpl(
 bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
                                             ScalarEvolution &SE) {
   auto *SCEVPtr = SE.getSCEV(Addr);
-  if (auto *AR = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
-    auto *Start = AR->getStart();
-    auto *Step = AR->getStepRecurrence(SE);
+  auto *ML = MonoLoopMap[Lop];
+  ASSERT(ML != nullptr);
 
+  if (auto *ARE = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
+    auto *Start = ARE->getStart();
+    auto *Step = ARE->getStepRecurrence(SE);
+
+    dbgs() << "[IndGep]\n";
+    dbgs() << "Addr: " << *Addr << "\n";
     dbgs() << "Start: " << *Start << "\n";
-    dbgs() << "Ind: " << *Addr << "\n";
     dbgs() << "Step: " << *Step << "\n";
   }
 
@@ -948,6 +974,33 @@ bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
 void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
                                    ScalarEvolution &SE, DominatorTree &DT,
                                    PostDominatorTree &PDT) {
+  collectMonoLoop(F, LI, SE);
+
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  for (auto *GEP : GepToInstrument) {
+    Loop *Loop = LI.getLoopFor(GEP->getParent());
+    if (MonoLoopMap.count(Loop) == 0)
+      continue;
+
+    MonoLoop *ML = MonoLoopMap[Loop];
+
+    if (ML->getStepInst() == GEP) {
+      // Note that the GEP is the induction variable,so that its lower and upper
+      // bound is loop invariant which has been checked in outside of the loop.
+      continue;
+    }
+
+    if (monotonicLoopOptimize(F, GEP, Loop, SE))
+      continue;
+
+    NewGepToInstrument.push_back(GEP);
+  }
+
+  GepToInstrument.swap(NewGepToInstrument);
+}
+
+void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
+                                      ScalarEvolution &SE) {
   for (auto *Loop : LI) {
     if (!Loop->isRotatedForm())
       continue;
@@ -1010,7 +1063,7 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
         (GuardBranchInst->getSuccessor(0) != Header &&
          GuardBranchInst->getSuccessor(0) != Preheader))
       continue;
-    
+
     auto *GuardCmp = dyn_cast<ICmpInst>(GuardBranchInst->getCondition());
     if (GuardCmp == nullptr)
       continue;
@@ -1019,11 +1072,46 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
     if (IndVar == nullptr)
       continue;
 
-    dbgs() << "[Valid Loop]\n";
+    auto *Enter = Preheader != nullptr ? Preheader : GuardBB;
+
+    Value *Step = IndVar->getIncomingValueForBlock(Latch);
+    Value *ExitCmpOp0 = ExitCmp->getOperand(0);
+    Value *ExitCmpOp1 = ExitCmp->getOperand(1);
+
+    Value *Lower = IndVar->getIncomingValueForBlock(Enter);
+    Value *Upper = nullptr;
+
+    if (ExitCmpOp0 == Step ||
+        (isa<CastInst>(ExitCmpOp0) &&
+         cast<CastInst>(ExitCmpOp0)->getOperand(0) == Step))
+      Upper = ExitCmpOp1;
+
+    if (ExitCmpOp1 == Step ||
+        (isa<CastInst>(ExitCmpOp1) &&
+         cast<CastInst>(ExitCmpOp1)->getOperand(0) == Step))
+      Upper = ExitCmpOp0;
+
+    if (Upper == nullptr)
+      continue;
+
+    while (!Loop->isLoopInvariant(Upper) && isa<CastInst>(Upper))
+      Upper = cast<CastInst>(Upper)->getOperand(0);
+    
+    if (!Loop->isLoopInvariant(Upper))
+      continue;
+    ASSERT(Loop->isLoopInvariant(Lower));
+
+    dbgs() << "[Mono Loop]\n";
+    dbgs() << "IndVar: " << *IndVar << "\n";
+    dbgs() << "Lower: " << *Lower << "\n";
+    dbgs() << "Upper: " << *Upper << "\n";
+    dbgs() << "Step: " << *Step << "\n";
+    dbgs() << "StepInst: " << *IndVar->getIncomingValueForBlock(Latch) << "\n";
     dbgs() << "GuardCond: " << *GuardCmp << "\n";
     dbgs() << "ExitCmp: " << *ExitCmp << "\n";
-    dbgs() << "StepInst: " << *IndVar->getIncomingValueForBlock(Latch) << "\n";
-    dbgs() << "IndVar: " << *IndVar << "\n";
+
+    MonoLoopMap[Loop] =
+        new MonoLoop(Loop, IndVar, Lower, Upper, Step, GuardBB, Preheader);
   }
 }
 
