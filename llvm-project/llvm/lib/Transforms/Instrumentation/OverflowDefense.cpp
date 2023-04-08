@@ -976,22 +976,27 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
                                    PostDominatorTree &PDT) {
   collectMonoLoop(F, LI, SE);
 
+  SmallPtrSet<GetElementPtrInst *, 16> GepSet(GepToInstrument.begin(),
+                                              GepToInstrument.end());
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
   for (auto *GEP : GepToInstrument) {
     Loop *Loop = LI.getLoopFor(GEP->getParent());
-    if (MonoLoopMap.count(Loop) == 0)
-      continue;
+    if (MonoLoopMap.count(Loop) != 0) {
+      MonoLoop *ML = MonoLoopMap[Loop];
 
-    MonoLoop *ML = MonoLoopMap[Loop];
+      if (ML->getStepInst() == GEP) {
+        if (auto *GEPUpper = dyn_cast<GetElementPtrInst>(ML->Upper)) {
+          if (GepSet.count(GEPUpper) == 0) {
+            GepSet.insert(GEPUpper);
+            NewGepToInstrument.push_back(GEPUpper);
+          }
+        }
+        continue;
+      }
 
-    if (ML->getStepInst() == GEP) {
-      // Note that the GEP is the induction variable,so that its lower and upper
-      // bound is loop invariant which has been checked in outside of the loop.
-      continue;
+      if (monotonicLoopOptimize(F, GEP, Loop, SE))
+        continue;
     }
-
-    if (monotonicLoopOptimize(F, GEP, Loop, SE))
-      continue;
 
     NewGepToInstrument.push_back(GEP);
   }
@@ -1096,7 +1101,7 @@ void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
 
     while (!Loop->isLoopInvariant(Upper) && isa<CastInst>(Upper))
       Upper = cast<CastInst>(Upper)->getOperand(0);
-    
+
     if (!Loop->isLoopInvariant(Upper))
       continue;
     ASSERT(Loop->isLoopInvariant(Lower));
