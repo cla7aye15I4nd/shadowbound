@@ -406,14 +406,23 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
 }
 
 void OverflowDefense::initializeModule(Module &M) {
+  LLVMContext &C = M.getContext();
+
   DL = &M.getDataLayout();
+
+  M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
+
   ReportFn = M.getFunction(kOdefReportName);
   AbortFn = M.getFunction(kOdefAbortName);
 
-  int32Type = Type::getInt32Ty(M.getContext());
-  int64Type = Type::getInt64Ty(M.getContext());
-  int32PtrType = Type::getInt32PtrTy(M.getContext());
-  int64PtrType = Type::getInt64PtrTy(M.getContext());
+  ASSERT(ReportFn != nullptr);
+  ASSERT(AbortFn != nullptr);
+
+  int32Type = Type::getInt32Ty(C);
+  int64Type = Type::getInt64Ty(C);
+  int32PtrType = Type::getInt32PtrTy(C);
+  int64PtrType = Type::getInt64PtrTy(C);
 
   memset(Counter, 0, sizeof(Counter));
 }
