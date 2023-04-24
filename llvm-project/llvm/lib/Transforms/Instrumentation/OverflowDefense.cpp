@@ -76,6 +76,10 @@ static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
                                       cl::desc("optimize struct field checks"),
                                       cl::Hidden, cl::init(false));
 
+static cl::opt<bool> ClTailCheck("odef-tail-check",
+                                 cl::desc("check tail of array"), cl::Hidden,
+                                 cl::init(false));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -529,7 +533,8 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
   ConstantInt *SizeCI = dyn_cast<ConstantInt>(Size);
 
   Type *IntTy = DL->getIntPtrType(Ptr->getType());
-  uint32_t NeededSize = DL->getTypeStoreSize(Ptr->getType());
+  uint32_t NeededSize =
+      DL->getTypeStoreSize(Ptr->getType()->getPointerElementType());
   Value *NeededSizeVal = ConstantInt::get(IntTy, NeededSize);
 
   auto SizeRange = SE.getUnsignedRange(SE.getSCEV(Size));
@@ -1006,6 +1011,7 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
 
 void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
                                       ScalarEvolution &SE) {
+  // TODO: This part is very complex and needs to be clarified
   for (auto *Loop : LI) {
     if (!Loop->isRotatedForm())
       continue;
@@ -1188,7 +1194,7 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   // Back = Packed >> 32;
   // Begin = Base - (Front << 3);
   // End = Base + (Back << 3);
-  // if (GEP < Begin || GEP + NeededSize >= End)
+  // if (GEP < Begin || GEP + NeededSize > End)
   //   report_overflow();
 
   Instruction *InsertPt = GEP->hasOneUser() && !isa<PHINode>(GEP->user_back())
@@ -1200,7 +1206,6 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *CmpPtr = IRB.CreatePtrToInt(GEP, int64Type);
 
-  // TODO: this part will be removed
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
       IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
@@ -1215,10 +1220,13 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
   Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
   Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
-  Value *CmpEnd = IRB.CreateICmpUGT(CmpPtr, End);
-  // TODO: After solving all bugs, replace the line with
-  // Value *CmpEnd = IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal),
-  // End);
+
+  uint64_t NeededSize =
+      DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+  Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+  Value *CmpEnd =
+      ClTailCheck ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
+                  : IRB.CreateICmpUGT(CmpPtr, End);
   Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   CreateTrapBB(IRB, Cmp, true);
 }
@@ -1302,15 +1310,16 @@ void OverflowDefense::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   for (auto &I : BC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
 
-    uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(I->getType()->getPointerElementType());
     Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
     Value *Addr = IRB.CreatePtrToInt(I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    Value *CmpEnd = IRB.CreateICmpUGT(Addr, PtrEnd);
-    // TODO: After solving all bugs, replace the line with
-    // Value *CmpEnd =
-    //     IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+    Value *CmpEnd =
+        ClTailCheck
+            ? IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal))
+            : IRB.CreateICmpUGT(Addr, PtrEnd);
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
     CreateTrapBB(IRB, Cmp, true);
@@ -1343,21 +1352,6 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
 
-  // The final version of the code is commented out. The reason is that the
-  // compiler is not able to support stack and global variables checking now
-  /*
-    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type,
-    kShadowBase)); Value *Shadow = IRB.CreateAnd(Ptr,
-                                  ConstantInt::get(int64Type, kShadowMask));
-    Value *Packed = IRB.CreateLoad(int64Type,
-                                   IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *Back = IRB.CreateAnd(Packed,
-                                 ConstantInt::get(int64Type, 0xffffffff));
-    Value *Front = IRB.CreateLShr(Packed, 32);
-    Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-    Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
-  */
-
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
       IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
@@ -1389,10 +1383,13 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
-    // TODO: After solving all bugs, replace the second part with
-    // IRB.CreateICmpUGT(IRB.CreateAdd(Ptr, NeededSizeVal), End)
-    Value *NotIn = IRB.CreateOr(IRB.CreateICmpULT(Ptr, Begin),
-                                IRB.CreateICmpUGT(Ptr, End));
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(I->getType()->getPointerElementType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+    Value *NotIn = IRB.CreateOr(
+        IRB.CreateICmpULT(Ptr, Begin),
+        IRB.CreateICmpUGT(ClTailCheck ? IRB.CreateAdd(Ptr, NeededSizeVal) : Ptr,
+                          End));
     CreateTrapBB(IRB, NotIn, true);
   }
 }
