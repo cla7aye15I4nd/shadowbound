@@ -1386,13 +1386,18 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   // End = Base + (Back << 3);
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+  BasicBlock *Head = IRB.GetInsertBlock();
 
-  // FIXME: This block can be removed?
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
-  Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
-  IRB.SetInsertPoint(ThenInsertPt);
+  {
+    // FIXME: This block can be removed?
+    Value *IsApp = IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr,
+                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  }
+
+  BasicBlock *Then = IRB.GetInsertBlock();
 
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
@@ -1408,14 +1413,12 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   IRB.SetInsertPoint(InsertPt);
   PHINode *Begin = IRB.CreatePHI(int64Type, 2);
-  Begin->addIncoming(ThenBegin, ThenInsertPt->getParent());
-  Begin->addIncoming(ConstantInt::get(int64Type, 0),
-                     cast<Instruction>(IsApp)->getParent());
+  Begin->addIncoming(ThenBegin, Then);
+  Begin->addIncoming(ConstantInt::get(int64Type, 0), Head);
 
   PHINode *End = IRB.CreatePHI(int64Type, 2);
-  End->addIncoming(ThenEnd, ThenInsertPt->getParent());
-  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress),
-                   cast<Instruction>(IsApp)->getParent());
+  End->addIncoming(ThenEnd, Then);
+  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
 
   // Check if Ptr is in [Begin, End).
   for (auto *I : CC.Insts) {
