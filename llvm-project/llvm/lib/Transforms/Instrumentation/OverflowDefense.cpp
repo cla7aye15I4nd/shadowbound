@@ -33,7 +33,7 @@ using BuilderTy = IRBuilder<TargetFolder>;
     }                                                                          \
   } while (0)
 
-static const int kReservedBytes = 8;
+static const int kReservedBytes = 0x20;
 
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
@@ -59,6 +59,7 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
 // odef-check-[heap|stack|global] option is set to false. However, in most
 // cases, the majority of these checks will be skipped.
 
+// ==== Check Type Option ==== //
 static cl::opt<bool> ClCheckHeap("odef-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
                                  cl::init(true));
@@ -75,6 +76,7 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::desc("check in-field memory"),
                                     cl::Hidden, cl::init(true));
 
+// ==== Optimization Option ==== //
 static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
                                       cl::desc("optimize struct field checks"),
                                       cl::Hidden, cl::init(false));
@@ -82,6 +84,10 @@ static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
 static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
                                          cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
+                                     cl::desc("optimize dependence checks"),
+                                     cl::Hidden, cl::init(true));
 
 static cl::opt<bool> ClLoopOpt("odef-loop-opt",
                                cl::desc("optimize loop checks"), cl::Hidden,
@@ -91,6 +97,7 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
+// ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
                                         cl::init(""));
@@ -289,7 +296,9 @@ bool isEscapeInstruction(Instruction *I) {
   static SmallVector<StringRef, 16> whitelist = {"llvm.prefetch."};
 
   if (auto *CI = dyn_cast<CallInst>(I)) {
-    // Some intrinsics function will not escape the pointer
+    if (CI->isLifetimeStartOrEnd())
+      return false;
+
     Function *F = CI->getCalledFunction();
     if (F != nullptr) {
       for (auto &name : whitelist) {
@@ -327,21 +336,18 @@ bool isFlexibleStructure(StructType *STy) {
   return false;
 }
 
-bool isZeroAccessGep(Instruction *I) {
+bool isZeroAccessGep(const DataLayout *DL, Instruction *I) {
   auto *Gep = dyn_cast<GetElementPtrInst>(I);
 
   // It is not a GEP
   if (Gep == nullptr)
     return false;
 
-  for (auto &Op : Gep->indices()) {
-    auto *C = dyn_cast<ConstantInt>(Op);
-    // Not a constant or the constant is not zero
-    if (C == nullptr || C->getZExtValue() != 0)
-      return false;
-  }
+  APInt Offset(DL->getIndexSizeInBits(Gep->getPointerAddressSpace()), 0, true);
+  if (!Gep->accumulateConstantOffset(*DL, Offset))
+    return false;
 
-  return true;
+  return Offset.ule(kReservedBytes);
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -503,8 +509,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectToInstrument(F, ObjSizeEval, SE);
 
   dependencyOptimize(F, DT, PDT, SE);
-  if (ClLoopOpt)
-    loopOptimize(F, LI, SE, DT, PDT);
+  loopOptimize(F, LI, SE, DT, PDT);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -562,7 +567,7 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
   if (isShrinkBitCast(I))
     return true;
 
-  if (isZeroAccessGep(I))
+  if (isZeroAccessGep(DL, I))
     return true;
 
   if (isVirtualTableGep(I))
@@ -676,7 +681,7 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
     TypeSize srcSize = DL->getTypeStoreSize(srcTy);
     TypeSize dstSize = DL->getTypeStoreSize(dstTy);
 
-    // We always ensure every pointer holds at least 8 bytes.
+    // We always ensure every pointer holds at least `kReservedBytes` bytes.
     return dstSize <= srcSize || dstSize <= kReservedBytes;
   }
 
@@ -746,6 +751,9 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
 void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
                                          PostDominatorTree &PDT,
                                          ScalarEvolution &SE) {
+
+  if (!ClDependenceOpt)
+    return;
   SmallVector<BitCastInst *, 16> NewBcToInstrument =
       dependencyOptimizeForBc(F, DT, PDT, SE);
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument =
@@ -808,35 +816,71 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
 
           // The pointer operand of I and J are the same
           if (I->getPointerOperand() == J->getPointerOperand()) {
-            Type *ty =
-                I->getPointerOperand()->getType()->getPointerElementType();
+            APInt IOffset(DL->getIndexSizeInBits(I->getPointerAddressSpace()),
+                          0, true);
+            APInt JOffset(DL->getIndexSizeInBits(J->getPointerAddressSpace()),
+                          0, true);
+            if (I->accumulateConstantOffset(*DL, IOffset) &&
+                J->accumulateConstantOffset(*DL, JOffset) &&
+                ((JOffset.sge(IOffset) && IOffset.sge(0)) ||
+                 (JOffset.sle(IOffset) && IOffset.sle(0)))) {
+              optimized = true;
+              break;
+            } else {
+              Type *ty =
+                  I->getPointerOperand()->getType()->getPointerElementType();
 
-            size_t numIndex =
-                isFixedSizeType(ty)
-                    ? 1
-                    : std::max(I->getNumIndices(), J->getNumIndices());
-            bool NotGreater = true;
+              size_t numIndex =
+                  isFixedSizeType(ty)
+                      ? 1
+                      : std::max(I->getNumIndices(), J->getNumIndices());
+              bool Greater = true;
 
-            // Compare the offset of each index if every offset of I is always
-            // smaller than J, then I is not need to be instrumented
-            for (size_t k = 0; k < numIndex; ++k) {
-              auto IOffset = k >= I->getNumIndices()
-                                 ? ConstantInt::getNullValue(int64Type)
-                                 : I->getOperand(k + 1);
-              auto JOffset = k >= J->getNumIndices()
-                                 ? ConstantInt::getNullValue(int64Type)
-                                 : J->getOperand(k + 1);
+              // Compare the offset of each index if every offset of I is always
+              // smaller than J, then I is not need to be instrumented
+              for (size_t k = 0; k < numIndex; ++k) {
+                auto IntTy = k >= I->getNumIndices()
+                                 ? J->getOperand(k + 1)->getType()
+                                 : I->getOperand(k + 1)->getType();
+                auto IOffset = k >= I->getNumIndices()
+                                   ? ConstantInt::getNullValue(IntTy)
+                                   : I->getOperand(k + 1);
+                auto JOffset = k >= J->getNumIndices()
+                                   ? ConstantInt::getNullValue(IntTy)
+                                   : J->getOperand(k + 1);
 
-              // If the max offset of I is larger than the min offset of J,
-              // then it is possible that the offset of I is greater than the
-              // offset of J at runtime.
-              if (SE.getUnsignedRangeMax(SE.getSCEV(IOffset)).getZExtValue() >
-                  SE.getUnsignedRangeMin(SE.getSCEV(JOffset)).getZExtValue()) {
-                NotGreater = false;
+                if (IOffset->getType() != JOffset->getType()) {
+                  Greater = false;
+                  break;
+                }
+
+                // If the max offset of I is larger than the min offset of J,
+                // then it is possible that the offset of I is greater than the
+                // offset of J at runtime.
+                if (SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
+                        .ult(SE.getUnsignedRangeMax(SE.getSCEV(IOffset)))) {
+                  Greater = false;
+                  break;
+                }
+              }
+              if (Greater) {
+                optimized = true;
                 break;
               }
             }
-            if (NotGreater) {
+          }
+
+          if (J->getPointerOperand() == I) {
+            // TODO: Determine the direction of I is positive or negative
+            bool Greater = true;
+            for (size_t k = 0; k < J->getNumIndices(); ++k) {
+              auto JOffset = J->getOperand(k + 1);
+              if (SE.getSignedRangeMin(SE.getSCEV(JOffset)).isNegative()) {
+                Greater = false;
+                break;
+              }
+            }
+            if (Greater) {
               optimized = true;
               break;
             }
@@ -1035,6 +1079,9 @@ bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
 void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
                                    ScalarEvolution &SE, DominatorTree &DT,
                                    PostDominatorTree &PDT) {
+  if (!ClLoopOpt)
+    return;
+
   collectMonoLoop(F, LI, SE);
 
   SmallPtrSet<GetElementPtrInst *, 16> GepSet(GepToInstrument.begin(),
