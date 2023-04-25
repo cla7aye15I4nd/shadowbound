@@ -388,7 +388,7 @@ void insertGlobalVariable(Module &M) {
   M.getOrInsertGlobal("__odef_only_small_alloc_opt", Type::getInt32Ty(C), [&] {
     return new GlobalVariable(
         M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
-        ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt),
+        ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt ? 1 : 0),
         "__odef_only_small_alloc_opt");
   });
 }

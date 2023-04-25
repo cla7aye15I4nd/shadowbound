@@ -26,8 +26,8 @@ void SetShadow(const void *ptr, uptr size) {
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 
-  if (__odef_only_small_alloc_opt) {
-    if (size > u32(-1)) {
+  if (__builtin_expect(__odef_only_small_alloc_opt, 1)) {
+    if (__builtin_expect(size > u32(-1), false)) {
       Report("ERROR: __odef_only_small_alloc_opt is enabled, but the size "
              "of the allocation is too big: %zu\n",
              size);
