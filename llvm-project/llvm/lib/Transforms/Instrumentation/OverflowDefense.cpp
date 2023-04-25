@@ -83,6 +83,10 @@ static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
                                          cl::Hidden, cl::init(true));
 
+static cl::opt<bool> ClLoopOpt("odef-loop-opt",
+                               cl::desc("optimize loop checks"), cl::Hidden,
+                               cl::init(false));
+
 static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
@@ -499,7 +503,8 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectToInstrument(F, ObjSizeEval, SE);
 
   dependencyOptimize(F, DT, PDT, SE);
-  loopOptimize(F, LI, SE, DT, PDT);
+  if (ClLoopOpt)
+    loopOptimize(F, LI, SE, DT, PDT);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
