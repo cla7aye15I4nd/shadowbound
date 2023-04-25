@@ -76,6 +76,10 @@ static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
                                       cl::desc("optimize struct field checks"),
                                       cl::Hidden, cl::init(false));
 
+static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
+                                         cl::desc("optimize only small alloc"),
+                                         cl::Hidden, cl::init(true));
+
 static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
@@ -379,6 +383,16 @@ void insertRuntimeFunction(Module &M) {
   M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
 }
 
+void insertGlobalVariable(Module &M) {
+  LLVMContext &C = M.getContext();
+  M.getOrInsertGlobal("__odef_only_small_alloc_opt", Type::getInt32Ty(C), [&] {
+    return new GlobalVariable(
+        M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
+        ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt),
+        "__odef_only_small_alloc_opt");
+  });
+}
+
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
   return (Opt.getNumOccurrences() > 0) ? Opt : Default;
 }
@@ -402,6 +416,7 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
     return PreservedAnalyses::all();
   insertModuleCtor(M);
   insertRuntimeFunction(M);
+  insertGlobalVariable(M);
   return PreservedAnalyses::none();
 }
 
@@ -1157,7 +1172,7 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   // ShadowAddr = BC & kShadowMask;
   // Base = BC & kShadowBase;
   // BackSize = *(int32_t *) ShadowAddr;
-  // if (BC >= Base + BackSize - NeededSize)
+  // if (BC > Base + BackSize - NeededSize)
   //   report_overflow();
 
   Instruction *InsertPt = BC->hasOneUser() && !isa<PHINode>(BC->user_back())
@@ -1170,19 +1185,23 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *CmpPtr = IRB.CreatePtrToInt(BC, int64Type);
 
-  // TODO: this part will be removed
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
-  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  {
+    // FIXME: This block can be removed?
+    Value *IsApp = IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr,
+                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  }
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *BackSize = IRB.CreateShl(
-      IRB.CreateZExt(
-          IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
-          int64Type),
-      3);
+
+  Value *BackSizeRaw = IRB.CreateZExt(
+      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+      int64Type);
+  Value *BackSize =
+      ClOnlySmallAllocOpt ? BackSizeRaw : IRB.CreateShl(BackSizeRaw, 3);
 
   uint64_t NeededSize =
       DL->getTypeStoreSize(BC->getType()->getPointerElementType());
@@ -1215,19 +1234,26 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *CmpPtr = IRB.CreatePtrToInt(GEP, int64Type);
 
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
-  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  {
+    // FIXME: This block can be removed?
+    Value *IsApp = IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr,
+                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  }
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Front = IRB.CreateLShr(Packed, 32);
-  Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-  Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  Value *BackRaw =
+      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+  Value *Begin = IRB.CreateSub(Base, Front);
+  Value *End = IRB.CreateAdd(Base, Back);
   Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
 
   uint64_t NeededSize =
@@ -1361,21 +1387,24 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
 
+  // FIXME: This block can be removed?
   Value *IsApp = IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
       IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
-
-  ASSERT(isa<Instruction>(IsApp));
   Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
   IRB.SetInsertPoint(ThenInsertPt);
+
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Front = IRB.CreateLShr(Packed, 32);
-  Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-  Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  Value *BackRaw =
+      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+  Value *ThenBegin = IRB.CreateSub(Base, Front);
+  Value *ThenEnd = IRB.CreateAdd(Base, Back);
 
   IRB.SetInsertPoint(InsertPt);
   PHINode *Begin = IRB.CreatePHI(int64Type, 2);
