@@ -92,9 +92,9 @@ void __odef_init() {
   odef_inited = true;
 }
 
-void __odef_report() { Report(" Overflow detected\n"); }
+void __odef_report() {}
 
 void __odef_abort() {
-  __odef_report();
+  Report(" Overflow detected\n");
   Die();
 }
