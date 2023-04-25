@@ -2,11 +2,13 @@
 
 ### Todo
 
+#### Optimization
+- [ ] Optimize the monotonic loop.
+- [ ] Simplify checks when compiler can determine the direction of the pointer calculation. (e.g. `p + 1` is always larger than `p`)
+
 #### Bugs
 
 - [ ] Investigate the cause of the 70% time consumption in ReleaseMemoryToOS of `602.gcc_s`.
-- [ ] Investigate why `kSpaceSize` in `AP64` not work.
-- [ ] Add loop optimization to monotonous loop and strlen style loop.
+- [ ] Investigate why parameter `kSpaceSize` in `AP64` not work.
 - [ ] There are some false positive in `perlbench`, `gcc_s`, `xalancbmk` and `imagick`.
-- [x] Some testcase even slower than `CAMP`, I found that some optimization in `Laid` not work.
 - [ ] Allocate more 50% in malloc to avoid last bytes.

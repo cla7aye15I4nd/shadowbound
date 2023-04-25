@@ -43,7 +43,7 @@ If a global pointer is stored or passed as an argument, it may violate the One D
 
 An unsafe stack in the heap can reduce the time consumption of transferring many stacks to the heap. To manage, allocate a large block of memory on the heap, use it as a stack and cut off pieces as needed. Track the current position and size of each data piece, updating as data is pushed and popped. When the unsafe stack is consumed, allocate a new unsafe stack chunk and connect using a list.
 
-### In-Field Overflow Checking
+### In-Field Overflow Checking [Deprecated]
 Instrumenting the in-filed overflow checking do not require any runtime support. Consider the following example:
 ```c
 struct Y{
