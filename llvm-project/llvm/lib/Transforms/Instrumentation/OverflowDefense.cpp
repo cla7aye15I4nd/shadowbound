@@ -2,6 +2,7 @@
 //------------===//
 
 #include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/ADT/StringSet.h"
 #include "llvm/Analysis/LoopInfo.h"
 #include "llvm/Analysis/MemoryBuiltins.h"
 #include "llvm/Analysis/PostDominators.h"
@@ -14,6 +15,8 @@
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <numeric>
 
 using namespace llvm;
@@ -83,6 +86,10 @@ static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
 static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
+
+static cl::opt<std::string> ClWhiteList("odef-whitelist",
+                                        cl::desc("whitelist file"), cl::Hidden,
+                                        cl::init(""));
 
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
@@ -254,6 +261,8 @@ private:
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Loop *, MonoLoop *> MonoLoopMap;
   SmallVector<BaseCheck *, 16> Checks;
+
+  StringSet<> WhiteList;
 
   const DataLayout *DL;
 
@@ -440,6 +449,21 @@ void OverflowDefense::initializeModule(Module &M) {
   int64PtrType = Type::getInt64PtrTy(C);
 
   memset(Counter, 0, sizeof(Counter));
+
+  // Initialize the white list
+  std::string WhiteListPath = ClWhiteList;
+  if (WhiteListPath != "") {
+    std::ifstream WhiteListFile(WhiteListPath);
+    if (WhiteListFile.is_open()) {
+      std::string Line;
+      while (std::getline(WhiteListFile, Line)) {
+        Line.erase(std::remove_if(Line.begin(), Line.end(), isspace),
+                   Line.end());
+        WhiteList.insert(Line);
+      }
+      WhiteListFile.close();
+    }
+  }
 }
 
 bool OverflowDefense::sanitizeFunction(Function &F,
@@ -454,6 +478,9 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     return false;
 
   if (ClSkipInstrument)
+    return false;
+
+  if (WhiteList.find(F.getName()) != WhiteList.end())
     return false;
 
   dbgs() << "[" << F.getName() << "]\n";
