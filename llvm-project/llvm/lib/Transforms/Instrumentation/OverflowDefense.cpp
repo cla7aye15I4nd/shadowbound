@@ -1047,11 +1047,11 @@ void OverflowDefense::collectChunkCheckImpl(
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
-    if (STy != nullptr)
+    if (STy != nullptr && ClStructFieldOpt)
       Counter[kRuntimeOptCheck] += Insts.size();
     Checks.push_back(new RuntimeCheck(Src, Insts));
   } else {
-    if (STy != nullptr)
+    if (STy != nullptr && ClStructFieldOpt)
       Counter[kClusterOptCheck]++;
     Checks.push_back(new ClusterCheck(Src, Insts));
   }

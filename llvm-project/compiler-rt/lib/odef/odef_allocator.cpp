@@ -16,7 +16,7 @@ struct OdefMapUnmapCallback {
   }
 };
 
-static const uptr kReservedBytes = sizeof(uptr);
+static const uptr kReservedBytes = 0x20;
 static const uptr kAllocatorSpace = 0x600000000000ULL;
 static const uptr kMaxAllowedMallocSize = 8UL << 30;
 
