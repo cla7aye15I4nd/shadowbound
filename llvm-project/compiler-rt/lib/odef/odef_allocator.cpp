@@ -74,12 +74,10 @@ static void *OdefAllocate(uptr size, uptr alignment) {
   }
   // FIXME: CHECK if out of memory.
   SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
-  RunMallocHooks(allocated, size);
   return allocated;
 }
 
 void OdefDeallocate(void *p) {
-  RunFreeHooks(p);
 
   OdefThread *t = GetCurrentThread();
   if (t) {
