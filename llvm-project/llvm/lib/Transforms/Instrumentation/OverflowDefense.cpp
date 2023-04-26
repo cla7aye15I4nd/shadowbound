@@ -384,6 +384,20 @@ bool isFixedSizeType(Type *Ty) {
   return false;
 }
 
+bool isStdFunction(StringRef name) {
+  std::string cmd = "c++filt " + name.str();
+  FILE *pipe = popen(cmd.c_str(), "r");
+ 
+  std::string result;
+  char buffer[0x100];
+  while (fgets(buffer, sizeof buffer, pipe) != NULL)
+    result += buffer;
+
+  pclose(pipe);
+
+  return StringRef(result).startswith("std::");
+}
+
 void insertModuleCtor(Module &M) {
   getOrCreateSanitizerCtorAndInitFunctions(
       M, kOdefModuleCtorName, kOdefInitName,
@@ -488,6 +502,9 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     return false;
 
   if (ClSkipInstrument)
+    return false;
+
+  if (isStdFunction(F.getName()))
     return false;
 
   if (WhiteList.find(F.getName()) != WhiteList.end())
