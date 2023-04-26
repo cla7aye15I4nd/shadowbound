@@ -46,7 +46,7 @@ Front = Packed & 0xffffffff;
 Back = Packed >> 32;
 Begin = Base - (Front << 3);
 End = Base + (Back << 3);
-if (GEP < Begin || GEP + NeededSize >= End)
+if (GEP < Begin || GEP + NeededSize > End)
   report_overflow();
 ```
 
