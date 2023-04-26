@@ -170,3 +170,7 @@ if (branch_a) {
 ## Reference
 - https://llvm.org/docs/OpaquePointers.html
 - https://llvm.org/docs/Vectorizers.html
+- https://llvm.org/devmtg/2020-09/slides/PGO_Instrumentation.pdf
+- https://llvm.org/devmtg/2015-10/slides/Baev-IndirectCallPromotion.pdf
+- https://llvm.org/docs/LinkTimeOptimization.html
+- https://releases.llvm.org/15.0.0/docs/GoldPlugin.html
