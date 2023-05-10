@@ -106,6 +106,7 @@ const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
 const char kOdefAbortName[] = "__odef_abort";
+const char kOdefSetShadowName[] = "__odef_set_shadow";
 
 namespace {
 
@@ -250,7 +251,6 @@ private:
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
-  void replaceAlloca(Function &F);
 
   Value *getSource(Instruction *I);
   Value *getSourceImpl(Value *V);
@@ -286,6 +286,7 @@ private:
 
   Function *ReportFn;
   Function *AbortFn;
+  Function *SetShadowFn;
 };
 
 bool isEscapeInstruction(Instruction *I) {
@@ -347,7 +348,7 @@ bool isZeroAccessGep(const DataLayout *DL, Instruction *I) {
   if (!Gep->accumulateConstantOffset(*DL, Offset))
     return false;
 
-  return Offset.ule(kReservedBytes);
+  return Offset.ule(0);
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -387,7 +388,7 @@ bool isFixedSizeType(Type *Ty) {
 bool isStdFunction(StringRef name) {
   std::string cmd = "c++filt " + name.str();
   FILE *pipe = popen(cmd.c_str(), "r");
- 
+
   std::string result;
   char buffer[0x100];
   while (fgets(buffer, sizeof buffer, pipe) != NULL)
@@ -414,6 +415,9 @@ void insertRuntimeFunction(Module &M) {
   LLVMContext &C = M.getContext();
   M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
   M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kOdefSetShadowName, Type::getVoidTy(C),
+                        Type::getInt64Ty(C), Type::getInt64Ty(C),
+                        Type::getInt64Ty(C));
 }
 
 void insertGlobalVariable(Module &M) {
@@ -463,6 +467,7 @@ void OverflowDefense::initializeModule(Module &M) {
 
   ReportFn = M.getFunction(kOdefReportName);
   AbortFn = M.getFunction(kOdefAbortName);
+  SetShadowFn = M.getFunction(kOdefSetShadowName);
 
   ASSERT(ReportFn != nullptr);
   ASSERT(AbortFn != nullptr);
@@ -647,6 +652,8 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
 
 bool OverflowDefense::NeverEscaped(Instruction *I) {
   SmallPtrSet<Instruction *, 16> Visited;
+  // FIXME: Rewrite by WorkList and identify
+  // the difference between escape and deference
   return NeverEscapedImpl(I, Visited);
 }
 
@@ -965,6 +972,7 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   if (GEPOperator *GEPO = dyn_cast<GEPOperator>(V)) {
     return getPhiSource(GEPO->getPointerOperand(), Src, Visited);
   }
+  // TODO: Maybe we need to handle the Constant NULL Pointer.
 
   if (Src == nullptr) {
     Src = V;

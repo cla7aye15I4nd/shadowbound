@@ -98,3 +98,8 @@ void __odef_abort() {
   Report(" Overflow detected\n");
   Die();
 }
+
+void __odef_set_shadow(uptr addr, uptr num, uptr size) {
+  uptr real_size = (num * size + (sizeof(uptr) - 1)) & ~(sizeof(uptr) - 1);
+  SetShadow((const void*) addr, real_size);
+}

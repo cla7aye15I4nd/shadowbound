@@ -1,7 +1,7 @@
 // from named_r
 #include <cstdio>
 #include <vector>
-
+#include <malloc.h>
 template <class Type>
 class ObjectArena
 {
@@ -21,6 +21,7 @@ public:
     if ((pos += n) > end)
     {
       pos = new Type[blockSize];
+      printf("malloc size: %lu\n", malloc_usable_size(pos) / sizeof(Type));
       push();
       end = pos + blockSize;
       rpos = pos;
@@ -45,7 +46,7 @@ int main()
 {
   ObjectArena<int> arena;
 
-  printf("%p\n", arena.getNewArray(400));
-  printf("%p\n", arena.getNewArray(400));
-  printf("%p\n", arena.getNewArray(400));
+  printf("%p\n", arena.getNewArray(500));
+  printf("%p\n", arena.getNewArray(500));
+  printf("%p\n", arena.getNewArray(500));
 }
