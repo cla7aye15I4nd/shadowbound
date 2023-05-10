@@ -349,7 +349,7 @@ bool isZeroAccessGep(const DataLayout *DL, Instruction *I) {
   if (!Gep->accumulateConstantOffset(*DL, Offset))
     return false;
 
-  return Offset.ule(kReservedBytes);
+  return Offset.ule(0);
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -389,7 +389,7 @@ bool isFixedSizeType(Type *Ty) {
 bool isStdFunction(StringRef name) {
   std::string cmd = "c++filt " + name.str();
   FILE *pipe = popen(cmd.c_str(), "r");
- 
+
   std::string result;
   char buffer[0x100];
   while (fgets(buffer, sizeof buffer, pipe) != NULL)
@@ -653,6 +653,8 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
 
 bool OverflowDefense::NeverEscaped(Instruction *I) {
   SmallPtrSet<Instruction *, 16> Visited;
+  // FIXME: Rewrite by WorkList and identify
+  // the difference between escape and deference
   return NeverEscapedImpl(I, Visited);
 }
 
@@ -971,6 +973,7 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   if (GEPOperator *GEPO = dyn_cast<GEPOperator>(V)) {
     return getPhiSource(GEPO->getPointerOperand(), Src, Visited);
   }
+  // TODO: Maybe we need to handle the Constant NULL Pointer.
 
   if (Src == nullptr) {
     Src = V;
