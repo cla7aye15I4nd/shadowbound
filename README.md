@@ -2,11 +2,25 @@
 
 **Laid** is a defense mechanism that can be implemented in both user-space programs and the kernel. It uses LLVM instrumentation and shadow memory to provide overflow protection, include stack/global/heap overflow and in-field overflow.
 
-## Build
+## Installation
+### Build `ld-gold`
+```bash
+git clone --depth 1 git://sourceware.org/git/binutils-gdb.git binutils
+cd binutils
+mkdir build && cd build
+../configure --enable-gold --enable-plugins --disable-werror
+make -j`nproc`
+cp /usr/bin/ld /usr/bin/ld.backup
+cp gold/ld-new /usr/bin/ld
+ld -v # GNU gold (GNU Binutils ...
 ```
+
+### Build `clang`
+```bash
 cd llvm-project
 mkdir build && cd build
-cmake -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm
+cmake -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" -DLLVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm
+# cmake -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" -DLLVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Debug -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm
 make -j`nproc`
 ```
 
@@ -32,7 +46,7 @@ Front = Packed & 0xffffffff;
 Back = Packed >> 32;
 Begin = Base - (Front << 3);
 End = Base + (Back << 3);
-if (GEP < Begin || GEP + NeededSize >= End)
+if (GEP < Begin || GEP + NeededSize > End)
   report_overflow();
 ```
 
@@ -42,7 +56,7 @@ If a global pointer is stored or passed as an argument, it may violate the One D
 
 An unsafe stack in the heap can reduce the time consumption of transferring many stacks to the heap. To manage, allocate a large block of memory on the heap, use it as a stack and cut off pieces as needed. Track the current position and size of each data piece, updating as data is pushed and popped. When the unsafe stack is consumed, allocate a new unsafe stack chunk and connect using a list.
 
-### In-Field Overflow Checking
+### In-Field Overflow Checking [Deprecated]
 Instrumenting the in-filed overflow checking do not require any runtime support. Consider the following example:
 ```c
 struct Y{
@@ -72,6 +86,7 @@ foo(a);
 ```
 The code creates `a` pointer a by adding `overflow_length` to the value of ptr. Then, it passes the pointer a as an argument to the function `foo`. This practice is considered to be poor programming because it can lead to a potential memory overflow. Even though the pointer `a` is not accessed in this code snippet, any calculations based on a would be meaningless. As a result, it is best to avoid storing or passing an overflow pointer as an argument to prevent potential memory safety issues.
 
+#### PHP
 There is an [php-8.2.2](https://github.com/php/php-src/blob/b20c0e925fe401a44a99b0d34b438797be865bb0/Zend/zend_API.c#L2859) example which is the most wired case I found.
 ```c
 num_args++;
@@ -82,6 +97,48 @@ reg_function->common.arg_info = new_arg_info + 1;
 If `num_args` is initially zero, then the `new_arg_info` pointer will only allocate memory for a single `zend_arg_info` structure. When `reg_function->common.arg_info = new_arg_info + 1` is executed, `reg_function->common.arg_info` will point to the memory location at the end the allocated memory. 
 
 However, I found the code only accesses `reg_function->common.arg_info[-1]` and never accesses any memory locations beyond the allocated memory, then the buffer overflow issue will not occur. However, this still leaves room for potential bugs or errors in the future, as the code may be modified or updated to access other memory locations.
+
+#### Named
+```c++
+Type *getNewArray(int n)
+{
+  // `end` is the end of the pos
+  Type *rpos;
+  rpos = pos;
+  if ((pos += n) > end)
+  {
+    pos = new Type[blockSize];
+    push();
+    end = pos + blockSize;
+    rpos = pos;
+    pos += n;
+  }
+
+  return rpos;
+}
+```
+#### Blender
+```c++
+if (coords_sign == 1) {
+  for (i = 0; i < coords_tot; i++) {
+    indices[i].next = &indices[i + 1]; // store an overflow pointer when i == coords_tot - 1
+    indices[i].prev = &indices[i - 1]; // store an overflow pointer when i == 0
+    indices[i].index = i;
+  }
+}
+else {
+  /* reversed */
+  unsigned int n = coords_tot - 1;
+  for (i = 0; i < coords_tot; i++) {
+    indices[i].next = &indices[i + 1];
+    indices[i].prev = &indices[i - 1];
+    indices[i].index = (n - i);
+  }
+}
+
+indices[0].prev = &indices[coords_tot - 1]; // cover the overflow pointer
+indices[coords_tot - 1].next = &indices[0]; // cover the overflow pointer
+```
 
 ### End-of-the-Array Pointers
 ```c
@@ -113,3 +170,7 @@ if (branch_a) {
 ## Reference
 - https://llvm.org/docs/OpaquePointers.html
 - https://llvm.org/docs/Vectorizers.html
+- https://llvm.org/devmtg/2020-09/slides/PGO_Instrumentation.pdf
+- https://llvm.org/devmtg/2015-10/slides/Baev-IndirectCallPromotion.pdf
+- https://llvm.org/docs/LinkTimeOptimization.html
+- https://releases.llvm.org/15.0.0/docs/GoldPlugin.html

@@ -10,34 +10,44 @@
 #include "sanitizer_common/sanitizer_libc.h"
 #include "sanitizer_common/sanitizer_linux.h"
 
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
+
 namespace __odef {
 
-static const uptr kShadowBound = 0x40000000; // 1G
-
 void SetShadow(const void *ptr, uptr size) {
+  // Layout of the shadow memory:
+  //  |BACK|FRON|....|BACK|FRON|BACK|FRON|....|BACK|FRON|
+  // Layout Example for size = 0x100:
+  // if __odef_only_small_alloc_opt:
+  //    |0x000|0x100|0x008|0x0f8|0x010|0x0f0|....|0x0f0|0x010|0x0f8|0x008|0x100|0x000|
+  // else
+  //    |0x00|0x20|0x01|0x1f|0x02|0x1e|....|0x1e|0x02|0x1f|0x01|0x20|0x00|
+
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 
-  if (size > kShadowBound) {
-    u32 a = 0;
-    u32 b = size / sizeof(uptr);
-
-    u32 *shadow_mid_left = shadow_beg + kShadowBound / 2 / sizeof(u32);
-    u32 *shadow_mid_right = shadow_end - kShadowBound / 2 / sizeof(u32);
-    while (shadow_beg < shadow_end) {
-      if (shadow_mid_left > shadow_beg || shadow_beg >= shadow_mid_right) {
-        *(shadow_beg + 0) = b;
-        *(shadow_beg + 1) = a;
-      }
-
-      b--;
-      a++;
-      shadow_beg += 2;
+  if (__builtin_expect(__odef_only_small_alloc_opt, 1)) {
+    if (__builtin_expect(size > u32(-1), false)) {
+      Report("ERROR: __odef_only_small_alloc_opt is enabled, but the size "
+             "of the allocation is too big: %zu\n",
+             size);
+      Die();
     }
 
+    u32 a = 0;
+    u32 b = size;
+
+#ifdef __clang__
+#pragma unroll
+#endif
+    while (shadow_beg < shadow_end) {
+      *(shadow_beg + 0) = b -= sizeof(u64);
+      *(shadow_beg + 1) = a += sizeof(u64);
+      shadow_beg += 2;
+    }
   } else {
     u32 a = 0;
-    u32 b = size / sizeof(uptr);
+    u32 b = size / sizeof(u32);
 
 #ifdef __clang__
 #pragma unroll

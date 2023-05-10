@@ -2,10 +2,12 @@
 //------------===//
 
 #include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/ADT/StringSet.h"
 #include "llvm/Analysis/LoopInfo.h"
 #include "llvm/Analysis/MemoryBuiltins.h"
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
+#include "llvm/Analysis/ScalarEvolutionExpressions.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Operator.h"
@@ -13,6 +15,8 @@
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
+#include <fstream>
+#include <iostream>
 #include <numeric>
 
 using namespace llvm;
@@ -29,7 +33,7 @@ using BuilderTy = IRBuilder<TargetFolder>;
     }                                                                          \
   } while (0)
 
-static const int kReservedBytes = 8;
+static const int kReservedBytes = 0x20;
 
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
@@ -55,6 +59,7 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
 // odef-check-[heap|stack|global] option is set to false. However, in most
 // cases, the majority of these checks will be skipped.
 
+// ==== Check Type Option ==== //
 static cl::opt<bool> ClCheckHeap("odef-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
                                  cl::init(true));
@@ -71,6 +76,32 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::desc("check in-field memory"),
                                     cl::Hidden, cl::init(true));
 
+// ==== Optimization Option ==== //
+static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
+                                      cl::desc("optimize struct field checks"),
+                                      cl::Hidden, cl::init(false));
+
+static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
+                                         cl::desc("optimize only small alloc"),
+                                         cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
+                                     cl::desc("optimize dependence checks"),
+                                     cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClLoopOpt("odef-loop-opt",
+                               cl::desc("optimize loop checks"), cl::Hidden,
+                               cl::init(false));
+
+static cl::opt<bool> ClTailCheck("odef-tail-check",
+                                 cl::desc("check tail of array"), cl::Hidden,
+                                 cl::init(false));
+
+// ==== Debug Option ==== //
+static cl::opt<std::string> ClWhiteList("odef-whitelist",
+                                        cl::desc("whitelist file"), cl::Hidden,
+                                        cl::init(""));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -79,45 +110,78 @@ const char kOdefSetShadowName[] = "__odef_set_shadow";
 
 namespace {
 
-enum AddrLoc {
-  kAddrLocStack = 0,
-  kAddrLocGlobal,
-  kAddrLocAny,
-  kAddrLocUnknown,
-};
-
 enum CheckType {
   kRuntimeCheck = 0,
   kClusterCheck = 1,
   kBuiltInCheck = 2,
   kInFieldCheck = 3,
+  kRuntimeOptCheck = 4,
+  kClusterOptCheck = 5,
   kCheckTypeEnd
 };
 
-struct FieldCheck {
+struct BaseCheck {
+  enum CheckType Type;
+
+  BaseCheck() = delete;
+  BaseCheck(enum CheckType Type) : Type(Type) {}
+};
+
+struct FieldCheck : public BaseCheck {
   GetElementPtrInst *Gep;
   SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
 
   FieldCheck(GetElementPtrInst *Gep,
              SmallVector<std::pair<Value *, uint64_t>, 16> SubFields)
-      : Gep(Gep), SubFields(SubFields) {}
+      : BaseCheck(kInFieldCheck), Gep(Gep), SubFields(SubFields) {}
 };
 
-struct ChunkCheck {
-  CheckType Type;
+struct ClusterCheck : public BaseCheck {
   Value *Src;
   SmallVector<Instruction *, 16> Insts;
 
-  // Used for built-in checks
+  ClusterCheck(Value *Src, SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kClusterCheck), Src(Src), Insts(Insts) {}
+};
+
+struct RuntimeCheck : public BaseCheck {
+  Value *Src;
+  SmallVector<Instruction *, 16> Insts;
+
+  RuntimeCheck(Value *Src, SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kRuntimeCheck), Src(Src), Insts(Insts) {}
+};
+
+struct BuiltinCheck : public BaseCheck {
+  Value *Src;
   Value *Size;
   Value *Offset;
+  SmallVector<Instruction *, 16> Insts;
 
-  ChunkCheck(CheckType Type, Value *Src, SmallVector<Instruction *, 16> Insts)
-      : Type(Type), Src(Src), Insts(Insts), Size(nullptr), Offset(nullptr) {}
+  BuiltinCheck(Value *Src, Value *Size, Value *Offset,
+               SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kBuiltInCheck), Src(Src), Size(Size), Offset(Offset),
+        Insts(Insts) {}
+};
 
-  ChunkCheck(CheckType Type, Value *Src, SmallVector<Instruction *, 16> Insts,
-             Value *Size, Value *Offset)
-      : Type(Type), Src(Src), Insts(Insts), Size(Size), Offset(Offset) {}
+struct MonoLoop {
+  Loop *Lop;
+  PHINode *IndVar;
+  Value *Lower;
+  Value *Upper;
+  Value *Step;
+
+  BasicBlock *GuardBB;
+  BasicBlock *Preheader;
+
+  MonoLoop(Loop *Lop, PHINode *IndVar, Value *Lower, Value *Upper, Value *Step,
+           BasicBlock *GuardBB, BasicBlock *Preheader)
+      : Lop(Lop), IndVar(IndVar), Lower(Lower), Upper(Upper), Step(Step),
+        GuardBB(GuardBB), Preheader(Preheader) {}
+
+  Value *getStepInst() const {
+    return IndVar->getIncomingValueForBlock(Lop->getLoopLatch());
+  }
 };
 
 class OverflowDefense {
@@ -138,7 +202,6 @@ private:
   void initializeModule(Module &M);
   void collectToInstrument(Function &F, ObjectSizeOffsetEvaluator &ObjSizeEval,
                            ScalarEvolution &SE);
-  void collectToReplace(Function &F);
 
   bool filterToInstrument(Function &F, Instruction *I,
                           ObjectSizeOffsetEvaluator &ObjSizeEval,
@@ -153,9 +216,11 @@ private:
   bool isAccessMember(Instruction *I);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
-  bool isInterestingPointer(Function &F, Value *V);
-  bool isInterestingPointerImpl(Function &F, Value *V,
-                                SmallPtrSet<Value *, 16> &Visited);
+  void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
+                    DominatorTree &DT, PostDominatorTree &PDT);
+  void collectMonoLoop(Function &F, LoopInfo &LI, ScalarEvolution &SE);
+  bool monotonicLoopOptimize(Function &F, Value *Addr, Loop *L,
+                             ScalarEvolution &SE);
 
   SmallVector<BitCastInst *, 16> dependencyOptimizeForBc(Function &F,
                                                          DominatorTree &DT,
@@ -167,23 +232,22 @@ private:
                            PostDominatorTree &PDT, ScalarEvolution &SE);
   void collectSubFieldCheck(Function &F, ScalarEvolution &SE);
   void collectChunkCheck(Function &F, LoopInfo &LI,
-                         ObjectSizeOffsetEvaluator &ObjSizeEval);
+                         ObjectSizeOffsetEvaluator &ObjSizeEval,
+                         ScalarEvolution &SE);
   void collectChunkCheckImpl(Function &F, Value *Src,
                              SmallVector<Instruction *, 16> &Insts,
                              LoopInfo &LI,
-                             ObjectSizeOffsetEvaluator &ObjSizeEval);
+                             ObjectSizeOffsetEvaluator &ObjSizeEval,
+                             ScalarEvolution &SE);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
   void commitInstrument(Function &F);
   void commitFieldCheck(Function &F, FieldCheck &Check);
-  void commitChunkCheck(Function &F, ChunkCheck &Check);
-
-  void commitBuiltInCheck(Function &F, ChunkCheck &Check);
-  void commitClusterCheck(Function &F, ChunkCheck &Check);
-  void commitRuntimeCheck(Function &F, ChunkCheck &Check);
-  void commitReplaceAlloca(Function &F);
+  void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
+  void commitClusterCheck(Function &F, ClusterCheck &Check);
+  void commitRuntimeCheck(Function &F, RuntimeCheck &Check);
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
@@ -193,12 +257,10 @@ private:
   Value *getSourceImpl(Value *V);
   bool getPhiSource(Value *V, Value *&Src, SmallPtrSet<Value *, 16> &Visited);
 
-  AddrLoc getLocation(Instruction *I);
-  void getLocationImpl(Value *V, AddrLoc &Loc,
-                       SmallPtrSet<Value *, 16> &Visited);
-
   void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
   Value *readRegister(Function &F, BuilderTy &IRB, StringRef RegName);
+
+  StructType *sourceAnalysis(Function &F, Value *Src);
 
   bool Kernel;
   bool Recover;
@@ -207,14 +269,12 @@ private:
   SmallVector<BitCastInst *, 16> BcToInstrument;
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
-  SmallVector<AllocaInst *, 16> AllocaToReplace;
 
   DenseMap<Value *, Value *> SourceCache;
-  DenseMap<Value *, AddrLoc> LocationCache;
-  DenseMap<Value *, bool> InterestingPointerCache;
+  DenseMap<Loop *, MonoLoop *> MonoLoopMap;
+  SmallVector<BaseCheck *, 16> Checks;
 
-  SmallVector<ChunkCheck, 16> ChunkChecks;
-  SmallVector<FieldCheck, 16> FieldChecks;
+  StringSet<> WhiteList;
 
   const DataLayout *DL;
 
@@ -238,7 +298,9 @@ bool isEscapeInstruction(Instruction *I) {
   static SmallVector<StringRef, 16> whitelist = {"llvm.prefetch."};
 
   if (auto *CI = dyn_cast<CallInst>(I)) {
-    // Some intrinsics function will not escape the pointer
+    if (CI->isLifetimeStartOrEnd())
+      return false;
+
     Function *F = CI->getCalledFunction();
     if (F != nullptr) {
       for (auto &name : whitelist) {
@@ -276,21 +338,18 @@ bool isFlexibleStructure(StructType *STy) {
   return false;
 }
 
-bool isZeroAccessGep(Instruction *I) {
+bool isZeroAccessGep(const DataLayout *DL, Instruction *I) {
   auto *Gep = dyn_cast<GetElementPtrInst>(I);
 
   // It is not a GEP
   if (Gep == nullptr)
     return false;
 
-  for (auto &Op : Gep->indices()) {
-    auto *C = dyn_cast<ConstantInt>(Op);
-    // Not a constant or the constant is not zero
-    if (C == nullptr || C->getZExtValue() != 0)
-      return false;
-  }
+  APInt Offset(DL->getIndexSizeInBits(Gep->getPointerAddressSpace()), 0, true);
+  if (!Gep->accumulateConstantOffset(*DL, Offset))
+    return false;
 
-  return true;
+  return Offset.ule(kReservedBytes);
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -327,6 +386,20 @@ bool isFixedSizeType(Type *Ty) {
   return false;
 }
 
+bool isStdFunction(StringRef name) {
+  std::string cmd = "c++filt " + name.str();
+  FILE *pipe = popen(cmd.c_str(), "r");
+ 
+  std::string result;
+  char buffer[0x100];
+  while (fgets(buffer, sizeof buffer, pipe) != NULL)
+    result += buffer;
+
+  pclose(pipe);
+
+  return StringRef(result).startswith("std::");
+}
+
 void insertModuleCtor(Module &M) {
   getOrCreateSanitizerCtorAndInitFunctions(
       M, kOdefModuleCtorName, kOdefInitName,
@@ -346,6 +419,16 @@ void insertRuntimeFunction(Module &M) {
   M.getOrInsertFunction(kOdefSetShadowName, Type::getVoidTy(C),
                         Type::getInt64Ty(C), Type::getInt64Ty(C),
                         Type::getInt64Ty(C));
+}
+
+void insertGlobalVariable(Module &M) {
+  LLVMContext &C = M.getContext();
+  M.getOrInsertGlobal("__odef_only_small_alloc_opt", Type::getInt32Ty(C), [&] {
+    return new GlobalVariable(
+        M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
+        ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt ? 1 : 0),
+        "__odef_only_small_alloc_opt");
+  });
 }
 
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
@@ -371,21 +454,46 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
     return PreservedAnalyses::all();
   insertModuleCtor(M);
   insertRuntimeFunction(M);
+  insertGlobalVariable(M);
   return PreservedAnalyses::none();
 }
 
 void OverflowDefense::initializeModule(Module &M) {
+  LLVMContext &C = M.getContext();
+
   DL = &M.getDataLayout();
+
+  M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
+
   ReportFn = M.getFunction(kOdefReportName);
   AbortFn = M.getFunction(kOdefAbortName);
   SetShadowFn = M.getFunction(kOdefSetShadowName);
 
-  int32Type = Type::getInt32Ty(M.getContext());
-  int64Type = Type::getInt64Ty(M.getContext());
-  int32PtrType = Type::getInt32PtrTy(M.getContext());
-  int64PtrType = Type::getInt64PtrTy(M.getContext());
+  ASSERT(ReportFn != nullptr);
+  ASSERT(AbortFn != nullptr);
+
+  int32Type = Type::getInt32Ty(C);
+  int64Type = Type::getInt64Ty(C);
+  int32PtrType = Type::getInt32PtrTy(C);
+  int64PtrType = Type::getInt64PtrTy(C);
 
   memset(Counter, 0, sizeof(Counter));
+
+  // Initialize the white list
+  std::string WhiteListPath = ClWhiteList;
+  if (WhiteListPath != "") {
+    std::ifstream WhiteListFile(WhiteListPath);
+    if (WhiteListFile.is_open()) {
+      std::string Line;
+      while (std::getline(WhiteListFile, Line)) {
+        Line.erase(std::remove_if(Line.begin(), Line.end(), isspace),
+                   Line.end());
+        WhiteList.insert(Line);
+      }
+      WhiteListFile.close();
+    }
+  }
 }
 
 bool OverflowDefense::sanitizeFunction(Function &F,
@@ -402,6 +510,14 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   if (ClSkipInstrument)
     return false;
 
+  if (isStdFunction(F.getName()))
+    return false;
+
+  if (WhiteList.find(F.getName()) != WhiteList.end())
+    return false;
+
+  dbgs() << "[" << F.getName() << "]\n";
+
   auto &SE = AM.getResult<ScalarEvolutionAnalysis>(F);
   auto &DT = AM.getResult<DominatorTreeAnalysis>(F);
   auto &PDT = AM.getResult<PostDominatorTreeAnalysis>(F);
@@ -414,9 +530,9 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   // Collect all instructions to instrument
   collectToInstrument(F, ObjSizeEval, SE);
-  collectToReplace(F);
 
   dependencyOptimize(F, DT, PDT, SE);
+  loopOptimize(F, LI, SE, DT, PDT);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -424,16 +540,21 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectSubFieldCheck(F, SE);
 
   // Instrument GEP and BC
-  collectChunkCheck(F, LI, ObjSizeEval);
+  collectChunkCheck(F, LI, ObjSizeEval, SE);
 
   commitInstrument(F);
 
-  dbgs() << "[" << F.getName() << "]\n";
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
-    dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n"
-           << "  Cluster Check: " << Counter[kClusterCheck] << "\n"
-           << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n"
-           << "  InField Check: " << Counter[kInFieldCheck] << "\n";
+    dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n";
+    dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
+
+    if (ClStructFieldOpt)
+      dbgs() << "  Cluster Optim: " << Counter[kClusterOptCheck] << "\n";
+    dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n";
+
+    if (ClStructFieldOpt)
+      dbgs() << "  Runtime Optim: " << Counter[kRuntimeOptCheck] << "\n";
+    dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n";
   }
 
   return true;
@@ -457,77 +578,6 @@ void OverflowDefense::collectToInstrument(
   }
 }
 
-void OverflowDefense::collectToReplace(Function &F) {
-  // Check all Alloca instructions
-
-  for (auto &BB : F)
-    for (auto &I : BB)
-      if (auto *Alloca = dyn_cast<AllocaInst>(&I)) {
-        auto *Ty = Alloca->getAllocatedType();
-        if (auto *ATy = dyn_cast<ArrayType>(Ty)) {
-          if (ATy->getNumElements() > 1 && isInterestingPointer(F, Alloca)) {
-            AllocaToReplace.push_back(Alloca);
-          }
-        }
-      }
-}
-
-bool OverflowDefense::isInterestingPointer(Function &F, Value *V) {
-  if (InterestingPointerCache.count(V))
-    return InterestingPointerCache[V];
-
-  SmallPtrSet<Value *, 16> Visited;
-  return InterestingPointerCache[V] = isInterestingPointerImpl(F, V, Visited);
-}
-
-bool OverflowDefense::isInterestingPointerImpl(
-    Function &F, Value *V, SmallPtrSet<Value *, 16> &Visited) {
-  if (Visited.count(V))
-    return false;
-
-  Visited.insert(V);
-
-  bool flag = false;
-  for (auto *U : V->users()) {
-    if (isa<GetElementPtrInst>(U) || isa<BitCastInst>(U) || isa<PHINode>(U) ||
-        isa<SelectInst>(U)) {
-      if (isInterestingPointerImpl(F, U, Visited))
-        return true;
-      continue;
-    }
-
-    if (auto *SI = dyn_cast<StoreInst>(U)) {
-      if (SI->getValueOperand() == V)
-        return true;
-      continue;
-    }
-
-    if (isa<ReturnInst>(U))
-      return true;
-
-    if (auto *CI = dyn_cast<CallBase>(U)) {
-      Function *F = CI->getCalledFunction();
-      if (F == nullptr || !F->isIntrinsic())
-        return true;
-      continue;
-    }
-
-    if (isa<ICmpInst>(U) || isa<LoadInst>(U))
-      continue;
-
-    // TODO: handle more cases
-    if (isa<PtrToIntInst>(U)) {
-      // FIXME: PtrToIntInst is not handled yet
-      continue;
-    }
-
-    errs() << "[Unhandled Instruction] " << *U << "\n";
-    __builtin_unreachable();
-  }
-
-  return false;
-}
-
 bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
                                          ObjectSizeOffsetEvaluator &ObjSizeEval,
                                          ScalarEvolution &SE) {
@@ -540,7 +590,7 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
   if (isShrinkBitCast(I))
     return true;
 
-  if (isZeroAccessGep(I))
+  if (isZeroAccessGep(DL, I))
     return true;
 
   if (isVirtualTableGep(I))
@@ -567,7 +617,8 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
   ConstantInt *SizeCI = dyn_cast<ConstantInt>(Size);
 
   Type *IntTy = DL->getIntPtrType(Ptr->getType());
-  uint32_t NeededSize = DL->getTypeStoreSize(Ptr->getType());
+  uint32_t NeededSize =
+      DL->getTypeStoreSize(Ptr->getType()->getPointerElementType());
   Value *NeededSizeVal = ConstantInt::get(IntTy, NeededSize);
 
   auto SizeRange = SE.getUnsignedRange(SE.getSCEV(Size));
@@ -653,7 +704,7 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
     TypeSize srcSize = DL->getTypeStoreSize(srcTy);
     TypeSize dstSize = DL->getTypeStoreSize(dstTy);
 
-    // We always ensure every pointer holds at least 8 bytes.
+    // We always ensure every pointer holds at least `kReservedBytes` bytes.
     return dstSize <= srcSize || dstSize <= kReservedBytes;
   }
 
@@ -714,7 +765,7 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
       }
 
       if (SubFields.size() > 0) {
-        FieldChecks.push_back(FieldCheck(Gep, SubFields));
+        Checks.push_back(new FieldCheck(Gep, SubFields));
       }
     }
   }
@@ -723,6 +774,9 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
 void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
                                          PostDominatorTree &PDT,
                                          ScalarEvolution &SE) {
+
+  if (!ClDependenceOpt)
+    return;
   SmallVector<BitCastInst *, 16> NewBcToInstrument =
       dependencyOptimizeForBc(F, DT, PDT, SE);
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument =
@@ -785,35 +839,71 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
 
           // The pointer operand of I and J are the same
           if (I->getPointerOperand() == J->getPointerOperand()) {
-            Type *ty =
-                I->getPointerOperand()->getType()->getPointerElementType();
+            APInt IOffset(DL->getIndexSizeInBits(I->getPointerAddressSpace()),
+                          0, true);
+            APInt JOffset(DL->getIndexSizeInBits(J->getPointerAddressSpace()),
+                          0, true);
+            if (I->accumulateConstantOffset(*DL, IOffset) &&
+                J->accumulateConstantOffset(*DL, JOffset) &&
+                ((JOffset.sge(IOffset) && IOffset.sge(0)) ||
+                 (JOffset.sle(IOffset) && IOffset.sle(0)))) {
+              optimized = true;
+              break;
+            } else {
+              Type *ty =
+                  I->getPointerOperand()->getType()->getPointerElementType();
 
-            size_t numIndex =
-                isFixedSizeType(ty)
-                    ? 1
-                    : std::max(I->getNumIndices(), J->getNumIndices());
-            bool NotGreater = true;
+              size_t numIndex =
+                  isFixedSizeType(ty)
+                      ? 1
+                      : std::max(I->getNumIndices(), J->getNumIndices());
+              bool Greater = true;
 
-            // Compare the offset of each index if every offset of I is always
-            // smaller than J, then I is not need to be instrumented
-            for (size_t k = 0; k < numIndex; ++k) {
-              auto IOffset = k >= I->getNumIndices()
-                                 ? ConstantInt::getNullValue(int64Type)
-                                 : I->getOperand(k + 1);
-              auto JOffset = k >= J->getNumIndices()
-                                 ? ConstantInt::getNullValue(int64Type)
-                                 : J->getOperand(k + 1);
+              // Compare the offset of each index if every offset of I is always
+              // smaller than J, then I is not need to be instrumented
+              for (size_t k = 0; k < numIndex; ++k) {
+                auto IntTy = k >= I->getNumIndices()
+                                 ? J->getOperand(k + 1)->getType()
+                                 : I->getOperand(k + 1)->getType();
+                auto IOffset = k >= I->getNumIndices()
+                                   ? ConstantInt::getNullValue(IntTy)
+                                   : I->getOperand(k + 1);
+                auto JOffset = k >= J->getNumIndices()
+                                   ? ConstantInt::getNullValue(IntTy)
+                                   : J->getOperand(k + 1);
 
-              // If the max offset of I is larger than the min offset of J,
-              // then it is possible that the offset of I is greater than the
-              // offset of J at runtime.
-              if (SE.getUnsignedRangeMax(SE.getSCEV(IOffset)).getZExtValue() >
-                  SE.getUnsignedRangeMin(SE.getSCEV(JOffset)).getZExtValue()) {
-                NotGreater = false;
+                if (IOffset->getType() != JOffset->getType()) {
+                  Greater = false;
+                  break;
+                }
+
+                // If the max offset of I is larger than the min offset of J,
+                // then it is possible that the offset of I is greater than the
+                // offset of J at runtime.
+                if (SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
+                        .ult(SE.getUnsignedRangeMax(SE.getSCEV(IOffset)))) {
+                  Greater = false;
+                  break;
+                }
+              }
+              if (Greater) {
+                optimized = true;
                 break;
               }
             }
-            if (NotGreater) {
+          }
+
+          if (J->getPointerOperand() == I) {
+            // TODO: Determine the direction of I is positive or negative
+            bool Greater = true;
+            for (size_t k = 0; k < J->getNumIndices(); ++k) {
+              auto JOffset = J->getOperand(k + 1);
+              if (SE.getSignedRangeMin(SE.getSCEV(JOffset)).isNegative()) {
+                Greater = false;
+                break;
+              }
+            }
+            if (Greater) {
               optimized = true;
               break;
             }
@@ -889,51 +979,9 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   return Src == V;
 }
 
-AddrLoc OverflowDefense::getLocation(Instruction *I) {
-  if (LocationCache.count(I))
-    return LocationCache[I];
-
-  AddrLoc AL = AddrLoc::kAddrLocUnknown;
-  SmallPtrSet<Value *, 16> Visited;
-  getLocationImpl(I, AL, Visited);
-
-  ASSERT(AL != AddrLoc::kAddrLocUnknown);
-  return LocationCache[I] = AL;
-}
-
-void OverflowDefense::getLocationImpl(Value *V, AddrLoc &AL,
-                                      SmallPtrSet<Value *, 16> &Visited) {
-
-  Value *S = getSourceImpl(V);
-  if (Visited.count(S))
-    return;
-  Visited.insert(S);
-
-  AddrLoc _AL = AddrLoc::kAddrLocUnknown;
-
-  if (isa<GlobalVariable>(S))
-    _AL = AddrLoc::kAddrLocGlobal;
-  else if (isa<AllocaInst>(S))
-    _AL = AddrLoc::kAddrLocStack;
-  else if (auto Phi = dyn_cast<PHINode>(S)) {
-    for (size_t i = 0; i < Phi->getNumIncomingValues(); ++i) {
-      getLocationImpl(Phi->getIncomingValue(i), _AL, Visited);
-      if (_AL == kAddrLocAny)
-        break;
-    }
-  } else {
-    // TODO: Sometimes S is Constant, which is not handled here.
-    _AL = AddrLoc::kAddrLocAny;
-  }
-
-  if (AL == AddrLoc::kAddrLocUnknown)
-    AL = _AL;
-  else if (AL != _AL)
-    AL = AddrLoc::kAddrLocAny;
-}
-
-void OverflowDefense::collectChunkCheck(
-    Function &F, LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
+void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
+                                        ObjectSizeOffsetEvaluator &ObjSizeEval,
+                                        ScalarEvolution &SE) {
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
@@ -950,8 +998,52 @@ void OverflowDefense::collectChunkCheck(
 
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval);
+    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval, SE);
   }
+}
+
+StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
+  if (auto *LI = dyn_cast<LoadInst>(Src)) {
+    if (auto *Gep = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
+      bool isFirstField = true;
+      Type *SrcTy = nullptr;
+      Type *DstTy = Gep->getSourceElementType();
+
+      if (isFixedSizeType(DstTy)) {
+        for (auto &Op : Gep->indices()) {
+          if (isFirstField) {
+            isFirstField = false;
+            continue;
+          }
+
+          auto value = Op.get();
+          if (value->getType()->isIntegerTy(32)) {
+            StructType *STy = cast<StructType>(DstTy);
+            auto index = cast<ConstantInt>(value)->getZExtValue();
+            SrcTy = DstTy;
+            DstTy = STy->getElementType(index);
+          } else {
+            auto Aty = cast<ArrayType>(DstTy);
+            SrcTy = DstTy;
+            DstTy = Aty->getArrayElementType();
+          }
+        }
+
+        ASSERT(DstTy == Src->getType());
+        if (SrcTy->isStructTy()) {
+          return cast<StructType>(SrcTy);
+        }
+      }
+    }
+  }
+
+  if (isa<Argument>(Src)) {
+    if (auto *STy = dyn_cast<StructType>(Src->getType())) {
+      return STy;
+    }
+  }
+
+  return nullptr;
 }
 
 bool OverflowDefense::isAccessMember(Instruction *I) {
@@ -967,7 +1059,7 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
 
 void OverflowDefense::collectChunkCheckImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
-    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval) {
+    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
   if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval)) {
     return;
   }
@@ -976,10 +1068,187 @@ void OverflowDefense::collectChunkCheckImpl(
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
 
+  StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
-    ChunkChecks.push_back(ChunkCheck(kRuntimeCheck, Src, Insts));
+    if (STy != nullptr && ClStructFieldOpt)
+      Counter[kRuntimeOptCheck] += Insts.size();
+    Checks.push_back(new RuntimeCheck(Src, Insts));
   } else {
-    ChunkChecks.push_back(ChunkCheck(kClusterCheck, Src, Insts));
+    if (STy != nullptr && ClStructFieldOpt)
+      Counter[kClusterOptCheck]++;
+    Checks.push_back(new ClusterCheck(Src, Insts));
+  }
+}
+
+bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
+                                            ScalarEvolution &SE) {
+  auto *SCEVPtr = SE.getSCEV(Addr);
+  auto *ML = MonoLoopMap[Lop];
+  ASSERT(ML != nullptr);
+
+  if (auto *ARE = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
+    auto *Start = ARE->getStart();
+    auto *Step = ARE->getStepRecurrence(SE);
+
+    dbgs() << "[IndGep]\n";
+    dbgs() << "Addr: " << *Addr << "\n";
+    dbgs() << "Start: " << *Start << "\n";
+    dbgs() << "Step: " << *Step << "\n";
+  }
+
+  return false;
+}
+
+void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
+                                   ScalarEvolution &SE, DominatorTree &DT,
+                                   PostDominatorTree &PDT) {
+  if (!ClLoopOpt)
+    return;
+
+  collectMonoLoop(F, LI, SE);
+
+  SmallPtrSet<GetElementPtrInst *, 16> GepSet(GepToInstrument.begin(),
+                                              GepToInstrument.end());
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  for (auto *GEP : GepToInstrument) {
+    Loop *Loop = LI.getLoopFor(GEP->getParent());
+    if (MonoLoopMap.count(Loop) != 0) {
+      MonoLoop *ML = MonoLoopMap[Loop];
+
+      if (ML->getStepInst() == GEP) {
+        if (auto *GEPUpper = dyn_cast<GetElementPtrInst>(ML->Upper)) {
+          if (GepSet.count(GEPUpper) == 0) {
+            GepSet.insert(GEPUpper);
+            NewGepToInstrument.push_back(GEPUpper);
+          }
+        }
+        continue;
+      }
+
+      if (monotonicLoopOptimize(F, GEP, Loop, SE))
+        continue;
+    }
+
+    NewGepToInstrument.push_back(GEP);
+  }
+
+  GepToInstrument.swap(NewGepToInstrument);
+}
+
+void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
+                                      ScalarEvolution &SE) {
+  // TODO: This part is very complex and needs to be clarified
+  for (auto *Loop : LI) {
+    if (!Loop->isRotatedForm())
+      continue;
+
+    auto *Preheader = Loop->getLoopPreheader(); // nullptr possible
+    auto *Header = Loop->getHeader();
+    auto *ExitCmp = Loop->getLatchCmpInst();
+
+    if (Header == nullptr || ExitCmp == nullptr)
+      continue;
+
+    auto *Latch = Loop->getLoopLatch();
+
+    // Find the possible guard block
+    BasicBlock *GuardBB = nullptr;
+    if (Preheader != nullptr)
+      GuardBB = Preheader->getUniquePredecessor();
+    else {
+      SmallVector<BasicBlock *, 4> GuardBlocks;
+      for (auto *Pred : predecessors(Header)) {
+        if (Pred == Latch)
+          continue;
+        GuardBlocks.push_back(Pred);
+      }
+      if (GuardBlocks.size() == 1)
+        GuardBB = GuardBlocks.front();
+    }
+
+    if (GuardBB == nullptr)
+      continue;
+
+    // Find the possible exit block
+    SmallVector<BasicBlock *, 4> GuardExitBlocks;
+    SmallVector<BasicBlock *, 4> LatchExitBlocks;
+    for (auto *Succ : successors(GuardBB)) {
+      if (Succ == Header || Succ == Preheader)
+        continue;
+      GuardExitBlocks.push_back(Succ);
+    }
+    for (auto *Succ : successors(Latch)) {
+      if (Succ == Header)
+        continue;
+      LatchExitBlocks.push_back(Succ);
+    }
+
+    if (GuardExitBlocks.size() != 1 || LatchExitBlocks.size() != 1)
+      continue;
+
+    auto *ExitBB = GuardExitBlocks.front();
+    auto *LatchExitBB = LatchExitBlocks.front();
+
+    if (LatchExitBB != ExitBB &&
+        (LatchExitBB->getUniqueSuccessor() == nullptr ||
+         LatchExitBB->getUniqueSuccessor()->sizeWithoutDebug() != 1 ||
+         LatchExitBB->getUniqueSuccessor()->getUniqueSuccessor() != ExitBB))
+      continue;
+
+    auto *GuardBranchInst = dyn_cast<BranchInst>(GuardBB->getTerminator());
+    if (GuardBranchInst == nullptr || GuardBranchInst->isUnconditional() ||
+        (GuardBranchInst->getSuccessor(0) != Header &&
+         GuardBranchInst->getSuccessor(0) != Preheader))
+      continue;
+
+    auto *GuardCmp = dyn_cast<ICmpInst>(GuardBranchInst->getCondition());
+    if (GuardCmp == nullptr)
+      continue;
+
+    auto *IndVar = Loop->getInductionVariableBoost(SE, GuardBB);
+    if (IndVar == nullptr)
+      continue;
+
+    auto *Enter = Preheader != nullptr ? Preheader : GuardBB;
+
+    Value *Step = IndVar->getIncomingValueForBlock(Latch);
+    Value *ExitCmpOp0 = ExitCmp->getOperand(0);
+    Value *ExitCmpOp1 = ExitCmp->getOperand(1);
+
+    Value *Lower = IndVar->getIncomingValueForBlock(Enter);
+    Value *Upper = nullptr;
+
+    if (ExitCmpOp0 == Step ||
+        (isa<CastInst>(ExitCmpOp0) &&
+         cast<CastInst>(ExitCmpOp0)->getOperand(0) == Step))
+      Upper = ExitCmpOp1;
+
+    if (ExitCmpOp1 == Step ||
+        (isa<CastInst>(ExitCmpOp1) &&
+         cast<CastInst>(ExitCmpOp1)->getOperand(0) == Step))
+      Upper = ExitCmpOp0;
+
+    if (Upper == nullptr)
+      continue;
+
+    while (!Loop->isLoopInvariant(Upper) && isa<CastInst>(Upper))
+      Upper = cast<CastInst>(Upper)->getOperand(0);
+
+    if (!Loop->isLoopInvariant(Upper))
+      continue;
+    ASSERT(Loop->isLoopInvariant(Lower));
+
+    dbgs() << "[Mono Loop]\n";
+    dbgs() << "IndVar: " << *IndVar << "\n";
+    dbgs() << "Lower: " << *Lower << "\n";
+    dbgs() << "Upper: " << *Upper << "\n";
+    dbgs() << "Step: " << *Step << "\n";
+    dbgs() << "StepInst: " << *IndVar->getIncomingValueForBlock(Latch) << "\n";
+    dbgs() << "GuardCond: " << *GuardCmp << "\n";
+    dbgs() << "ExitCmp: " << *ExitCmp << "\n";
+
+    MonoLoopMap[Loop] =
+        new MonoLoop(Loop, IndVar, Lower, Upper, Step, GuardBB, Preheader);
   }
 }
 
@@ -989,9 +1258,8 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
   if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
-    ChunkChecks.push_back(ChunkCheck(kBuiltInCheck, Src, Insts,
-                                     SizeOffsetEval.first,
-                                     SizeOffsetEval.second));
+    Checks.push_back(new BuiltinCheck(Src, SizeOffsetEval.first,
+                                      SizeOffsetEval.second, Insts));
     return true;
   } else if (auto *G = dyn_cast<GlobalVariable>(Src)) {
     // FIXME: handle global variable
@@ -1006,32 +1274,36 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   // ShadowAddr = BC & kShadowMask;
   // Base = BC & kShadowBase;
   // BackSize = *(int32_t *) ShadowAddr;
-  // if (BC >= Base + BackSize - NeededSize)
+  // if (BC > Base + BackSize - NeededSize)
   //   report_overflow();
 
-  Instruction *InsertPt = BC->getInsertionPointAfterDef();
+  Instruction *InsertPt = BC->hasOneUser() && !isa<PHINode>(BC->user_back())
+                              ? BC->user_back()
+                              : BC->getInsertionPointAfterDef();
+
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *CmpPtr = IRB.CreatePtrToInt(BC, int64Type);
 
-  // TODO: this part will be removed
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(
-          Ptr, ClCheckStack ? ConstantInt::get(int64Type, kAllocatorSpaceEnd)
-                            : readRegister(F, IRB, "rsp")));
-
-  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  {
+    // FIXME: This block can be removed?
+    Value *IsApp = IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr,
+                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  }
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *BackSize = IRB.CreateShl(
-      IRB.CreateZExt(
-          IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
-          int64Type),
-      3);
+
+  Value *BackSizeRaw = IRB.CreateZExt(
+      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+      int64Type);
+  Value *BackSize =
+      ClOnlySmallAllocOpt ? BackSizeRaw : IRB.CreateShl(BackSizeRaw, 3);
 
   uint64_t NeededSize =
       DL->getTypeStoreSize(BC->getType()->getPointerElementType());
@@ -1052,69 +1324,48 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   // Back = Packed >> 32;
   // Begin = Base - (Front << 3);
   // End = Base + (Back << 3);
-  // if (GEP < Begin || GEP + NeededSize >= End)
+  // if (GEP < Begin || GEP + NeededSize > End)
   //   report_overflow();
 
-  Instruction *InsertPt = GEP->getInsertionPointAfterDef();
+  Instruction *InsertPt = GEP->hasOneUser() && !isa<PHINode>(GEP->user_back())
+                              ? GEP->user_back()
+                              : GEP->getInsertionPointAfterDef();
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *CmpPtr = IRB.CreatePtrToInt(GEP, int64Type);
 
-  // TODO: this part will be removed
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(
-          Ptr, ClCheckStack ? ConstantInt::get(int64Type, kAllocatorSpaceEnd)
-                            : readRegister(F, IRB, "rsp")));
-  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  {
+    // FIXME: This block can be removed?
+    Value *IsApp = IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr,
+                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  }
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Front = IRB.CreateLShr(Packed, 32);
-  Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-  Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  Value *BackRaw =
+      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+  Value *Begin = IRB.CreateSub(Base, Front);
+  Value *End = IRB.CreateAdd(Base, Back);
   Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
-  Value *CmpEnd = IRB.CreateICmpUGT(CmpPtr, End);
-  // TODO: After solving all bugs, replace the line with
-  // Value *CmpEnd = IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal),
-  // End);
+
+  uint64_t NeededSize =
+      DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+  Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+  Value *CmpEnd =
+      ClTailCheck ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
+                  : IRB.CreateICmpUGT(CmpPtr, End);
   Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   CreateTrapBB(IRB, Cmp, true);
-}
-
-void OverflowDefense::commitReplaceAlloca(Function &F) {
-  if (AllocaToReplace.empty())
-    return;
-
-  dbgs() << "[" << F.getName()
-         << "] AllocaToReplace: " << AllocaToReplace.size() << "\n";
-
-  for (auto &I : AllocaToReplace)
-    replaceAlloca(F, I);
-}
-
-void OverflowDefense::replaceAlloca(Function &F, AllocaInst *AI) {
-  if (AI->getAlign().value() < sizeof(uint64_t))
-    AI->setAlignment(Align(sizeof(uint64_t)));
-
-  auto *Ty = AI->getAllocatedType();
-
-  uint64_t Size = DL->getTypeStoreSize(Ty);
-  Value *Num = AI->getArraySize();
-
-  Instruction *InsertPt = AI->getInsertionPointAfterDef();
-  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
-                TargetFolder(*DL));
-
-  Value *Ptr = IRB.CreatePtrToInt(AI, int64Type);
-  Value *NumVal = IRB.CreateZExt(Num, int64Type);
-  Value *SizeVal = ConstantInt::get(int64Type, Size);
-  IRB.CreateCall(SetShadowFn, {Ptr, NumVal, SizeVal});
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
@@ -1132,20 +1383,28 @@ void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
 }
 
 void OverflowDefense::commitInstrument(Function &F) {
-  for (auto &FC : FieldChecks)
-    commitFieldCheck(F, FC);
-
-  for (auto &CC : ChunkChecks)
-    commitChunkCheck(F, CC);
-
-  // Replace alloca with malloc
-  commitReplaceAlloca(F);
+  for (auto *C_ : Checks) {
+    BaseCheck &C = *C_;
+    if (C.Type == kBuiltInCheck) {
+      commitBuiltInCheck(F, (BuiltinCheck &)C);
+    } else if (C.Type == kClusterCheck) {
+      commitClusterCheck(F, (ClusterCheck &)C);
+    } else if (C.Type == kRuntimeCheck) {
+      commitRuntimeCheck(F, (RuntimeCheck &)C);
+    } else if (C.Type == kInFieldCheck) {
+      commitFieldCheck(F, (FieldCheck &)C);
+    } else {
+      ASSERT(false);
+      __builtin_unreachable();
+    }
+  }
 }
 
 void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
   if (!ClCheckInField)
     return;
 
+  ASSERT(FC.Type == kInFieldCheck);
   Counter[kInFieldCheck]++;
 
   Instruction *InsertPt = FC.Gep;
@@ -1162,23 +1421,14 @@ void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
   CreateTrapBB(IRB, Cond, true);
 }
 
-void OverflowDefense::commitChunkCheck(Function &F, ChunkCheck &CC) {
-  if (CC.Type == kBuiltInCheck) {
-    commitBuiltInCheck(F, CC);
-  } else if (CC.Type == kClusterCheck) {
-    commitClusterCheck(F, CC);
-  } else if (CC.Type == kRuntimeCheck) {
-    commitRuntimeCheck(F, CC);
-  }
-}
-
-void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
+void OverflowDefense::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   if (!ClCheckStack)
     return;
 
-  Counter[CC.Type]++;
+  ASSERT(BC.Type == kBuiltInCheck);
+  Counter[kBuiltInCheck]++;
 
-  Value *Src = CC.Src;
+  Value *Src = BC.Src;
   Instruction *InsertPt =
       isa<Instruction>(Src)
           ? cast<Instruction>(Src)->getInsertionPointAfterDef()
@@ -1187,36 +1437,38 @@ void OverflowDefense::commitBuiltInCheck(Function &F, ChunkCheck &CC) {
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
-  Value *Size = CC.Size;
-  Value *Offset = CC.Offset;
+  Value *Size = BC.Size;
+  Value *Offset = BC.Offset;
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
   Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
   Value *PtrEnd = IRB.CreateAdd(Ptr, Size);
 
-  for (auto &I : CC.Insts) {
+  for (auto &I : BC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
 
-    uint64_t NeededSize = DL->getTypeStoreSize(I->getType());
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(I->getType()->getPointerElementType());
     Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
     Value *Addr = IRB.CreatePtrToInt(I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    Value *CmpEnd = IRB.CreateICmpUGT(Addr, PtrEnd);
-    // TODO: After solving all bugs, replace the line with
-    // Value *CmpEnd =
-    //     IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal));
+    Value *CmpEnd =
+        ClTailCheck
+            ? IRB.CreateICmpUGT(Addr, IRB.CreateSub(PtrEnd, NeededSizeVal))
+            : IRB.CreateICmpUGT(Addr, PtrEnd);
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
     CreateTrapBB(IRB, Cmp, true);
   }
 }
 
-void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
+void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   if (!ClCheckHeap)
     return;
 
-  Counter[CC.Type]++;
+  ASSERT(CC.Type == kClusterCheck);
+  Counter[kClusterCheck]++;
 
   Value *Src = CC.Src;
   Instruction *InsertPt =
@@ -1236,72 +1488,65 @@ void OverflowDefense::commitClusterCheck(Function &F, ChunkCheck &CC) {
   // End = Base + (Back << 3);
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
+  BasicBlock *Head = IRB.GetInsertBlock();
 
-  // The final version of the code is commented out. The reason is that the
-  // compiler is not able to support stack and global variables checking now
-  /*
-    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type,
-    kShadowBase)); Value *Shadow = IRB.CreateAnd(Ptr,
-                                  ConstantInt::get(int64Type, kShadowMask));
-    Value *Packed = IRB.CreateLoad(int64Type,
-                                   IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *Back = IRB.CreateAnd(Packed,
-                                 ConstantInt::get(int64Type, 0xffffffff));
-    Value *Front = IRB.CreateLShr(Packed, 32);
-    Value *Begin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-    Value *End = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
-  */
+  {
+    // FIXME: This block can be removed?
+    Value *IsApp = IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr,
+                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
+        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
+  }
 
-  Value *IsApp = IRB.CreateAnd(
-      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-      IRB.CreateICmpULT(
-          Ptr, ClCheckStack ? ConstantInt::get(int64Type, kAllocatorSpaceEnd)
-                            : readRegister(F, IRB, "rsp")));
+  BasicBlock *Then = IRB.GetInsertBlock();
 
-  ASSERT(isa<Instruction>(IsApp));
-  Instruction *ThenInsertPt = SplitBlockAndInsertIfThen(IsApp, InsertPt, false);
-  IRB.SetInsertPoint(ThenInsertPt);
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Packed =
       IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *Back = IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *Front = IRB.CreateLShr(Packed, 32);
-  Value *ThenBegin = IRB.CreateSub(Base, IRB.CreateShl(Front, 3));
-  Value *ThenEnd = IRB.CreateAdd(Base, IRB.CreateShl(Back, 3));
+  Value *BackRaw =
+      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+  Value *ThenBegin = IRB.CreateSub(Base, Front);
+  Value *ThenEnd = IRB.CreateAdd(Base, Back);
 
   IRB.SetInsertPoint(InsertPt);
   PHINode *Begin = IRB.CreatePHI(int64Type, 2);
-  Begin->addIncoming(ThenBegin, ThenInsertPt->getParent());
-  Begin->addIncoming(ConstantInt::get(int64Type, 0),
-                     cast<Instruction>(IsApp)->getParent());
+  Begin->addIncoming(ThenBegin, Then);
+  Begin->addIncoming(ConstantInt::get(int64Type, 0), Head);
 
   PHINode *End = IRB.CreatePHI(int64Type, 2);
-  End->addIncoming(ThenEnd, ThenInsertPt->getParent());
-  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress),
-                   cast<Instruction>(IsApp)->getParent());
+  End->addIncoming(ThenEnd, Then);
+  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
 
   // Check if Ptr is in [Begin, End).
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
-    // TODO: After solving all bugs, replace the second part with
-    // IRB.CreateICmpUGT(IRB.CreateAdd(Ptr, NeededSizeVal), End)
-    Value *NotIn = IRB.CreateOr(IRB.CreateICmpULT(Ptr, Begin),
-                                IRB.CreateICmpUGT(Ptr, End));
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(I->getType()->getPointerElementType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+    Value *NotIn = IRB.CreateOr(
+        IRB.CreateICmpULT(Ptr, Begin),
+        IRB.CreateICmpUGT(ClTailCheck ? IRB.CreateAdd(Ptr, NeededSizeVal) : Ptr,
+                          End));
     CreateTrapBB(IRB, NotIn, true);
   }
 }
 
-void OverflowDefense::commitRuntimeCheck(Function &F, ChunkCheck &CC) {
+void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
   if (!ClCheckHeap)
     return;
 
-  Counter[CC.Type] += CC.Insts.size();
+  ASSERT(RC.Type == kRuntimeCheck);
+  Counter[kRuntimeCheck] += RC.Insts.size();
 
-  Value *Src = CC.Src;
+  Value *Src = RC.Src;
 
-  for (auto *I : CC.Insts) {
+  for (auto *I : RC.Insts) {
     if (auto *GEP = dyn_cast<GetElementPtrInst>(I)) {
       instrumentGep(F, Src, GEP);
     } else if (auto *BC = dyn_cast<BitCastInst>(I)) {

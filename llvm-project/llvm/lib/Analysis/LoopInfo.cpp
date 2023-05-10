@@ -287,6 +287,56 @@ Optional<Loop::LoopBounds> Loop::getBounds(ScalarEvolution &SE) const {
   return None;
 }
 
+PHINode *Loop::getInductionVariableBoost(ScalarEvolution &SE, BasicBlock *GuardBB) const {
+  ICmpInst *CmpInst = getLatchCmpInst();
+  if (!CmpInst)
+    return nullptr;
+
+  if (getLoopPreheader() == nullptr && GuardBB == nullptr)
+    return nullptr;
+
+  BasicBlock *Header = getHeader();
+  assert(Header && "Expected a valid loop header");
+
+  Value *LatchCmpOp0 = CmpInst->getOperand(0);
+  Value *LatchCmpOp1 = CmpInst->getOperand(1);
+
+  for (PHINode &IndVar : Header->phis()) {
+    InductionDescriptor IndDesc;
+    if (!InductionDescriptor::isInductionPHIBoost(&IndVar, this, &SE, IndDesc, GuardBB))
+      continue;
+
+    BasicBlock *Latch = getLoopLatch();
+    Value *StepInst = IndVar.getIncomingValueForBlock(Latch);
+    // case 1:
+    // IndVar = phi[{InitialValue, preheader}, {StepInst, latch}]
+    // StepInst = IndVar + step
+    // cmp = StepInst < FinalValue
+    if (StepInst == LatchCmpOp0 || StepInst == LatchCmpOp1)
+      return &IndVar;
+    if (StepInst->getType()->isIntegerTy()) {
+      if (auto *CI = dyn_cast<CastInst>(LatchCmpOp0)) {
+        if (CI->getOperand(0) == StepInst)
+          return &IndVar;
+      }
+
+      if (auto *CI = dyn_cast<CastInst>(LatchCmpOp1)) {
+        if (CI->getOperand(0) == StepInst)
+          return &IndVar;
+      }
+    }
+
+    // case 2:
+    // IndVar = phi[{InitialValue, preheader}, {StepInst, latch}]
+    // StepInst = IndVar + step
+    // cmp = IndVar < FinalValue
+    if (&IndVar == LatchCmpOp0 || &IndVar == LatchCmpOp1)
+      return &IndVar;
+  }
+
+  return nullptr;
+}
+
 PHINode *Loop::getInductionVariable(ScalarEvolution &SE) const {
   if (!isLoopSimplifyForm())
     return nullptr;
@@ -733,7 +783,7 @@ void UnloopUpdater::updateBlockParents() {
   bool Changed = FoundIB;
   for (unsigned NIters = 0; Changed; ++NIters) {
     assert(NIters < Unloop.getNumBlocks() && "runaway iterative algorithm");
-    (void) NIters;
+    (void)NIters;
 
     // Iterate over the postorder list of blocks, propagating the nearest loop
     // from successors to predecessors as before.
@@ -925,9 +975,8 @@ void LoopInfo::erase(Loop *Unloop) {
   }
 }
 
-bool
-LoopInfo::wouldBeOutOfLoopUseRequiringLCSSA(const Value *V,
-                                            const BasicBlock *ExitBB) const {
+bool LoopInfo::wouldBeOutOfLoopUseRequiringLCSSA(
+    const Value *V, const BasicBlock *ExitBB) const {
   if (V->getType()->isTokenTy())
     // We can't form PHIs of token type, so the definition of LCSSA excludes
     // values of that type.

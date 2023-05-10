@@ -22,8 +22,10 @@ set(ODEF_RTL_HEADERS
 
 set(ODEF_RTL_CFLAGS ${SANITIZER_COMMON_CFLAGS})
 append_rtti_flag(OFF ODEF_RTL_CFLAGS)
-append_list_if(COMPILER_RT_HAS_FPIE_FLAG -fPIE ODEF_CFLAGS)
+append_list_if(COMPILER_RT_HAS_FPIE_FLAG -fPIE ODEF_RTL_CFLAGS)
 append_list_if(COMPILER_RT_HAS_FFREESTANDING_FLAG -ffreestanding ODEF_RTL_CFLAGS)
+
+set(ODEF_RUNTIME_LIBRARIES)
 
 add_compiler_rt_component(odef)
 
@@ -46,6 +48,16 @@ foreach(arch ${ODEF_SUPPORTED_ARCH})
     ADDITIONAL_HEADERS ${ODEF_RTL_HEADERS}
     CFLAGS ${ODEF_RTL_CFLAGS}
     PARENT_TARGET odef)
-  list(APPEND ODEF_RUNTIME_LIBS clang_rt.odef-${arch}
-                                clang_rt.odef_cxx-${arch})
+  list(APPEND ODEF_RUNTIME_LIBRARIES clang_rt.odef-${arch}
+                                     clang_rt.odef_cxx-${arch})
+  if(SANITIZER_USE_SYMBOLS)
+    add_sanitizer_rt_symbols(clang_rt.odef
+      ARCHS ${arch}
+      EXTRA odef.syms.extra)
+    add_sanitizer_rt_symbols(clang_rt.odef_cxx
+      ARCHS ${arch}
+      EXTRA odef.syms.extra)
+    add_dependencies(odef clang_rt.odef-${arch}-symbols
+                          clang_rt.odef_cxx-${arch}-symbols)
+  endif()
 endforeach()

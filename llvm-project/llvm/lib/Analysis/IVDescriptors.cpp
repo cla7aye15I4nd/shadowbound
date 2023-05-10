@@ -1567,3 +1567,86 @@ bool InductionDescriptor::isInductionPHI(
                           /* BinOp */ nullptr, ElementType);
   return true;
 }
+
+
+bool InductionDescriptor::isInductionPHIBoost(
+    PHINode *Phi, const Loop *TheLoop, ScalarEvolution *SE,
+    InductionDescriptor &D, BasicBlock *GuardBB) {
+  Type *PhiTy = Phi->getType();
+  // We only handle integer and pointer inductions variables.
+  if (!PhiTy->isIntegerTy() && !PhiTy->isPointerTy())
+    return false;
+
+  // Check that the PHI is consecutive.
+  const SCEV *PhiScev = SE->getSCEV(Phi);
+  const SCEVAddRecExpr *AR = dyn_cast<SCEVAddRecExpr>(PhiScev);
+
+  if (!AR) {
+    LLVM_DEBUG(dbgs() << "LV: PHI is not a poly recurrence.\n");
+    return false;
+  }
+
+  if (AR->getLoop() != TheLoop) {
+    // FIXME: We should treat this as a uniform. Unfortunately, we
+    // don't currently know how to handled uniform PHIs.
+    LLVM_DEBUG(
+        dbgs() << "LV: PHI is a recurrence with respect to an outer loop.\n");
+    return false;
+  }
+
+  BasicBlock *Preheader = AR->getLoop()->getLoopPreheader();
+  BasicBlock *BB = Preheader ? Preheader : GuardBB;
+  Value *StartValue = 
+      Phi->getIncomingValueForBlock(BB);
+
+  BasicBlock *Latch = AR->getLoop()->getLoopLatch();
+  if (!Latch)
+    return false;
+
+  const SCEV *Step = AR->getStepRecurrence(*SE);
+  // Calculate the pointer stride and check if it is consecutive.
+  // The stride may be a constant or a loop invariant integer value.
+  const SCEVConstant *ConstStep = dyn_cast<SCEVConstant>(Step);
+  if (!ConstStep && !SE->isLoopInvariant(Step, TheLoop))
+    return false;
+
+  if (PhiTy->isIntegerTy()) {
+    BinaryOperator *BOp =
+        dyn_cast<BinaryOperator>(Phi->getIncomingValueForBlock(Latch));
+    D = InductionDescriptor(StartValue, IK_IntInduction, Step, BOp,
+                            /* ElementType */ nullptr, nullptr);
+    return true;
+  }
+
+  assert(PhiTy->isPointerTy() && "The PHI must be a pointer");
+  // Pointer induction should be a constant.
+  if (!ConstStep)
+    return false;
+
+  // Always use i8 element type for opaque pointer inductions.
+  PointerType *PtrTy = cast<PointerType>(PhiTy);
+  Type *ElementType = PtrTy->isOpaque()
+                          ? Type::getInt8Ty(PtrTy->getContext())
+                          : PtrTy->getNonOpaquePointerElementType();
+  if (!ElementType->isSized())
+    return false;
+
+  ConstantInt *CV = ConstStep->getValue();
+  const DataLayout &DL = Phi->getModule()->getDataLayout();
+  TypeSize TySize = DL.getTypeAllocSize(ElementType);
+  // TODO: We could potentially support this for scalable vectors if we can
+  // prove at compile time that the constant step is always a multiple of
+  // the scalable type.
+  if (TySize.isZero() || TySize.isScalable())
+    return false;
+
+  int64_t Size = static_cast<int64_t>(TySize.getFixedSize());
+  int64_t CVSize = CV->getSExtValue();
+  if (CVSize % Size)
+    return false;
+  auto *StepValue =
+      SE->getConstant(CV->getType(), CVSize / Size, true /* signed */);
+  D = InductionDescriptor(StartValue, IK_PtrInduction, StepValue,
+                          /* BinOp */ nullptr, ElementType);
+  return true;
+}

@@ -16,7 +16,7 @@ struct OdefMapUnmapCallback {
   }
 };
 
-static const uptr kReservedBytes = sizeof(uptr);
+static const uptr kReservedBytes = 0x20;
 static const uptr kAllocatorSpace = 0x600000000000ULL;
 static const uptr kMaxAllowedMallocSize = 8UL << 30;
 
@@ -73,13 +73,11 @@ static void *OdefAllocate(uptr size, uptr alignment) {
     allocated = allocator.Allocate(cache, size, alignment);
   }
   // FIXME: CHECK if out of memory.
-  SetShadow(allocated, size);
-  RunMallocHooks(allocated, size);
+  SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
   return allocated;
 }
 
 void OdefDeallocate(void *p) {
-  RunFreeHooks(p);
 
   OdefThread *t = GetCurrentThread();
   if (t) {
@@ -121,24 +119,24 @@ void *odef_malloc(uptr size) {
 
 // TODO: Increasing the `nmemb` amy should be moved to the Instrumentation.
 void *odef_calloc(uptr nmemb, uptr size) {
-  nmemb += 1;
+  nmemb += (kReservedBytes + size - 1) / size;
   return OdefCalloc(nmemb, size);
 }
 
 void *odef_realloc(void *p, uptr size) {
-  size += kReservedBytes;
-
-  if (!p)
-    return OdefAllocate(size, sizeof(u64));
   if (!size) {
     OdefDeallocate(p);
     return nullptr;
   }
-  return OdefReallocate(p, size, sizeof(u64));
+
+  size += kReservedBytes;
+  if (!p)
+    return OdefAllocate(size, sizeof(u64));
+  else
+    return OdefReallocate(p, size, sizeof(u64));
 }
 
 void *odef_reallocarray(void *p, uptr nmemb, uptr size) {
-  nmemb += 1;
   return odef_realloc(p, nmemb * size);
 }
 
@@ -150,8 +148,7 @@ void *odef_valloc(uptr size) {
 void *odef_pvalloc(uptr size) {
   uptr PageSize = GetPageSizeCached();
 
-  size += kReservedBytes;
-  size = size ? RoundUpTo(size, PageSize) : PageSize;
+  size = RoundUpTo(size + kReservedBytes, PageSize);
   return OdefAllocate(size, PageSize);
 }
 
@@ -166,7 +163,6 @@ void *odef_memalign(uptr alignment, uptr size) {
 }
 
 uptr odef_allocated_size(void *p) {
-  // FIXME: May me we need return requested size instead of actually allocated
   return allocator.GetActuallyAllocatedSize(p) - kReservedBytes;
 }
 
