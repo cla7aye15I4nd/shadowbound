@@ -251,7 +251,6 @@ private:
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
-  void replaceAlloca(Function &F, AllocaInst *AI);
 
   Value *getSource(Instruction *I);
   Value *getSourceImpl(Value *V);
