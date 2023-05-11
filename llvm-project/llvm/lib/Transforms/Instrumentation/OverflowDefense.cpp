@@ -306,7 +306,13 @@ bool isEscapeInstruction(Instruction *I, Value *V) {
       return true;
   }
 
-  static SmallVector<StringRef, 16> whitelist = {"llvm.prefetch."};
+  static SmallVector<StringRef, 16> whitelist = {
+      // LLVM Intrinsics
+      "llvm.prefetch.",
+      // allocate/free
+      "realloc",
+      "free",
+  };
 
   if (auto *CI = dyn_cast<CallInst>(I)) {
     if (CI->isLifetimeStartOrEnd())
