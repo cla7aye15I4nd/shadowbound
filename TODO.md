@@ -8,6 +8,20 @@
 - [ ] Try compile the whole kernel with `laid` to see if it works.
 - [ ] Allocate more 50% in malloc to avoid last bytes.
 #### Optimization
+- [x] Tail bytes optimization.
+
+1. If a pointer exists outside the function it was created in, it is called an "escaped pointer."
+2. If an escaped pointer always points to a memory chunk with at least `k` valid bytes, we can avoid checking non-escaped pointers whose offsets from the base pointer are less than `k`.
+
+For example, when `k` is 20, we can avoid checking `f[3]` on the following code. However, we cannot avoid checking `f[2]` because `f + 2` is a escaped pointer.
+```c
+void f(int *f) {
+  f[3] = 0; // f + 3 is not a escaped pointer.
+  call(f + 2); // f + 2 is a escaped pointer.
+}
+```
+
+
 - [ ] Optimize the checks in the monotonic loop.
 ```c
 // Before Optimization
