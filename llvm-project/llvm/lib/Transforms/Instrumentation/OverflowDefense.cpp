@@ -184,6 +184,11 @@ struct MonoLoop {
   }
 };
 
+enum PtrUsage {
+  kPtrNone,
+  kPtrDeref,
+  kPtrEscape,
+};
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
@@ -206,9 +211,8 @@ private:
   bool filterToInstrument(Function &F, Instruction *I,
                           ObjectSizeOffsetEvaluator &ObjSizeEval,
                           ScalarEvolution &SE);
-  bool NeverEscaped(Instruction *I);
-  bool NeverEscapedImpl(Instruction *I,
-                        SmallPtrSet<Instruction *, 16> &Visited);
+  PtrUsage GetPtrUsage(Instruction *I);
+  bool isZeroAccessGep(const DataLayout *DL, Instruction *I);
   bool isShrinkBitCast(Instruction *I);
   bool isSafePointer(Instruction *Ptr, ObjectSizeOffsetEvaluator &ObjSizeEval,
                      ScalarEvolution &SE);
@@ -270,6 +274,7 @@ private:
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
   DenseMap<Value *, Value *> SourceCache;
+  DenseMap<Value *, PtrUsage> PtrUsageCache;
   DenseMap<Loop *, MonoLoop *> MonoLoopMap;
   SmallVector<BaseCheck *, 16> Checks;
 
@@ -289,10 +294,17 @@ private:
   Function *SetShadowFn;
 };
 
-bool isEscapeInstruction(Instruction *I) {
+bool isEscapeInstruction(Instruction *I, Value *V) {
   // TODO: Add uncommon escape instructions
-  if (isa<StoreInst>(I) || isa<LoadInst>(I) || isa<ReturnInst>(I))
+  if (auto *RI = dyn_cast<ReturnInst>(I)) {
+    ASSERT(RI->getReturnValue() == V);
     return true;
+  }
+
+  if (auto *SI = dyn_cast<StoreInst>(I)) {
+    if (SI->getValueOperand() == V)
+      return true;
+  }
 
   static SmallVector<StringRef, 16> whitelist = {"llvm.prefetch."};
 
@@ -309,6 +321,20 @@ bool isEscapeInstruction(Instruction *I) {
     }
 
     return true;
+  }
+
+  return false;
+}
+
+bool isDerefInstruction(Instruction *I, Value *V) {
+  if (auto *LI = dyn_cast<LoadInst>(I)) {
+    ASSERT(LI->getPointerOperand() == V);
+    return true;
+  }
+
+  if (auto *SI = dyn_cast<StoreInst>(I)) {
+    if (SI->getPointerOperand() == V)
+      return true;
   }
 
   return false;
@@ -335,20 +361,6 @@ bool isFlexibleStructure(StructType *STy) {
   }
 
   return false;
-}
-
-bool isZeroAccessGep(const DataLayout *DL, Instruction *I) {
-  auto *Gep = dyn_cast<GetElementPtrInst>(I);
-
-  // It is not a GEP
-  if (Gep == nullptr)
-    return false;
-
-  APInt Offset(DL->getIndexSizeInBits(Gep->getPointerAddressSpace()), 0, true);
-  if (!Gep->accumulateConstantOffset(*DL, Offset))
-    return false;
-
-  return Offset.ule(0);
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -583,7 +595,7 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
   if (!I->getType()->isPointerTy())
     return true;
 
-  if (NeverEscaped(I))
+  if (GetPtrUsage(I) == kPtrNone)
     return true;
 
   if (isShrinkBitCast(I))
@@ -650,34 +662,49 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
   return C && !C->getZExtValue();
 }
 
-bool OverflowDefense::NeverEscaped(Instruction *I) {
-  SmallPtrSet<Instruction *, 16> Visited;
-  // FIXME: Rewrite by WorkList and identify
-  // the difference between escape and deference
-  return NeverEscapedImpl(I, Visited);
+bool OverflowDefense::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
+  auto *Gep = dyn_cast<GetElementPtrInst>(I);
+
+  // It is not a GEP
+  if (Gep == nullptr)
+    return false;
+
+  APInt Offset(DL->getIndexSizeInBits(Gep->getPointerAddressSpace()), 0, true);
+  if (!Gep->accumulateConstantOffset(*DL, Offset))
+    return false;
+
+  return Offset.ule(GetPtrUsage(I) == kPtrDeref ? kReservedBytes : 0);
 }
 
-bool OverflowDefense::NeverEscapedImpl(
-    Instruction *I, SmallPtrSet<Instruction *, 16> &Visited) {
-  if (Visited.count(I))
-    return true;
+PtrUsage OverflowDefense::GetPtrUsage(Instruction *I) {
+  SmallVector<Instruction *, 16> WorkList;
+  SmallPtrSet<Instruction *, 16> Visited;
 
-  Visited.insert(I);
+  if (PtrUsageCache.count(I))
+    return PtrUsageCache[I];
 
-  for (auto *U : I->users()) {
-    if (auto *UI = dyn_cast<Instruction>(U)) {
-      if (isEscapeInstruction(UI))
-        return false;
+  WorkList.push_back(I);
+  while (!WorkList.empty()) {
+    Instruction *V = WorkList.pop_back_val();
 
-      // TODO: handle more cases
-      if (isa<PHINode>(UI) && !NeverEscapedImpl(UI, Visited))
-        return false;
-    } else {
-      // TODO: handle non-instruction user
+    if (Visited.count(V))
+      continue;
+
+    Visited.insert(V);
+
+    for (auto *U : I->users()) {
+      if (auto *UI = dyn_cast<Instruction>(U)) {
+        if (isEscapeInstruction(UI, V))
+          return PtrUsageCache[I] = kPtrEscape;
+        if (isDerefInstruction(UI, V))
+          return PtrUsageCache[I] = kPtrDeref;
+        if (isa<PHINode>(UI))
+          WorkList.push_back(UI);
+      }
     }
   }
 
-  return true;
+  return PtrUsageCache[I] = kPtrNone;
 }
 
 bool OverflowDefense::isShrinkBitCast(Instruction *I) {
