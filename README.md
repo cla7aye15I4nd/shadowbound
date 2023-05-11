@@ -41,8 +41,20 @@ However, we can optimize this approach by considering two key facts. Firstly, al
 
 Then for every GEP instruction, we insert following checking code:
 ```c
-// Layout Example for chunk size = 0x100:
-// |000|100|008|0f8|010|0f0|....|0f0|010|0f8|008|100|000|
+// Layout Example for chunk size = 0x20
+// |<-- 8 bytes -->|<-- 8 bytes -->|<-- 8 bytes -->|<-- 8 bytes -->|
+// |<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|
+// |  0x0  |  0x4  |  0x1  |  0x3  |  0x2  |  0x2  |  0x3  |  0x1  |
+
+// Minor optimization (implemented): 
+//   Many programs do not require chunk larger than 4 GB.
+//   Hence, we can store the original distance in the shadow memory,
+//   which eliminates the need for two extra shift operations in runtime.
+
+// Under the optimization, the shadow memory layout will be:
+// |<-- 8 bytes -->|<-- 8 bytes -->|<-- 8 bytes -->|<-- 8 bytes -->|
+// |<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|<- 4 ->|
+// | 0x000 | 0x020 | 0x008 | 0x018 | 0x010 | 0x010 | 0x018 | 0x008 |
 
 // %result = getelementptr %pointer, ...
 ShadowAddr = GEP & kShadowMask;
@@ -50,10 +62,6 @@ Base = GEP & kShadowBase;
 Packed = *(int32_t *) ShadowAddr;
 Front = Packed & 0xffffffff;
 Back = Packed >> 32;
-// Minor optimization (implemented): 
-//   Many programs do not require chunk larger than 4 GB.
-//   Hence, we can store the original distance in the shadow memory,
-//   which eliminates the need for two extra shift operations in runtime.
 Begin = Base - (Front << 3);
 End = Base + (Back << 3);
 if (GEP < Begin || GEP + NeededSize > End)
