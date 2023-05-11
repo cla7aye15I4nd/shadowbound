@@ -24,6 +24,14 @@ if (p < begin || p+n > end)
 for (int i = 0; i < n; ++i) 
   foo(p[i]);
 ```
+- [ ] Optimize `string-iter` loop?
+```c
+// if we can reserve one bytes for every string, 
+// we can remove the check in the loop.
+// However, is it deserved ?
+for( aep = aexpr; *aep; aep++)
+  // do something
+```
 - [ ] Simplify checks when compiler can determine the direction of the pointer calculation. (e.g. `p + 1` is always larger than `p`)
 ```c
 // Before Optimization
