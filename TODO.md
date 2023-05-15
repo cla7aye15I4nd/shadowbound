@@ -2,11 +2,6 @@
 
 ### Todo
 
-#### Kernel
-- [ ] Study the principle of `kmsan`'s runtime and implement the runtime of `laid` in kernel.
-- [ ] Try compile a single kernel module with `laid` to see if it works.
-- [ ] Try compile the whole kernel with `laid` to see if it works.
-- [ ] Allocate more 50% in malloc to avoid last bytes.
 #### Optimization
 - [x] Tail bytes optimization.
 
@@ -94,7 +89,7 @@ void run() {
     node->foo[mode](ptr);
 }
 ```
-- [ ] Identify all protected pointers access and remove checks for them in LTO.
+- [ ] Identify all protected pointers access and remove checks for them in LTO. (Stucture-Based)
 ```c
 struct node {
   int *ptr;
@@ -105,6 +100,51 @@ struct node {
 for (int i = 0; i < n->ptr_len; ++i)
   n->ptr[i] = 1;
 ```
+
+- [ ] Identify the relationship between the argument of the function?
+
+I have not find a elegant a method to implement this optimization. My current method need to split the function.
+```c
+// Before Optimization
+void bar() {
+  while (a) {
+    foo(a->data, a->length);
+    a = a->next;
+  };
+}
+void foo(int *ptr, int ptr_len) {
+  // ptr_len is ptr's length with high probability.
+  getChunkBound(ptr, &begin, &end);
+  for (int i = 0; i < ptr_len; ++i) {
+    if (magic(i))
+      break;
+    if (ptr+i < begin || ptr+i+1 > end)
+      crash();
+    ptr[i] = random();
+  }
+}
+// After Optimization
+void foo(int *ptr, int ptr_len) {
+  for (int i = 0; i < ptr_len; ++i) {
+    if (magic(i))
+      break;
+    ptr[i] = random();
+  }
+}
+```
+
+#### Kernel
+- [ ] Study the principle of `kmsan`'s runtime and implement the runtime of `laid` in kernel.
+- [ ] Try compile a single kernel module with `laid` to see if it works.
+- [ ] Try compile the whole kernel with `laid` to see if it works.
+- [ ] Allocate more 50% in malloc to avoid last bytes.
+
+#### Hardware
+
+- [ ] Implement the per-pointer bounds tracking with more hardware support, such as `CHERI`. `CHERI` extend the the 64-bit virtual address to 128-bit, with the higher 64-bit being used to store the upper bounds of the pointer.
+
+- [ ] An alternative approach is to utilize SGX (Software Guard Extensions) for implementing per-pointer bounds tracking. SGX enclave programs utilize a 64-bit virtual address, with only the lower 36 bits being valid. In this approach, we can allocate the higher 28 bits of the virtual address to store the upper bounds of the pointer.
+> For the lower bounds, we can continue using shadow memory to store them. However, it is worth noting that in most cases, pointer arithmetic tends to have a positive direction. As a result, we can optimize the implementation by minimizing accesses to shadow memory. 
 
 #### Bugs
 
