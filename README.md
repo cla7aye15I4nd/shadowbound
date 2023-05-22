@@ -1,6 +1,6 @@
 # Efficient Memory Protection through Whole-Program Optimization and Advanced Metadata Management
 
-**Laid** is a defense mechanism that can be implemented in both user-space programs and the kernel. It uses LLVM instrumentation and shadow memory to provide overflow protection, include stack/global/heap overflow and in-field overflow.
+**Laid** is a defense mechanism that can be implemented in ~~both~~ user-space programs ~~and the kernel~~. It uses LLVM instrumentation and shadow memory to provide memory protection, include ~~stack/global/~~ heap out-of-bound ~~and in-field overflow~~ and use-after-free.
 
 ## Installation
 ### Build `ld-gold`
@@ -30,6 +30,18 @@ LLVM has two type of pointer computing instructions, both of them may result in 
 
 - `getelementptr`: GEP is a LLVM instruction used for computing the address of an element in memory. The instruction takes a base pointer and a set of indices and computes the memory address. If the indices are not properly checked, an attacker may be able to exploit a GEP operation to access memory outside of the intended bounds of the array, leading to a buffer overflow.
 - `bitcast`: BitCast can transfer a value of one type to a value of another type. However, if the target type is not large enough to contain the original value, a truncation will occur. This can lead to an overflow.
+
+`laid` will check OOB after the two type instructions, here is the example:
+```c
+void main() {
+  char *buf = malloc(16);
+  __check_range(buf, &buf[3], sizeof(char));
+  __check_type(buf + 3, sizeof(struct obj));
+  foo((struct obj*)buf + 3);
+  __check_range(buf, &buf[1], sizeof(char));
+  buf[1] = 'y';
+}
+```
 
 ### Heap Overflow Checking
 
