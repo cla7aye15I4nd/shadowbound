@@ -45,7 +45,7 @@ void main() {
 
 ### Heap Overflow Checking
 
-The `laid` tool employs shadow memory to track the size of each chunk and instrument the checking code during compile time. To achieve this, the shadow memory of address `p` is used to store two distances - one from `p` to the start of the chunk and another from `p` to the end of the chunk. Since we require two 64-bit integers to store the distances, the shadow memory size is 16 bytes for each byte.
+The `laid` tool employs shadow memory to track the bound of each chunk and instrument the checking code during compile time. To achieve this, the shadow memory of address `p` is used to store two distances - one from `p` to the start of the chunk and another from `p` to the end of the chunk. Since we require two 64-bit integers to store the distances, the shadow memory size is 16 bytes for each byte.
 
 However, we can optimize this approach by considering two key facts. Firstly, almost all allocators align the size of the chunk to 8 bytes, allowing us to store distance information for every 8 bytes. Secondly, the largest size of a chunk is 8 GB ($2^{33}$ bytes), and the size's low 3 bits are always zero due to the first fact. Consequently, we can use two 32-bit integers to store distance information for every 8 bytes, which means we only need 8 bytes for every 8 bytes of memory. This size of shadow memory is identical to the original memory size itself.
 
