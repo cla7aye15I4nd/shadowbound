@@ -1,4 +1,4 @@
-# Laid-Back: A Layout-Aware Identification Defense for Buffer Overflow Attacks
+# Efficient Memory Protection through Whole-Program Optimization and Advanced Metadata Management
 
 **Laid** is a defense mechanism that can be implemented in both user-space programs and the kernel. It uses LLVM instrumentation and shadow memory to provide overflow protection, include stack/global/heap overflow and in-field overflow.
 
