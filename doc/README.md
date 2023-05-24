@@ -149,7 +149,7 @@ if (p < begin || p+n > end)
 for (int i = 0; i < n; ++i) 
   foo(p[i]);
 ```
-- [ ] Simplify checks when compiler can determine the direction of the pointer calculation. (e.g. `p + 1` is always larger than `p`) (+)
+- Simplify checks when compiler can determine the direction of the pointer calculation. (e.g. `p + 1` is always larger than `p`) (+)
 ```c
 // Before Optimization
 getChunkBound(p, &begin, &end);
@@ -240,7 +240,7 @@ void foo(int *ptr, int ptr_len) {
   }
 }
 ```
-- [ ] Optimize `string-iter` loop? (+)
+- Optimize `string-iter` loop.
 ```c
 // if we can reserve one bytes for every string, 
 // we can remove the check in the loop.

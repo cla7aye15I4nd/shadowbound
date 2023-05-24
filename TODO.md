@@ -2,11 +2,12 @@
 
 ## Optimization
 - [x] Tail bytes optimization.
+- [ ] Pointer calculation direction optimization.
 - [ ] Optimize the checks in the monotonic loop.
-- [ ] Optimize `string-iteration` loop.
 - [ ] Use PGO and LTO to inline the indirect call.
 - [ ] Identify all protected pointers access and remove checks for them in LTO. (Stucture-Based) 
 - [ ] Identify the relationship between the argument of the function.
+- [ ] Optimize `string-iteration` loop.
 
 ## Bugs
 
