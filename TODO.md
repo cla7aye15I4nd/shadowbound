@@ -2,7 +2,7 @@
 
 ## Optimization
 - [x] Tail bytes optimization.
-- [ ] Pointer calculation direction optimization.
+- [x] Pointer calculation direction optimization.
 - [ ] Optimize the checks in the monotonic loop.
 - [ ] Use PGO and LTO to inline the indirect call.
 - [ ] Identify all protected pointers access and remove checks for them in LTO. (Stucture-Based) 
