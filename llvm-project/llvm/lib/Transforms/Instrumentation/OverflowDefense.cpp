@@ -120,6 +120,12 @@ enum CheckType {
   kCheckTypeEnd
 };
 
+using OffsetDir = uint8_t;
+static constexpr OffsetDir kOffsetUnknown = 0b00;
+static constexpr OffsetDir kOffsetPositive = 0b01;
+static constexpr OffsetDir kOffsetNegative = 0b10;
+static constexpr OffsetDir kOffsetBoth = kOffsetPositive | kOffsetNegative;
+
 struct BaseCheck {
   enum CheckType Type;
 
@@ -256,8 +262,10 @@ private:
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
 
-  Value *getSource(Instruction *I);
+  Value *getSource(Value *I);
   Value *getSourceImpl(Value *V);
+  OffsetDir getOffsetDir(Value *Addr);
+  void setOffsetDir(Value *Addr, ScalarEvolution &SE);
   bool getPhiSource(Value *V, Value *&Src, SmallPtrSet<Value *, 16> &Visited);
 
   void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
@@ -273,6 +281,7 @@ private:
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
+  DenseMap<Value *, OffsetDir> OffsetDirCache;
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Value *, PtrUsage> PtrUsageCache;
   DenseMap<Loop *, MonoLoop *> MonoLoopMap;
@@ -953,7 +962,7 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
   return NewGepToInstrument;
 }
 
-Value *OverflowDefense::getSource(Instruction *I) {
+Value *OverflowDefense::getSource(Value *I) {
   if (SourceCache.count(I))
     return SourceCache[I];
 
@@ -1081,6 +1090,67 @@ StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
   return nullptr;
 }
 
+void OverflowDefense::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
+  if (OffsetDirCache.count(Addr))
+    return;
+
+  Value *Src = getSource(Addr);
+  OffsetDir Dir = kOffsetUnknown;
+
+  SmallVector<Value *, 16> WorkList;
+  SmallPtrSet<Value *, 16> Visited;
+
+  WorkList.push_back(Addr);
+  while (!WorkList.empty()) {
+    Value *V = WorkList.pop_back_val();
+    if (Visited.count(V))
+      continue;
+
+    Visited.insert(V);
+    if (OffsetDirCache.count(V)) {
+      Dir |= OffsetDirCache[V];
+      if (Dir == kOffsetBoth)
+        break;
+      continue;
+    }
+
+    if (auto *BC = dyn_cast<BitCastInst>(V)) {
+      WorkList.push_back(BC->getOperand(0));
+    } else if (auto *Phi = dyn_cast<PHINode>(V)) {
+      if (Phi != Src) {
+        for (size_t i = 0; i < Phi->getNumIncomingValues(); ++i)
+          WorkList.push_back(Phi->getIncomingValue(i));
+      }
+    } else if (auto *GEP = dyn_cast<GetElementPtrInst>(V)) {
+      for (auto &Op : GEP->indices()) {
+        auto Range = SE.getSCEV(Op.get());
+        if (SE.getSignedRangeMin(Range).isNonNegative())
+          Dir |= kOffsetPositive;
+        else if (SE.getSignedRangeMax(Range).isNegative())
+          Dir |= kOffsetNegative;
+        else
+          Dir |= kOffsetBoth;
+
+        if (Dir == kOffsetBoth)
+          break;
+      }
+
+      if (Dir == kOffsetBoth)
+        break;
+
+      WorkList.push_back(GEP->getPointerOperand());
+    }
+  }
+
+  OffsetDirCache[Addr] = Dir;
+}
+
+OffsetDir OverflowDefense::getOffsetDir(Value *Addr) {
+  ASSERT(OffsetDirCache.count(Addr));
+
+  return OffsetDirCache[Addr];
+}
+
 bool OverflowDefense::isAccessMember(Instruction *I) {
   ASSERT(isa<GetElementPtrInst>(I));
   auto *GEP = cast<GetElementPtrInst>(I);
@@ -1102,6 +1172,9 @@ void OverflowDefense::collectChunkCheckImpl(
   int weight = 0;
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+
+  for (auto *I : Insts)
+    setOffsetDir(I, SE);
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
@@ -1382,24 +1455,53 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *Packed =
-      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *BackRaw =
-      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
-  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
-  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
-  Value *Begin = IRB.CreateSub(Base, Front);
-  Value *End = IRB.CreateAdd(Base, Back);
-  Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
 
-  uint64_t NeededSize =
-      DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-  Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-  Value *CmpEnd =
-      ClTailCheck ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
-                  : IRB.CreateICmpUGT(CmpPtr, End);
-  Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+  Value *Cmp = nullptr;
+  if (getOffsetDir(GEP) == kOffsetBoth) {
+    Value *Packed =
+        IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+    Value *BackRaw =
+        IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+    Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+    Value *Begin = IRB.CreateSub(Base, Front);
+    Value *End = IRB.CreateAdd(Base, Back);
+    Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
+
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+    Value *CmpEnd =
+        ClTailCheck
+            ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
+            : IRB.CreateICmpUGT(CmpPtr, End);
+    Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+  } else if (getOffsetDir(GEP) == kOffsetPositive) {
+    Value *BackRaw = IRB.CreateZExt(
+        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+        int64Type);
+    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+    Value *End = IRB.CreateAdd(Base, Back);
+
+    Cmp = ClTailCheck
+              ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
+              : IRB.CreateICmpUGT(CmpPtr, End);
+  } else if (getOffsetDir(GEP) == kOffsetNegative) {
+    Value *ShadowP = IRB.CreateAdd(Shadow, ConstantInt::get(int64Type, 4));
+    Value *FrontRaw = IRB.CreateZExt(
+        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(ShadowP, int32PtrType)),
+        int64Type);
+    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+
+    Cmp = IRB.CreateICmpULT(CmpPtr, IRB.CreateSub(Base, Front));
+  }
+
+  ASSERT(Cmp != nullptr);
   CreateTrapBB(IRB, Cmp, true);
 }
 
@@ -1564,10 +1666,18 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
     Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-    Value *NotIn = IRB.CreateOr(
-        IRB.CreateICmpULT(Ptr, Begin),
-        IRB.CreateICmpUGT(ClTailCheck ? IRB.CreateAdd(Ptr, NeededSizeVal) : Ptr,
-                          End));
+
+    OffsetDir Dir = getOffsetDir(I);
+
+    Value *UpperCmp =
+        Dir & kOffsetPositive
+            ? IRB.CreateICmpUGT(
+                  ClTailCheck ? IRB.CreateAdd(Ptr, NeededSizeVal) : Ptr, End)
+            : ConstantInt::getFalse(IRB.getContext());
+    Value *LowerCmp = Dir & kOffsetNegative
+                          ? IRB.CreateICmpULT(Ptr, Begin)
+                          : ConstantInt::getFalse(IRB.getContext());
+    Value *NotIn = IRB.CreateOr(UpperCmp, LowerCmp);
     CreateTrapBB(IRB, NotIn, true);
   }
 }
