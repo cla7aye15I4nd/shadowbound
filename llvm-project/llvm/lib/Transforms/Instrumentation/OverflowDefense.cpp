@@ -8,10 +8,13 @@
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Operator.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
@@ -101,6 +104,9 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
                                         cl::init(""));
+
+static cl::opt<bool> ClDumpIR("odef-dump-ir", cl::desc("dump IR"), cl::Hidden,
+                              cl::init(false));
 
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
@@ -476,6 +482,12 @@ PreservedAnalyses OverflowDefensePass::run(Function &F,
 
 PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
                                                  ModuleAnalysisManager &AM) {
+  if (ClDumpIR) {
+    std::error_code EC;
+    raw_fd_ostream OS(M.getSourceFileName() + ".bc", EC, sys::fs::OF_None);
+    WriteBitcodeToFile(M, OS);
+  }
+
   if (Options.Kernel)
     return PreservedAnalyses::all();
   insertModuleCtor(M);
