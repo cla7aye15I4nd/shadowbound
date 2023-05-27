@@ -66,15 +66,15 @@ static cl::opt<bool> ClCheckHeap("odef-check-heap",
 
 static cl::opt<bool> ClCheckStack("odef-check-stack",
                                   cl::desc("check stack memory"), cl::Hidden,
-                                  cl::init(true));
+                                  cl::init(false));
 
 static cl::opt<bool> ClCheckGlobal("odef-check-global",
                                    cl::desc("check global memory"), cl::Hidden,
-                                   cl::init(true));
+                                   cl::init(false));
 
 static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::desc("check in-field memory"),
-                                    cl::Hidden, cl::init(true));
+                                    cl::Hidden, cl::init(false));
 
 // ==== Optimization Option ==== //
 static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
@@ -559,6 +559,10 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   dependencyOptimize(F, DT, PDT, SE);
   loopOptimize(F, LI, SE, DT, PDT);
+  if (ClLoopOpt) {
+    // Loop Optimization may introduce new instructions to instrument
+    dependencyOptimize(F, DT, PDT, SE);
+  }
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -707,7 +711,7 @@ PtrUsage OverflowDefense::GetPtrUsage(Instruction *I) {
 
     Visited.insert(V);
 
-    for (auto *U : I->users()) {
+    for (auto *U : V->users()) {
       if (auto *UI = dyn_cast<Instruction>(U)) {
         if (isEscapeInstruction(UI, V))
           return PtrUsageCache[I] = kPtrEscape;
