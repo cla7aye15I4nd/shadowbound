@@ -100,6 +100,10 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
+static cl::opt<std::string> ClSemanticFile("odef-semantic-file",
+                                           cl::desc("semantic file"),
+                                           cl::Hidden, cl::init(""));
+
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
@@ -230,6 +234,7 @@ private:
                      ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
   bool isAccessMember(Instruction *I);
+  void semanticOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
@@ -570,6 +575,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectToInstrument(F, ObjSizeEval, SE);
 
   dependencyOptimize(F, DT, PDT, SE);
+  semanticOptimize(F);
   loopOptimize(F, LI, SE, DT, PDT);
   if (ClLoopOpt) {
     // Loop Optimization may introduce new instructions to instrument
@@ -844,6 +850,17 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   // TODO: optimize for subfield access
   BcToInstrument.swap(NewBcToInstrument);
   GepToInstrument.swap(NewGepToInstrument);
+}
+
+void OverflowDefense::semanticOptimize(Function &F) {
+  if (ClSemanticFile == "")
+    return;
+
+  std::ifstream SemanticFile(ClSemanticFile);
+  if (!SemanticFile.is_open()) {
+    errs() << "Failed to open semantic file: " << ClSemanticFile << "\n";
+    return;
+  }
 }
 
 SmallVector<BitCastInst *, 16>
