@@ -8,10 +8,13 @@
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Operator.h"
 #include "llvm/Support/CommandLine.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
@@ -66,15 +69,15 @@ static cl::opt<bool> ClCheckHeap("odef-check-heap",
 
 static cl::opt<bool> ClCheckStack("odef-check-stack",
                                   cl::desc("check stack memory"), cl::Hidden,
-                                  cl::init(true));
+                                  cl::init(false));
 
 static cl::opt<bool> ClCheckGlobal("odef-check-global",
                                    cl::desc("check global memory"), cl::Hidden,
-                                   cl::init(true));
+                                   cl::init(false));
 
 static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::desc("check in-field memory"),
-                                    cl::Hidden, cl::init(true));
+                                    cl::Hidden, cl::init(false));
 
 // ==== Optimization Option ==== //
 static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
@@ -102,6 +105,9 @@ static cl::opt<std::string> ClWhiteList("odef-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
                                         cl::init(""));
 
+static cl::opt<bool> ClDumpIR("odef-dump-ir", cl::desc("dump IR"), cl::Hidden,
+                              cl::init(false));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -119,6 +125,12 @@ enum CheckType {
   kClusterOptCheck = 5,
   kCheckTypeEnd
 };
+
+using OffsetDir = uint8_t;
+static constexpr OffsetDir kOffsetUnknown = 0b00;
+static constexpr OffsetDir kOffsetPositive = 0b01;
+static constexpr OffsetDir kOffsetNegative = 0b10;
+static constexpr OffsetDir kOffsetBoth = kOffsetPositive | kOffsetNegative;
 
 struct BaseCheck {
   enum CheckType Type;
@@ -184,6 +196,11 @@ struct MonoLoop {
   }
 };
 
+enum PtrUsage {
+  kPtrNone,
+  kPtrDeref,
+  kPtrEscape,
+};
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
@@ -206,9 +223,8 @@ private:
   bool filterToInstrument(Function &F, Instruction *I,
                           ObjectSizeOffsetEvaluator &ObjSizeEval,
                           ScalarEvolution &SE);
-  bool NeverEscaped(Instruction *I);
-  bool NeverEscapedImpl(Instruction *I,
-                        SmallPtrSet<Instruction *, 16> &Visited);
+  PtrUsage GetPtrUsage(Instruction *I);
+  bool isZeroAccessGep(const DataLayout *DL, Instruction *I);
   bool isShrinkBitCast(Instruction *I);
   bool isSafePointer(Instruction *Ptr, ObjectSizeOffsetEvaluator &ObjSizeEval,
                      ScalarEvolution &SE);
@@ -252,8 +268,10 @@ private:
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
 
-  Value *getSource(Instruction *I);
+  Value *getSource(Value *I);
   Value *getSourceImpl(Value *V);
+  OffsetDir getOffsetDir(Value *Addr);
+  void setOffsetDir(Value *Addr, ScalarEvolution &SE);
   bool getPhiSource(Value *V, Value *&Src, SmallPtrSet<Value *, 16> &Visited);
 
   void CreateTrapBB(BuilderTy &B, Value *Cond, bool Abort);
@@ -269,7 +287,9 @@ private:
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
+  DenseMap<Value *, OffsetDir> OffsetDirCache;
   DenseMap<Value *, Value *> SourceCache;
+  DenseMap<Value *, PtrUsage> PtrUsageCache;
   DenseMap<Loop *, MonoLoop *> MonoLoopMap;
   SmallVector<BaseCheck *, 16> Checks;
 
@@ -289,12 +309,25 @@ private:
   Function *SetShadowFn;
 };
 
-bool isEscapeInstruction(Instruction *I) {
+bool isEscapeInstruction(Instruction *I, Value *V) {
   // TODO: Add uncommon escape instructions
-  if (isa<StoreInst>(I) || isa<LoadInst>(I) || isa<ReturnInst>(I))
+  if (auto *RI = dyn_cast<ReturnInst>(I)) {
+    ASSERT(RI->getReturnValue() == V);
     return true;
+  }
 
-  static SmallVector<StringRef, 16> whitelist = {"llvm.prefetch."};
+  if (auto *SI = dyn_cast<StoreInst>(I)) {
+    if (SI->getValueOperand() == V)
+      return true;
+  }
+
+  static SmallVector<StringRef, 16> whitelist = {
+      // LLVM Intrinsics
+      "llvm.prefetch.",
+      // allocate/free
+      "realloc",
+      "free",
+  };
 
   if (auto *CI = dyn_cast<CallInst>(I)) {
     if (CI->isLifetimeStartOrEnd())
@@ -309,6 +342,20 @@ bool isEscapeInstruction(Instruction *I) {
     }
 
     return true;
+  }
+
+  return false;
+}
+
+bool isDerefInstruction(Instruction *I, Value *V) {
+  if (auto *LI = dyn_cast<LoadInst>(I)) {
+    ASSERT(LI->getPointerOperand() == V);
+    return true;
+  }
+
+  if (auto *SI = dyn_cast<StoreInst>(I)) {
+    if (SI->getPointerOperand() == V)
+      return true;
   }
 
   return false;
@@ -335,20 +382,6 @@ bool isFlexibleStructure(StructType *STy) {
   }
 
   return false;
-}
-
-bool isZeroAccessGep(const DataLayout *DL, Instruction *I) {
-  auto *Gep = dyn_cast<GetElementPtrInst>(I);
-
-  // It is not a GEP
-  if (Gep == nullptr)
-    return false;
-
-  APInt Offset(DL->getIndexSizeInBits(Gep->getPointerAddressSpace()), 0, true);
-  if (!Gep->accumulateConstantOffset(*DL, Offset))
-    return false;
-
-  return Offset.ule(0);
 }
 
 bool isVirtualTableGep(Instruction *I) {
@@ -449,6 +482,12 @@ PreservedAnalyses OverflowDefensePass::run(Function &F,
 
 PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
                                                  ModuleAnalysisManager &AM) {
+  if (ClDumpIR) {
+    std::error_code EC;
+    raw_fd_ostream OS(M.getSourceFileName() + ".bc", EC, sys::fs::OF_None);
+    WriteBitcodeToFile(M, OS);
+  }
+
   if (Options.Kernel)
     return PreservedAnalyses::all();
   insertModuleCtor(M);
@@ -532,6 +571,10 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   dependencyOptimize(F, DT, PDT, SE);
   loopOptimize(F, LI, SE, DT, PDT);
+  if (ClLoopOpt) {
+    // Loop Optimization may introduce new instructions to instrument
+    dependencyOptimize(F, DT, PDT, SE);
+  }
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -583,7 +626,7 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
   if (!I->getType()->isPointerTy())
     return true;
 
-  if (NeverEscaped(I))
+  if (GetPtrUsage(I) == kPtrNone)
     return true;
 
   if (isShrinkBitCast(I))
@@ -650,34 +693,49 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
   return C && !C->getZExtValue();
 }
 
-bool OverflowDefense::NeverEscaped(Instruction *I) {
-  SmallPtrSet<Instruction *, 16> Visited;
-  // FIXME: Rewrite by WorkList and identify
-  // the difference between escape and deference
-  return NeverEscapedImpl(I, Visited);
+bool OverflowDefense::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
+  auto *Gep = dyn_cast<GetElementPtrInst>(I);
+
+  // It is not a GEP
+  if (Gep == nullptr)
+    return false;
+
+  APInt Offset(DL->getIndexSizeInBits(Gep->getPointerAddressSpace()), 0, true);
+  if (!Gep->accumulateConstantOffset(*DL, Offset))
+    return false;
+
+  return Offset.ule(GetPtrUsage(I) == kPtrDeref ? kReservedBytes : 0);
 }
 
-bool OverflowDefense::NeverEscapedImpl(
-    Instruction *I, SmallPtrSet<Instruction *, 16> &Visited) {
-  if (Visited.count(I))
-    return true;
+PtrUsage OverflowDefense::GetPtrUsage(Instruction *I) {
+  SmallVector<Instruction *, 16> WorkList;
+  SmallPtrSet<Instruction *, 16> Visited;
 
-  Visited.insert(I);
+  if (PtrUsageCache.count(I))
+    return PtrUsageCache[I];
 
-  for (auto *U : I->users()) {
-    if (auto *UI = dyn_cast<Instruction>(U)) {
-      if (isEscapeInstruction(UI))
-        return false;
+  WorkList.push_back(I);
+  while (!WorkList.empty()) {
+    Instruction *V = WorkList.pop_back_val();
 
-      // TODO: handle more cases
-      if (isa<PHINode>(UI) && !NeverEscapedImpl(UI, Visited))
-        return false;
-    } else {
-      // TODO: handle non-instruction user
+    if (Visited.count(V))
+      continue;
+
+    Visited.insert(V);
+
+    for (auto *U : V->users()) {
+      if (auto *UI = dyn_cast<Instruction>(U)) {
+        if (isEscapeInstruction(UI, V))
+          return PtrUsageCache[I] = kPtrEscape;
+        if (isDerefInstruction(UI, V))
+          return PtrUsageCache[I] = kPtrDeref;
+        if (isa<PHINode>(UI))
+          WorkList.push_back(UI);
+      }
     }
   }
 
-  return true;
+  return PtrUsageCache[I] = kPtrNone;
 }
 
 bool OverflowDefense::isShrinkBitCast(Instruction *I) {
@@ -920,7 +978,7 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
   return NewGepToInstrument;
 }
 
-Value *OverflowDefense::getSource(Instruction *I) {
+Value *OverflowDefense::getSource(Value *I) {
   if (SourceCache.count(I))
     return SourceCache[I];
 
@@ -1048,6 +1106,67 @@ StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
   return nullptr;
 }
 
+void OverflowDefense::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
+  if (OffsetDirCache.count(Addr))
+    return;
+
+  Value *Src = getSource(Addr);
+  OffsetDir Dir = kOffsetUnknown;
+
+  SmallVector<Value *, 16> WorkList;
+  SmallPtrSet<Value *, 16> Visited;
+
+  WorkList.push_back(Addr);
+  while (!WorkList.empty()) {
+    Value *V = WorkList.pop_back_val();
+    if (Visited.count(V))
+      continue;
+
+    Visited.insert(V);
+    if (OffsetDirCache.count(V)) {
+      Dir |= OffsetDirCache[V];
+      if (Dir == kOffsetBoth)
+        break;
+      continue;
+    }
+
+    if (auto *BC = dyn_cast<BitCastInst>(V)) {
+      WorkList.push_back(BC->getOperand(0));
+    } else if (auto *Phi = dyn_cast<PHINode>(V)) {
+      if (Phi != Src) {
+        for (size_t i = 0; i < Phi->getNumIncomingValues(); ++i)
+          WorkList.push_back(Phi->getIncomingValue(i));
+      }
+    } else if (auto *GEP = dyn_cast<GetElementPtrInst>(V)) {
+      for (auto &Op : GEP->indices()) {
+        auto Range = SE.getSCEV(Op.get());
+        if (SE.getSignedRangeMin(Range).isNonNegative())
+          Dir |= kOffsetPositive;
+        else if (SE.getSignedRangeMax(Range).isNegative())
+          Dir |= kOffsetNegative;
+        else
+          Dir |= kOffsetBoth;
+
+        if (Dir == kOffsetBoth)
+          break;
+      }
+
+      if (Dir == kOffsetBoth)
+        break;
+
+      WorkList.push_back(GEP->getPointerOperand());
+    }
+  }
+
+  OffsetDirCache[Addr] = Dir;
+}
+
+OffsetDir OverflowDefense::getOffsetDir(Value *Addr) {
+  ASSERT(OffsetDirCache.count(Addr));
+
+  return OffsetDirCache[Addr];
+}
+
 bool OverflowDefense::isAccessMember(Instruction *I) {
   ASSERT(isa<GetElementPtrInst>(I));
   auto *GEP = cast<GetElementPtrInst>(I);
@@ -1069,6 +1188,9 @@ void OverflowDefense::collectChunkCheckImpl(
   int weight = 0;
   for (auto *I : Insts)
     weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+
+  for (auto *I : Insts)
+    setOffsetDir(I, SE);
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
@@ -1349,24 +1471,53 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
 
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *Packed =
-      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *BackRaw =
-      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
-  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
-  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
-  Value *Begin = IRB.CreateSub(Base, Front);
-  Value *End = IRB.CreateAdd(Base, Back);
-  Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
 
-  uint64_t NeededSize =
-      DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-  Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-  Value *CmpEnd =
-      ClTailCheck ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
-                  : IRB.CreateICmpUGT(CmpPtr, End);
-  Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+  Value *Cmp = nullptr;
+  if (getOffsetDir(GEP) == kOffsetBoth) {
+    Value *Packed =
+        IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+    Value *BackRaw =
+        IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+    Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+    Value *Begin = IRB.CreateSub(Base, Front);
+    Value *End = IRB.CreateAdd(Base, Back);
+    Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
+
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+    Value *CmpEnd =
+        ClTailCheck
+            ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
+            : IRB.CreateICmpUGT(CmpPtr, End);
+    Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
+  } else if (getOffsetDir(GEP) == kOffsetPositive) {
+    Value *BackRaw = IRB.CreateZExt(
+        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+        int64Type);
+    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+
+    uint64_t NeededSize =
+        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
+    Value *End = IRB.CreateAdd(Base, Back);
+
+    Cmp = ClTailCheck
+              ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
+              : IRB.CreateICmpUGT(CmpPtr, End);
+  } else if (getOffsetDir(GEP) == kOffsetNegative) {
+    Value *ShadowP = IRB.CreateAdd(Shadow, ConstantInt::get(int64Type, 4));
+    Value *FrontRaw = IRB.CreateZExt(
+        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(ShadowP, int32PtrType)),
+        int64Type);
+    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+
+    Cmp = IRB.CreateICmpULT(CmpPtr, IRB.CreateSub(Base, Front));
+  }
+
+  ASSERT(Cmp != nullptr);
   CreateTrapBB(IRB, Cmp, true);
 }
 
@@ -1531,10 +1682,18 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
     Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-    Value *NotIn = IRB.CreateOr(
-        IRB.CreateICmpULT(Ptr, Begin),
-        IRB.CreateICmpUGT(ClTailCheck ? IRB.CreateAdd(Ptr, NeededSizeVal) : Ptr,
-                          End));
+
+    OffsetDir Dir = getOffsetDir(I);
+
+    Value *UpperCmp =
+        Dir & kOffsetPositive
+            ? IRB.CreateICmpUGT(
+                  ClTailCheck ? IRB.CreateAdd(Ptr, NeededSizeVal) : Ptr, End)
+            : ConstantInt::getFalse(IRB.getContext());
+    Value *LowerCmp = Dir & kOffsetNegative
+                          ? IRB.CreateICmpULT(Ptr, Begin)
+                          : ConstantInt::getFalse(IRB.getContext());
+    Value *NotIn = IRB.CreateOr(UpperCmp, LowerCmp);
     CreateTrapBB(IRB, NotIn, true);
   }
 }

@@ -34,3 +34,6 @@
 # VSCode
 .vscode/
 tools/result.txt
+
+# Bitcode
+*.bc
