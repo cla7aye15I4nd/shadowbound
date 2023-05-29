@@ -3458,3 +3458,41 @@ static void print_current_usage() {
   }
 }
 #endif
+
+void SetShadow(const void *ptr, uptr size) {
+  u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
+  u32 *shadow_end = shadow_beg + size / sizeof(u32);
+
+#ifndef USE_LARGE_CHUNK
+  if (size > (u32)(-1)) {
+    printf("ERROR: small chunk optimization is enabled, but the size "
+           "of the allocation is too big: %zu\n",
+           size);
+    abort();
+  }
+
+  u32 a = 0;
+  u32 b = size;
+
+#ifdef __clang__
+#pragma unroll
+#endif
+  while (shadow_beg < shadow_end) {
+    *(shadow_beg + 0) = b -= sizeof(u64);
+    *(shadow_beg + 1) = a += sizeof(u64);
+    shadow_beg += 2;
+  }
+#else
+  u32 a = 0;
+  u32 b = size / sizeof(u32);
+
+#ifdef __clang__
+#pragma unroll
+#endif
+  while (shadow_beg < shadow_end) {
+    *(shadow_beg + 0) = b--;
+    *(shadow_beg + 1) = a++;
+    shadow_beg += 2;
+  }
+#endif
+}

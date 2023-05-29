@@ -220,3 +220,9 @@ FFMALLOC_API void ffdump_pool_details();
 #ifdef __cplusplus
 }
 #endif
+
+typedef unsigned int u32;
+typedef unsigned long long u64;
+typedef size_t uptr;
+
+#define MEM_TO_SHADOW(mem) (((uptr)(mem)) & ~0x400000000007ULL)
