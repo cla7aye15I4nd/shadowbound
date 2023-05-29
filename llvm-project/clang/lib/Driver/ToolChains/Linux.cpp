@@ -761,6 +761,7 @@ SanitizerMask Linux::getSupportedSanitizers() const {
   if (IsX86_64) {
     Res |= SanitizerKind::KernelMemory;
     Res |= SanitizerKind::OverflowDefense;
+    Res |= SanitizerKind::MemProtect;
   }
   if (IsX86 || IsX86_64)
     Res |= SanitizerKind::Function;

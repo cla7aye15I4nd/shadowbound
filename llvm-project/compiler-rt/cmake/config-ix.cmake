@@ -586,6 +586,9 @@ if(APPLE)
   list_intersect(ODEF_SUPPORTED_ARCH
     ALL_ODEF_SUPPORTED_ARCH
     SANITIZER_COMMON_SUPPORTED_ARCH)
+  list_intersect(MEMP_SUPPORTED_ARCH
+    ALL_MEMP_SUPPORTED_ARCH
+    SANITIZER_COMMON_SUPPORTED_ARCH)
   list_intersect(HWASAN_SUPPORTED_ARCH
     ALL_HWASAN_SUPPORTED_ARCH
     SANITIZER_COMMON_SUPPORTED_ARCH)
@@ -642,6 +645,7 @@ else()
   filter_available_targets(LSAN_SUPPORTED_ARCH ${ALL_LSAN_SUPPORTED_ARCH})
   filter_available_targets(MSAN_SUPPORTED_ARCH ${ALL_MSAN_SUPPORTED_ARCH})
   filter_available_targets(ODEF_SUPPORTED_ARCH ${ALL_ODEF_SUPPORTED_ARCH})
+  filter_available_targets(MEMP_SUPPORTED_ARCH ${ALL_MEMP_SUPPORTED_ARCH})
   filter_available_targets(HWASAN_SUPPORTED_ARCH ${ALL_HWASAN_SUPPORTED_ARCH})
   filter_available_targets(MEMPROF_SUPPORTED_ARCH ${ALL_MEMPROF_SUPPORTED_ARCH})
   filter_available_targets(PROFILE_SUPPORTED_ARCH ${ALL_PROFILE_SUPPORTED_ARCH})
@@ -690,7 +694,7 @@ if(COMPILER_RT_SUPPORTED_ARCH)
 endif()
 message(STATUS "Compiler-RT supported architectures: ${COMPILER_RT_SUPPORTED_ARCH}")
 
-set(ALL_SANITIZERS asan;dfsan;msan;hwasan;tsan;safestack;cfi;scudo;ubsan_minimal;gwp_asan;odef)
+set(ALL_SANITIZERS asan;dfsan;msan;hwasan;tsan;safestack;cfi;scudo;ubsan_minimal;gwp_asan;odef;memp)
 set(COMPILER_RT_SANITIZERS_TO_BUILD all CACHE STRING
     "sanitizers to build if supported on the target (all;${ALL_SANITIZERS})")
 list_replace(COMPILER_RT_SANITIZERS_TO_BUILD all "${ALL_SANITIZERS}")
@@ -750,6 +754,13 @@ if (COMPILER_RT_HAS_SANITIZER_COMMON AND ODEF_SUPPORTED_ARCH AND
   set(COMPILER_RT_HAS_ODEF TRUE)
 else()
   set(COMPILER_RT_HAS_ODEF FALSE)
+endif()
+
+if (COMPILER_RT_HAS_SANITIZER_COMMON AND MEMP_SUPPORTED_ARCH AND
+    OS_NAME MATCHES "Linux")
+  set(COMPILER_RT_HAS_MEMP TRUE)
+else()
+  set(COMPILER_RT_HAS_MEMP FALSE)
 endif()
 
 if (COMPILER_RT_HAS_SANITIZER_COMMON AND HWASAN_SUPPORTED_ARCH AND
