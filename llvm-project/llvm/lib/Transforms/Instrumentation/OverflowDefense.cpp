@@ -1692,6 +1692,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   End->addIncoming(ThenEnd, Then);
   End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
 
+  // TODO: Move tail check to here
   // Check if Ptr is in [Begin, End).
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
