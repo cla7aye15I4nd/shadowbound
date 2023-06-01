@@ -16,6 +16,7 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm/Transforms/Utils/Identification.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
 #include <fstream>
@@ -856,11 +857,32 @@ void OverflowDefense::semanticOptimize(Function &F) {
   if (ClSemanticFile == "")
     return;
 
-  std::ifstream SemanticFile(ClSemanticFile);
-  if (!SemanticFile.is_open()) {
-    errs() << "Failed to open semantic file: " << ClSemanticFile << "\n";
+  auto Semantics = parseSemaFile(ClSemanticFile);
+  if (Semantics.empty())
     return;
+
+  StringRef Name;
+  int PointerField;
+
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  for (auto &GEP : GepToInstrument) {
+    bool optimized = false;
+    if (getPtrDesc(GEP->getPointerOperand(), Name, PointerField)) {
+      for (auto &Sem : Semantics) {
+        if (Sem.getName() == Name && Sem.getPointerField() == PointerField) {
+          dbgs() << "  Skip: " << *GEP << "\n";
+          optimized = true;
+          break;
+        }
+      }
+    }
+
+    if (!optimized) {
+      NewGepToInstrument.push_back(GEP);
+    }
   }
+
+  GepToInstrument.swap(NewGepToInstrument);
 }
 
 SmallVector<BitCastInst *, 16>
