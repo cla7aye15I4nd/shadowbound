@@ -861,15 +861,15 @@ void OverflowDefense::semanticOptimize(Function &F) {
   if (Semantics.empty())
     return;
 
-  StringRef Name;
+  std::string Name;
   int PointerField;
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
   for (auto &GEP : GepToInstrument) {
     bool optimized = false;
-    if (getPtrDesc(GEP->getPointerOperand(), Name, PointerField)) {
-      for (auto &Sem : Semantics) {
-        if (Sem.getName() == Name && Sem.getPointerField() == PointerField) {
+    if (getPtrDesc(getSource(GEP), Name, PointerField)) {
+      for (auto *Sem : Semantics) {
+        if (Sem->getName() == Name && Sem->getPointerField() == PointerField) {
           dbgs() << "  Skip: " << *GEP << "\n";
           optimized = true;
           break;
@@ -1279,13 +1279,8 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
       MonoLoop *ML = MonoLoopMap[Loop];
 
       if (ML->getStepInst() == GEP) {
-        if (auto *GEPUpper = dyn_cast<GetElementPtrInst>(ML->Upper)) {
-          if (GepSet.count(GEPUpper) == 0) {
-            GepSet.insert(GEPUpper);
-            NewGepToInstrument.push_back(GEPUpper);
-          }
-        }
-        continue;
+        if (!isa<GetElementPtrInst>(ML->Upper))
+          continue;
       }
 
       if (monotonicLoopOptimize(F, GEP, Loop, SE))

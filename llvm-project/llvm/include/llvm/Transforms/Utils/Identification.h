@@ -6,31 +6,32 @@
 #include "llvm/IR/Value.h"
 
 #include <string>
+#include <vector>
 
 namespace llvm {
 
 class Semantic {
-  StringRef Name;
+  std::string Name;
   int PointerField;
   int LengthField;
   int Slope;
   int Intercept;
 
 public:
-  Semantic(StringRef Name, int PointerField, int LengthField,
+  Semantic(std::string Name, int PointerField, int LengthField,
            int Slope, int Intercept)
       : Name(Name), PointerField(PointerField), LengthField(LengthField),
         Slope(Slope), Intercept(Intercept) {}
   
-  StringRef getName() const { return Name; }
+  std::string getName() const { return Name; }
   int getPointerField() const { return PointerField; }
   int getLengthField() const { return LengthField; }
   int getSlope() const { return Slope; }
   int getIntercept() const { return Intercept; }
 };
 
-ArrayRef<Semantic> parseSemaFile(std::string Filename);
-bool getPtrDesc(Value *V, StringRef &Name, int &Field);
+std::vector<Semantic*> parseSemaFile(std::string Filename);
+bool getPtrDesc(Value *V, std::string &Name, int &Field);
 
 } // end namespace llvm
 
