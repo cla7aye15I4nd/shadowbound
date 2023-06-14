@@ -885,7 +885,7 @@ void OverflowDefense::structPointerOptimizae(Function &F) {
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
   for (auto *GEP : GepToInstrument) {
-    if (isAccessMember(GEP)) {
+    if (!isAccessMember(GEP)) {
       NewGepToInstrument.push_back(GEP);
     }
   }
