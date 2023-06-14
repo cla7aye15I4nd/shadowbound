@@ -234,7 +234,8 @@ private:
                      ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
   bool isAccessMember(Instruction *I);
-  void structPointerOptimizae(Function &F);
+  bool isAccessMemberBoost(Instruction *I, ScalarEvolution &SE);
+  void structPointerOptimizae(Function &F, ScalarEvolution &SE);
   void arrayPatternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
@@ -411,6 +412,13 @@ bool isVirtualTableGep(Instruction *I) {
   return false;
 }
 
+unsigned getFixedSize(Type *Ty, const DataLayout *DL) {
+  if (Ty->isArrayTy() || Ty->isStructTy())
+    return DL->getTypeStoreSize(Ty);
+
+  ASSERT(false);
+}
+
 bool isFixedSizeType(Type *Ty) {
   if (isUnionType(Ty))
     return false;
@@ -581,7 +589,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     // Loop Optimization may introduce new instructions to instrument
     dependencyOptimize(F, DT, PDT, SE);
   }
-  structPointerOptimizae(F);
+  structPointerOptimizae(F, SE);
   arrayPatternOptimize(F);
 
   // Instrument subfield access
@@ -879,15 +887,17 @@ void OverflowDefense::arrayPatternOptimize(Function &F) {
   GepToInstrument.swap(NewGepToInstrument);
 }
 
-void OverflowDefense::structPointerOptimizae(Function &F) {
+void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
   if (!ClStructPointerOpt)
     return;
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
   for (auto *GEP : GepToInstrument) {
-    if (!isAccessMember(GEP)) {
-      NewGepToInstrument.push_back(GEP);
-    }
+    if (isAccessMember(GEP))
+      continue;
+    if (isAccessMemberBoost(GEP, SE))
+      continue;
+    NewGepToInstrument.push_back(GEP);
   }
 
   GepToInstrument.swap(NewGepToInstrument);
@@ -1221,6 +1231,49 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
 
   if (auto C = dyn_cast<ConstantInt>(GEP->getOperand(1)))
     return C->getZExtValue() == 0;
+  return false;
+}
+
+bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
+  // Optimize the following case:
+  //  Obj* obj = ...
+  //  u8* buf = (u8*) obj;
+  //  buf[1] = 0;
+
+  Value *Src = getSource(I);
+
+  ASSERT(Src->getType()->isPointerTy());
+  Type *ty = dyn_cast<PointerType>(Src->getType())->getPointerElementType();
+
+  if (isFixedSizeType(ty)) {
+    unsigned size = getFixedSize(ty, DL);
+    unsigned maxOffset =
+        DL->getTypeStoreSize(I->getType()->getPointerElementType());
+
+    Value *V = I;
+    while (V != Src) {
+      if (isa<PHINode>(V))
+        return false;
+      if (auto *BC = dyn_cast<BitCastInst>(V))
+        V = BC->getOperand(0);
+      if (auto *GEP = dyn_cast<GetElementPtrInst>(V)) {
+        V = GEP->getPointerOperand();
+
+        // TODO: support more than one index
+        if (GEP->getNumIndices() != 1)
+          return false;
+
+        auto Range = SE.getUnsignedRange(SE.getSCEV(GEP->getOperand(1)));
+        maxOffset += Range.getUnsignedMax().getZExtValue();
+
+        if (maxOffset > size)
+          return false;
+      }
+    }
+
+    return true;
+  }
+
   return false;
 }
 
