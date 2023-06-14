@@ -81,9 +81,10 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::Hidden, cl::init(false));
 
 // ==== Optimization Option ==== //
-static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
-                                      cl::desc("optimize struct field checks"),
-                                      cl::Hidden, cl::init(false));
+static cl::opt<bool>
+    ClStructPointerOpt("odef-struct-pointer-opt",
+                       cl::desc("optimize struct pointer checks"), cl::Hidden,
+                       cl::init(true));
 
 static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
@@ -126,8 +127,6 @@ enum CheckType {
   kClusterCheck = 1,
   kBuiltInCheck = 2,
   kInFieldCheck = 3,
-  kRuntimeOptCheck = 4,
-  kClusterOptCheck = 5,
   kCheckTypeEnd
 };
 
@@ -235,6 +234,7 @@ private:
                      ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
   bool isAccessMember(Instruction *I);
+  void structPointerOptimizae(Function &F);
   void arrayPatternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
@@ -581,6 +581,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     // Loop Optimization may introduce new instructions to instrument
     dependencyOptimize(F, DT, PDT, SE);
   }
+  structPointerOptimizae(F);
   arrayPatternOptimize(F);
 
   // Instrument subfield access
@@ -596,13 +597,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
     dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n";
     dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
-
-    if (ClStructFieldOpt)
-      dbgs() << "  Cluster Optim: " << Counter[kClusterOptCheck] << "\n";
     dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n";
-
-    if (ClStructFieldOpt)
-      dbgs() << "  Runtime Optim: " << Counter[kRuntimeOptCheck] << "\n";
     dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n";
   }
 
@@ -884,6 +879,20 @@ void OverflowDefense::arrayPatternOptimize(Function &F) {
   GepToInstrument.swap(NewGepToInstrument);
 }
 
+void OverflowDefense::structPointerOptimizae(Function &F) {
+  if (!ClStructPointerOpt)
+    return;
+
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  for (auto *GEP : GepToInstrument) {
+    if (isAccessMember(GEP)) {
+      NewGepToInstrument.push_back(GEP);
+    }
+  }
+
+  GepToInstrument.swap(NewGepToInstrument);
+}
+
 SmallVector<BitCastInst *, 16>
 OverflowDefense::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
                                          PostDominatorTree &PDT,
@@ -1084,8 +1093,6 @@ void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
-    if (isAccessMember(I))
-      continue;
     Value *Source = getSource(I);
     SourceMap[Source].push_back(I);
   }
@@ -1233,12 +1240,8 @@ void OverflowDefense::collectChunkCheckImpl(
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
-    if (STy != nullptr && ClStructFieldOpt)
-      Counter[kRuntimeOptCheck] += Insts.size();
     Checks.push_back(new RuntimeCheck(Src, Insts));
   } else {
-    if (STy != nullptr && ClStructFieldOpt)
-      Counter[kClusterOptCheck]++;
     Checks.push_back(new ClusterCheck(Src, Insts));
   }
 }
