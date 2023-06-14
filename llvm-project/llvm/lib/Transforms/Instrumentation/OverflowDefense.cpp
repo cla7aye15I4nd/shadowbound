@@ -101,9 +101,9 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
-static cl::opt<std::string> ClSemanticFile("odef-semantic-file",
-                                           cl::desc("semantic file"),
-                                           cl::Hidden, cl::init(""));
+static cl::opt<std::string> ClArrayPatternFile("odef-array-pattern-file",
+                                               cl::desc("array pattern file"),
+                                               cl::Hidden, cl::init(""));
 
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
@@ -235,7 +235,7 @@ private:
                      ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
   bool isAccessMember(Instruction *I);
-  void semanticOptimize(Function &F);
+  void arrayPatternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
@@ -576,12 +576,12 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectToInstrument(F, ObjSizeEval, SE);
 
   dependencyOptimize(F, DT, PDT, SE);
-  semanticOptimize(F);
   loopOptimize(F, LI, SE, DT, PDT);
   if (ClLoopOpt) {
     // Loop Optimization may introduce new instructions to instrument
     dependencyOptimize(F, DT, PDT, SE);
   }
+  arrayPatternOptimize(F);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -853,32 +853,31 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   GepToInstrument.swap(NewGepToInstrument);
 }
 
-void OverflowDefense::semanticOptimize(Function &F) {
-  if (ClSemanticFile == "")
+void OverflowDefense::arrayPatternOptimize(Function &F) {
+  if (ClArrayPatternFile == "")
     return;
 
-  auto Semantics = parseSemaFile(ClSemanticFile);
-  if (Semantics.empty())
+  auto ArrayPatterns = parseAPFile(ClArrayPatternFile);
+  if (ArrayPatterns.empty())
     return;
-
-  std::string Name;
-  int PointerField;
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
   for (auto &GEP : GepToInstrument) {
     bool optimized = false;
-    if (getPtrDesc(getSource(GEP), Name, PointerField)) {
-      for (auto *Sem : Semantics) {
-        if (Sem->getName() == Name && Sem->getPointerField() == PointerField) {
-          dbgs() << "  Skip: " << *GEP << "\n";
-          optimized = true;
-          break;
-        }
+
+    ArrayPatternBase *AP = getArrayPattern(getSource(GEP), GEP);
+    for (auto *APat : ArrayPatterns) {
+      if (APat->matchPointer(AP)) {
+        optimized = true;
+        break;
       }
     }
 
     if (!optimized) {
       NewGepToInstrument.push_back(GEP);
+
+      if (AP != nullptr)
+        dbgs() << "  Fail Skip Array Pattern: " << *GEP << "\n";
     }
   }
 
@@ -978,7 +977,8 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                 // If the max offset of I is larger than the min offset of J,
                 // then it is possible that the offset of I is greater than the
                 // offset of J at runtime.
-                if (SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
+                if (IOffset != JOffset &&
+                    SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
                         .ult(SE.getUnsignedRangeMax(SE.getSCEV(IOffset)))) {
                   Greater = false;
                   break;

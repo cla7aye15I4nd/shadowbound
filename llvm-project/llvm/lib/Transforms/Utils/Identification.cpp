@@ -10,13 +10,13 @@ using namespace std;
 
 namespace llvm {
 
-vector<Semantic*> parseSemaFile(string Filename) {
-  vector<Semantic*> Semantics;
+vector<ArrayPatternBase *> parseAPFile(string Filename) {
+  vector<ArrayPatternBase *> APats;
 
   ifstream fin(Filename);
   if (!fin.is_open()) {
     errs() << "Error: cannot open file " << Filename << "\n";
-    return vector<Semantic*>();
+    return {};
   }
 
   string raw((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
@@ -25,19 +25,19 @@ vector<Semantic*> parseSemaFile(string Filename) {
   auto JSON = json::parse(raw);
   if (!JSON) {
     errs() << "Error: cannot parse file " << Filename << "\n";
-    return vector<Semantic*>();
+    return {};
   }
   if (!JSON->getAsArray()) {
     errs() << "Error: top-level value is not a JSON array: " << Filename
            << "\n";
-    return vector<Semantic*>();
+    return {};
   }
 
   for (json::Value &V : *JSON->getAsArray()) {
     json::Object *O = V.getAsObject();
     if (!O) {
       errs() << "Error: cannot parse object " << Filename << "\n";
-      return vector<Semantic*>();
+      return {};
     }
 
     Optional<StringRef> Name = O->getString("id");
@@ -48,35 +48,44 @@ vector<Semantic*> parseSemaFile(string Filename) {
 
     if (!Name || !PointerField || !LengthField || !Slope || !Intercept) {
       errs() << "Error: cannot parse field " << Filename << "\n";
-      return vector<Semantic*>();
+      return {};
     }
 
-    Semantic *S = new Semantic(Name.getValue().str(), PointerField.getValue(),
-                              LengthField.getValue(), Slope.getValue(),
-                              Intercept.getValue());
+    ArrayPatternBase *AP = nullptr;
+    if (Name->startswith("struct."))
+      AP = new StructFieldAP(Name->str(), PointerField.getValue(),
+                             LengthField.getValue(), Slope.getValue(),
+                             Intercept.getValue());
+    else
+      AP = new FunArgAP(Name->str(), PointerField.getValue(),
+                        LengthField.getValue(), Slope.getValue(),
+                        Intercept.getValue());
 
-    Semantics.push_back(S);
+    APats.push_back(AP);
   }
 
-  return Semantics;
+  return APats;
 }
 
-bool getPtrDesc(Value *V, string &Name, int &Field) {
-  if (auto *LI = dyn_cast<LoadInst>(V)) {
-    if (auto *GM = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
+ArrayPatternBase *getArrayPattern(Value *Src, Instruction *I) {
+  if (auto *LI = dyn_cast<LoadInst>(Src)) {
+    if (auto *GEP = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
+      // TODO: more precise pattern matching
       if (auto *STy = dyn_cast<StructType>(
-              GM->getPointerOperand()->getType()->getPointerElementType())) {
-        if (GM->getNumIndices() == 2) {
-          if (auto *CI = dyn_cast<ConstantInt>(GM->getOperand(2))) {
-            Name = STy->getName().str();
-            Field = CI->getZExtValue();
-            return true;
+              GEP->getPointerOperand()->getType()->getPointerElementType())) {
+        if (GEP->getNumIndices() == 2) {
+          if (auto *CI = dyn_cast<ConstantInt>(GEP->getOperand(2))) {
+            StructFieldAP *AP = new StructFieldAP(
+                STy->getName().str(), CI->getZExtValue(), 0);
+
+            return AP;
           }
         }
       }
     }
   }
-  return false;
+
+  return nullptr;
 }
 
 } // end namespace llvm
