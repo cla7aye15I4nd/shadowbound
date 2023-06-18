@@ -1240,6 +1240,20 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
   //  u8* buf = (u8*) obj;
   //  buf[1] = 0;
 
+#define HANDLE_GEP(GEP)                                                        \
+  do {                                                                         \
+    V = GEP->getPointerOperand();                                              \
+                                                                               \
+    if (GEP->getNumIndices() != 1)                                             \
+      return false;                                                            \
+                                                                               \
+    auto Range = SE.getUnsignedRange(SE.getSCEV(GEP->getOperand(1)));          \
+    maxOffset += Range.getUnsignedMax().getZExtValue();                        \
+                                                                               \
+    if (maxOffset > size)                                                      \
+      return false;                                                            \
+  } while (0)
+
   Value *Src = getSource(I);
 
   ASSERT(Src->getType()->isPointerTy());
@@ -1252,29 +1266,25 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
 
     Value *V = I;
     while (V != Src) {
+      dbgs() << "  " << *V << "\n";
       if (isa<PHINode>(V))
         return false;
       if (auto *BC = dyn_cast<BitCastInst>(V))
         V = BC->getOperand(0);
-      if (auto *GEP = dyn_cast<GetElementPtrInst>(V)) {
-        V = GEP->getPointerOperand();
-
-        // TODO: support more than one index
-        if (GEP->getNumIndices() != 1)
-          return false;
-
-        auto Range = SE.getUnsignedRange(SE.getSCEV(GEP->getOperand(1)));
-        maxOffset += Range.getUnsignedMax().getZExtValue();
-
-        if (maxOffset > size)
-          return false;
-      }
+      else if (auto *BCO = dyn_cast<BitCastOperator>(V))
+        V = BCO->getOperand(0);
+      else if (auto *GEP = dyn_cast<GetElementPtrInst>(V))
+        HANDLE_GEP(GEP);
+      else if (auto *GEPO = dyn_cast<GEPOperator>(V))
+        HANDLE_GEP(GEPO);
     }
 
     return true;
   }
 
   return false;
+
+#undef HANDLE_GEP
 }
 
 void OverflowDefense::collectChunkCheckImpl(
