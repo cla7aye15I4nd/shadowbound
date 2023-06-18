@@ -1,6 +1,7 @@
 #include "pattern.h"
 
 #include "llvm/ADT/DenseMap.h"
+#include "llvm/IR/Operator.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/JSON.h"
@@ -30,6 +31,10 @@ static bool isHeapAddress(Value *V) {
       Worklist.push_back(GEP->getPointerOperand());
     else if (auto *BC = dyn_cast<BitCastInst>(V))
       Worklist.push_back(BC->getOperand(0));
+    else if (auto *GEPO = dyn_cast<GEPOperator>(V))
+      Worklist.push_back(GEPO->getPointerOperand());
+    else if (auto *BCO = dyn_cast<BitCastOperator>(V))
+      Worklist.push_back(BCO->getOperand(0));
     else if (auto *PHI = dyn_cast<PHINode>(V))
       for (unsigned int i = 0; i < PHI->getNumIncomingValues(); i++)
         Worklist.push_back(PHI->getIncomingValue(i));
