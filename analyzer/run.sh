@@ -7,4 +7,5 @@ else
 fi
 
 echo "Running analyzer on ${benchmark}..."
-./build/harness/analyzer `find ../bitcodes/${benchmark} -name *bc | xargs`
+./build/harness/analyzer `find ../bitcodes/${benchmark} -name *bc | xargs` -pattern-opt-file ../config/${benchmark}.json
+../llvm-project/build/bin/clang-format -i ../config/${benchmark}.json

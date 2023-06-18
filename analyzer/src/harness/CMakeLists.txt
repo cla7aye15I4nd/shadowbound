@@ -1,4 +1,4 @@
-set(source main.cpp relation.cpp)
+set(source main.cpp pattern.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
