@@ -1,5 +1,6 @@
 #include "pattern.h"
 
+#include "llvm/ADT/DenseMap.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/JSON.h"
@@ -40,36 +41,36 @@ static bool isHeapAddress(Value *V) {
 }
 
 static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
-                          vector<Module *> &Modules) {
-  for (auto *M : Modules) {
-    for (auto &F : *M) {
-      if (F.isDeclaration())
-        continue;
-      for (auto &BB : F) {
-        for (auto &I : BB) {
-          if (auto *CI = dyn_cast<CallBase>(&I)) {
-            if (CI->getCalledFunction() == &FO) {
-              Value *Arg = CI->getArgOperand(ArgNo);
-              if (isHeapAddress(Arg))
-                return false;
-            }
-          }
-        }
-      }
-    }
+                          vector<Module *> &Modules,
+                          DenseMap<Function *, vector<CallBase *>> &CallSites) {
+
+  for (auto *CI : CallSites[&FO]) {
+    Value *Arg = CI->getArgOperand(ArgNo);
+    if (isHeapAddress(Arg))
+      return false;
   }
+
   return true;
 }
 
 static void findNonHeapFunctionArguments(vector<Module *> Modules,
                                          vector<PatternBase *> &Patterns) {
+  DenseMap<Function *, vector<CallBase *>> CallSites;
+  for (auto *M : Modules)
+    for (auto &F : *M)
+      for (auto &BB : F)
+        for (auto &I : BB)
+          if (auto *CI = dyn_cast<CallBase>(&I))
+            if (CI->getCalledFunction() != nullptr)
+              CallSites[CI->getCalledFunction()].push_back(CI);
 
   for (auto *M : Modules) {
     for (auto &F : *M) {
       if (F.isDeclaration())
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
-        if (F.getArg(i)->getType()->isPointerTy() && alwaysNonHeap(F, i, Modules)) {
+        if (F.getArg(i)->getType()->isPointerTy() &&
+            alwaysNonHeap(F, i, Modules, CallSites)) {
           Patterns.push_back(
               new ValuePattern(new FunArgIdent(F.getName().str(), i)));
         }
