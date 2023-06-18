@@ -102,9 +102,9 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
-static cl::opt<std::string> ClArrayPatternFile("odef-array-pattern-file",
-                                               cl::desc("array pattern file"),
-                                               cl::Hidden, cl::init(""));
+static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
+                                             cl::desc("pattern opt file"),
+                                             cl::Hidden, cl::init(""));
 
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
@@ -236,7 +236,8 @@ private:
   bool isAccessMember(Instruction *I);
   bool isAccessMemberBoost(Instruction *I, ScalarEvolution &SE);
   void structPointerOptimizae(Function &F, ScalarEvolution &SE);
-  void arrayPatternOptimize(Function &F);
+  bool patternMatch(Function &F, Instruction *I, PatternBase *P);
+  void patternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
@@ -590,7 +591,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     dependencyOptimize(F, DT, PDT, SE);
   }
   structPointerOptimizae(F, SE);
-  arrayPatternOptimize(F);
+  patternOptimize(F);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -856,35 +857,62 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   GepToInstrument.swap(NewGepToInstrument);
 }
 
-void OverflowDefense::arrayPatternOptimize(Function &F) {
-  if (ClArrayPatternFile == "")
-    return;
+bool OverflowDefense::patternMatch(Function &F, Instruction *I,
+                                   PatternBase *P) {
 
-  auto ArrayPatterns = parseAPFile(ClArrayPatternFile);
-  if (ArrayPatterns.empty())
-    return;
+  if (P->getType() == PT_VALUE) {
+    ValueIdentBase *VI = static_cast<ValuePattern *>(P)->getIdent();
 
-  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
-  for (auto &GEP : GepToInstrument) {
-    bool optimized = false;
-
-    ArrayPatternBase *AP = getArrayPattern(getSource(GEP), GEP);
-    for (auto *APat : ArrayPatterns) {
-      if (APat->matchPointer(AP)) {
-        optimized = true;
-        break;
+    if (VI->getType() == VIT_FUNARG) {
+      FunArgIdent *FAI = static_cast<FunArgIdent *>(VI);
+      if (FAI->getName() == F.getName()) {
+        if (auto Arg = dyn_cast<Argument>(getSource(I))) {
+          if (Arg->getArgNo() == FAI->getIndex()) {
+            return true;
+          }
+        }
       }
+    } else if (VI->getType() == VIT_STRUCT) {
+      // TODO: support struct pattern
     }
-
-    if (!optimized) {
-      NewGepToInstrument.push_back(GEP);
-
-      if (AP != nullptr)
-        dbgs() << "  Fail Skip Array Pattern: " << *GEP << "\n";
-    }
+  } else if (P->getType() == PT_ARRAY) {
+    // TODO: support array pattern
   }
 
+  return false;
+}
+
+void OverflowDefense::patternOptimize(Function &F) {
+  if (ClPatternOptFile == "")
+    return;
+
+  auto Patterns = parsePatternFile(ClPatternOptFile);
+  if (Patterns.empty())
+    return;
+
+  auto match = [&](Instruction *I) {
+    for (auto P : Patterns)
+      if (patternMatch(F, I, P))
+        return true;
+    return false;
+  };
+
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  SmallVector<BitCastInst *, 16> NewBcToInstrument;
+
+  for (auto *Gep : GepToInstrument)
+    if (!match(Gep))
+      NewGepToInstrument.push_back(Gep);
+    else
+      dbgs() << "  Pattern Match: " << *Gep << "\n";
+  for (auto *Bc : BcToInstrument)
+    if (!match(Bc))
+      NewBcToInstrument.push_back(Bc);
+    else
+      dbgs() << "  Pattern Match: " << *Bc << "\n";
+
   GepToInstrument.swap(NewGepToInstrument);
+  BcToInstrument.swap(NewBcToInstrument);
 }
 
 void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {

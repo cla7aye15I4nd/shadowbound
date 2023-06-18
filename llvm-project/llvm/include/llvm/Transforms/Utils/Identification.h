@@ -6,6 +6,7 @@
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Value.h"
+#include "llvm/Support/JSON.h"
 
 #include <string>
 #include <vector>
@@ -13,94 +14,176 @@
 #define ASSERT(X)                                                              \
   do {                                                                         \
     if (!(X)) {                                                                \
-      printf("Assertion failed at Identification.h: " #X "\n");                \
+      printf("Assertion failed: " __FILE__ ":%d\n", __LINE__);                 \
       abort();                                                                 \
     }                                                                          \
   } while (0)
 
 namespace llvm {
 
-enum APType {
-  APT_FUNARG,
-  APT_STRUCT,
+enum ValueIdentType {
+  VIT_GLOBAL,
+  VIT_STRUCT,
+  VIT_FUNARG,
+  VIT_UNKNOWN,
 };
 
-class ArrayPatternBase {
-  APType Type;
-  unsigned int Slope;
-  unsigned int Intercept;
+class ValueIdentBase {
+  ValueIdentType Type;
 
 public:
-  ArrayPatternBase(APType Type, unsigned int Slope, unsigned int Intercept)
-      : Type(Type), Slope(Slope), Intercept(Intercept) {}
-  APType getType() const { return Type; }
-  unsigned int getSlope() const { return Slope; }
-  unsigned int getIntercept() const { return Intercept; }
+  ValueIdentBase(ValueIdentType Type) : Type(Type) {}
+  ValueIdentType getType() const { return Type; }
 
   virtual void print(raw_ostream &OS) const { ASSERT(0); }
-  virtual bool matchPointer(ArrayPatternBase *AP) { return false; }
-
-  friend raw_ostream &operator<<(raw_ostream &OS, const ArrayPatternBase &AP) {
-    AP.print(OS);
+  virtual json::Value toJSON() const { ASSERT(0); }
+  friend raw_ostream &operator<<(raw_ostream &OS, const ValueIdentBase &VI) {
+    VI.print(OS);
     return OS;
   }
 };
 
-class FunArgAP : public ArrayPatternBase {
-  std::string FnName;
-  unsigned int PointerArg;
-  unsigned int LengthArg;
+class GlobalIdent : public ValueIdentBase {
+  std::string Name;
 
 public:
-  FunArgAP(std::string FnName, unsigned int PointerArg, unsigned int LengthArg,
-           unsigned int Slope = -1, unsigned int Intercept = -1)
-      : ArrayPatternBase(APT_FUNARG, Slope, Intercept), FnName(FnName),
-        PointerArg(PointerArg), LengthArg(LengthArg) {}
+  GlobalIdent(std::string Name) : ValueIdentBase(VIT_GLOBAL), Name(Name) {}
+  std::string getName() const { return Name; }
 
-  void print(raw_ostream &OS) const override {
-    OS << "FunArgAP(" << FnName << ", " << PointerArg << ", " << LengthArg
-       << ", " << getSlope() << ", " << getIntercept() << ")";
-  }
-
-  bool matchPointer(ArrayPatternBase *AP) override {
-    if (AP == nullptr)
-      return false;
-    if (AP->getType() != APT_FUNARG)
-      return false;
-    FunArgAP *FAP = (FunArgAP *)AP;
-    return FnName == FAP->FnName && PointerArg == FAP->PointerArg;
+  void print(raw_ostream &OS) const override { OS << "Global(" << Name << ")"; }
+  json::Value toJSON() const override {
+    json::Object O;
+    O["type"] = json::Value("global");
+    O["name"] = json::Value(Name);
+    return json::Value(std::move(O));
   }
 };
 
-class StructFieldAP : public ArrayPatternBase {
-  std::string StructName;
-  unsigned int PointerField;
-  unsigned int LengthField;
+class StructMemberIdent : public ValueIdentBase {
+  std::string Name;
+  unsigned int Index;
 
 public:
-  StructFieldAP(std::string StructName, unsigned int PointerField,
-                unsigned int LengthField, unsigned int Slope = -1,
-                unsigned int Intercept = -1)
-      : ArrayPatternBase(APT_STRUCT, Slope, Intercept), StructName(StructName),
-        PointerField(PointerField), LengthField(LengthField) {}
+  StructMemberIdent(std::string Name, unsigned int Index)
+      : ValueIdentBase(VIT_STRUCT), Name(Name), Index(Index) {}
+
+  std::string getName() const { return Name; }
+  unsigned int getIndex() const { return Index; }
 
   void print(raw_ostream &OS) const override {
-    OS << "StructFieldAP(" << StructName << ", " << PointerField << ", "
-       << LengthField << ", " << getSlope() << ", " << getIntercept() << ")";
+    OS << "StructMember(" << Name << ", " << Index << ")";
   }
-
-  bool matchPointer(ArrayPatternBase *AP) override {
-    if (AP == nullptr)
-      return false;
-    if (AP->getType() != APT_STRUCT)
-      return false;
-    StructFieldAP *SAP = (StructFieldAP *)AP;
-    return StructName == SAP->StructName && PointerField == SAP->PointerField;
+  json::Value toJSON() const override {
+    json::Object O;
+    O["type"] = json::Value("struct");
+    O["name"] = json::Value(Name);
+    O["index"] = json::Value(Index);
+    return json::Value(std::move(O));
   }
 };
 
-std::vector<ArrayPatternBase *> parseAPFile(std::string Filename);
-ArrayPatternBase *getArrayPattern(Value *Src, Instruction *I);
+class FunArgIdent : public ValueIdentBase {
+  std::string Name;
+  unsigned int Index;
+
+public:
+  FunArgIdent(std::string Name, unsigned int Index)
+      : ValueIdentBase(VIT_FUNARG), Name(Name), Index(Index) {}
+
+  std::string getName() const { return Name; }
+  unsigned int getIndex() const { return Index; }
+
+  void print(raw_ostream &OS) const override {
+    OS << "FunArg(" << Name << ", " << Index << ")";
+  }
+  json::Value toJSON() const override {
+    json::Object O;
+    O["type"] = json::Value("funarg");
+    O["name"] = json::Value(Name);
+    O["index"] = json::Value(Index);
+    return json::Value(std::move(O));
+  }
+};
+
+class UnknownIdent : public ValueIdentBase {
+public:
+  UnknownIdent() : ValueIdentBase(VIT_UNKNOWN) {}
+
+  void print(raw_ostream &OS) const override { OS << "Unknown()"; }
+};
+
+enum PatternType {
+  PT_VALUE,
+  PT_ARRAY,
+};
+
+class PatternBase {
+  PatternType Type;
+
+public:
+  PatternBase(PatternType Type) : Type(Type) {}
+  PatternType getType() const { return Type; }
+
+  virtual void print(raw_ostream &OS) const { ASSERT(0); }
+  friend raw_ostream &operator<<(raw_ostream &OS, const PatternBase &P) {
+    P.print(OS);
+    return OS;
+  }
+
+  virtual json::Value toJSON() const { ASSERT(0); }
+};
+
+class ValuePattern : public PatternBase {
+  ValueIdentBase *Ident;
+
+public:
+  ValuePattern(ValueIdentBase *Ident) : PatternBase(PT_VALUE), Ident(Ident) {}
+  ValueIdentBase *getIdent() const { return Ident; }
+
+  void print(raw_ostream &OS) const override {
+    OS << "ValuePattern[" << Ident << "]";
+  }
+  json::Value toJSON() const override {
+    json::Object O;
+    O["type"] = json::Value("value");
+    O["pattern"] = Ident->toJSON();
+    return json::Value(std::move(O));
+  }
+};
+
+class ArrayPatternBase : public PatternBase {
+  ValueIdentBase *Pointer;
+  ValueIdentBase *Length;
+  int Slope;
+  int Intercept;
+
+public:
+  ArrayPatternBase(PatternType Type, ValueIdentBase *Pointer,
+                   ValueIdentBase *Length, int Slope, int Intercept)
+      : PatternBase(Type), Pointer(Pointer), Length(Length), Slope(Slope),
+        Intercept(Intercept) {}
+  ValueIdentBase *getPointer() const { return Pointer; }
+  ValueIdentBase *getLength() const { return Length; }
+  int getSlope() const { return Slope; }
+  int getIntercept() const { return Intercept; }
+
+  void print(raw_ostream &OS) const override {
+    OS << "ArrayPattern[ptr=" << Pointer << ", len=" << Length
+       << ", k=" << Slope << ", b=" << Intercept << "]";
+  }
+  json::Value toJSON() const override {
+    json::Object O, P;
+    P["pointer"] = Pointer->toJSON();
+    P["length"] = Length->toJSON();
+    P["slope"] = json::Value(Slope);
+    P["intercept"] = json::Value(Intercept);
+    O["type"] = json::Value("array");
+    O["pattern"] = json::Value(std::move(P));
+    return json::Value(std::move(O));
+  }
+};
+
+std::vector<PatternBase *> parsePatternFile(std::string Filename);
 
 } // end namespace llvm
 
