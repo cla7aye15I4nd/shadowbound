@@ -42,7 +42,7 @@ static bool isHeapAddress(Value *V) {
       return true;
   }
 
-  return true;
+  return false;
 }
 
 static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
@@ -61,17 +61,30 @@ static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
 static void findNonHeapFunctionArguments(vector<Module *> Modules,
                                          vector<PatternBase *> &Patterns) {
   DenseMap<Function *, vector<CallBase *>> CallSites;
+  SmallPtrSet<Function *, 16> ICallFuncs;
+
   for (auto *M : Modules)
     for (auto &F : *M)
       for (auto &BB : F)
-        for (auto &I : BB)
-          if (auto *CI = dyn_cast<CallBase>(&I))
+        for (auto &I : BB) {
+          if (auto *CI = dyn_cast<CallBase>(&I)) {
             if (CI->getCalledFunction() != nullptr)
               CallSites[CI->getCalledFunction()].push_back(CI);
+            for (unsigned int i = 0; i < CI->arg_size(); i++)
+              if (auto *Fn = dyn_cast<Function>(CI->getArgOperand(i)))
+                ICallFuncs.insert(Fn);
+          } else {
+            for (unsigned int i = 0; i < I.getNumOperands(); i++)
+              if (auto *Fn = dyn_cast<Function>(I.getOperand(i)))
+                ICallFuncs.insert(Fn);
+          }
+        }
 
   for (auto *M : Modules) {
     for (auto &F : *M) {
-      if (F.isDeclaration())
+      if (F.isDeclaration() || ICallFuncs.count(&F) || 
+          /* it is possibile because of inline */
+          CallSites.count(&F) == 0)
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
         if (F.getArg(i)->getType()->isPointerTy() &&
