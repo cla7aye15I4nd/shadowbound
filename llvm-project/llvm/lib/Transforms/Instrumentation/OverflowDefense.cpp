@@ -377,6 +377,9 @@ bool isUnionType(Type *Ty) {
 }
 
 bool isFlexibleStructure(StructType *STy) {
+  if (STy->getNumElements() == 0)
+    return false;
+
   if (ArrayType *Aty = dyn_cast<ArrayType>(STy->elements().back())) {
     // Avoid Check Some Flexible Array Member
     // struct page_entry {
@@ -1286,6 +1289,8 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
 
   ASSERT(Src->getType()->isPointerTy());
   Type *ty = dyn_cast<PointerType>(Src->getType())->getPointerElementType();
+  dbgs() << "  " << *Src << "\n";
+  dbgs() << "  " << *ty << "\n";
 
   if (isFixedSizeType(ty)) {
     unsigned size = getFixedSize(ty, DL);
