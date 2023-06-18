@@ -69,7 +69,7 @@ static void findNonHeapFunctionArguments(vector<Module *> Modules,
       if (F.isDeclaration())
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
-        if (alwaysNonHeap(F, i, Modules)) {
+        if (F.getArg(i)->getType()->isPointerTy() && alwaysNonHeap(F, i, Modules)) {
           Patterns.push_back(
               new ValuePattern(new FunArgIdent(F.getName().str(), i)));
         }
