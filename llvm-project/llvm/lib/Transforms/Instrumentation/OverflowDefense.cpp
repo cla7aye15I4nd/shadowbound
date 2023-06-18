@@ -102,9 +102,9 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
-static cl::opt<std::string> ClArrayPatternFile("odef-array-pattern-file",
-                                               cl::desc("array pattern file"),
-                                               cl::Hidden, cl::init(""));
+static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
+                                             cl::desc("pattern opt file"),
+                                             cl::Hidden, cl::init(""));
 
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
@@ -236,7 +236,7 @@ private:
   bool isAccessMember(Instruction *I);
   bool isAccessMemberBoost(Instruction *I, ScalarEvolution &SE);
   void structPointerOptimizae(Function &F, ScalarEvolution &SE);
-  void arrayPatternOptimize(Function &F);
+  void patternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
@@ -590,7 +590,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     dependencyOptimize(F, DT, PDT, SE);
   }
   structPointerOptimizae(F, SE);
-  arrayPatternOptimize(F);
+  patternOptimize(F);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -856,35 +856,16 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   GepToInstrument.swap(NewGepToInstrument);
 }
 
-void OverflowDefense::arrayPatternOptimize(Function &F) {
-  if (ClArrayPatternFile == "")
+void OverflowDefense::patternOptimize(Function &F) {
+  if (ClPatternOptFile == "")
     return;
 
-  auto ArrayPatterns = parseAPFile(ClArrayPatternFile);
-  if (ArrayPatterns.empty())
+  auto Patterns = parsePatternFile(ClPatternOptFile);
+  if (Patterns.empty())
     return;
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
-  for (auto &GEP : GepToInstrument) {
-    bool optimized = false;
-
-    ArrayPatternBase *AP = getArrayPattern(getSource(GEP), GEP);
-    for (auto *APat : ArrayPatterns) {
-      if (APat->matchPointer(AP)) {
-        optimized = true;
-        break;
-      }
-    }
-
-    if (!optimized) {
-      NewGepToInstrument.push_back(GEP);
-
-      if (AP != nullptr)
-        dbgs() << "  Fail Skip Array Pattern: " << *GEP << "\n";
-    }
-  }
-
-  GepToInstrument.swap(NewGepToInstrument);
+  SmallVector<BitCastInst *, 16> NewBcToInstrument;
 }
 
 void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {

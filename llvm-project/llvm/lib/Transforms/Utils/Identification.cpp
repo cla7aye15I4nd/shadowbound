@@ -10,82 +10,62 @@ using namespace std;
 
 namespace llvm {
 
-vector<ArrayPatternBase *> parseAPFile(string Filename) {
-  vector<ArrayPatternBase *> APats;
+vector<PatternBase *> parsePatternFile(string Filename) {
+#define ERROR_HANDLER(X)                                                       \
+  do {                                                                         \
+    if (!(X)) {                                                                \
+      errs() << "Error: Wrong File Format (" << Filename << ")\n";             \
+      return {};                                                               \
+    }                                                                          \
+  } while (0)
+
+  vector<PatternBase *> Patterns;
 
   ifstream fin(Filename);
-  if (!fin.is_open()) {
-    errs() << "Error: cannot open file " << Filename << "\n";
-    return {};
-  }
+  ERROR_HANDLER(fin.is_open());
 
   string raw((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
   fin.close();
 
   auto JSON = json::parse(raw);
-  if (!JSON) {
-    errs() << "Error: cannot parse file " << Filename << "\n";
-    return {};
-  }
-  if (!JSON->getAsArray()) {
-    errs() << "Error: top-level value is not a JSON array: " << Filename
-           << "\n";
-    return {};
-  }
+  ERROR_HANDLER(!!JSON && JSON->getAsArray() != nullptr);
 
   for (json::Value &V : *JSON->getAsArray()) {
     json::Object *O = V.getAsObject();
-    if (!O) {
-      errs() << "Error: cannot parse object " << Filename << "\n";
-      return {};
-    }
+    ERROR_HANDLER(O != nullptr && O->get("type") != nullptr &&
+                  O->get("type")->getAsString().hasValue() &&
+                  O->get("pattern") != nullptr &&
+                  O->get("pattern")->getAsObject() != nullptr);
 
-    Optional<StringRef> Name = O->getString("id");
-    Optional<int64_t> PointerField = O->getInteger("ptr");
-    Optional<int64_t> LengthField = O->getInteger("len");
-    Optional<int64_t> Slope = O->getInteger("k");
-    Optional<int64_t> Intercept = O->getInteger("b");
+    StringRef TypeStr = O->get("type")->getAsString().getValue();
+    json::Object *Pattern = O->get("pattern")->getAsObject();
 
-    if (!Name || !PointerField || !LengthField || !Slope || !Intercept) {
-      errs() << "Error: cannot parse field " << Filename << "\n";
-      return {};
-    }
+    if (TypeStr == "value") {
+      ERROR_HANDLER(Pattern->get("type") != nullptr &&
+                    Pattern->get("type")->getAsString().hasValue());
+      StringRef PatternType = Pattern->get("type")->getAsString().getValue();
+      if (PatternType == "funarg") {
+        ERROR_HANDLER(Pattern->get("name") != nullptr &&
+                      Pattern->get("name")->getAsString().hasValue());
+        ERROR_HANDLER(Pattern->get("index") != nullptr &&
+                      Pattern->get("index")->getAsNumber().hasValue());
+        StringRef Name = Pattern->get("name")->getAsString().getValue();
+        unsigned int Index = Pattern->get("index")->getAsNumber().getValue();
 
-    ArrayPatternBase *AP = nullptr;
-    if (Name->startswith("struct."))
-      AP = new StructFieldAP(Name->str(), PointerField.getValue(),
-                             LengthField.getValue(), Slope.getValue(),
-                             Intercept.getValue());
-    else
-      AP = new FunArgAP(Name->str(), PointerField.getValue(),
-                        LengthField.getValue(), Slope.getValue(),
-                        Intercept.getValue());
-
-    APats.push_back(AP);
-  }
-
-  return APats;
-}
-
-ArrayPatternBase *getArrayPattern(Value *Src, Instruction *I) {
-  if (auto *LI = dyn_cast<LoadInst>(Src)) {
-    if (auto *GEP = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
-      // TODO: more precise pattern matching
-      if (auto *STy = dyn_cast<StructType>(
-              GEP->getPointerOperand()->getType()->getPointerElementType())) {
-        if (GEP->getNumIndices() == 2) {
-          if (auto *CI = dyn_cast<ConstantInt>(GEP->getOperand(2))) {
-            StructFieldAP *AP = new StructFieldAP(
-                STy->getName().str(), CI->getZExtValue(), 0);
-
-            return AP;
-          }
-        }
+        Patterns.push_back(new ValuePattern(FunArgIdent(Name.str(), Index)));
+      } else if (PatternType == "struct") {
+        // TODO: Implement
+      } else if (PatternType == "global") {
+        // TODO: Implement
       }
+    } else if (TypeStr == "array") {
+      // TODO: Implement
     }
   }
 
-  return nullptr;
+  return Patterns;
+
+#undef ERROR_HANDLER
 }
 
 } // end namespace llvm
