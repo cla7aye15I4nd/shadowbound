@@ -906,13 +906,9 @@ void OverflowDefense::patternOptimize(Function &F) {
   for (auto *Gep : GepToInstrument)
     if (!match(Gep))
       NewGepToInstrument.push_back(Gep);
-    else
-      dbgs() << "  Pattern Match: " << *Gep << "\n";
   for (auto *Bc : BcToInstrument)
     if (!match(Bc))
       NewBcToInstrument.push_back(Bc);
-    else
-      dbgs() << "  Pattern Match: " << *Bc << "\n";
 
   GepToInstrument.swap(NewGepToInstrument);
   BcToInstrument.swap(NewBcToInstrument);
@@ -1289,8 +1285,6 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
 
   ASSERT(Src->getType()->isPointerTy());
   Type *ty = dyn_cast<PointerType>(Src->getType())->getPointerElementType();
-  dbgs() << "  " << *Src << "\n";
-  dbgs() << "  " << *ty << "\n";
 
   if (isFixedSizeType(ty)) {
     unsigned size = getFixedSize(ty, DL);
@@ -1299,7 +1293,6 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
 
     Value *V = I;
     while (V != Src) {
-      dbgs() << "  " << *V << "\n";
       if (isa<PHINode>(V))
         return false;
       if (auto *BC = dyn_cast<BitCastInst>(V))
