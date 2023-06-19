@@ -15,6 +15,7 @@ using namespace std;
 using namespace llvm;
 
 static DenseMap<Function *, vector<CallBase *>> CallSites;
+static SmallPtrSet<Function *, 16> ICallFuncs;
 
 static bool isHeapAddress(Value *V) {
   set<Value *> Visited;
@@ -47,10 +48,10 @@ static bool isHeapAddress(Value *V) {
   return false;
 }
 
-static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
+static bool alwaysNonHeap(Function &F, unsigned int ArgNo,
                           vector<Module *> &Modules) {
 
-  for (auto *CI : CallSites[&FO]) {
+  for (auto *CI : CallSites[&F]) {
     Value *Arg = CI->getArgOperand(ArgNo);
     if (isHeapAddress(Arg))
       return false;
@@ -59,25 +60,16 @@ static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
   return true;
 }
 
-static void findNonHeapFunctionArguments(vector<Module *> Modules,
-                                         vector<PatternBase *> &Patterns) {
-  SmallPtrSet<Function *, 16> ICallFuncs;
+static bool alwaysSafeArray(Function &F, unsigned int ArgNo,
+                            vector<Module *> &Modules) {
+  for (auto *CI : CallSites[&F]) {
+  }
 
-  for (auto *M : Modules)
-    for (auto &F : *M)
-      for (auto &BB : F)
-        for (auto &I : BB) {
-          if (auto *CI = dyn_cast<CallBase>(&I)) {
-            for (unsigned int i = 0; i < CI->arg_size(); i++)
-              if (auto *Fn = dyn_cast<Function>(CI->getArgOperand(i)))
-                ICallFuncs.insert(Fn);
-          } else {
-            for (unsigned int i = 0; i < I.getNumOperands(); i++)
-              if (auto *Fn = dyn_cast<Function>(I.getOperand(i)))
-                ICallFuncs.insert(Fn);
-          }
-        }
+  return false;
+}
 
+static void findSafeFunctionArguments(vector<Module *> Modules,
+                                      vector<PatternBase *> &Patterns) {
   for (auto *M : Modules) {
     for (auto &F : *M) {
       if (F.isDeclaration() || ICallFuncs.count(&F) ||
@@ -85,10 +77,13 @@ static void findNonHeapFunctionArguments(vector<Module *> Modules,
           CallSites.count(&F) == 0)
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
-        if (F.getArg(i)->getType()->isPointerTy() &&
-            alwaysNonHeap(F, i, Modules)) {
-          Patterns.push_back(
-              new ValuePattern(new FunArgIdent(F.getName().str(), i)));
+        if (F.getArg(i)->getType()->isPointerTy()) {
+          if (alwaysNonHeap(F, i, Modules))
+            Patterns.push_back(
+                new ValuePattern(new FunArgIdent(F.getName().str(), i)));
+          else if (alwaysSafeArray(F, i, Modules))
+            Patterns.push_back(
+                new ValuePattern(new FunArgIdent(F.getName().str(), i)));
         }
       }
     }
@@ -116,17 +111,26 @@ static void initialize(vector<Module *> &Modules) {
   for (auto *M : Modules)
     for (auto &F : *M)
       for (auto &BB : F)
-        for (auto &I : BB)
-          if (auto *CI = dyn_cast<CallBase>(&I))
+        for (auto &I : BB) {
+          if (auto *CI = dyn_cast<CallBase>(&I)) {
             if (CI->getCalledFunction() != nullptr)
               CallSites[CI->getCalledFunction()].push_back(CI);
+            for (unsigned int i = 0; i < CI->arg_size(); i++)
+              if (auto *Fn = dyn_cast<Function>(CI->getArgOperand(i)))
+                ICallFuncs.insert(Fn);
+          } else {
+            for (unsigned int i = 0; i < I.getNumOperands(); i++)
+              if (auto *Fn = dyn_cast<Function>(I.getOperand(i)))
+                ICallFuncs.insert(Fn);
+          }
+        }
 }
 
 void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {
   vector<PatternBase *> Patterns;
 
   initialize(Modules);
-  findNonHeapFunctionArguments(Modules, Patterns);
+  findSafeFunctionArguments(Modules, Patterns);
 
   printPatternOptFile(Filename, Patterns);
 }
