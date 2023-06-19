@@ -1,0 +1,122 @@
+[
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z5fevalP7state_tiP12t_eval_comps",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZL16fast_order_movesP7state_tPiS1_ij",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZL16fast_order_movesP7state_tPiS1_ij",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZL15remove_one_fastPiS_S_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZL15remove_one_fastPiS_S_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZL15remove_one_fastPiS_S_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZL11order_movesP7state_tPiS1_ij",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZL11order_movesP7state_tPiS1_ij",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z14setup_epd_lineP11gamestate_tP7state_tPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z13allocate_timeP11gamestate_ti",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z11comp_to_sanP7state_tiPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z13comp_to_coordP7state_tiPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z6rinputPciP8_IO_FILE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z12verify_coordP7state_tPcPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z12verify_coordP7state_tPcPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]

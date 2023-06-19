@@ -1,0 +1,9122 @@
+[
+  {
+    "pattern": {
+      "index": 2,
+      "name": "object_clear_transform_generic_exec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "object_clear_transform_generic_exec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "do_weight_paint_vertex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "shade_ray",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "shade_ray",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "refraction",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "refraction",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "refraction",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "QMC_samplePhong",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "traceray",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "traceray",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ray_fadeout_endcolor",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ray_fadeout_endcolor",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "IMB_indexer_open",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ccgSubSurf__effectedFaceNeighbours",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ccgSubSurf__effectedFaceNeighbours",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ccgSubSurf__effectedFaceNeighbours",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ccgSubSurf__effectedFaceNeighbours",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "paintcurve_point_add",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "paintcurve_point_select",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "render_result_new",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "RE_WriteRenderResult",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "RE_WriteRenderResult",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "render_result_exr_file_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "render_result_exr_file_read_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "render_result_exr_file_cache_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "write_jpeg",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNSt5dequeIP8VBVHNodeSaIS1_EED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNSt5queueIP8VBVHNodeSt5dequeIS1_SaIS1_EEED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNSt5dequeIP8VBVHNodeSaIS1_EEC2ERKS3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNSt5dequeIP8VBVHNodeSaIS1_EEC2ERKS3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZSt15__copy_move_ditILb0EP8VBVHNodeRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZSt15__copy_move_ditILb0EP8VBVHNodeRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZSt15__copy_move_ditILb0EP8VBVHNodeRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZSt15__copy_move_ditILb0EP8VBVHNodeRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNSt5dequeIP8VBVHNodeSaIS1_EE16_M_push_back_auxERKS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_read_file_from_memfile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "edbm_rip_edgedist_squared",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "edbm_rip_edgedist_squared",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "edbm_rip_edge_side_measure",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "edbm_rip_edge_side_measure",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "paint_draw_tex_overlay",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "paint_draw_cursor_overlay",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_rollBoneToVector",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "bones_merge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "animsys_evaluate_action",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "nlastrips_ctime_get_strip",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "nlastrip_evaluate",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "nladata_flush_channels",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "lamp_get_shadow",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "OrenNayar_Diff",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Toon_Diff",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Fresnel_Diff",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Phong_Spec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "CookTorr_Spec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Blinn_Spec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "WardIso_Spec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Toon_Spec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "do_specular_ramp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNSt6vectorIS_I20GHOST_DisplaySettingSaIS0_EESaIS2_EE9push_backERKS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNSt6vectorI20GHOST_DisplaySettingSaIS0_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS0_S2_EERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "project_image_refresh_tagged",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_paint_proj_mesh_data_check",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_paint_proj_mesh_data_check",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_paint_proj_mesh_data_check",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BKE_paint_proj_mesh_data_check",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "project_paint_bucket_bounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "project_paint_bucket_bounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "project_paint_face_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "project_paint_face_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "project_bucket_point_occluded",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "project_paint_uvpixel_mask",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "project_paint_uvpixel_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "project_paint_uvpixel_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "project_paint_uvpixel_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "project_paint_uvpixel_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "line_clip_rect2f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "line_clip_rect2f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "project_paint_occlude_ptv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "project_paint_PickColor",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "line_isect_x",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "key_block_get_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_key_evaluate_object_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "setkeys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "setkeys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "do_key",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "do_key",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BM_vert_tri_calc_plane",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "line_crosses_v2f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "line_crosses_v2f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "line_crosses_v2f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "line_crosses_v2f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bm_subdivide_multicut",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "bm_subdivide_edge_addvert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "linearrgb_to_srgb_v3_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "imapaint_tri_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_mesh_loops_to_mface_corners",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_mesh_loops_to_tessdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "png_set_sCAL_s",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "png_set_sCAL_s",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "draw_marker_areas",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "draw_marker_slide_zones",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "draw_marker_slide_square",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "track_colors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "track_colors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "draw_marker_slide_triangle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "get_collisionobjects",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "add_collision_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "add_collision_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "add_collision_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "collision_compute_barycentric",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "collision_compute_barycentric",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "collision_compute_barycentric",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZL14calc_ocval_rayP5OcValfffPfS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZL14calc_ocval_rayP5OcValfffPfS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZL14calc_ocval_rayP5OcValfffPfS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZL7ocwriteP6OctreeP7RayFaceisssPA3_f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZL5d2ddaP6OctreessssPcPA3_sPA3_f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZL5d2ddaP6OctreessssPcPA3_sPA3_f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZL12face_in_nodeP7RayFacesssPA3_f",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_draw_gradient",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ui_draw_link_bezier",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "uiWidgetScrollDraw",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "widgetbase_draw",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "draw_disk_shaded",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "draw_disk_shaded",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ui_text_clip_middle_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "round_box__edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "round_box_shadow_edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "round_box_shadow_edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bm_loop_path_build_step",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bm_loop_path_build_step",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BM_edgeloop_calc_center",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BM_edgeloop_calc_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BM_edgeloop_calc_normal_aligned",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "create_octree_node",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "create_octree_node",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "wmSubWindowScissorSet",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "verify_fcurve",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "insert_bezt_fcurve",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "insert_keyframe_direct",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "insert_keyframe",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "insert_keyframe",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "delete_keyframe",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "delete_keyframe",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "v3d_transform_butsR",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "rollBoneByQuatAligned",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "rollBoneByQuatAligned",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "renameTemplateBone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "shadeSkyView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "shadeSkyView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "shadeSkyView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "shadeSunView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "walk_ray_cast",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "walk_ray_cast",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "walk_ray_cast",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gzread",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_curve_boundbox_calc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_curve_boundbox_calc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_seq_color3ubv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "draw_shadedstrip",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "render_strand_segment",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "render_strand_segment",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "render_strand_segment",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "rna_Node_register_base",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gpu_stack_from_data_list",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "gpu_stack_from_data_list",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BLI_dir_create_recursive",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Mesh_tessface_uv_textures_begin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Mesh_tessface_vertex_colors_begin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rna_LoopCustomData_data_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rna_PolyCustomData_data_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "paint_2d_fill_add_pixel_byte",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "brush_painter_2d_tex_mapping",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "brush_painter_imbuf_partial_update",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "paint_2d_torus_split_region",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "IMB_colormanagement_colorspace_to_scene_linear_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "init_default_view_settings",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "colormanage_cache_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "colormanage_cache_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "create_display_buffer_processor",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "IMB_colormanagement_processor_apply_pixel",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "get_vert2geom_distance",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "dm_merge_transform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ED_object_modifier_add",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "object_modifier_remove",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ED_object_modifier_convert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_screens_header_tools_menu_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "nla_panel_context",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "nla_panel_context",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "nla_panel_context",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "image_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNSt6vectorI10STR_StringSaIS0_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS0_S2_EERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "nlaedit_disable_tweakmode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "md5_process_block",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_armature_bone_rename",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "constraint_bone_name_fix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "constraint_bone_name_fix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "global_bounds_obi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "global_bounds_obi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "intersect_outside_volume",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ED_view3d_autodist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "view3d_from_minmax",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "view3d_from_minmax",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "posttrans_action_clean",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "MaskPointToTransData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "MaskHandleToTransData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "MaskHandleToTransData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "SeqTransInfo",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "SeqTransInfo",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "SeqTransInfo",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "bezt_to_transdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "bezt_to_transdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "make_prim_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "make_prim_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "make_prim_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "make_prim_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "make_prim_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "make_prim_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "undo_stack_push_begin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "undo_stack_push_end",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "undo_stack_step",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "EDBM_select_mirrored",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "EDBM_select_mirrored",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "EDBM_vert_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "EDBM_edge_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "EDBM_face_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "unified_findnearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "unified_findnearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "unified_findnearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "unified_findnearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "walker_select_count",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "walker_select_count",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "GPU_verify_image",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "uvedit_get_aspect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "uvedit_get_aspect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "uv_map_transform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "uv_map_transform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "uiTemplateCurveMapping",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "uiTemplateCurveMapping",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "prepare_list",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "template_keymap_item_properties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "IMB_rectblend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "IMB_rectblend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "IMB_rectblend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "eyedropper_color_sample_fl",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "datadropper_id_sample_pt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "file_sfile_to_operator",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "file_select",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "unpackFile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "tselem_draw_icon_uibut",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "restrictbutton_recursive_child",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "console_textview_main__internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "console_textview_main__internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "console_textview_main__internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "draw_sphere_bone_dist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "draw_sphere_bone_dist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "draw_sphere_bone_wire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "draw_sphere_bone_wire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "draw_wire_bone_segments",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_new_constraint_target",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "get_new_constraint_target",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bm_face_split_find",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bm_face_split_find",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "draw_mesh_paint_weight_edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "draw_mesh_paint_weight_edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "set_draw_settings_cached",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "linearrgb_to_srgb_v3_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "borderselect_graphkeys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "borderselect_graphkeys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "borderselect_graphkeys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "select_moreless_graph_keys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "mouse_graph_keys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "nearest_fcurve_vert_store",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_mesh_boundbox_calc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_mesh_boundbox_calc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_mesh_texspace_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_mesh_texspace_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_mesh_texspace_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BKE_mesh_from_metaball",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_mesh_from_nurbs_displist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_mesh_to_curve_nurblist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "firstreadshadbuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "isb_bsp_fillfaces",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "isb_bsp_insert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "png_check_keyword",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "png_text_compress",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "png_write_compressed_data_out",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "create_frame",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "hull_merge_triangles",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "quad_from_tris",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "quad_from_tris",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "connect_frames",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "tan_calc_quat_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "WM_operatortype_append",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "WM_operator_properties_default",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "WM_operator_confirm_message",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "radial_control_get_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "radial_control_get_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "dynamicPaint_createType",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "dynamicPaint_updatePointData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "surface_determineForceTargetPoints",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "surface_determineForceTargetPoints",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "edgering_find_order",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "fsmenu_insert_entry",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_glewStrSame3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_glewStrSame3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_glewStrSame3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BM_face_interp_from_face_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BM_face_interp_from_face_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "BM_face_interp_from_face_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "BM_face_interp_from_face_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "update_data_blocks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "quad_coord",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "quad_coord",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "quad_coord",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "quad_coord",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BKE_deform_flip_side_name",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "RNA_define_free",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rna_validate_identifier",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RNA_def_property_int_sdna",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RNA_def_property_float_sdna",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RNA_def_property_pointer_sdna",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RNA_def_property_collection_sdna",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "RNA_def_property_collection_sdna",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "rna_find_sdna_member",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BM_face_create_ngon",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BM_face_create_ngon_verts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BM_mesh_copy_init_customdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "build_boundary",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "offset_in_plane",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "offset_meet",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "offset_on_edge_between",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "make_unit_square_map",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "offset_meet_edge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "offset_meet_edge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bevel_build_poly",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "adj_vmesh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BKE_mesh_edge_poly_map_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_mesh_edge_poly_map_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_mesh_edge_poly_map_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "texture_rgb_blend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "do_material_tex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "do_material_tex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "texco_mapping",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "texco_mapping",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "texco_mapping",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "do_volume_tex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "do_volume_tex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mg_mFractalOrfBmTex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mg_ridgedOrHybridMFTex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mg_HTerrainTex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "cubemap",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "cubemap",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "node_link_bezier_points",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "node_buts_image_user",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "node_buts_image_user",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ui_block_to_window_rctf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_is_but_push_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ui_but_event_operator_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ui_but_event_property_operator_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "free_hair",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "psys_interpolate_particle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "psys_interpolate_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "psys_map_index_on_dm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "psys_map_index_on_dm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "psys_cache_child_paths",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "psys_get_texture",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "init_particle_interpolation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "psys_mat_hair_to_global",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "do_particle_interpolation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "do_path_effectors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "do_path_effectors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "cache_key_incremental_rotation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "psys_new_settings",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "psys_new_settings",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "get_particle_uv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpolate_pathcache",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "get_child_modifier_parameters",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "get_child_modifier_parameters",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "do_child_modifiers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "do_child_modifiers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_strand_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ntreeCompositOutputFileAddSocket",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ShapeKey_data_begin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "EDBM_op_finish",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "EDBM_verts_mirror_cache_begin_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ed_editnurb_spin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ed_editnurb_spin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ed_editnurb_spin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "rotateflagNurb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "fcurve_path_rename",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "fcurve_path_rename",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "fcurve_path_rename",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "initialize_index_map",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "adduplicateflagNurb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "addvert_Nurb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "findselectedNurbvert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "findselectedNurbvert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "findselectedNurbvert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "console_draw_sel",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "console_draw_sel",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "console_draw_sel",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RE_AcquireResultImage",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "do_write_image_or_movie",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "DM_update_weight_mcol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "DM_update_weight_mcol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "get_orco_coords_dm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BLI_snprintf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_mask_point_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ED_mask_point_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ED_mask_point_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ED_mask_point_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "ED_mask_point_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_mask_feather_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ED_mask_feather_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ED_mask_feather_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ED_mask_feather_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "ED_mask_feather_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "ED_mask_feather_find_nearest",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "save_image_options_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "save_image_doit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "invert_m3_m3_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "svd_m4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "svd_m4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "svd_m4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "pseudoinverse_m4_m4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "pseudoinverse_m4_m4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "CDDM_from_curve_displist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "cddm_draw_attrib_vertex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "snapVertex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "snapVertex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "snapVertex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "snapEdge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "snapEdge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "snapEdge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "peelDerivedMesh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "peelDerivedMesh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "get_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ANIM_set_active_channel",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ANIM_deselect_anim_channels",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ANIM_flush_setting_anim_channels",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ANIM_fcurve_delete_from_animdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "setflag_anim_channels",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rearrange_action_channels",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rearrange_animchannel_islands",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "rearrange_animchannel_islands",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "barycentric_weights",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "resolve_quad_uv_v2_deriv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "form_factor_visible_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "form_factor_visible_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "form_factor_visible_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "form_factor_visible_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "form_factor_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "form_factor_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "form_factor_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "form_factor_quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "add_particles_to_effectors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "effector_falloff",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "effector_falloff",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "closest_point_on_surface",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_effector_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BM_face_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_constraints_id_loop",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_constraints_id_loop",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_constraint_targets_for_solving_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "configure_and_run_tracker",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "configure_and_run_tracker",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "tracking_context_get_reference_ibuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "track_get_search_floatbuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "track_get_search_floatbuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "add_2nd_order_roller",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "softbody_apply_forces",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sb_deflect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "sb_deflect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "sb_deflect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "sb_deflect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "sb_deflect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "sb_detect_face_collisionCached",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "sb_detect_face_collisionCached",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "sb_detect_face_pointCached",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "sb_detect_face_pointCached",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "deselect_nla_strips",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "do_multires_bake",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "do_multires_bake",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "do_multires_bake",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "do_multires_bake",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "multiresbake_get_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "get_ccgdm_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "get_ccgdm_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ed_preview_draw_rect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNSt8_Rb_treeIN9RangeTreeIjE5RangeES2_St9_IdentityIS2_ESt4lessIS2_ESaIS2_EE16_M_insert_uniqueERKS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "WM_file_read",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "wm_window_match_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "wm_window_match_do",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "wm_homefile_read",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BM_face_exists_multi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bm_mesh_calc_volume_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_Panel_unregister",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_Header_unregister",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ED_view3d_draw_offscreen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ED_view3d_draw_offscreen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "view3d_draw_objects",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_view3d_draw_offscreen_imbuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_view3d_draw_offscreen_imbuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_scene_draw_fps",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ED_view3d_calc_render_border",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "gpu_render_lamp_update",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ccgdm_draw_attrib_vertex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "BKE_bmbvh_new_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "summary_to_keylist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "summary_to_keylist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "draw_keylist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "draw_keylist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ob_to_keylist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ob_to_keylist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "id_copy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "idp_resize_group_array",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "edgetag_set_cb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "modifiers_getVirtualModifierList",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "nlaedit_add_tracks_existing",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "colamd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "init_scoring",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "init_scoring",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "init_scoring",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "print_report",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "WM_keymap_add_item",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "WM_keymap_find_all",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "view3d_cached_text_draw_end",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "drawObjectSelect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "draw_mesh_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "draw_editfont",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "draw_editnurb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "drawmball",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "draw_empty_image",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "drawlamp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "drawcamera",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ob_draw_RE_motion",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ob_wire_color_blend_theme_id",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "drawspiral",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "drawspiral",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "drawtube",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "drawtube",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "drawcone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "drawcone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "draw_particle_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "draw_particle_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "draw_particle_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNSt5dequeIP12GHOST_IEventSaIS1_EE17_M_push_front_auxERKS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNSt5dequeIP12GHOST_IEventSaIS1_EE8_M_eraseESt15_Deque_iteratorIS1_RS1_PS1_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNSt5dequeIP12GHOST_IEventSaIS1_EE8_M_eraseESt15_Deque_iteratorIS1_RS1_PS1_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZSt24__copy_move_backward_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZSt24__copy_move_backward_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZSt24__copy_move_backward_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZSt24__copy_move_backward_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZSt15__copy_move_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZSt15__copy_move_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZSt15__copy_move_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZSt15__copy_move_ditILb0EP12GHOST_IEventRS1_PS1_St15_Deque_iteratorIS1_S2_S3_EET3_S4_IT0_T1_T2_ESA_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ruler_item_as_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "view3d_ruler_pick",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "view3d_ruler_pick",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "view3d_ruler_pick",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "vol_get_density",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "vol_get_scattering",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "vol_get_scattering",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "vol_get_bounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "vol_get_bounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "vol_get_transmittance",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "vol_trace_behind",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "volumeintegrate",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "texfn",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "angle_normalized_v3v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "angle_normalized_v3v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "angle_v3v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "angle_v3v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "calc_point_from_barycentric_extrusion",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "calc_point_from_barycentric_extrusion",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "calc_point_from_barycentric_extrusion",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "mixed_bones_object_selectbuffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mixed_bones_object_selectbuffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "mixed_bones_object_selectbuffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "mouse_select_eval_buffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mouse_select_eval_buffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "object_mouse_select_menu",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "object_mouse_select_menu",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "object_mouse_select_menu",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "isect_segments_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "isect_segments_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "isect_segments_fl",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "isect_segments_fl",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_object_add_only_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_object_rot_to_mat3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_object_mat3_to_rot",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "solve_parenting",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ob_get_parent_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_object_handle_update_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "give_parvert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "node_add_node",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_lattice_resize",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "calc_curve_deform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "calc_curve_deform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "quad_verts_to_barycentric_tri",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_object_new_primitive_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ED_object_new_primitive_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ED_object_new_primitive_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ED_object_add_generic_get_opts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ED_object_add_generic_get_opts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ED_object_add_generic_get_opts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ED_object_add_generic_get_opts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "ED_object_add_generic_get_opts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_object_add_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ED_object_add_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "psys_count_keyed_targets",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "psys_sph_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "sph_evaluate_func",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "system_step",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sph_particle_courant",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "collision_newton_rhapson",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "collision_newton_rhapson",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "sph_integrate",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "integrate_particle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "collision_point_distance_with_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "collision_point_distance_with_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "collision_point_distance_with_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "build_pict_list",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "playanim_window_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "playanim_window_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BLI_ghash_clear_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_movieclip_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_movieclip_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_gpencil_data_get_pointers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "gp_strokepoint_convertcoords",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gp_stroke_to_path_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "gp_stroke_to_path_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "gp_stroke_to_path_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gp_stroke_to_bezier_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "gp_stroke_to_bezier_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "gp_stroke_to_bezier_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "gp_stroke_to_bezier_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 11,
+      "name": "gp_stroke_to_bezier_add_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BKE_ptcache_make_particle_key",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BKE_ptcache_ids_from_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ptcache_filename",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_ptcache_id_time",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_ptcache_id_time",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_ptcache_id_time",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BKE_ptcache_id_time",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_ptcache_id_reset",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BKE_ptcache_bake",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_selected_and_linked_obs",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "draw_brick_actuator",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "MEM_lockfree_mapallocN",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "MEM_lockfree_mallocN_aligned",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "print_error",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "image_undo_push_tile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "image_undo_push_tile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "image_undo_push_tile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "UI_view2d_smooth_view",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BMO_push",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BMO_op_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BMO_op_finish",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BMO_slot_mat_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BMO_slot_buffer_from_all",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BMO_op_vinitf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BM_face_split",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BM_face_split",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BM_edge_split",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bm_face_split_edgenet_find_loop_pair",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bm_face_split_edgenet_find_loop_walk",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bm_face_split_edgenet_find_loop_walk",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "uiStyleFontDrawExt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "uiStyleFontDrawExt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "edit_sensor_property_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "edit_controller_property_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "edit_actuator_property_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sample_occ_tree",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "occ_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "occ_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "occ_build_split",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "occ_lookup",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "uiItemsFullEnumO",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "ui_item_rna_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "ui_item_rna_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ui_but_add_search",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ui_but_add_search",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_TextureSlot_update",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rna_TextureSlot_update",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "gp_draw_strokes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "createSpaceNormal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "createSpaceNormalTangent",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "createSpaceNormalTangent",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "addMatrixSpace",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "getTransformOrientation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "getTransformOrientation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bm_mesh_verts_select_get_n",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bm_mesh_edges_select_get_n",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "GPU_texture_create_3D",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "GPU_shader_uniform_vector",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "GPU_shader_uniform_vector",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "GPU_shader_uniform_texture",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "GPU_shader_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "GPU_shader_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "GPU_shader_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "GPU_shader_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "shader_print_errors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "shader_print_errors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_ColorRamp_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "png_create_read_struct_2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "png_create_read_struct_2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "png_create_read_struct_2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_shrinkwrap_project_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_shrinkwrap_project_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_shrinkwrap_project_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BKE_shrinkwrap_project_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "BKE_shrinkwrap_project_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "txt_add_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "check_zone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "testAxialSymmetry",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "testRadialSymmetry",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "calc_weight",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 14,
+      "name": "BKE_mesh_validate_arrays",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "BKE_mesh_validate_all_customdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "mesh_validate_customdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ANIM_remove_driver",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "edbm_extrude_edge_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "dag_current_scene_layers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "png_decompress_chunk",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_vfont_load",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_vfont_to_curve_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BKE_vfont_to_curve_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "BKE_vfont_to_curve_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "BKE_vfont_to_curve_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "voronoi_addTriangulationPoint",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "voronoi_addTriangulationPoint",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "voronoi_checkCircle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "animdata_filter_ds_nodetree_group",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "animdata_filter_ds_material",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "state_step__face_edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "state_step__face_edges",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "state_step__face_verts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "state_step__face_verts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "boxsampleclip",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ibuf_get_color_clip_bilerp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "add_passes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "add_passes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "shade_sample_sss",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "uvedit_center",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "boid_find_ground",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "boid_find_ground",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "boid_climb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "boid_climb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "stampdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "openanim",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "image_get_cached_ibuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "image_get_cached_ibuf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_image_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_image_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bm_edgenet_path_calc_best",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bm_edgenet_path_calc_best",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bm_edgenet_path_calc_best",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "bm_edgenet_path_calc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "paint_stroke_line_end",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "paint_line_strokes_spacing",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "paint_line_strokes_spacing",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "paint_line_strokes_spacing",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "long_edge_queue_face_add",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_tracking_stabilization_data_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BKE_tracking_stabilization_data_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "BKE_tracking_stabilization_data_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "stabilization_calculate_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "stabilization_calculate_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_tracking_stabilization_data_to_mat4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "BKE_tracking_stabilization_data_to_mat4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "view3d_winmatrix_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "env_rotate_scene",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "envcube_isect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "envcube_isect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_maskrasterize_handle_sample",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "mask_draw_curve_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "draw_single_handle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "draw_single_handle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_get_fcurve_context_ui",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "findzero",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_pbvh_search_gather",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_pbvh_search_gather",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_pbvh_search_gather",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "pbvh_iter_next",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "pbvh_vertex_iter_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "build_sub",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "CustomData_bmesh_copy_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "CustomData_bmesh_copy_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_material_append_id",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "imb_handle_alpha",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "IMB_loadifffile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ed_view3d_project__internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_view3d_win_to_3d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "blo_reportf_wrap",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "blo_read_file_internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "read_libblock",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "read_data_into_oldnewmap",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_bone_from_selectbuffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_mesh_uv_texture_add",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_mesh_color_add",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_mask_point_segment_co",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BKE_mask_point_normal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_mask_point_parent_matrix_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bm_uuidwalk_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bm_uuidwalk_free",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bm_uuidwalk_init_from_edge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bm_uuidwalk_facestep_begin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bm_uuidwalk_rehash",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "rna_ParticleSystem_tessfaceidx_on_emitter",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ctx_data_get",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "GPU_shadeinput_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "GPU_shaderesult_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "GPU_shaderesult_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ui_popup_block_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_update_block_buts_rgb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BLI_scanfill_calc_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "unit_scale_str",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "init_metaball_octal_tree",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "testface",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "testface",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "add_cube",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "zbufclipwire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "zbufclipwire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "zbufclipwire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "zbufclipwire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "zbufclipwire",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "clipline",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "clipline",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "clippyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "clippyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "clippyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "makevertpyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "makevertpyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "makevertpyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "makevertpyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "makevertpyra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "zbufclip4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "zbufclip4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "zbufclip4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "zbufclip4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "zbufclip4",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "zbuf_part_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "zbuf_part_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "zbuf_part_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "zbuf_part_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "zbuf_shadow_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "zbuf_shadow_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "zbuf_shadow_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "add_transp_speed",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "shade_tra_samples",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "shade_tra_samples",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "addtosamp_shr",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "addtosamp_shr",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "add_transp_passes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "copy_dupli_context",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "copy_dupli_context",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "make_child_duplis",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "make_child_duplis",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "blf_draw__start",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "blf_draw__start",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "stats_object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_mesh_mirror_spatial_table",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_tracking_object_add",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_tracking_marker_insert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_tracking_plane_marker_insert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "BKE_tracking_sample_pattern",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "nodeToView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "nodeToView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_node_instance_hash_remove_untagged",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "wm_get_cursor_position",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "wm_get_cursor_position",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_space_image_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_space_image_get_size",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "grid_tangent_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "grid_tangent_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "multires_apply_smat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "tracking_marker_check_slide",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "tracking_marker_check_slide",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "tracking_marker_check_slide",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "mouse_on_slide_zone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "mouse_on_slide_zone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "track_init_markers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "solve_camera_initjob",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "object_solver_inverted_matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_clip_point_undistorted_pos",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "seq_effect_find_selected",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "seq_effect_find_selected",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "seq_effect_find_selected",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "seq_effect_find_selected",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rgb_float_set_hue_float_offset",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bm_isect_edge_tri",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bm_isect_edge_tri",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "bm_isect_edge_tri",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "bm_isect_edge_tri",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "bm_isect_edge_tri",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "for_mouse_hit_keys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "key_test_depth",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "PE_undo_push",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "PE_minmax",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "PE_minmax",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "select_root",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "select_tip",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "brush_edit_apply",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "foreach_mouse_hit_key",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "foreach_mouse_hit_key",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "brush_cut",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "foreach_mouse_hit_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "foreach_mouse_hit_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BLI_stringdec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BLI_stringdec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "BLI_stringdec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BLI_uniquename_cb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BLI_uniquename_cb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "get_path_user",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "get_path_system",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_path_system",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BLI_make_file_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BLI_make_file_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "BLI_where_is_temp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BLI_where_is_temp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "test_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sculpt_raycast_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sculpt_raycast_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "sculpt_raycast_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "sculpt_raycast_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sculpt_dynamic_topology_disable",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "do_symmetrical_brush_actions",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "calc_sculpt_plane",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "calc_sculpt_plane",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sculpt_flush_pbvhvert_deform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sample_detail",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "projectFloatView",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "applyAspectRatio",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "headerResize",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "headerResize",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ElementResize",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ElementRotation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "headerTranslation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "set_brush_rc_props",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "set_brush_rc_props",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ed_keymap_paint_brush_radial_control",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_displist_fill",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "curve_calc_modifiers_pre",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "rotateBevelPiece",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gimbal_axis",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "draw_manipulator_axes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "print_error",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "evaluate_seq_frame_gen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "seq_proxy_build_frame",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "seq_proxy_get_fname",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "bake_shade",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "bake_shade",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bake_set_vlr_dxyco",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bake_set_vlr_dxyco",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bake_set_vlr_dxyco",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "WM_event_add_notifier",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "wm_event_add_mousemove",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "wm_event_cursor_other_windows",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "wm_eventemulation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "png_format_buffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "partialvis_update_bmesh_verts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "partialvis_update_bmesh_verts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "partialvis_update_bmesh_verts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "noise3_perlin",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "render_view3d_disprect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "screen_render_scene_layer_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "screen_render_scene_layer_set",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "render_update_resolution",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "get_graph_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_graph_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_graph_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "get_graph_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "get_graph_keyframe_extents",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "gp_point_to_xy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "gp_point_to_xy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "blf_font_boundbox",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "tri_to_quat_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "tri_to_quat_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "quat_to_eulO",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "eulO_to_quat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "axis_angle_to_mat3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mat3_to_eul2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "mat3_to_eul2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "compatible_eul",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "eulO_to_mat3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mat3_to_eulo2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "mat3_to_eulo2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "mat3_to_compatible_eulO",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ED_mask_find_nearest_diff_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "ED_mask_find_nearest_diff_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "ED_mask_find_nearest_diff_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "ED_mask_find_nearest_diff_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 11,
+      "name": "ED_mask_find_nearest_diff_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 12,
+      "name": "ED_mask_find_nearest_diff_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "add_vertex_subdivide",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "create_primitive_from_points",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "wrap_offset",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "wrap_offset",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "wrap_offset_in_line",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "wrap_offset_in_line",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "deselect_action_keys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "select_moreless_action_keys",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "calcArcCorrelation",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "load_image_file",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "init_targa",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "computeSSIM",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "view2d_map_cur_using_mask",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "UI_view2d_view_to_region_rcti_clip",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "region_rect_recursive",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_region_visible_rect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_vgroup_parray_alloc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_vgroup_parray_alloc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ED_object_vgroup_selection_itemf_helper",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_object_vgroup_selection_itemf_helper",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ED_vgroup_subset_from_select_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ED_vgroup_subset_from_select_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ED_vgroup_mirror",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ED_vgroup_mirror",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "object_hook_index_array",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "object_hook_index_array",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "object_hook_index_array",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "object_hook_index_array",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_pan_to_scroll",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ui_pan_to_scroll",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ui_button_text_password_hide",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "srgb_to_linearrgb_v3_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "srgb_to_linearrgb_v3_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "linearrgb_to_srgb_v3_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "linearrgb_to_srgb_v3_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_rgb_to_color_picker_HSVCUBE_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ui_rgb_to_color_picker_HSVCUBE_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_rgb_to_color_picker_HSVCUBE_compat_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ui_color_picker_to_rgb_HSVCUBE_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ui_color_picker_to_rgb_HSVCUBE_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "emdm_pass_attrib_vertex_glsl",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "bm_edgering_pair_ringsubd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bm_edgering_pair_subdiv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "bezier_handle_calc_length_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "bezier_handle_calc_length_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bezier_handle_calc_length_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bezier_handle_calc_length_v3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "b_bone_spline_setup",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "dist_bone_deform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "dist_bone_deform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "dist_bone_deform",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "BKE_pchan_to_pose_mat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "BKE_pchan_to_pose_mat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "vec_roll_to_mat3_normalized",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_dm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "polyfill_prepare",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "polyfill_calc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "png_create_write_struct_2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "png_create_write_struct_2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "png_create_write_struct_2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "setLocalConstraint",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "axisProjection",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "BKE_camera_view_frame_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "BKE_camera_view_frame_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "BKE_camera_view_frame_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "BKE_camera_view_frame_ex",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_idproperty_check",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "RNA_property_collection_lookup_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "RNA_property_collection_end",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "RNA_property_int_range",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "RNA_property_int_range",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "RNA_property_float_range",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "RNA_property_float_range",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "RNA_property_enum_value",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "RNA_property_enum_value",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "RNA_property_enum_identifier",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "RNA_property_collection_lookup_int",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "RNA_property_collection_raw_array",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_path_token",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rna_path_token",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "RNA_parameter_list_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RNA_parameter_list_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_function_parameter_parse",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_idp_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "rna_idp_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rna_idp_path_create",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "set_pointer_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_pointer_type",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "speedvector_project",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "copy_dbase_object_vectors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "get_particle_uvco_mcol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "particle_curve",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "particle_curve",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "particle_normal_ren",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "particle_normal_ren",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "particle_normal_ren",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 11,
+      "name": "particle_normal_ren",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "init_render_dm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "dl_surf_to_renderdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "displace_render_vert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "displace_render_vert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "run_configured_detector",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sequencer_generic_invoke_path__internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sequencer_add_generic_strip_exec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "seq_load_operator_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "knife_find_closest_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "knife_find_closest_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "point_is_visible",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "point_is_visible",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "knife_ray_intersect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "knife_ray_intersect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "knife_ray_intersect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "knife_ray_intersect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "knife_ray_intersect_face",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "knife_split_edge",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "knife_make_chain_cut",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "edvm_mesh_knife_face_point",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "pose_clear_transform_generic_exec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "pose_clear_transform_generic_exec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "write_file_handle",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "write_customdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "write_customdata",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "tree_element_to_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "tree_element_to_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "tree_element_to_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "tree_element_to_path",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ED_uvedit_minmax",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ED_uvedit_minmax",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "uv_find_nearest_vert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "uv_find_nearest_vert",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "uv_mouse_select",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "uv_select_linked",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "uv_select_linked",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "uv_select_edgeloop_edge_tag_faces",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]

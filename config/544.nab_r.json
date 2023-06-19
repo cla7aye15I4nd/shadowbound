@@ -1,0 +1,226 @@
+[
+  {
+    "pattern": {
+      "index": 1,
+      "name": "vPDictDelete",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ReportError",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ePrepareDatabaseForEntry",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ConstructDataHeader",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ConstructDataHeader",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "StripInteger",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "StripDouble",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sStripString",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "AddColumnType",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ConcatString",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "DBClose",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "pfind",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "is_pattern",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "is_pattern",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "torsionp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "torsionp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "torsionp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "torsionp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "trans4p",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "trans4p",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "rot4p",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rot4p",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "egb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "egb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "egb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 11,
+      "name": "egb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "nbond",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "nbond",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]

@@ -1,0 +1,530 @@
+[
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ercPixConcealIMB",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ercCollect8PredBlocks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "getIntArray",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "get_mem2Ddouble",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_neighbors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readMBMotionVectors",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "read_delta_quant",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "read_delta_quant",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "readCompCoeff8x8MB_CABAC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "readCompCoeff4x4MB_CABAC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "readCoeff4x4_CAVLC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "readCoeff4x4_CAVLC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "readCoeff4x4_CAVLC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Help",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "quant_trellis_cabac",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "quant_trellis_cabac",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_intra",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_intra_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_intra_rd_refine",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_init_qp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_p8x8_mixed_ref",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_p8x8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_p16x8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_p8x16",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_transform_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "x264_mb_analyse_transform_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "x264_mb_analyse_transform_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_b_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_b8x8_mixed_ref",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_b8x8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_b16x8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_b8x16",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_refine_bidir",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "scenecut",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "scenecut",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_cabac_mb_ref",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_cabac_mb8x8_mvd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "block_residual_write_cabac_internal",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_mb_analyse_inter_p4x4_chroma",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "x264_slicetype_mb_cost",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_macroblock_tree_propagate",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "LowPassForIntra8x8Pred",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_pan_scan_rect_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_subsequence_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_subsequence_layer_characteristics_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_subsequence_characteristics_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_motion_constrained_slice_group_set_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_film_grain_characteristics_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_stereo_video_info_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_post_filter_hints_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "interpret_frame_packing_arrangement_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_strcat_filename",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "find_underflow",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "find_underflow",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "x264_cqm_parse_jmlist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "x264_cqm_parse_jmlist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "x264_log",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "x264_log",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_atobool",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "parse_enum",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "load_image_file",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "init_targa",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "computeSSIM",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "LowPassForIntra8x8Pred",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "concealByTrial",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "buildPredRegionYUV",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]

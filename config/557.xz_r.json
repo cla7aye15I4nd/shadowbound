@@ -1,0 +1,98 @@
+[
+  {
+    "pattern": {
+      "index": 0,
+      "name": "my_snprintf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "my_snprintf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "my_snprintf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "parse_options",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "parse_options",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "parse_details",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "parse_details",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "parse_details",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "message_filters_to_str",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "init_encoder",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "init_encoder",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "fd_grow",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]
