@@ -1287,8 +1287,8 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
   Type *ty = dyn_cast<PointerType>(Src->getType())->getPointerElementType();
 
   if (isFixedSizeType(ty)) {
-    unsigned size = getFixedSize(ty, DL);
-    unsigned maxOffset =
+    unsigned long long size = getFixedSize(ty, DL);
+    unsigned long long maxOffset =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
 
     Value *V = I;
