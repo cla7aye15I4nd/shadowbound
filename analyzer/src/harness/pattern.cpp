@@ -48,24 +48,27 @@ static bool isHeapAddress(Value *V) {
   return false;
 }
 
-static bool alwaysNonHeap(Function &F, unsigned int ArgNo,
-                          vector<Module *> &Modules) {
+static bool isSafeConstArray(Function &F, Value *V) {
+  while (auto *BC = dyn_cast<BitCastInst>(V))
+    V = BC->getOperand(0);
+
+  // TODO: check if it is a constant array
+  return false;
+}
+
+static bool alwaysSafe(Function &F, unsigned int ArgNo,
+                       vector<Module *> &Modules) {
 
   for (auto *CI : CallSites[&F]) {
     Value *Arg = CI->getArgOperand(ArgNo);
-    if (isHeapAddress(Arg))
+    if (isHeapAddress(Arg)) {
+      if (isSafeConstArray(F, Arg))
+        continue;
       return false;
+    }
   }
 
   return true;
-}
-
-static bool alwaysSafeArray(Function &F, unsigned int ArgNo,
-                            vector<Module *> &Modules) {
-  for (auto *CI : CallSites[&F]) {
-  }
-
-  return false;
 }
 
 static void findSafeFunctionArguments(vector<Module *> Modules,
@@ -78,10 +81,7 @@ static void findSafeFunctionArguments(vector<Module *> Modules,
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
         if (F.getArg(i)->getType()->isPointerTy()) {
-          if (alwaysNonHeap(F, i, Modules))
-            Patterns.push_back(
-                new ValuePattern(new FunArgIdent(F.getName().str(), i)));
-          else if (alwaysSafeArray(F, i, Modules))
+          if (alwaysSafe(F, i, Modules))
             Patterns.push_back(
                 new ValuePattern(new FunArgIdent(F.getName().str(), i)));
         }
