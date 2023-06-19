@@ -14,6 +14,8 @@
 using namespace std;
 using namespace llvm;
 
+static DenseMap<Function *, vector<CallBase *>> CallSites;
+
 static bool isHeapAddress(Value *V) {
   set<Value *> Visited;
   vector<Value *> Worklist;
@@ -46,8 +48,7 @@ static bool isHeapAddress(Value *V) {
 }
 
 static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
-                          vector<Module *> &Modules,
-                          DenseMap<Function *, vector<CallBase *>> &CallSites) {
+                          vector<Module *> &Modules) {
 
   for (auto *CI : CallSites[&FO]) {
     Value *Arg = CI->getArgOperand(ArgNo);
@@ -60,7 +61,6 @@ static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
 
 static void findNonHeapFunctionArguments(vector<Module *> Modules,
                                          vector<PatternBase *> &Patterns) {
-  DenseMap<Function *, vector<CallBase *>> CallSites;
   SmallPtrSet<Function *, 16> ICallFuncs;
 
   for (auto *M : Modules)
@@ -68,8 +68,6 @@ static void findNonHeapFunctionArguments(vector<Module *> Modules,
       for (auto &BB : F)
         for (auto &I : BB) {
           if (auto *CI = dyn_cast<CallBase>(&I)) {
-            if (CI->getCalledFunction() != nullptr)
-              CallSites[CI->getCalledFunction()].push_back(CI);
             for (unsigned int i = 0; i < CI->arg_size(); i++)
               if (auto *Fn = dyn_cast<Function>(CI->getArgOperand(i)))
                 ICallFuncs.insert(Fn);
@@ -82,13 +80,13 @@ static void findNonHeapFunctionArguments(vector<Module *> Modules,
 
   for (auto *M : Modules) {
     for (auto &F : *M) {
-      if (F.isDeclaration() || ICallFuncs.count(&F) || 
+      if (F.isDeclaration() || ICallFuncs.count(&F) ||
           /* it is possibile because of inline */
           CallSites.count(&F) == 0)
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
         if (F.getArg(i)->getType()->isPointerTy() &&
-            alwaysNonHeap(F, i, Modules, CallSites)) {
+            alwaysNonHeap(F, i, Modules)) {
           Patterns.push_back(
               new ValuePattern(new FunArgIdent(F.getName().str(), i)));
         }
@@ -97,10 +95,8 @@ static void findNonHeapFunctionArguments(vector<Module *> Modules,
   }
 }
 
-void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {
-  vector<PatternBase *> Patterns;
-  findNonHeapFunctionArguments(Modules, Patterns);
-
+static void printPatternOptFile(string Filename,
+                                vector<PatternBase *> &Patterns) {
   json::Array JSONPatterns;
   for (auto *P : Patterns)
     JSONPatterns.push_back(P->toJSON());
@@ -114,4 +110,23 @@ void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {
 
   OS << json::Value(std::move(JSONPatterns));
   OS.close();
+}
+
+static void initialize(vector<Module *> &Modules) {
+  for (auto *M : Modules)
+    for (auto &F : *M)
+      for (auto &BB : F)
+        for (auto &I : BB)
+          if (auto *CI = dyn_cast<CallBase>(&I))
+            if (CI->getCalledFunction() != nullptr)
+              CallSites[CI->getCalledFunction()].push_back(CI);
+}
+
+void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {
+  vector<PatternBase *> Patterns;
+
+  initialize(Modules);
+  findNonHeapFunctionArguments(Modules, Patterns);
+
+  printPatternOptFile(Filename, Patterns);
 }
