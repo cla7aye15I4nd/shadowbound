@@ -1,0 +1,1330 @@
+[
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL3mapEPdPNS_14Pattern_StructES0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL3mapEPdPNS_14Pattern_StructES0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL15image_colour_atEPNS_12Image_StructEddPfPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN3povL12sample_mediaEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEidPfS9_iS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "_ZN3povL12sample_mediaEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEidPfS9_iS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "_ZN3povL16sample_media_recEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEiddPfS9_S9_S9_S9_S9_iddS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 11,
+      "name": "_ZN3povL16sample_media_recEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEiddPfS9_S9_S9_S9_S9_iddS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov12BuildCommandEP9POVMSDatajPNS_9shelldataE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov15BuildRenderTimeEP9POVMSDatajiiii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov18BuildRenderOptionsEP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov21BuildRenderStatisticsEP9POVMSDataPx",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov14AddOIStatisticEP9POVMSDataiPx",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov13BuildProgressEP9POVMSDatai",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov19Test_Thick_CylinderEPdS0_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov19Test_Thick_CylinderEPdS0_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov16SetCommandOptionEP9POVMSDatajPNS_9shelldataE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12IntersectionEPNS_10istk_entryEPNS_13Object_StructEPNS_10Ray_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL16setGatherOptionsEPNS_17photon_map_structEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL14AllocatePhotonEPNS_17photon_map_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base16TextStreamBuffer6printfEPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL21project_bounding_slabEPNS_14Project_StructEPPNS_24Project_Tree_Node_StructEPNS_16BBox_Tree_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL12project_bboxEPNS_14Project_StructEPA3_dPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL12project_bboxEPNS_14Project_StructEPA3_dPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL21project_raw_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3povL21project_raw_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN12POVMS_ObjectclEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov13Intersect_BoxEPNS_10Ray_StructEPNS_16Transform_StructEPdS4_S4_S4_PiS5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov13Intersect_BoxEPNS_10Ray_StructEPNS_16Transform_StructEPdS4_S4_S4_PiS5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN3pov13Intersect_BoxEPNS_10Ray_StructEPNS_16Transform_StructEPdS4_S4_S4_PiS5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN3pov13Intersect_BoxEPNS_10Ray_StructEPNS_16Transform_StructEPdS4_S4_S4_PiS5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL23intersect_mesh_triangleEPNS_10Ray_StructEPNS_11Mesh_StructEPNS_20Mesh_Triangle_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL23intersect_mesh_triangleEPNS_10Ray_StructEPNS_11Mesh_StructEPNS_20Mesh_Triangle_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov31Compute_Axis_Rotation_TransformEPNS_16Transform_StructEPdd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov31Compute_Axis_Rotation_TransformEPNS_16Transform_StructEPdd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov11trace_pixelEiiPfS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "_ZN3povL15trace_sub_pixelEiPPNS_12Pixel_StructEiiiiiiiPfi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov5TraceEPNS_10Ray_StructEPfd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov30initialize_ray_container_stateEPNS_10Ray_StructEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL21trace_ray_with_offsetEiiddPf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov29Evaluate_Function_Interval_UVEjdPdS0_dRdS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov29Evaluate_Function_Interval_UVEjdPdS0_dRdS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL10insert_hitEPNS_19Blob_Element_StructEddPNS_20Blob_Interval_StructEPj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL23calculate_element_fieldEPNS_19Blob_Element_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL14element_normalEPdS0_PNS_19Blob_Element_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8pov_base14ProcessOptions23Parse_INI_SpecificationEPKcRPcS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8pov_base14ProcessOptions23Parse_INI_SpecificationEPKcRPcS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN8pov_base14ProcessOptions23Parse_INI_SpecificationEPKcRPcS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8pov_base14ProcessOptions20Parse_INI_Skip_SpaceEPNS_11ITextStreamEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8pov_base14ProcessOptions19Parse_INI_Skip_LineEPNS_11ITextStreamE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base14ProcessOptions15Parse_CL_SwitchERPKciP9POVMSDatab",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base14ProcessOptions15Parse_CL_OptionERPKcP9POVMSDatab",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov15Build_BBox_TreeEPPNS_16BBox_Tree_StructElRS2_lS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov17Check_And_EnqueueEPNS_21Priority_Queue_StructEPNS_16BBox_Tree_StructEPNS_19Bounding_Box_StructEPNS_14Rayinfo_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov20Convert_UTF8_To_UCS2EPhiPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL14do_texture_mapEPfPNS_14Texture_StructEPdS3_PNS_10Ray_StructEdPNS_10istk_entryEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov10do_diffuseEPNS_13Finish_StructEPNS_10Ray_StructEPdPfS5_S5_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov10do_diffuseEPNS_13Finish_StructEPNS_10Ray_StructEPdPfS5_S5_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov8do_phongEPNS_13Finish_StructEPNS_10Ray_StructEPdS4_PfS5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov8do_phongEPNS_13Finish_StructEPNS_10Ray_StructEPdS4_PfS5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov11do_specularEPNS_13Finish_StructEPNS_10Ray_StructEPdS4_PfS5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov11do_specularEPNS_13Finish_StructEPNS_10Ray_StructEPdS4_PfS5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL7ReflectEPdPNS_10Ray_StructES0_S0_Pfd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL7do_iridEPNS_13Finish_StructEPNS_10Ray_StructEPdS4_Pf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL11do_blockingEPNS_10istk_entryEPNS_10Ray_StructEPfPNS_13istack_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL21project_bounding_slabEiPdPNS_14Project_StructEPPNS_24Project_Tree_Node_StructEPNS_16BBox_Tree_StructEiS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov21Compute_Plane_Min_MaxEPNS_12Plane_StructEPdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov21Compute_Plane_Min_MaxEPNS_12Plane_StructEPdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN12pov_frontend21DefaultRenderFrontend12BannerPrintfEPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov15Compute_PigmentEPfPNS_14Pigment_StructEPdPNS_10istk_entryE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov7WarningEjPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov5ErrorEPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL10solve_hit1EPNS_21Superellipsoid_StructEdPddS2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL10solve_hit1EPNS_21Superellipsoid_StructEdPddS2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3povL10solve_hit1EPNS_21Superellipsoid_StructEdPddS2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z30POVMS_Sys_QueueReceive_DefaultP27POVMS_Sys_QueueNode_DefaultPib",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z25POVMSMsg_GetSourceAddressP9POVMSDataPPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z25POVMSMsg_GetSourceAddressP9POVMSDataPPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z30POVMSMsg_SetDestinationAddressP9POVMSDataPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z30POVMSMsg_GetDestinationAddressP9POVMSDataPPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z30POVMSMsg_GetDestinationAddressP9POVMSDataPPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z25POVMSMsg_SetSourceAddressP9POVMSDataPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z13POVMS_ReceivePvP9POVMSDataS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z13POVMS_ReceivePvP9POVMSDataS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z10POVMS_SendPvP9POVMSDataS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z10POVMS_SendPvP9POVMSDataS1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z15POVMSObject_SetP9POVMSDataS0_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL19ExtractGlyphOutlineEPNS_18FontFileInfoStructEPjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov30Intersect_Sphere_Sweep_SegmentEPNS_10Ray_StructEPNS_27Sphere_Sweep_Segment_StructEPNS_35Sphere_Sweep_Intersection_StructureE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov14Perturb_NormalEPdPNS_14Tnormal_StructES0_PNS_10istk_entryE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov18Parse_Float_Param2EPdS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov18Parse_Float_Param2EPdS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL14Parse_Rel_TermEPdPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL11Parse_TraceEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN12pov_frontend20ProcessRenderOptions17OpenINIFileStreamEPKcjPcP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "load_image_file",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "init_targa",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "computeSSIM",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov19Found_Instead_ErrorEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL12Parse_CameraEPPNS_13Camera_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12Parse_MatrixEPA4_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL20Parse_Three_UVCoordsEPdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL20Parse_Three_UVCoordsEPdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL20Parse_Three_UVCoordsEPdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL18Parse_Mesh_TextureEPPNS_14Texture_StructES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL18Parse_Mesh_TextureEPPNS_14Texture_StructES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL20bezier_split_up_downEPA4_A4_A3_dS3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL20bezier_split_up_downEPA4_A4_A3_dS3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3povL23bezier_split_left_rightEPA4_A4_A3_dS3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL23bezier_split_left_rightEPA4_A4_A3_dS3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3povL12bezier_valueEPA4_A4_A3_dddPdS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL12bezier_valueEPA4_A4_A3_dddPdS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov6ot_insEPPNS_14ot_node_structEPNS_15ot_block_structEPNS_12ot_id_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov6ot_insEPPNS_14ot_node_structEPNS_15ot_block_structEPNS_12ot_id_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12ot_index_boxEPdS0_PNS_12ot_id_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov12ot_index_boxEPdS0_PNS_12ot_id_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov29IsoSurface_Function_Find_RootEPNS_17IsoSurface_StructEPdS2_S2_S2_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov29IsoSurface_Function_Find_RootEPNS_17IsoSurface_StructEPdS2_S2_S2_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov29IsoSurface_Function_Find_RootEPNS_17IsoSurface_StructEPdS2_S2_S2_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov29IsoSurface_Function_Find_RootEPNS_17IsoSurface_StructEPdS2_S2_S2_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov10push_entryEdPdPNS_13Object_StructEPNS_13istack_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "_ZN3povL17add_single_normalEPPtiiiiiiiiPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov18Normal_Calc_HComplEPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov18Normal_Calc_HComplEPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov21Normal_Calc_HCompl_z3EPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov21Normal_Calc_HCompl_z3EPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov29Normal_Calc_HCompl_ReciprocalEPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov29Normal_Calc_HCompl_ReciprocalEPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov23Normal_Calc_HCompl_FuncEPdiPNS_14Fractal_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov13Complex_ATanhEPNS_5cmplxES1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov13Complex_ATanhEPNS_5cmplxES1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]

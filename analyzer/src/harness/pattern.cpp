@@ -14,6 +14,9 @@
 using namespace std;
 using namespace llvm;
 
+static DenseMap<Function *, vector<CallBase *>> CallSites;
+static SmallPtrSet<Function *, 16> ICallFuncs;
+
 static bool isHeapAddress(Value *V) {
   set<Value *> Visited;
   vector<Value *> Worklist;
@@ -45,24 +48,66 @@ static bool isHeapAddress(Value *V) {
   return false;
 }
 
-static bool alwaysNonHeap(Function &FO, unsigned int ArgNo,
-                          vector<Module *> &Modules,
-                          DenseMap<Function *, vector<CallBase *>> &CallSites) {
+static bool isSafeConstArray(Function &F, Value *V) {
+  while (auto *BC = dyn_cast<BitCastInst>(V))
+    V = BC->getOperand(0);
 
-  for (auto *CI : CallSites[&FO]) {
+  // TODO: check if it is a constant array
+  return false;
+}
+
+static bool alwaysSafe(Function &F, unsigned int ArgNo,
+                       vector<Module *> &Modules) {
+
+  for (auto *CI : CallSites[&F]) {
     Value *Arg = CI->getArgOperand(ArgNo);
-    if (isHeapAddress(Arg))
+    if (isHeapAddress(Arg)) {
+      if (isSafeConstArray(F, Arg))
+        continue;
       return false;
+    }
   }
 
   return true;
 }
 
-static void findNonHeapFunctionArguments(vector<Module *> Modules,
-                                         vector<PatternBase *> &Patterns) {
-  DenseMap<Function *, vector<CallBase *>> CallSites;
-  SmallPtrSet<Function *, 16> ICallFuncs;
+static void findSafeFunctionArguments(vector<Module *> Modules,
+                                      vector<PatternBase *> &Patterns) {
+  for (auto *M : Modules) {
+    for (auto &F : *M) {
+      if (F.isDeclaration() || ICallFuncs.count(&F) ||
+          /* it is possibile because of inline */
+          CallSites.count(&F) == 0)
+        continue;
+      for (unsigned int i = 0; i < F.arg_size(); i++) {
+        if (F.getArg(i)->getType()->isPointerTy()) {
+          if (alwaysSafe(F, i, Modules))
+            Patterns.push_back(
+                new ValuePattern(new FunArgIdent(F.getName().str(), i)));
+        }
+      }
+    }
+  }
+}
 
+static void printPatternOptFile(string Filename,
+                                vector<PatternBase *> &Patterns) {
+  json::Array JSONPatterns;
+  for (auto *P : Patterns)
+    JSONPatterns.push_back(P->toJSON());
+
+  error_code EC;
+  raw_fd_ostream OS(Filename, EC, sys::fs::OF_None);
+  if (EC) {
+    errs() << "Error: " << EC.message() << "\n";
+    exit(1);
+  }
+
+  OS << json::Value(std::move(JSONPatterns));
+  OS.close();
+}
+
+static void initialize(vector<Module *> &Modules) {
   for (auto *M : Modules)
     for (auto &F : *M)
       for (auto &BB : F)
@@ -79,39 +124,13 @@ static void findNonHeapFunctionArguments(vector<Module *> Modules,
                 ICallFuncs.insert(Fn);
           }
         }
-
-  for (auto *M : Modules) {
-    for (auto &F : *M) {
-      if (F.isDeclaration() || ICallFuncs.count(&F) || 
-          /* it is possibile because of inline */
-          CallSites.count(&F) == 0)
-        continue;
-      for (unsigned int i = 0; i < F.arg_size(); i++) {
-        if (F.getArg(i)->getType()->isPointerTy() &&
-            alwaysNonHeap(F, i, Modules, CallSites)) {
-          Patterns.push_back(
-              new ValuePattern(new FunArgIdent(F.getName().str(), i)));
-        }
-      }
-    }
-  }
 }
 
 void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {
   vector<PatternBase *> Patterns;
-  findNonHeapFunctionArguments(Modules, Patterns);
 
-  json::Array JSONPatterns;
-  for (auto *P : Patterns)
-    JSONPatterns.push_back(P->toJSON());
+  initialize(Modules);
+  findSafeFunctionArguments(Modules, Patterns);
 
-  error_code EC;
-  raw_fd_ostream OS(Filename, EC, sys::fs::OF_None);
-  if (EC) {
-    errs() << "Error: " << EC.message() << "\n";
-    exit(1);
-  }
-
-  OS << json::Value(std::move(JSONPatterns));
-  OS.close();
+  printPatternOptFile(Filename, Patterns);
 }
