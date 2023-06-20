@@ -447,7 +447,26 @@ bool isStdFunction(StringRef name) {
 
   pclose(pipe);
 
-  return StringRef(result).startswith("std::");
+  std::string fname;
+  size_t start_pos = 0, end_pos = 0, count = 0;
+
+  while (end_pos < result.size()) {
+    if (result[end_pos] == '(') {
+      fname = result.substr(start_pos, end_pos - start_pos);
+      break;
+    }
+
+    if (result[end_pos] == '<' && result[end_pos + 1] != '(')
+      count++;
+    else if (result[end_pos] == '>')
+      count--;
+    else if (result[end_pos] == ' ' && count == 0)
+      start_pos = end_pos + 1;
+
+    end_pos++;
+  }
+
+  return StringRef(fname).startswith("std::");
 }
 
 void insertModuleCtor(Module &M) {
