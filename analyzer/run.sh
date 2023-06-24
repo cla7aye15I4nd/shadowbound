@@ -24,6 +24,23 @@ if [ $# -ne 1 ]; then
     run_analyzer "526.blender_r"
     run_analyzer "538.imagick_r"
     run_analyzer "544.nab_r"
+    run_analyzer "400.perlbench"
+    run_analyzer "403.gcc"
+    run_analyzer "429.mcf"
+    run_analyzer "433.milc"
+    run_analyzer "444.namd"
+    run_analyzer "445.gobmk"
+    run_analyzer "447.dealII"
+    run_analyzer "450.soplex"
+    run_analyzer "453.povray"
+    run_analyzer "456.hmmer"
+    run_analyzer "458.sjeng"
+    run_analyzer "462.libquantum"
+    run_analyzer "464.h264ref"
+    run_analyzer "470.lbm"
+    run_analyzer "473.astar"
+    run_analyzer "482.sphinx3"
+    run_analyzer "483.xalancbmk"
 else
     run_analyzer $1
 fi
