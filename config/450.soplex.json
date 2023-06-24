@@ -1,0 +1,538 @@
+[
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK6soplex6SoPlex7isBasicENS_5SPxIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex10SPxSteepPR9entered4XENS_5SPxIdEiiiii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex10SPxSteepPR12selectEnterXERdiiii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex10SPxSteepPR12selectEnterXERdiiii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8SSVectorC2Eid",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8SSVectorD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8MPSInput11syntaxErrorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8MPSInput12entryIgnoredEPKcS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex8MPSInput12entryIgnoredEPKcS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplex8MPSInput12entryIgnoredEPKcS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK6soplex6SoPlex7isBasicENS_5SPxIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9DataArrayIiE5reMaxEii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9DataArrayIiE5reMaxEii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK6soplex6SoPlex7isBasicENS_5SPxIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9DataArrayIiE5reMaxEii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex11SPxWeightST15setPrimalStatusERNS_8SPxBasis4DescERKNS_6SoPlexERKNS_5SPxIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK6soplex6SoPlex6vectorERKNS_5SPxIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplexL13setDualStatusERNS_8SPxBasis4DescERKNS_6SoPlexERKNS_5SPxIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8SPxBasis4DescC2ERKS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8MPSInput11syntaxErrorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex9CLUFactor17solveLleft2forestEPdPiS1_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex9CLUFactor11solveLleft2EPdPiS1_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex10SPxDevexPR12selectEnterXERdiiii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex10SPxDevexPR9entered4XENS_5SPxIdEiiiii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex7NameSet6removeENS_7DataKeyE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex13DataHashTableINS_7NameSet4NameENS_7DataKeyEEC2EPFiPKS2_Eiid",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9SPxFastRT8maxDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex9SPxFastRT8maxDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplex9SPxFastRT8maxDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN6soplex9SPxFastRT8maxDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9SPxFastRT8minDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex9SPxFastRT8minDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplex9SPxFastRT8minDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN6soplex9SPxFastRT8minDeltaERiRdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9SPxFastRT9maxSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex9SPxFastRT9maxSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplex9SPxFastRT9maxSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN6soplex9SPxFastRT9maxSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN6soplex9SPxFastRT9maxSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex9SPxFastRT9minSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplex9SPxFastRT9minSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplex9SPxFastRT9minSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN6soplex9SPxFastRT9minSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN6soplex9SPxFastRT9minSelectERiRdS2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex9SPxFastRT10maxReleaveERdid",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex9SPxFastRT10minReleaveERdid",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex9SPxFastRT10maxReenterERdddNS_5SPxIdEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN6soplex9SPxFastRT10maxReenterERdddNS_5SPxIdEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplex9SPxFastRT10minReenterERdddNS_5SPxIdEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN6soplex9SPxFastRT10minReenterERdddNS_5SPxIdEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8SSVectorC2Eid",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8MySoPlex14displayQualityEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8MySoPlexD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplexlsERSoRKNS_8SPxBasis4Desc6StatusE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN6soplexlsERSoRKNS_8SPxBasis4Desc6StatusE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK6soplex6SoPlex22basisStatusToVarStatusENS_8SPxBasis4Desc6StatusE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8SPxBasis4DescC2ERKS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplex9CLUFactor13vSolveLright2EPdPiS2_dS1_S2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN6soplex9CLUFactor13vSolveLright2EPdPiS2_dS1_S2_S2_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8LPColSetC2Eii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplexL9readValueERPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplexL11readColNameERPcPNS_7NameSetERNS_8LPColSetEPNS_5LPColE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN6soplexL11readColNameERPcPNS_7NameSetERNS_8LPColSetEPNS_5LPColE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN6soplexL11readColNameERPcPNS_7NameSetERNS_8LPColSetEPNS_5LPColE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8LPRowSetD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6soplex8LPColSetD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK6soplex7NameSet6numberEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  }
+]
