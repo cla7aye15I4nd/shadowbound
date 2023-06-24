@@ -1,5 +1,6 @@
 #include "interception/interception.h"
 #include "odef.h"
+#include "odef_thread.h"
 
 #include "sanitizer_common/sanitizer_allocator_dlsym.h"
 #include "sanitizer_common/sanitizer_common.h"
@@ -113,6 +114,47 @@ INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
   return odef_allocated_size(ptr);
 }
 
+
+extern "C" int pthread_attr_init(void *attr);
+extern "C" int pthread_attr_destroy(void *attr);
+
+static void *OdefThreadStartFunc(void *arg) {
+  OdefThread *t = (OdefThread *)arg;
+  SetCurrentThread(t);
+  t->Init();
+  SetSigProcMask(&t->starting_sigset_, nullptr);
+  return t->ThreadStart();
+}
+
+INTERCEPTOR(int, pthread_create, void *th, void *attr, void *(*callback)(void*),
+            void * param) {
+  ENSURE_ODEF_INITED(); // for GetTlsSize()
+  __sanitizer_pthread_attr_t myattr;
+  if (!attr) {
+    pthread_attr_init(&myattr);
+    attr = &myattr;
+  }
+
+  AdjustStackSize(attr);
+
+  OdefThread *t = OdefThread::Create(callback, param);
+  ScopedBlockSignals block(&t->starting_sigset_);
+  int res = REAL(pthread_create)(th, attr, OdefThreadStartFunc, t);
+
+  if (attr == &myattr)
+    pthread_attr_destroy(&myattr);
+  return res;
+}
+
+INTERCEPTOR(int, pthread_join, void *th, void **retval) {
+  ENSURE_ODEF_INITED();
+  int res = REAL(pthread_join)(th, retval);
+  return res;
+}
+
+DEFINE_REAL_PTHREAD_FUNCTIONS
+
+
 #define ODEF_INTERCEPT_FUNC(name)                                              \
   do {                                                                         \
     if (!INTERCEPT_FUNCTION(name))                                             \
@@ -164,6 +206,7 @@ INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
 
 #include "sanitizer_common/sanitizer_common_interceptors.inc"
 #include "sanitizer_common/sanitizer_platform_interceptors.h"
+#include "sanitizer_common/sanitizer_signal_interceptors.inc"
 
 struct OdefAtExitRecord {
   void (*func)(void *arg);
@@ -190,6 +233,7 @@ void InitializeInterceptors() {
   new (interceptor_ctx()) InterceptorContext();
 
   InitializeCommonInterceptors();
+  InitializeSignalInterceptors();
 
   INTERCEPT_FUNCTION(posix_memalign);
   INTERCEPT_FUNCTION(memalign);
@@ -207,6 +251,10 @@ void InitializeInterceptors() {
   INTERCEPT_FUNCTION(malloc_stats);
   INTERCEPT_FUNCTION(mallinfo);
   INTERCEPT_FUNCTION(malloc_usable_size);
+
+  INTERCEPT_FUNCTION(pthread_create);
+  INTERCEPT_FUNCTION(pthread_join);
+  // INTERCEPT_FUNCTION(__cxa_atexit);
 
   inited = 1;
 }
