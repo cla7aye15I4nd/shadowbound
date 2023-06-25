@@ -347,6 +347,95 @@ indices[0].prev = &indices[coords_tot - 1]; // cover the overflow pointer
 indices[coords_tot - 1].next = &indices[0]; // cover the overflow pointer
 ```
 
+**mcf**
+```c
+for( ; arc < stop_arcs; arc += nr_group ) {
+  // not handle arc in loop optimization
+}
+```
+
+**403.gcc**
+```c
+// SPEC 2006
+// alloc
+reg_known_value  = (rtx *) xcalloc ((maxreg - FIRST_PSEUDO_REGISTER), sizeof (rtx)) - FIRST_PSEUDO_REGISTER;
+// access
+for (i = FIRST_PSEUDO_REGISTER; i < maxreg; i++)
+if (reg_known_value[i] == 0)
+  reg_known_value[i] = regno_reg_rtx[i];
+
+// SPEC 2017
+// alloc
+reg_known_value = GGC_CNEWVEC (rtx, reg_known_value_size);
+// access
+if (regno >= FIRST_PSEUDO_REGISTER)
+{
+  regno -= FIRST_PSEUDO_REGISTER;
+  if (regno < reg_known_value_size)
+    return reg_known_value[regno];
+}
+```
+**483.xalancbmk**
+
+```c++
+// SPEC 2006
+SchemaGrammar& sGrammar = (SchemaGrammar&) grammarEnum.nextElement();
+if (sGrammar.getGrammarType() != Grammar::SchemaGrammarType || sGrammar.getValidated())
+     continue;
+
+// SPEC 2017
+// Replace the following 3 lines with the 4 lines below it per report that the code is
+// down-casting a variable, sGrammar, of type Gramar& to type SchemaGrammar& before it
+// Knows if the variable is really of type SchemaGrammar& 
+//      SchemaGrammar& sGrammar = (SchemaGrammar&) grammarEnum.nextElement();
+//      if (sGrammar.getGrammarType() != Grammar::SchemaGrammarType || sGrammar.getValidated())
+//           continue;
+Grammar& gGrammar = grammarEnum.nextElement();
+if (gGrammar.getGrammarType() !=Grammar::SchemaGrammarType ||gGrammar.getValidated())
+      continue;
+SchemaGrammar& sGrammar = (SchemaGrammar&)gGrammar;
+```
+
+**450.soplex**
+
+This test case stores data pointers in a list. Initially, these pointers were all located within the same array called `theItem`. Then the code calls `reMax` to expand the `theItem` array using `realloc` and returns the offset between the new and old pointers. To synchronize the data within the list, the code calls `move` to add this offset to all the pointers in the list. This behavior actually constitutes a typical Use-After-Free (UAF) and Out-of-Bounds (OOB) scenario. The code should handle these operations before the "realloc" call, freeing the old pointers. 
+
+```c
+// svset.cc
+ptrdiff_t reMax(int newmax = 0)
+{
+  struct Item * old_theitem = theitem;
+  newmax = (newmax < size()) ? size() : newmax;
+
+  int* lastfree = &firstfree;
+  while (*lastfree != -themax - 1)
+     lastfree = &(theitem[ -1 - *lastfree].info);
+  *lastfree = -newmax - 1;
+
+  themax = newmax;
+
+  spx_realloc(theitem, themax);
+  spx_realloc(thekey,  themax);
+
+  return reinterpret_cast<char*>(theitem) 
+     - reinterpret_cast<char*>(old_theitem);
+}
+
+// islist.h
+void move(ptrdiff_t delta)
+{
+  if (the_first)
+  {
+     T* elem;
+     the_last  = reinterpret_cast<T*>(reinterpret_cast<char*>(the_last) + delta);
+     the_first = reinterpret_cast<T*>(reinterpret_cast<char*>(the_first) + delta);
+     for (elem = first(); elem; elem = next(elem))
+        if (elem != last())
+           elem->next() = reinterpret_cast<T*>(reinterpret_cast<char*>(elem->next()) + delta);
+  }
+}
+```
+
 ### End-of-the-Array Pointers
 ```c
 struct obj* objs = malloc(sizeof(struct obj) * num_obj);
