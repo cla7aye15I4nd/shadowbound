@@ -113,8 +113,7 @@ bool InitShadow() {
         return false;
       if (!MmapFixedSuperNoReserve(start, size, kMemoryLayout[i].name))
         return false;
-      if (common_flags()->use_madv_dontdump)
-        DontDumpShadowMemory(start, size);
+      DontDumpShadowMemory(start, size);
     }
     if (protect) {
       if (!CheckMemoryRangeAvailability(start, size))

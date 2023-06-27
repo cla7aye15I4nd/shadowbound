@@ -871,8 +871,6 @@ class SizeClassAllocator64 {
       return;  // Nothing new to release.
     }
 
-    // TODO: it is a very bad idea, but we need to do it for now.
-    return;
 
     if (!force) {
       s32 interval_ms = ReleaseToOSIntervalMs();
