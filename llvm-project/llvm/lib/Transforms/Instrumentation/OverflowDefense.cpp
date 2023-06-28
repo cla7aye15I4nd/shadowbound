@@ -989,13 +989,14 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                                           PostDominatorTree &PDT,
                                           ScalarEvolution &SE) {
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  DenseSet<int> OptimizedIndex;
 
   for (size_t i = 0; i < GepToInstrument.size(); ++i) {
     bool optimized = false;
     auto I = GepToInstrument[i];
 
     for (size_t j = 0; j < GepToInstrument.size(); ++j) {
-      if (i != j) {
+      if (i != j && OptimizedIndex.count(j) == 0) {
         auto J = GepToInstrument[j];
         if (DT.dominates(J, I) || PDT.dominates(J, I)) {
 
@@ -1077,6 +1078,8 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
 
     if (!optimized)
       NewGepToInstrument.push_back(GepToInstrument[i]);
+    else
+      OptimizedIndex.insert(i);
   }
 
   return NewGepToInstrument;
