@@ -67,11 +67,14 @@ for bench in fprate + intrate:
   if not os.path.exists(bitcodepath):
     os.makedirs(bitcodepath)
   
-  print('Copying bitcode files for ' + bench)
+  fileset = set()
+  print('Copying bitcode files for ' + bench) 
   for root, dirs, files in os.walk(buildpath):
     for file in files:
       if file.endswith('.bc'):
         bcfile = os.path.join(root, file)
+        assert bcfile not in fileset
+        fileset.add(bcfile)
         os.system('cp ' + bcfile + ' ' + bitcodepath)
 
 benchdir = os.path.join(args.spec2006dir, 'benchspec', 'CPU2006')
@@ -81,9 +84,12 @@ for bench in all_c + all_cpp:
   if not os.path.exists(bitcodepath):
     os.makedirs(bitcodepath)
   
+  fileset = set()
   print('Copying bitcode files for ' + bench)
   for root, dirs, files in os.walk(buildpath):
     for file in files:
       if file.endswith('.bc'):
         bcfile = os.path.join(root, file)
+        assert bcfile not in fileset
+        fileset.add(bcfile)
         os.system('cp ' + bcfile + ' ' + bitcodepath)
