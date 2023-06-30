@@ -52,7 +52,15 @@ vector<PatternBase *> parsePatternFile(string Filename) {
         StringRef Name = Pattern->get("name")->getAsString().getValue();
         unsigned int Index = Pattern->get("index")->getAsNumber().getValue();
 
-        Patterns.push_back(new ValuePattern(new FunArgIdent(Name.str(), Index)));
+        if (Pattern->get("module") == nullptr)
+          Patterns.push_back(
+              new ValuePattern(new FunArgIdent(Name.str(), Index)));
+        else {
+          ERROR_HANDLER(Pattern->get("module")->getAsString().hasValue());
+          StringRef Module = Pattern->get("module")->getAsString().getValue();
+          Patterns.push_back(new ValuePattern(
+              new FunArgIdent(Name.str(), Index, Module.str())));
+        }
       } else if (PatternType == "struct") {
         // TODO: Implement
       } else if (PatternType == "global") {

@@ -887,6 +887,12 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
 
     if (VI->getType() == VIT_FUNARG) {
       FunArgIdent *FAI = static_cast<FunArgIdent *>(VI);
+
+      // F is a static function, we need to check the module name
+      if (F.hasLocalLinkage() &&
+          !StringRef(F.getParent()->getModuleIdentifier())
+               .endswith(FAI->getModuleName()))
+        return false;
       if (FAI->getName() == F.getName()) {
         if (auto Arg = dyn_cast<Argument>(getSource(I))) {
           if (Arg->getArgNo() == FAI->getIndex()) {

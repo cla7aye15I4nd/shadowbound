@@ -8,14 +8,34 @@
 #include "llvm/Support/raw_ostream.h"
 
 #include <algorithm>
+#include <map>
 #include <set>
 #include <string>
 
 using namespace std;
 using namespace llvm;
 
-static DenseMap<Function *, vector<CallBase *>> CallSites;
-static SmallPtrSet<Function *, 16> ICallFuncs;
+using func = pair<string, string>;
+
+static map<func, vector<CallBase *>> CallSites;
+static set<func> ICallFuncs;
+
+string getFileName(string Path) {
+  size_t LastSlash = Path.find_last_of('/');
+  size_t LastDot = Path.find_last_of('.');
+  string result = Path.substr(LastSlash + 1, LastDot - LastSlash - 1);
+
+  assert(result != "");
+  return result;
+}
+
+func makeFnHash(Function *F) {
+  if (F->hasLocalLinkage()) {
+    assert(F->getParent()->getModuleIdentifier() != "");
+    return func(F->getParent()->getModuleIdentifier(), F->getName().str());
+  } else
+    return func("", F->getName().str());
+}
 
 static bool isHeapAddress(Value *V) {
   set<Value *> Visited;
@@ -59,7 +79,7 @@ static bool isSafeConstArray(Function &F, Value *V) {
 static bool alwaysSafe(Function &F, unsigned int ArgNo,
                        vector<Module *> &Modules) {
 
-  for (auto *CI : CallSites[&F]) {
+  for (auto *CI : CallSites[makeFnHash(&F)]) {
     Value *Arg = CI->getArgOperand(ArgNo);
     if (isHeapAddress(Arg)) {
       if (isSafeConstArray(F, Arg))
@@ -75,15 +95,17 @@ static void findSafeFunctionArguments(vector<Module *> Modules,
                                       vector<PatternBase *> &Patterns) {
   for (auto *M : Modules) {
     for (auto &F : *M) {
-      if (F.isDeclaration() || ICallFuncs.count(&F) ||
+      if (F.isDeclaration() || ICallFuncs.count(makeFnHash(&F)) ||
           /* it is possibile because of inline */
-          CallSites.count(&F) == 0)
+          CallSites.count(makeFnHash(&F)) == 0)
         continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
         if (F.getArg(i)->getType()->isPointerTy()) {
           if (alwaysSafe(F, i, Modules))
-            Patterns.push_back(
-                new ValuePattern(new FunArgIdent(F.getName().str(), i)));
+            Patterns.push_back(new ValuePattern(new FunArgIdent(
+                F.getName().str(), i,
+                F.hasLocalLinkage() ? getFileName(M->getModuleIdentifier())
+                                    : "")));
         }
       }
     }
@@ -109,21 +131,24 @@ static void printPatternOptFile(string Filename,
 
 static void initialize(vector<Module *> &Modules) {
   for (auto *M : Modules)
-    for (auto &F : *M)
-      for (auto &BB : F)
+    for (auto &F : *M) {
+      for (auto &BB : F) {
         for (auto &I : BB) {
           if (auto *CI = dyn_cast<CallBase>(&I)) {
-            if (CI->getCalledFunction() != nullptr)
-              CallSites[CI->getCalledFunction()].push_back(CI);
+            if (auto *Fn = CI->getCalledFunction()) {
+              CallSites[makeFnHash(Fn)].push_back(CI);
+            }
             for (unsigned int i = 0; i < CI->arg_size(); i++)
               if (auto *Fn = dyn_cast<Function>(CI->getArgOperand(i)))
-                ICallFuncs.insert(Fn);
+                ICallFuncs.insert(makeFnHash(Fn));
           } else {
             for (unsigned int i = 0; i < I.getNumOperands(); i++)
               if (auto *Fn = dyn_cast<Function>(I.getOperand(i)))
-                ICallFuncs.insert(Fn);
+                ICallFuncs.insert(makeFnHash(Fn));
           }
         }
+      }
+    }
 }
 
 void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {

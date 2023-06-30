@@ -85,12 +85,15 @@ public:
 class FunArgIdent : public ValueIdentBase {
   std::string Name;
   unsigned int Index;
+  std::string ModuleName;
 
 public:
-  FunArgIdent(std::string Name, unsigned int Index)
-      : ValueIdentBase(VIT_FUNARG), Name(Name), Index(Index) {}
+  FunArgIdent(std::string Name, unsigned int Index, std::string ModuleName = "")
+      : ValueIdentBase(VIT_FUNARG), Name(Name), Index(Index),
+        ModuleName(ModuleName) {}
 
   std::string getName() const { return Name; }
+  std::string getModuleName() const { return ModuleName; }
   unsigned int getIndex() const { return Index; }
 
   void print(raw_ostream &OS) const override {
@@ -101,6 +104,8 @@ public:
     O["type"] = json::Value("funarg");
     O["name"] = json::Value(Name);
     O["index"] = json::Value(Index);
+    if (!ModuleName.empty())
+      O["module"] = json::Value(ModuleName);
     return json::Value(std::move(O));
   }
 };
