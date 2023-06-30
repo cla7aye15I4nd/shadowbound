@@ -1,6 +1,38 @@
 [
   {
     "pattern": {
+      "index": 0,
+      "name": "getpdb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "getpdb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "regexec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "regexec",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "vPDictDelete",
       "type": "funarg"
@@ -10,6 +42,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "database.c",
       "name": "ReportError",
       "type": "funarg"
     },
@@ -18,6 +51,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "database.c",
       "name": "ePrepareDatabaseForEntry",
       "type": "funarg"
     },
@@ -26,6 +60,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "database.c",
       "name": "ConstructDataHeader",
       "type": "funarg"
     },
@@ -34,6 +69,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "database.c",
       "name": "ConstructDataHeader",
       "type": "funarg"
     },
@@ -42,6 +78,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "database.c",
       "name": "StripInteger",
       "type": "funarg"
     },
@@ -50,6 +87,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "database.c",
       "name": "StripDouble",
       "type": "funarg"
     },
@@ -58,6 +96,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "database.c",
       "name": "sStripString",
       "type": "funarg"
     },
@@ -66,6 +105,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "database.c",
       "name": "AddColumnType",
       "type": "funarg"
     },
@@ -74,6 +114,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "database.c",
       "name": "ConcatString",
       "type": "funarg"
     },
@@ -89,8 +130,16 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "pfind",
+      "index": 0,
+      "name": "setseed",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gauss",
       "type": "funarg"
     },
     "type": "value"
@@ -98,6 +147,48 @@
   {
     "pattern": {
       "index": 1,
+      "name": "gauss",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ggets",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "readparm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "module": "prm.c",
+      "name": "pfind",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "setpoint",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "select_atoms.c",
       "name": "is_pattern",
       "type": "funarg"
     },
@@ -106,7 +197,80 @@
   {
     "pattern": {
       "index": 2,
+      "module": "select_atoms.c",
       "name": "is_pattern",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "rt_errormsg_s",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "regcomp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "regcomp",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "chirvol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "chirvol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "chirvol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "addstrand",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "addresidue",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "addresidue",
       "type": "funarg"
     },
     "type": "value"
@@ -146,6 +310,38 @@
   {
     "pattern": {
       "index": 0,
+      "name": "setxyz_from_mol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "setxyz_from_mol",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "NAB_initres",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "NAB_initatom",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "trans4p",
       "type": "funarg"
     },
@@ -177,7 +373,72 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "mpiinit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "mpiinit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "mpiinit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mme_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "mme_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "mme_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "mme_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "md",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 8,
+      "module": "sff.c",
       "name": "egb",
       "type": "funarg"
     },
@@ -186,6 +447,7 @@
   {
     "pattern": {
       "index": 9,
+      "module": "sff.c",
       "name": "egb",
       "type": "funarg"
     },
@@ -194,6 +456,7 @@
   {
     "pattern": {
       "index": 10,
+      "module": "sff.c",
       "name": "egb",
       "type": "funarg"
     },
@@ -202,6 +465,7 @@
   {
     "pattern": {
       "index": 11,
+      "module": "sff.c",
       "name": "egb",
       "type": "funarg"
     },
@@ -210,6 +474,7 @@
   {
     "pattern": {
       "index": 6,
+      "module": "sff.c",
       "name": "nbond",
       "type": "funarg"
     },
@@ -218,6 +483,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "sff.c",
       "name": "nbond",
       "type": "funarg"
     },

@@ -18,6 +18,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "dfa.c",
       "name": "sync_product",
       "type": "funarg"
     },
@@ -26,6 +27,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "dfa.c",
       "name": "sync_product",
       "type": "funarg"
     },
@@ -34,6 +36,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "dfa.c",
       "name": "sync_product",
       "type": "funarg"
     },
@@ -41,7 +44,56 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "hashdata_recalc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "hashdata_recalc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "hashdata_invert_ko",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "hashdata_invert_stone",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "string_connect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "disconnect",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
+      "module": "readconnect.c",
       "name": "find_connection_moves",
       "type": "funarg"
     },
@@ -50,6 +102,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "readconnect.c",
       "name": "find_connection_moves",
       "type": "funarg"
     },
@@ -58,6 +111,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "readconnect.c",
       "name": "compute_connection_distances",
       "type": "funarg"
     },
@@ -66,6 +120,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "readconnect.c",
       "name": "print_connection_distances",
       "type": "funarg"
     },
@@ -74,6 +129,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "readconnect.c",
       "name": "ladder_capture",
       "type": "funarg"
     },
@@ -82,6 +138,62 @@
   {
     "pattern": {
       "index": 1,
+      "name": "write_color_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gg_sort",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "gg_sort",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gg_interpolate",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgftree_readfile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgftreeAddComment",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgftreeWriteResult",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "atari_atari",
       "type": "funarg"
     },
@@ -98,6 +210,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "combination.c",
       "name": "do_atari_atari",
       "type": "funarg"
     },
@@ -106,6 +219,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "combination.c",
       "name": "do_atari_atari",
       "type": "funarg"
     },
@@ -113,8 +227,24 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "atari_atari_blunder_size",
+      "index": 2,
+      "name": "atari_atari_confirm_safety",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "atari_atari_confirm_safety",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "atari_atari_confirm_safety",
       "type": "funarg"
     },
     "type": "value"
@@ -122,6 +252,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "combination.c",
       "name": "atari_atari_find_defense_moves",
       "type": "funarg"
     },
@@ -130,6 +261,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "combination.c",
       "name": "atari_atari_find_defense_moves",
       "type": "funarg"
     },
@@ -138,6 +270,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "combination.c",
       "name": "update_aa_goal",
       "type": "funarg"
     },
@@ -146,6 +279,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "play_ascii.c",
       "name": "do_move",
       "type": "funarg"
     },
@@ -154,6 +288,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "play_ascii.c",
       "name": "do_pass",
       "type": "funarg"
     },
@@ -161,16 +296,128 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "getopt_internal",
+      "index": 0,
+      "name": "play_ascii_emacs",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "getopt_internal",
+      "index": 1,
+      "name": "play_ascii_emacs",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gnugo_genmove",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gnugo_genmove",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "gnugo_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "gnugo_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "gnugo_find_defense",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "gnugo_find_defense",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gnugo_estimate_score",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gnugo_estimate_score",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gameinfo_play_sgftree",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "store_board",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "restore_board",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "komaster_trymove",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "komaster_trymove",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "komaster_trymove",
       "type": "funarg"
     },
     "type": "value"
@@ -194,6 +441,14 @@
   {
     "pattern": {
       "index": 3,
+      "name": "approxlib",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
       "name": "accuratelib",
       "type": "funarg"
     },
@@ -201,7 +456,120 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "have_common_lib",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "name": "chainlinks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "chainlinks2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "extended_chainlinks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_move_from_stack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_move_from_stack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "incremental_order_moves",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "dragon.c",
       "name": "dragon_eye",
       "type": "funarg"
     },
@@ -226,22 +594,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "dragon_escape",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "dragon_escape",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
+      "module": "dragon.c",
       "name": "compute_surrounding_moyo_sizes",
       "type": "funarg"
     },
@@ -249,8 +602,137 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "search_persistent_reading_cache",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
+      "name": "search_persistent_reading_cache",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "reading_hotspots",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "search_persistent_owl_cache",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "owl_hotspots",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "module": "persistent.c",
       "name": "mark_dragon_hotspot_values",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gg_get_rand_state",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gg_set_rand_state",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgfAddProperty",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgfAddPropertyInt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgfAddPropertyFloat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgfGetIntProperty",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sgfGetIntProperty",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgfGetFloatProperty",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sgfGetFloatProperty",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sgfGetCharProperty",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sgfGetCharProperty",
       "type": "funarg"
     },
     "type": "value"
@@ -266,6 +748,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "sgfOverwritePropertyInt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "sgfOverwritePropertyFloat",
       "type": "funarg"
     },
@@ -273,8 +763,8 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "sgfBoardText",
+      "index": 1,
+      "name": "sgfLabel",
       "type": "funarg"
     },
     "type": "value"
@@ -282,7 +772,31 @@
   {
     "pattern": {
       "index": 1,
-      "name": "attack",
+      "name": "review_move_reasons",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "matchpat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "fullboard_matchpat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "fullboard_matchpat",
       "type": "funarg"
     },
     "type": "value"
@@ -290,6 +804,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "do_attack",
       "type": "funarg"
     },
@@ -298,14 +813,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "find_defense",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
+      "module": "reading.c",
       "name": "do_find_defense",
       "type": "funarg"
     },
@@ -345,7 +853,32 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "attack_threats",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "attack_threats",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "tune_move_ordering",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "break_chain_moves",
       "type": "funarg"
     },
@@ -354,6 +887,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "order_moves",
       "type": "funarg"
     },
@@ -362,6 +896,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "reading.c",
       "name": "order_moves",
       "type": "funarg"
     },
@@ -370,6 +905,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "break_chain2_efficient_moves",
       "type": "funarg"
     },
@@ -378,6 +914,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "propose_edge_moves",
       "type": "funarg"
     },
@@ -386,6 +923,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "reading.c",
       "name": "propose_edge_moves",
       "type": "funarg"
     },
@@ -394,6 +932,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "edge_clamp_moves",
       "type": "funarg"
     },
@@ -402,6 +941,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "special_rescue_moves",
       "type": "funarg"
     },
@@ -410,6 +950,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "superstring_breakchain_moves",
       "type": "funarg"
     },
@@ -418,6 +959,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "break_chain2_defense_moves",
       "type": "funarg"
     },
@@ -426,6 +968,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "special_rescue5_moves",
       "type": "funarg"
     },
@@ -434,6 +977,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "special_rescue5_moves",
       "type": "funarg"
     },
@@ -442,6 +986,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "break_chain3_moves",
       "type": "funarg"
     },
@@ -450,6 +995,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "hane_rescue_moves",
       "type": "funarg"
     },
@@ -458,6 +1004,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "hane_rescue_moves",
       "type": "funarg"
     },
@@ -466,6 +1013,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "special_rescue3_moves",
       "type": "funarg"
     },
@@ -474,6 +1022,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "special_rescue3_moves",
       "type": "funarg"
     },
@@ -482,6 +1031,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "special_rescue6_moves",
       "type": "funarg"
     },
@@ -490,6 +1040,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "special_rescue6_moves",
       "type": "funarg"
     },
@@ -498,6 +1049,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "attack2",
       "type": "funarg"
     },
@@ -506,6 +1058,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "attack3",
       "type": "funarg"
     },
@@ -514,6 +1067,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "reading.c",
       "name": "attack4",
       "type": "funarg"
     },
@@ -522,6 +1076,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "edge_block_moves",
       "type": "funarg"
     },
@@ -530,6 +1085,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "reading.c",
       "name": "find_cap2",
       "type": "funarg"
     },
@@ -538,6 +1094,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "reading.c",
       "name": "edge_closing_backfill",
       "type": "funarg"
     },
@@ -545,7 +1102,40 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "play_solo",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "load_and_analyze_sgf_file",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "load_and_score_sgf_file",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "load_and_score_sgf_file",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "module": "score.c",
       "name": "dilate_erode",
       "type": "funarg"
     },
@@ -554,6 +1144,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "score.c",
       "name": "close_bubbles",
       "type": "funarg"
     },
@@ -562,6 +1153,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "score.c",
       "name": "print_regions",
       "type": "funarg"
     },
@@ -570,6 +1162,111 @@
   {
     "pattern": {
       "index": 3,
+      "name": "get_read_result",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "get_read_result",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "get_read_result2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "get_read_result2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "get_read_result2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgf_trace",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgf_trace2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "play_replay",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgffile_output",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgffile_begindump",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sgffile_enddump",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "movelist_move_known",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "movelist_move_known",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "module": "worm.c",
       "name": "change_tactical_point",
       "type": "funarg"
     },
@@ -578,6 +1275,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "worm.c",
       "name": "change_tactical_point",
       "type": "funarg"
     },
@@ -586,14 +1284,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "get_lively_stones",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
+      "module": "worm.c",
       "name": "do_compute_effective_worm_sizes",
       "type": "funarg"
     },
@@ -602,6 +1293,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "worm.c",
       "name": "do_compute_effective_worm_sizes",
       "type": "funarg"
     },
@@ -609,7 +1301,32 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "owl_analyze_semeai",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "owl_analyze_semeai",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "owl_analyze_semeai",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "module": "owl.c",
       "name": "init_owl",
       "type": "funarg"
     },
@@ -618,6 +1335,31 @@
   {
     "pattern": {
       "index": 1,
+      "name": "owl_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "owl_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "owl_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "owl.c",
       "name": "do_owl_attack",
       "type": "funarg"
     },
@@ -626,6 +1368,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "owl.c",
       "name": "do_owl_attack",
       "type": "funarg"
     },
@@ -633,7 +1376,24 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "owl_threaten_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "owl_threaten_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "module": "owl.c",
       "name": "owl_shapes",
       "type": "funarg"
     },
@@ -642,6 +1402,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "owl.c",
       "name": "owl_shapes",
       "type": "funarg"
     },
@@ -650,6 +1411,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "owl.c",
       "name": "owl_shapes",
       "type": "funarg"
     },
@@ -658,6 +1420,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "owl.c",
       "name": "get_next_move_from_list",
       "type": "funarg"
     },
@@ -666,6 +1429,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "owl.c",
       "name": "get_next_move_from_list",
       "type": "funarg"
     },
@@ -674,6 +1438,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "owl.c",
       "name": "close_pattern_list",
       "type": "funarg"
     },
@@ -682,6 +1447,31 @@
   {
     "pattern": {
       "index": 1,
+      "name": "owl_defend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "owl_defend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "owl_defend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "owl.c",
       "name": "do_owl_defend",
       "type": "funarg"
     },
@@ -690,7 +1480,24 @@
   {
     "pattern": {
       "index": 2,
+      "module": "owl.c",
       "name": "do_owl_defend",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "owl_threaten_defense",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "owl_threaten_defense",
       "type": "funarg"
     },
     "type": "value"
@@ -705,7 +1512,24 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "owl_confirm_safety",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "owl_does_attack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "owl.c",
       "name": "sniff_lunch",
       "type": "funarg"
     },
@@ -714,6 +1538,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "owl.c",
       "name": "sniff_lunch",
       "type": "funarg"
     },
@@ -722,6 +1547,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "owl.c",
       "name": "sniff_lunch",
       "type": "funarg"
     },
@@ -730,6 +1556,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "owl.c",
       "name": "push_owl",
       "type": "funarg"
     },
@@ -738,6 +1565,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "owl.c",
       "name": "push_owl",
       "type": "funarg"
     },
@@ -746,6 +1574,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "owl.c",
       "name": "owl_estimate_life",
       "type": "funarg"
     },
@@ -754,6 +1583,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "owl.c",
       "name": "owl_estimate_life",
       "type": "funarg"
     },
@@ -762,6 +1592,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "owl.c",
       "name": "owl_estimate_life",
       "type": "funarg"
     },
@@ -770,6 +1601,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "owl.c",
       "name": "owl_estimate_life",
       "type": "funarg"
     },
@@ -778,6 +1610,7 @@
   {
     "pattern": {
       "index": 6,
+      "module": "owl.c",
       "name": "owl_estimate_life",
       "type": "funarg"
     },
@@ -785,7 +1618,16 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "gfprintf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "module": "printutils.c",
       "name": "vgprintf",
       "type": "funarg"
     },
@@ -794,7 +1636,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "gprintf",
+      "name": "mprintf",
       "type": "funarg"
     },
     "type": "value"
@@ -811,6 +1653,38 @@
     "pattern": {
       "index": 2,
       "name": "abortgo",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "location_to_buffer",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "string_to_location",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "string_to_location",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "confirm_safety",
       "type": "funarg"
     },
     "type": "value"
@@ -825,7 +1699,152 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "unconditional_life",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "name": "find_superstring",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "find_superstring",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "find_superstring_conservative",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "find_superstring_conservative",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "find_superstring_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "find_superstring_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "find_proper_superstring_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "find_proper_superstring_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "find_superstring_stones_and_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "find_superstring_stones_and_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "find_superstring_stones_and_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "find_superstring_stones_and_liberties",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "superstring_chainlinks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "superstring_chainlinks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "proper_superstring_chainlinks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "proper_superstring_chainlinks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "time_report",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "utils.c",
       "name": "superstring_add_string",
       "type": "funarg"
     },
@@ -834,6 +1853,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "utils.c",
       "name": "superstring_add_string",
       "type": "funarg"
     },
@@ -842,6 +1862,7 @@
   {
     "pattern": {
       "index": 11,
+      "module": "utils.c",
       "name": "superstring_add_string",
       "type": "funarg"
     },
@@ -850,6 +1871,7 @@
   {
     "pattern": {
       "index": 12,
+      "module": "utils.c",
       "name": "superstring_add_string",
       "type": "funarg"
     },
@@ -858,6 +1880,7 @@
   {
     "pattern": {
       "index": 13,
+      "module": "utils.c",
       "name": "superstring_add_string",
       "type": "funarg"
     },
@@ -866,6 +1889,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "genmove.c",
       "name": "do_genmove",
       "type": "funarg"
     },
@@ -874,7 +1898,71 @@
   {
     "pattern": {
       "index": 0,
-      "name": "aftermath_genmove",
+      "name": "genmove_conservative",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "genmove_conservative",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "genmove_restricted",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "genmove_restricted",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "genmove_restricted",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "aftermath_compute_score",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_moveXY",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "get_moveXY",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gtp_main_loop",
       "type": "funarg"
     },
     "type": "value"
@@ -889,6 +1977,54 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "gtp_set_vertex_transform_hooks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gtp_set_vertex_transform_hooks",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "gtp_mprintf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "gtp_decode_move",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "gtp_decode_move",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "gtp_decode_move",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "gtp_print_vertices",
       "type": "funarg"
@@ -905,7 +2041,80 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "get_attack_threats",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "name": "get_saved_worms",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "mark_changed_dragon",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "mark_changed_dragon",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "mark_changed_dragon",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mark_changed_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "mark_changed_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "get_saved_dragons",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "mark_safe_stones",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "optics.c",
       "name": "compute_primary_domains",
       "type": "funarg"
     },
@@ -914,6 +2123,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "optics.c",
       "name": "compute_primary_domains",
       "type": "funarg"
     },
@@ -922,6 +2132,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "optics.c",
       "name": "compute_primary_domains",
       "type": "funarg"
     },
@@ -929,7 +2140,136 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "propagate_eye",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "find_eye_dragons",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "find_eye_dragons",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "compute_eyes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "compute_eyes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "compute_eyes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "compute_eyes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "compute_eyes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "compute_eyes_pessimistic",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "compute_eyes_pessimistic",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "compute_eyes_pessimistic",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "compute_eyes_pessimistic",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "is_halfeye",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "is_false_eye",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "test_eyeshape",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "find_half_and_false_eyes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 6,
+      "module": "optics.c",
       "name": "recognize_eye",
       "type": "funarg"
     },
@@ -938,6 +2278,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "filllib.c",
       "name": "filllib_confirm_safety",
       "type": "funarg"
     },
@@ -945,8 +2286,24 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "gg_getopt_long",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
-      "name": "compute_surroundings",
+      "name": "gg_getopt_long",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "gg_getopt_long",
       "type": "funarg"
     },
     "type": "value"

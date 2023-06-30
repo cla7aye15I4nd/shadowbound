@@ -2,6 +2,22 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK13JobIdentifierclB5cxx11Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK13JobIdentifierclB5cxx11Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN24TensorProductPolynomialsILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
       "type": "funarg"
     },
@@ -18,14 +34,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN24TensorProductPolynomialsILi3EED2Ev",
       "type": "funarg"
     },
@@ -35,14 +43,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN17FE_Q_HierarchicalILi3EE37lexicographic_to_hierarchic_numberingERK17FiniteElementDataILi3EEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN9TableBaseILi2EdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -105,16 +105,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
+      "index": 2,
+      "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIbSaIbEEmS4_EET_S6_T0_RKT1_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIbSaIbEEmS4_EET_S6_T0_RKT1_",
+      "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -153,6 +153,38 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11BlockVectorIdE5beginEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11BlockVectorIfE5beginEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8internal20BlockVectorIterators8IteratorIdLb0EE12move_forwardEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8internal20BlockVectorIterators8IteratorIfLb0EE12move_forwardEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIjSaIjEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPjS1_EEmRKj",
       "type": "funarg"
@@ -161,24 +193,8 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorI6VectorIdESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorI6VectorIfESaIS1_EE18_M_fill_initializeEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -217,14 +233,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIfESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN9Histogram8evaluateIdEEvRKSt6vectorI6VectorIT_ESaIS4_EERKS1_IdSaIdEEjNS_15IntervalSpacingE",
       "type": "funarg"
@@ -235,14 +243,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN9Histogram8evaluateIdEEvRKSt6vectorI6VectorIT_ESaIS4_EERKS1_IdSaIdEEjNS_15IntervalSpacingE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -259,22 +259,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZNSt6vectorIN9Histogram8IntervalESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIfESaIS1_EE18_M_fill_initializeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -313,8 +297,64 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN16ParameterHandler13declare_entryERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_RKN8Patterns11PatternBaseES7_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN16ParameterHandler13declare_entryERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_RKN8Patterns11PatternBaseES7_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN16ParameterHandler13declare_entryERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_RKN8Patterns11PatternBaseES7_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN16ParameterHandler13declare_entryERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_RKN8Patterns11PatternBaseES7_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK16ParameterHandler11get_integerERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN16ParameterHandler18ExcConversionErrorD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK16ParameterHandler10get_doubleERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK16ParameterHandler8get_boolERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
       "type": "funarg"
     },
     "type": "value"
@@ -337,7 +377,7 @@
   },
   {
     "pattern": {
-      "index": 1,
+      "index": 2,
       "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
@@ -345,8 +385,8 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 0,
+      "name": "_ZN8Patterns9SelectionD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -425,14 +465,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIN11Polynomials10PolynomialIdEESaIS2_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNSt6vectorIN11Polynomials10PolynomialIdEESaIS2_EEaSERKS4_",
       "type": "funarg"
@@ -449,16 +481,16 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
+      "index": 2,
+      "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIN11Polynomials10PolynomialIdEESaIS5_EEmS7_EET_S9_T0_RKT1_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIN11Polynomials10PolynomialIdEESaIS5_EEmS7_EET_S9_T0_RKT1_",
+      "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -505,14 +537,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
@@ -531,38 +555,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11VectorTools11interpolateILi3E6VectorIdEEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERK8FunctionIXT_EERT0_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN8FEValuesILi3EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -601,14 +593,6 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNK10FullMatrixIdE5vmultIdEEvR6VectorIT_ERKS4_b",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN11VectorTools7projectILi3EEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERK16ConstraintMatrixRK10QuadratureIXT_EERK8FunctionIXT_EER6VectorIdEbRKSC_IXmiT_Li1EEEb",
       "type": "funarg"
@@ -619,6 +603,22 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11VectorTools31create_boundary_right_hand_sideILi3EEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERK10QuadratureIXmiT_Li1EEERK8FunctionIXT_EER6VectorIdERKSt3setIhSt4lessIhESaIhEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11VectorTools27interpolate_boundary_valuesILi3EEEvRK10DoFHandlerIXT_EEhRK8FunctionIXT_EERSt3mapIjdSt4lessIjESaISt4pairIKjdEEERKSt6vectorIbSaIbEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11VectorTools27interpolate_boundary_valuesILi3EEEvRK10DoFHandlerIXT_EEhRK8FunctionIXT_EERSt3mapIjdSt4lessIjESaISt4pairIKjdEEERKSt6vectorIbSaIbEE",
       "type": "funarg"
     },
     "type": "value"
@@ -802,30 +802,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZSt18__do_uninit_fill_nIPSt6vectorI6TensorILi1ELi3EESaIS2_EEmS4_ET_S6_T0_RKT1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNSt8_Rb_treeIhhSt9_IdentityIhESt4lessIhESaIhEE16_M_insert_uniqueERKh",
       "type": "funarg"
     },
@@ -897,22 +873,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIbSaIbEEC2ERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI5PointILi2EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorI5PointILi2EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
@@ -947,14 +907,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN8FESystemILi3EE26compute_nonzero_componentsERK13FiniteElementILi3EEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1049,14 +1001,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
@@ -1081,16 +1025,104 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIdSaIdEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPdS1_EEmRKd",
+      "index": 2,
+      "name": "_ZN7FE_PolyI24TensorProductPolynomialsILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorIdSaIdEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPdS1_EEmRKd",
+      "index": 3,
+      "name": "_ZN7FE_PolyI24TensorProductPolynomialsILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN7FE_PolyI24TensorProductPolynomialsILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN7FE_PolyI24TensorProductPolynomialsILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN7FE_PolyI15PolynomialSpaceILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN7FE_PolyI15PolynomialSpaceILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN7FE_PolyI15PolynomialSpaceILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN7FE_PolyI15PolynomialSpaceILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN7FE_PolyI12PolynomialsPILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN7FE_PolyI12PolynomialsPILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN7FE_PolyI12PolynomialsPILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN7FE_PolyI12PolynomialsPILi3EELi3EEC2EjRKS1_RK17FiniteElementDataILi3EERKSt6vectorIbSaIbEERKS9_ISB_SaISB_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1099,22 +1131,6 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIdSaIdEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPdS1_EEmRKd",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6TensorILi1ELi3EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -1131,14 +1147,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN9TableBaseILi2E6TensorILi1ELi3EEE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN13MatrixCreator18create_mass_matrixILi3EdEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERK10QuadratureIXT_EER12SparseMatrixIT0_EPK8FunctionIXT_EE",
       "type": "funarg"
     },
     "type": "value"
@@ -1257,14 +1265,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN13MatrixCreator27create_boundary_mass_matrixILi3EEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERK10QuadratureIXmiT_Li1EEER12SparseMatrixIdERKN11FunctionMapIXT_EE4typeER6VectorIdERSt6vectorIjSaIjEEPK8FunctionIXT_EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 8,
       "name": "_ZN13MatrixCreator29create_boundary_mass_matrix_1ILi3EEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERK10QuadratureIXmiT_Li1EEER12SparseMatrixIdERKN11FunctionMapIXT_EE4typeER6VectorIdERSt6vectorIjSaIjEEPK8FunctionIXT_EENS_13IteratorRangeIXT_EEERN7Threads16DummyThreadMutexE",
       "type": "funarg"
@@ -1330,15 +1330,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
+      "name": "_ZN9TableBaseILi2EfED2Ev",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
+      "index": 0,
+      "name": "_ZN25CompressedSparsityPatternD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1347,14 +1347,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZSt18__do_uninit_fill_nIPSt3setIjSt4lessIjESaIjEEmS4_ET_S6_T0_RKT1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt8_Rb_treeIjjSt9_IdentityIjESt4lessIjESaIjEE16_M_insert_uniqueERKj",
       "type": "funarg"
     },
     "type": "value"
@@ -1371,22 +1363,6 @@
     "pattern": {
       "index": 4,
       "name": "_ZNK15MGTransferBlockIfE10copy_to_mgILi3E11BlockVectorIdEEEvRK12MGDoFHandlerIXT_EER13MGLevelObjectIS2_IfEERKT0_RKNS0_5is_1dILb0EEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"
@@ -1641,6 +1617,38 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN15PolynomialSpaceILi1EE13set_numberingERKSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN15PolynomialSpaceILi2EE13set_numberingERKSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN15PolynomialSpaceILi3EE13set_numberingERKSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9TableBaseILi2ESt6vectorIdSaIdEEED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN9TableBaseILi2ESt6vectorIdSaIdEEE6reinitERK12TableIndicesILi2EE",
       "type": "funarg"
@@ -1651,14 +1659,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN9TableBaseILi2ESt6vectorIdSaIdEEE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorIdSaIdEEaSERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -1810,6 +1810,46 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK13TriangulationILi3EE14begin_raw_lineEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE14begin_raw_quadEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE5beginEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE3endEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE12last_raw_hexEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNSt3mapISt4pairIiiE12TriaIteratorILi3E18TriaObjectAccessorILi1ELi3EEESt4lessIS1_ESaIS0_IKS1_S5_EEEixERS8_",
       "type": "funarg"
     },
@@ -1834,6 +1874,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK13TriangulationILi3EE13begin_raw_hexEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNSt3mapIiSt6vectorI12TriaIteratorILi3E12CellAccessorILi3EEESaIS4_EESt4lessIiESaISt4pairIKiS6_EEEixERSA_",
       "type": "funarg"
     },
@@ -1843,6 +1891,38 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt3mapIiSt6vectorI12TriaIteratorILi3E12CellAccessorILi3EEESaIS4_EESt4lessIiESaISt4pairIKiS6_EEEixERSA_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE12begin_activeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE14begin_raw_faceEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE17begin_active_faceEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13TriangulationILi3EE8end_faceEv",
       "type": "funarg"
     },
     "type": "value"
@@ -1873,8 +1953,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNK13TriangulationILi3EE18save_coarsen_flagsERSt6vectorIbSaIbEE",
+      "index": 2,
+      "name": "_ZN13TriangulationILi3EE12set_boundaryEjRK8BoundaryILi3EE",
       "type": "funarg"
     },
     "type": "value"
@@ -1882,39 +1962,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNK13TriangulationILi3EE17save_refine_flagsERSt6vectorIbSaIbEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN13TriangulationILi3EE17write_bool_vectorEjRKSt6vectorIbSaIbEEjRSo",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN13TriangulationILi3EE16read_bool_vectorEjRSt6vectorIbSaIbEEjRSi",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN13TriangulationILi3EE17load_refine_flagsERKSt6vectorIbSaIbEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN13TriangulationILi3EE18load_coarsen_flagsERKSt6vectorIbSaIbEE",
+      "name": "_ZNK13TriangulationILi3EE15save_user_flagsERSt6vectorIbSaIbEE",
       "type": "funarg"
     },
     "type": "value"
@@ -1939,6 +1987,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZNK13TriangulationILi3EE19save_user_flags_hexERSt6vectorIbSaIbEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN13TriangulationILi3EE15load_user_flagsERKSt6vectorIbSaIbEE",
       "type": "funarg"
     },
     "type": "value"
@@ -2210,6 +2266,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN14DoFRenumbering21compute_Cuthill_McKeeILi3EEEvRSt6vectorIjSaIjEERK10DoFHandlerIXT_EEbbRKS3_",
       "type": "funarg"
     },
@@ -2226,30 +2290,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorIjSaIjEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorIjSaIjEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN16ConstraintMatrixD2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN14DoFRenumbering22compute_component_wiseILi3E15WrapDoFIteratorI18TriaActiveIteratorILi3E15DoFCellAccessorILi3EEEE12TriaIteratorILi3ES4_EEEjRSt6vectorIjSaIjEERT0_RKT1_RKSB_",
       "type": "funarg"
     },
@@ -2291,14 +2331,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN14DoFRenumbering22compute_component_wiseILi3E17WrapMGDoFIteratorI12TriaIteratorILi3E17MGDoFCellAccessorILi3EEEES6_EEjRSt6vectorIjSaIjEERT0_RKT1_RKS9_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"
@@ -2331,22 +2363,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN14DoFRenumbering22compute_subdomain_wiseILi3EEEvRSt6vectorIjSaIjEERK10DoFHandlerIXT_EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IjSaIjEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZSt18__do_uninit_fill_nIPSt6vectorIjSaIjEEmS2_ET_S4_T0_RKT1_",
       "type": "funarg"
     },
     "type": "value"
@@ -2465,6 +2481,22 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZNK14FilteredMatrixI12SparseMatrixIdE6VectorIdEE17apply_constraintsERS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK14FilteredMatrixI12SparseMatrixIdE6VectorIdEE17apply_constraintsERS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZNK14FilteredMatrixI12SparseMatrixIfE6VectorIfEE18get_column_entriesEjRSt6vectorISt4pairIjfESaIS7_EEb",
       "type": "funarg"
@@ -2473,8 +2505,8 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorISt4pairIjdESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
+      "index": 0,
+      "name": "_ZN14FilteredMatrixI12SparseMatrixIdE6VectorIdEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -2651,22 +2683,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN13LaplaceSolver6SolverILi3EEC2ER13TriangulationILi3EERK13FiniteElementILi3EERK10QuadratureILi3EERKS9_ILi2EERK8FunctionILi3EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"
@@ -3074,7 +3090,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorIS_IjSaIjEESaIS1_EEaSERKS3_",
+      "name": "_ZN10FullMatrixIfEaSIdEERS0_RKS_IT_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10FullMatrixIfE3addIfEEvfRKS_IT_E",
       "type": "funarg"
     },
     "type": "value"
@@ -3082,7 +3106,23 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
+      "name": "_ZNK10FullMatrixIfE5mmultIfEEvRS_IT_ERKS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK10FullMatrixIfE5mmultIfEEvRS_IT_ERKS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9TableBaseILi2EfED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -3099,14 +3139,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt6vectorIS_I6VectorIfESaIS1_EESaIS3_EEaSERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIfESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -3161,14 +3193,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNSt6vectorIN16SolutionTransferILi3EdE13PointerstructESaIS2_EEaSERKS4_",
       "type": "funarg"
@@ -3202,31 +3226,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZSt18__do_uninit_fill_nIPSt6vectorIjSaIjEEmS2_ET_S4_T0_RKT1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIfESaIS1_EE18_M_fill_initializeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
       "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorI6VectorIfESaIS4_EEmS6_EET_S8_T0_RKT1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -3242,7 +3242,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN10DoFHandlerILi3EE23distribute_dofs_on_cellER18TriaActiveIteratorILi3E15DoFCellAccessorILi3EEEj",
+      "name": "_ZN14GridRefinement31refine_and_coarsen_fixed_numberILi3E6VectorIfEEEvR13TriangulationIXT_EERKT0_dd",
       "type": "funarg"
     },
     "type": "value"
@@ -3250,7 +3250,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorIjSaIjEEaSERKS1_",
+      "name": "_ZN14GridRefinement33refine_and_coarsen_fixed_fractionILi3E6VectorIfEEEvR13TriangulationIXT_EERKT0_dd",
       "type": "funarg"
     },
     "type": "value"
@@ -3258,7 +3258,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK13TriangulationILi3EE10begin_lineEj",
+      "name": "_ZNK10DoFHandlerILi3EE5beginEj",
       "type": "funarg"
     },
     "type": "value"
@@ -3266,7 +3266,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK13TriangulationILi3EE17begin_active_lineEj",
+      "name": "_ZNK10DoFHandlerILi3EE12begin_activeEj",
       "type": "funarg"
     },
     "type": "value"
@@ -3274,7 +3274,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK13TriangulationILi3EE9last_lineEj",
+      "name": "_ZNK10DoFHandlerILi3EE3endEv",
       "type": "funarg"
     },
     "type": "value"
@@ -3282,7 +3282,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK13TriangulationILi3EE16last_active_lineEj",
+      "name": "_ZNK10DoFHandlerILi3EE17begin_active_faceEj",
       "type": "funarg"
     },
     "type": "value"
@@ -3290,31 +3290,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK13TriangulationILi3EE10begin_quadEj",
+      "name": "_ZNK10DoFHandlerILi3EE8end_faceEv",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE17begin_active_quadEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE9last_quadEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE16last_active_quadEj",
+      "index": 1,
+      "name": "_ZN10DoFHandlerILi3EE23distribute_dofs_on_cellER18TriaActiveIteratorILi3E15DoFCellAccessorILi3EEEj",
       "type": "funarg"
     },
     "type": "value"
@@ -3345,32 +3329,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN15PolynomialSpaceILi3EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIbSaIbEEmS4_EET_S6_T0_RKT1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
       "type": "funarg"
     },
     "type": "value"
@@ -3433,6 +3393,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN14GridReorderingILi3EE13reorder_cellsERSt6vectorI8CellDataILi3EESaIS3_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZNSt6vectorIN8internal16GridReordering3d4CellESaIS2_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS2_S4_EERKS2_",
       "type": "funarg"
@@ -3473,8 +3441,32 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IS_IdSaIdEESaIS1_EESaIS3_EED2Ev",
+      "index": 1,
+      "name": "_ZN24TensorProductPolynomialsILi3EE13set_numberingERKSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK24TensorProductPolynomialsILi3EE7computeERK5PointILi3EERSt6vectorIdSaIdEERS5_I6TensorILi1ELi3EESaISA_EERS5_IS9_ILi2ELi3EESaISE_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZNK24TensorProductPolynomialsILi3EE7computeERK5PointILi3EERSt6vectorIdSaIdEERS5_I6TensorILi1ELi3EESaISA_EERS5_IS9_ILi2ELi3EESaISE_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZNK24TensorProductPolynomialsILi3EE7computeERK5PointILi3EERSt6vectorIdSaIdEERS5_I6TensorILi1ELi3EESaISA_EERS5_IS9_ILi2ELi3EESaISE_EE",
       "type": "funarg"
     },
     "type": "value"
@@ -3505,8 +3497,8 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIS2_IdSaIdEESaIS4_EEmS6_EET_S8_T0_RKT1_",
+      "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -3545,22 +3537,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN8FEValuesILi3EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN12DataOutStackILi3EE15add_data_vectorIdEEvRK6VectorIT_ERKSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaISD_EE",
       "type": "funarg"
@@ -3578,7 +3554,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
+      "name": "_ZN9TableBaseILi2EfED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -3603,6 +3579,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN9LogStreamC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9LogStream13depth_consoleEj",
       "type": "funarg"
     },
     "type": "value"
@@ -3689,16 +3673,72 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "_ZNSt6vectorIjSaIjEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPjS1_EEmRKj",
+      "index": 0,
+      "name": "_ZNK12FEValuesBaseILi3EE16quadrature_pointEj",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE19get_function_valuesI6VectorIfEdEEvRKT_RSt6vectorIT0_SaIS8_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE19get_function_valuesI11BlockVectorIfEdEEvRKT_RSt6vectorIT0_SaIS8_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE19get_function_valuesI6VectorIfEdEEvRKT_RSt6vectorIS2_IT0_ESaIS9_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE19get_function_valuesI11BlockVectorIfEdEEvRKT_RSt6vectorI6VectorIT0_ESaISA_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE18get_function_gradsI6VectorIfEEEvRKT_RSt6vectorI6TensorILi1ELi3EESaIS9_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE18get_function_gradsI11BlockVectorIdEEEvRKT_RSt6vectorI6TensorILi1ELi3EESaIS9_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12FEValuesBaseILi3EE18get_function_gradsI11BlockVectorIfEEEvRKT_RSt6vectorI6TensorILi1ELi3EESaIS9_EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZNSt6vectorIjSaIjEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPjS1_EEmRKj",
       "type": "funarg"
     },
     "type": "value"
@@ -3769,14 +3809,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN9TableBaseILi2EdED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN7FETools35get_interpolation_difference_matrixILi3EdEEvRK13FiniteElementIXT_EES4_R10FullMatrixIT0_E",
       "type": "funarg"
@@ -3817,14 +3849,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK10FullMatrixIdE5vmultIdEEvR6VectorIT_ERKS4_b",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNK10FullMatrixIdE5vmultIdEEvR6VectorIT_ERKS4_b",
       "type": "funarg"
@@ -3833,32 +3857,24 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNK10FullMatrixIdE5vmultIdEEvR6VectorIT_ERKS4_b",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN16ConstraintMatrixD2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
+      "name": "_ZN7FETools24interpolation_differenceILi3E6VectorIdES2_EEvRK10DoFHandlerIXT_EERK16ConstraintMatrixRKT0_S6_S9_RT1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN7FETools24interpolation_differenceILi3E6VectorIdES2_EEvRK10DoFHandlerIXT_EERK16ConstraintMatrixRKT0_S6_S9_RT1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN7FETools24interpolation_differenceILi3E6VectorIdES2_EEvRK10DoFHandlerIXT_EERK16ConstraintMatrixRKT0_S6_S9_RT1_",
       "type": "funarg"
     },
     "type": "value"
@@ -3873,23 +3889,7 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK10FullMatrixIdE5vmultIfEEvR6VectorIT_ERKS4_b",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZNK10FullMatrixIdE5vmultIfEEvR6VectorIT_ERKS4_b",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
       "name": "_ZNK10FullMatrixIdE5vmultIfEEvR6VectorIT_ERKS4_b",
       "type": "funarg"
     },
@@ -3963,6 +3963,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZN7FETools11extrapolateILi3E11BlockVectorIfE6VectorIfEEEvRK10DoFHandlerIXT_EERKT0_S8_RK16ConstraintMatrixRT1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN7FETools37lexicographic_to_hierarchic_numberingILi3EEEvRK4FE_QIXT_EERSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"
@@ -4065,14 +4073,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
@@ -4105,24 +4105,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIdSaIdEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPdS1_EEmRKd",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIdSaIdEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPdS1_EEmRKd",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6TensorILi1ELi3EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -4146,7 +4130,31 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11Polynomials19LagrangeEquidistant23generate_complete_basisEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11Polynomials10PolynomialIdED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11Polynomials8Legendre23generate_complete_basisEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11Polynomials12Hierarchical23generate_complete_basisEj",
       "type": "funarg"
     },
     "type": "value"
@@ -4179,6 +4187,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11Polynomials10PolynomialIeED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11Polynomials8MonomialIdE23generate_complete_basisEj",
       "type": "funarg"
     },
     "type": "value"
@@ -4274,6 +4290,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN13GridGenerator10hyper_ballER13TriangulationILi3EERK5PointILi3EEd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN13GridGenerator15hyper_rectangleILi3EEEvR13TriangulationIXT_EERK5PointIXT_EES7_b",
       "type": "funarg"
     },
@@ -4283,6 +4307,14 @@
     "pattern": {
       "index": 2,
       "name": "_ZN13GridGenerator15hyper_rectangleILi3EEEvR13TriangulationIXT_EERK5PointIXT_EES7_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN13GridGenerator10hyper_cubeILi3EEEvR13TriangulationIXT_EEdd",
       "type": "funarg"
     },
     "type": "value"
@@ -4315,6 +4347,14 @@
     "pattern": {
       "index": 2,
       "name": "_ZN13GridGenerator13laplace_solveERK12SparseMatrixIdERKSt3mapIjdSt4lessIjESaISt4pairIKjdEEER6VectorIdE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN4FE_QILi3EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4426,22 +4466,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNSt6vectorI8CellDataILi3EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
     },
@@ -4483,14 +4507,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11DataOutBase8write_dxILi1ELi1EEEvRKSt6vectorINS_5PatchIXT_EXT0_EEESaIS3_EERKS1_INSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaISD_EERKNS_7DXFlagsERSo",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4739,6 +4755,22 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11DataOutBase9write_vtkILi3ELi3EEEvRKSt6vectorINS_5PatchIXT_EXT0_EEESaIS3_EERKS1_INSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaISD_EERKNS_8VtkFlagsERSo",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK16DataOutInterfaceILi3ELi3EE5writeERSoNS0_12OutputFormatE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK16DataOutInterfaceILi3ELi3EE5writeERSoNS0_12OutputFormatE",
       "type": "funarg"
     },
     "type": "value"
@@ -5218,23 +5250,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN9TableBaseILi2EdED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
+      "name": "_ZN9TableBaseILi2EfED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -5265,8 +5281,32 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIbSaIbEEC2ERKS1_",
+      "index": 2,
+      "name": "_ZN19KellyErrorEstimatorILi3EE8estimateI6VectorIdEEEvRK10DoFHandlerILi3EERK10QuadratureILi2EERKSt3mapIhPK8FunctionILi3EESt4lessIhESaISt4pairIKhSG_EEERKT_RS2_IfERKSt6vectorIbSaIbEESG_jj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN19KellyErrorEstimatorILi3EE8estimateI6VectorIdEEEvRK10DoFHandlerILi3EERK10QuadratureILi2EERKSt3mapIhPK8FunctionILi3EESt4lessIhESaISt4pairIKhSG_EEERKT_RS2_IfERKSt6vectorIbSaIbEESG_jj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN19KellyErrorEstimatorILi3EE8estimateI6VectorIdEEEvRK10DoFHandlerILi3EERK10QuadratureILi2EERKSt3mapIhPK8FunctionILi3EESt4lessIhESaISt4pairIKhSG_EEERKT_RS2_IfERKSt6vectorIbSaIbEESG_jj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN19KellyErrorEstimatorILi3EE8estimateI6VectorIdEEEvRK10DoFHandlerILi3EERK10QuadratureILi2EERKSt3mapIhPK8FunctionILi3EESt4lessIhESaISt4pairIKhSG_EEERKT_RS2_IfERKSt6vectorIbSaIbEESG_jj",
       "type": "funarg"
     },
     "type": "value"
@@ -5649,6 +5689,30 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZNK12MGDoFHandlerILi3EE5beginEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12MGDoFHandlerILi3EE12begin_activeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12MGDoFHandlerILi3EE3endEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN12MGDoFHandlerILi3EE23distribute_dofs_on_cellER12TriaIteratorILi3E17MGDoFCellAccessorILi3EEEj",
       "type": "funarg"
@@ -5657,8 +5721,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorIjSaIjEEaSERKS1_",
+      "index": 2,
+      "name": "_ZN12MGDoFHandlerILi3EE13renumber_dofsEjRKSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"
@@ -5667,70 +5731,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNK12MGDoFHandlerILi3EE3endEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE10begin_lineEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE17begin_active_lineEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE9last_lineEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE16last_active_lineEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE10begin_quadEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE17begin_active_quadEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE9last_quadEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE16last_active_quadEj",
       "type": "funarg"
     },
     "type": "value"
@@ -5755,14 +5755,6 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIP8FEValuesILi3EESaIS2_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS2_S4_EEmRKS2_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN9TableBaseILi2E6TensorILi1ELi3EEE6reinitERK12TableIndicesILi2EE",
       "type": "funarg"
     },
     "type": "value"
@@ -5833,22 +5825,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE17begin_active_lineEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK13TriangulationILi3EE10begin_lineEj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIS_IjSaIjEESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
@@ -5898,7 +5874,103 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE7measureEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE7measureEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE11at_boundaryEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE11at_boundaryEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE11material_idEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE15set_material_idEh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK12CellAccessorILi3EE27recursively_set_material_idEh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE12point_insideERK5PointILi3EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE25neighbor_child_on_subfaceEjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE3setERK4Line",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE3setERK4Line",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE13set_used_flagEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE15clear_used_flagEv",
       "type": "funarg"
     },
     "type": "value"
@@ -5922,6 +5994,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE16set_user_pointerEPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi1ELi3EE28recursively_set_user_pointerEPv",
       "type": "funarg"
     },
@@ -5938,6 +6018,38 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE18clear_user_pointerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE12user_pointerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE12set_childrenEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE14clear_childrenEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi1ELi3EE20max_refinement_depthEv",
       "type": "funarg"
     },
@@ -5946,7 +6058,95 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE18boundary_indicatorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE22set_boundary_indicatorEh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE11at_boundaryEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE8diameterEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi1ELi3EE6centerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi1ELi3EE18number_of_childrenEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE12set_neighborEjRK12TriaIteratorILi3ES0_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE12subdomain_idEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12CellAccessorILi3EE16set_subdomain_idEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE3setERK4Quad",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE13set_used_flagEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE15clear_used_flagEv",
       "type": "funarg"
     },
     "type": "value"
@@ -5970,6 +6170,30 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE16set_user_pointerEPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE18clear_user_pointerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE12user_pointerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi2ELi3EE28recursively_set_user_pointerEPv",
       "type": "funarg"
     },
@@ -5986,6 +6210,22 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE12set_childrenEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE14clear_childrenEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi2ELi3EE20max_refinement_depthEv",
       "type": "funarg"
     },
@@ -5994,7 +6234,79 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE18boundary_indicatorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE22set_boundary_indicatorEh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE11at_boundaryEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE8diameterEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi2ELi3EE6centerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi2ELi3EE18number_of_childrenEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE3setERK10Hexahedron",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE3setERK10Hexahedron",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE13set_used_flagEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE15clear_used_flagEv",
       "type": "funarg"
     },
     "type": "value"
@@ -6018,6 +6330,30 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE16set_user_pointerEPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE18clear_user_pointerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE12user_pointerEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi3ELi3EE28recursively_set_user_pointerEPv",
       "type": "funarg"
     },
@@ -6034,7 +6370,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE12set_childrenEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK18TriaObjectAccessorILi3ELi3EE20max_refinement_depthEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE6centerEv",
       "type": "funarg"
     },
     "type": "value"
@@ -6050,7 +6402,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
+      "name": "_ZNK18TriaObjectAccessorILi3ELi3EE20set_face_orientationEjb",
       "type": "funarg"
     },
     "type": "value"
@@ -6073,8 +6425,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
+      "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6122,6 +6474,30 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK8FunctionILi3EE10value_listERKSt6vectorI5PointILi3EESaIS3_EERS1_IdSaIdEEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK8FunctionILi3EE10value_listERKSt6vectorI5PointILi3EESaIS3_EERS1_IdSaIdEEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN16ConstantFunctionILi3EEC2Edj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN24TensorProductPolynomialsILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
       "type": "funarg"
     },
@@ -6131,14 +6507,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN24TensorProductPolynomialsILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6154,7 +6522,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN9TableBaseILi2EdED2Ev",
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6163,14 +6531,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZNSt22__uninitialized_fill_nILb0EE15__uninit_fill_nIPSt6vectorIbSaIbEEmS4_EET_S6_T0_RKT1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
       "type": "funarg"
     },
     "type": "value"
@@ -6187,22 +6547,6 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIjSaIjEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPjS1_EEmRKj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
       "type": "funarg"
     },
     "type": "value"
@@ -6249,14 +6593,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN15PolynomialSpaceILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN15PolynomialSpaceILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
       "type": "funarg"
@@ -6266,15 +6602,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN15PolynomialSpaceILi3EED2Ev",
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6289,22 +6617,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN9TableBaseILi2EdE6reinitERK12TableIndicesILi2EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN24TensorProductPolynomialsILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
       "type": "funarg"
@@ -6315,14 +6627,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN24TensorProductPolynomialsILi3EEC2IN11Polynomials10PolynomialIdEEEERKSt6vectorIT_SaIS6_EE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6353,16 +6657,24 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN9TableBaseILi2EdED2Ev",
+      "index": 1,
+      "name": "_ZN4FE_QILi2EE37lexicographic_to_hierarchic_numberingERK17FiniteElementDataILi2EEj",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN4FE_QILi2EE37lexicographic_to_hierarchic_numberingERK17FiniteElementDataILi2EEj",
+      "index": 0,
+      "name": "_ZN4FE_QILi3EED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11Polynomials10PolynomialIdED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6395,6 +6707,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZNK9MappingQ1ILi3EE22compute_shapes_virtualERKSt6vectorI5PointILi3EESaIS3_EERNS0_12InternalDataE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK9MappingQ1ILi3EE14compute_shapesERKSt6vectorI5PointILi3EESaIS3_EERNS0_12InternalDataE",
       "type": "funarg"
     },
     "type": "value"
@@ -6449,8 +6769,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
+      "index": 1,
+      "name": "_ZN8DoFTools21make_sparsity_patternILi3E15SparsityPatternEEvRK10DoFHandlerIXT_EERT0_",
       "type": "funarg"
     },
     "type": "value"
@@ -6458,15 +6778,39 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
+      "name": "_ZN8DoFTools21make_sparsity_patternILi3E25CompressedSparsityPatternEEvRK10DoFHandlerIXT_EERT0_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
+      "index": 2,
+      "name": "_ZN8DoFTools30make_boundary_sparsity_patternILi3E15SparsityPatternEEvRK10DoFHandlerIXT_EERKN11FunctionMapIXT_EE4typeERKSt6vectorIjSaIjEERT0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN8DoFTools30make_boundary_sparsity_patternILi3E15SparsityPatternEEvRK10DoFHandlerIXT_EERKN11FunctionMapIXT_EE4typeERKSt6vectorIjSaIjEERT0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8DoFTools29distribute_cell_to_dof_vectorILi3EfEEvRK10DoFHandlerIXT_EERK6VectorIT0_ERS5_IdEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8DoFTools29distribute_cell_to_dof_vectorILi3EfEEvRK10DoFHandlerIXT_EERK6VectorIT0_ERS5_IdEj",
       "type": "funarg"
     },
     "type": "value"
@@ -6475,6 +6819,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN8DoFTools25get_subdomain_associationILi3EEEvRK10DoFHandlerIXT_EERSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8DoFTools24count_dofs_per_componentILi3EEEvRK10DoFHandlerIXT_EERSt6vectorIjSaIjEES7_",
       "type": "funarg"
     },
     "type": "value"
@@ -6513,8 +6865,16 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN8FEValuesILi3EED2Ev",
+      "index": 1,
+      "name": "_ZN8DoFTools27map_dof_to_boundary_indicesILi3EEEvRK10DoFHandlerIXT_EERKSt3setIhSt4lessIhESaIhEERSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8DoFTools27map_dof_to_boundary_indicesILi3EEEvRK10DoFHandlerIXT_EERKSt3setIhSt4lessIhESaIhEERSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"
@@ -6585,14 +6945,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIiSaIiEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPiS1_EEmRKi",
       "type": "funarg"
@@ -6642,39 +6994,39 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN23DerivativeApproximation20approximate_gradientILi3E6VectorIdEEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERKT0_RS1_IfEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN23DerivativeApproximation20approximate_gradientILi3E6VectorIdEEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERKT0_RS1_IfEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN23DerivativeApproximation29approximate_second_derivativeILi3E6VectorIdEEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERKT0_RS1_IfEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN23DerivativeApproximation29approximate_second_derivativeILi3E6VectorIdEEEvRK7MappingIXT_EERK10DoFHandlerIXT_EERKT0_RS1_IfEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN23DerivativeApproximation8GradientILi3EE24get_projected_derivativeI6VectorIdEEEdRK8FEValuesILi3EERKT_j",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZSt9__advanceI18TriaActiveIteratorILi3E15DoFCellAccessorILi3EEElEvRT_T0_St26bidirectional_iterator_tag",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorI6VectorIdESaIS1_EE18_M_fill_initializeEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -6707,14 +7059,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt6vectorIS_I6TensorILi1ELi3EESaIS1_EESaIS3_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZSt18__do_uninit_fill_nIPSt6vectorI6TensorILi1ELi3EESaIS2_EEmS4_ET_S6_T0_RKT1_",
       "type": "funarg"
     },
     "type": "value"
@@ -6794,6 +7138,118 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK17MGDoFCellAccessorILi3EE4faceEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK17MGDoFCellAccessorILi3EE4faceEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi3ELi3EE4quadEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi1ELi3EE12mg_dof_indexEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi2ELi3EE12mg_dof_indexEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi3ELi3EE4lineEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi1ELi3EE16set_mg_dof_indexEjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi2ELi3EE16set_mg_dof_indexEjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK19MGDoFObjectAccessorILi2ELi3EE18get_mg_dof_indicesERSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK19MGDoFObjectAccessorILi2ELi3EE18get_mg_dof_indicesERSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK19MGDoFObjectAccessorILi3ELi3EE18get_mg_dof_indicesERSt6vectorIjSaIjEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK17MGDoFCellAccessorILi3EE8neighborEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK17MGDoFCellAccessorILi3EE8neighborEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK17MGDoFCellAccessorILi3EE5childEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN12DataOutFacesILi3EE4DataD2Ev",
       "type": "funarg"
     },
@@ -6826,7 +7282,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN16FEFaceValuesBaseILi3EED2Ev",
+      "name": "_ZN9TableBaseILi2EfED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6889,6 +7345,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN9TableBaseILi2EfED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZSt18__do_uninit_fill_nIPN15DataOutRotationILi3EE4DataEmS2_ET_S4_T0_RKT1_",
       "type": "funarg"
@@ -6945,6 +7409,22 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN12InterGridMapI10DoFHandlerLi3EE12make_mappingERKS0_ILi3EES4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN12InterGridMapI10DoFHandlerLi3EE12make_mappingERKS0_ILi3EES4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN12InterGridMapI10DoFHandlerLi3EE11set_mappingERK12TriaIteratorILi3E15DoFCellAccessorILi3EEES7_",
       "type": "funarg"
@@ -6955,6 +7435,22 @@
     "pattern": {
       "index": 2,
       "name": "_ZN12InterGridMapI10DoFHandlerLi3EE11set_mappingERK12TriaIteratorILi3E15DoFCellAccessorILi3EEES7_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK12InterGridMapI10DoFHandlerLi3EEixERK12TriaIteratorILi3E15DoFCellAccessorILi3EEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK12InterGridMapI10DoFHandlerLi3EEixERK12TriaIteratorILi3E15DoFCellAccessorILi3EEE",
       "type": "funarg"
     },
     "type": "value"
@@ -7065,8 +7561,16 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN10FullMatrixIdE3addIdEEvdRKS_IT_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
-      "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI6VectorIdEdEEvRKT_RS2_IT0_E",
+      "name": "_ZNK10FullMatrixIdE5mmultIdEEvRS_IT_ERKS3_b",
       "type": "funarg"
     },
     "type": "value"
@@ -7074,7 +7578,79 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI6VectorIdEdEEvRKT_RS2_IT0_E",
+      "name": "_ZNK10FullMatrixIdE5mmultIdEEvRS_IT_ERKS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK10FullMatrixIdE6TmmultIdEEvRS_IT_ERKS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZNK10FullMatrixIdE6TmmultIdEEvRS_IT_ERKS3_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10FullMatrixIdE6invertIdEEvRKS_IT_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN10FullMatrixIdE6invertIdEEvRKS_IT_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10FullMatrixIdE16fill_permutationIdEEvRKS_IT_ERKSt6vectorIjSaIjEESA_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN10FullMatrixIdE16fill_permutationIdEEvRKS_IT_ERKSt6vectorIjSaIjEESA_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10FullMatrixIdE5vmultIdEEvR6VectorIT_ERKS4_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10FullMatrixIdE5vmultIfEEvR6VectorIT_ERKS4_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK15DoFCellAccessorILi3EE4faceEj",
       "type": "funarg"
     },
     "type": "value"
@@ -7090,14 +7666,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK15DoFCellAccessorILi3EE31set_dof_values_by_interpolationI6VectorIdEdEEvRKS2_IT0_ERT_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZNK15DoFCellAccessorILi3EE31set_dof_values_by_interpolationI6VectorIdEdEEvRKS2_IT0_ERT_",
       "type": "funarg"
     },
@@ -7178,22 +7746,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI6VectorIfEfEEvRKT_RS2_IT0_E",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI6VectorIfEfEEvRKT_RS2_IT0_E",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNK15DoFCellAccessorILi3EE31set_dof_values_by_interpolationI6VectorIfEfEEvRKS2_IT0_ERT_",
       "type": "funarg"
     },
@@ -7203,14 +7755,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZNK15DoFCellAccessorILi3EE31set_dof_values_by_interpolationI6VectorIfEfEEvRKS2_IT0_ERT_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI11BlockVectorIdEdEEvRKT_R6VectorIT0_E",
       "type": "funarg"
     },
     "type": "value"
@@ -7305,14 +7849,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI11BlockVectorIfEfEEvRKT_R6VectorIT0_E",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNK15DoFCellAccessorILi3EE27get_interpolated_dof_valuesI11BlockVectorIfEfEEvRKT_R6VectorIT0_E",
       "type": "funarg"
@@ -7338,7 +7874,23 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorIS_IbSaIbEESaIS1_EED2Ev",
+      "name": "_ZNK17DoFObjectAccessorILi1ELi3EE13set_dof_indexEjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK17DoFObjectAccessorILi2ELi3EE13set_dof_indexEjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK15DoFCellAccessorILi3EE25neighbor_child_on_subfaceEjj",
       "type": "funarg"
     },
     "type": "value"
@@ -7346,7 +7898,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN7MGTools24count_dofs_per_componentILi3EEEvRK12MGDoFHandlerIXT_EERSt6vectorIS5_IjSaIjEESaIS7_EES7_",
+      "name": "_ZN7MGTools21make_sparsity_patternILi3E15SparsityPatternEEvRK12MGDoFHandlerIXT_EERT0_j",
       "type": "funarg"
     },
     "type": "value"
@@ -7355,14 +7907,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN7MGTools24count_dofs_per_componentILi3EEEvRK12MGDoFHandlerIXT_EERSt6vectorIS5_IjSaIjEESaIS7_EES7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IjSaIjEESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -7385,8 +7929,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIbSaIbEE14_M_fill_insertESt13_Bit_iteratormb",
+      "index": 1,
+      "name": "_ZNSt6vectorIN16ConstraintMatrix14ConstraintLineESaIS1_EE9push_backERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -7394,7 +7938,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZSt18__do_uninit_fill_nIPSt6vectorIjSaIjEEmS2_ET_S4_T0_RKT1_",
+      "name": "_ZN16ConstraintMatrix11add_entriesEjRKSt6vectorISt4pairIjdESaIS2_EE",
       "type": "funarg"
     },
     "type": "value"
@@ -7402,7 +7946,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorIN16ConstraintMatrix14ConstraintLineESaIS1_EE9push_backERKS1_",
+      "name": "_ZNK16ConstraintMatrix8condenseER15SparsityPattern",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK16ConstraintMatrix8condenseER25CompressedSparsityPattern",
       "type": "funarg"
     },
     "type": "value"
@@ -7434,7 +7986,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt8_Rb_treeIjjSt9_IdentityIjESt4lessIjESaIjEE16_M_insert_uniqueERKj",
+      "name": "_ZN12SparseMatrixIdEC1ERK15SparsityPattern",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN12SparseMatrixIdEC1ERK15SparsityPattern",
       "type": "funarg"
     },
     "type": "value"
@@ -7497,14 +8057,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorIdSaIdEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZSt18__do_uninit_fill_nIPN11Polynomials10PolynomialIdEEmS2_ET_S4_T0_RKT1_",
       "type": "funarg"
@@ -7531,6 +8083,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorI6TensorILi2ELi2EESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11MatrixTools21apply_boundary_valuesIdEEvRKSt3mapIjdSt4lessIjESaISt4pairIKjdEEER12SparseMatrixIT_ER6VectorISC_ESH_b",
       "type": "funarg"
     },
     "type": "value"
@@ -7633,14 +8193,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIjSaIjEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPjS1_EEmRKj",
       "type": "funarg"
@@ -7705,6 +8257,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN9TableBaseILi2EfED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIN14SparseMatrixEZIfE7RowInfoESaIS2_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS2_S4_EEmRKS2_",
       "type": "funarg"
@@ -7737,6 +8297,30 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EEC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE18attach_dof_handlerERK10DoFHandlerILi3EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE18attach_dof_handlerERK10DoFHandlerILi3EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE15add_data_vectorI6VectorIdEEEvRKT_RKSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaISD_EENS0_14DataVectorTypeE",
       "type": "funarg"
@@ -7763,6 +8347,30 @@
     "pattern": {
       "index": 2,
       "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE15add_data_vectorI11BlockVectorIdEEEvRKT_RKSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaISD_EENS0_14DataVectorTypeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE15add_data_vectorI6VectorIdEEEvRKT_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS0_14DataVectorTypeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE15add_data_vectorI6VectorIdEEEvRKT_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS0_14DataVectorTypeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN15DataOut_DoFDataILi3ELi3ELi3EE15add_data_vectorI6VectorIdEEEvRKT_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS0_14DataVectorTypeE",
       "type": "funarg"
     },
     "type": "value"
@@ -7818,6 +8426,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN7DataOutILi3EE13build_patchesEjj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN7DataOutILi3EE4DataD2Ev",
       "type": "funarg"
     },
@@ -7835,22 +8451,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11DataOutBase5PatchILi3ELi3EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IjSaIjEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN8FEValuesILi3EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -7889,6 +8489,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN9TableBaseILi2EfED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIjSaIjEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPjS1_EEmRKj",
       "type": "funarg"
@@ -7907,14 +8515,6 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EEmRKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIS_IjSaIjEESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -7985,6 +8585,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZNK10QuadratureILi1EE5pointEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN10QProjectorILi3EE15project_to_faceERK10QuadratureILi2EEjRSt6vectorI5PointILi3EESaIS7_EE",
       "type": "funarg"
@@ -8018,7 +8626,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN10QProjectorILi3EE23project_to_all_subfacesERK10QuadratureILi2EE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN9QIteratedILi1EEC2ERK10QuadratureILi1EEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK10QuadratureILi1EE6weightEj",
       "type": "funarg"
     },
     "type": "value"
@@ -8114,15 +8738,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN10QuadratureILi1EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN10QuadratureILi2EED2Ev",
+      "name": "_ZNK10QProjectorILi3EE17DataSetDescriptorcvjEv",
       "type": "funarg"
     },
     "type": "value"
@@ -8131,14 +8747,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt6vectorI5PointILi2EESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorI5PointILi3EESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -8187,22 +8795,6 @@
     "pattern": {
       "index": 4,
       "name": "_ZNK18MGTransferPrebuiltI6VectorIfEE10copy_to_mgILi3E11BlockVectorIdEEEvRK12MGDoFHandlerIXT_EER13MGLevelObjectIS1_ERKT0_RKNS2_5is_1dILb0EEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK17DoFObjectAccessorILi3ELi3EE15get_dof_indicesERSt6vectorIjSaIjEE",
       "type": "funarg"
     },
     "type": "value"

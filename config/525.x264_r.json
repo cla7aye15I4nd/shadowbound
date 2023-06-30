@@ -1,6 +1,190 @@
 [
   {
     "pattern": {
+      "index": 0,
+      "name": "x264_encoder_open_96",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_encoder_parameters",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_encoder_headers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "x264_encoder_headers",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_encoder_encode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "x264_encoder_encode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "x264_encoder_encode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "x264_encoder_encode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "biari_init_context",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "ParseCommand",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "check_next_mb_and_get_field_mode_CABAC_p_slice",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "check_next_mb_and_get_field_mode_CABAC_b_slice",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "reorder_short_term",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "reorder_long_term",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "get_mb_pos",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "get_mb_pos",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "get4x4NeighbourBase",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "mk_writeHeader",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "mk_writeHeader",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "error",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "OpenDecoder",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "DecodeOneFrame",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "FinitDecoder",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 4,
       "name": "ercPixConcealIMB",
       "type": "funarg"
@@ -18,7 +202,24 @@
   {
     "pattern": {
       "index": 2,
+      "module": "io_tiff.c",
       "name": "getIntArray",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "no_mem_exit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "get_mem3D",
       "type": "funarg"
     },
     "type": "value"
@@ -34,6 +235,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "start_macroblock",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "get_neighbors",
       "type": "funarg"
     },
@@ -42,6 +251,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "macroblock.c",
       "name": "readMBMotionVectors",
       "type": "funarg"
     },
@@ -50,6 +260,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "macroblock.c",
       "name": "read_delta_quant",
       "type": "funarg"
     },
@@ -58,6 +269,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "macroblock.c",
       "name": "read_delta_quant",
       "type": "funarg"
     },
@@ -66,6 +278,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "macroblock.c",
       "name": "readCompCoeff8x8MB_CABAC",
       "type": "funarg"
     },
@@ -74,6 +287,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "macroblock.c",
       "name": "readCompCoeff4x4MB_CABAC",
       "type": "funarg"
     },
@@ -82,6 +296,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "macroblock.c",
       "name": "readCoeff4x4_CAVLC",
       "type": "funarg"
     },
@@ -90,6 +305,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "macroblock.c",
       "name": "readCoeff4x4_CAVLC",
       "type": "funarg"
     },
@@ -98,6 +314,7 @@
   {
     "pattern": {
       "index": 6,
+      "module": "macroblock.c",
       "name": "readCoeff4x4_CAVLC",
       "type": "funarg"
     },
@@ -106,6 +323,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "x264.c",
       "name": "Help",
       "type": "funarg"
     },
@@ -113,7 +331,64 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "x264_me_refine_qpel",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_me_refine_qpel_refdupe",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_me_refine_bidir_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "x264_me_refine_bidir_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_me_refine_qpel_rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_put_tag",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "x264_put_amf_string",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 4,
+      "module": "analyse.c",
       "name": "quant_trellis_cabac",
       "type": "funarg"
     },
@@ -122,6 +397,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "analyse.c",
       "name": "quant_trellis_cabac",
       "type": "funarg"
     },
@@ -130,6 +406,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_intra",
       "type": "funarg"
     },
@@ -138,6 +415,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_intra_rd",
       "type": "funarg"
     },
@@ -146,6 +424,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_intra_rd_refine",
       "type": "funarg"
     },
@@ -154,6 +433,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_init_qp",
       "type": "funarg"
     },
@@ -162,6 +442,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_p8x8_mixed_ref",
       "type": "funarg"
     },
@@ -170,6 +451,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_p8x8",
       "type": "funarg"
     },
@@ -178,6 +460,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_p16x8",
       "type": "funarg"
     },
@@ -186,6 +469,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_p8x16",
       "type": "funarg"
     },
@@ -194,6 +478,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_transform_rd",
       "type": "funarg"
     },
@@ -202,6 +487,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_transform_rd",
       "type": "funarg"
     },
@@ -210,6 +496,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_transform_rd",
       "type": "funarg"
     },
@@ -218,6 +505,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_b_rd",
       "type": "funarg"
     },
@@ -226,6 +514,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_b8x8_mixed_ref",
       "type": "funarg"
     },
@@ -234,6 +523,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_b8x8",
       "type": "funarg"
     },
@@ -242,6 +532,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_b16x8",
       "type": "funarg"
     },
@@ -250,6 +541,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_b8x16",
       "type": "funarg"
     },
@@ -258,6 +550,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_refine_bidir",
       "type": "funarg"
     },
@@ -266,6 +559,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "scenecut",
       "type": "funarg"
     },
@@ -274,6 +568,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "analyse.c",
       "name": "scenecut",
       "type": "funarg"
     },
@@ -282,6 +577,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_cabac_mb_ref",
       "type": "funarg"
     },
@@ -290,6 +586,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_cabac_mb8x8_mvd",
       "type": "funarg"
     },
@@ -298,6 +595,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "block_residual_write_cabac_internal",
       "type": "funarg"
     },
@@ -306,6 +604,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_mb_analyse_inter_p4x4_chroma",
       "type": "funarg"
     },
@@ -314,6 +613,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "analyse.c",
       "name": "x264_slicetype_mb_cost",
       "type": "funarg"
     },
@@ -322,6 +622,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "analyse.c",
       "name": "x264_macroblock_tree_propagate",
       "type": "funarg"
     },
@@ -330,6 +631,127 @@
   {
     "pattern": {
       "index": 0,
+      "name": "ue_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "se_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "u_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "i_v",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "u_1",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readSyntaxElement_Intra4x4PredictionMode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "GetBits",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readSyntaxElement_NumCoeffTrailingOnes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "readSyntaxElement_NumCoeffTrailingOnes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "readSyntaxElement_NumCoeffTrailingOnesChromaDC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readSyntaxElement_Level_VLC0",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readSyntaxElement_Level_VLCN",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readSyntaxElement_TotalZeros",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "readSyntaxElement_TotalZerosChromaDC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "readSyntaxElement_Run",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "module": "intra8x8_pred_normal.c",
       "name": "LowPassForIntra8x8Pred",
       "type": "funarg"
     },
@@ -410,6 +832,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "ratecontrol.c",
       "name": "x264_strcat_filename",
       "type": "funarg"
     },
@@ -418,6 +841,15 @@
   {
     "pattern": {
       "index": 2,
+      "name": "x264_ratecontrol_end",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "module": "ratecontrol.c",
       "name": "find_underflow",
       "type": "funarg"
     },
@@ -426,6 +858,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "ratecontrol.c",
       "name": "find_underflow",
       "type": "funarg"
     },
@@ -433,7 +866,88 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "ParseContent",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "InitParams",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "TestParams",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "TestParams",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "DisplayParams",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "DisplayParams",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "name": "prepare_direct_params",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "prepare_direct_params",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "prepare_direct_params",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "prepare_direct_params",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "module": "set.c",
       "name": "x264_cqm_parse_jmlist",
       "type": "funarg"
     },
@@ -442,6 +956,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "set.c",
       "name": "x264_cqm_parse_jmlist",
       "type": "funarg"
     },
@@ -449,8 +964,32 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "ihadamard2x2",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
-      "name": "x264_log",
+      "name": "x264_param_default_preset",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "x264_param_apply_fastfirstpass",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "x264_param_apply_profile",
       "type": "funarg"
     },
     "type": "value"
@@ -466,6 +1005,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "common.c",
       "name": "x264_atobool",
       "type": "funarg"
     },
@@ -474,6 +1014,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "common.c",
       "name": "parse_enum",
       "type": "funarg"
     },
@@ -506,6 +1047,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "intra8x8_pred_mbaff.c",
       "name": "LowPassForIntra8x8Pred",
       "type": "funarg"
     },
@@ -513,7 +1055,24 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "x264_mb_predict_mv_ref16x16",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 4,
+      "name": "x264_mb_predict_mv_ref16x16",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "module": "erc_do_p.c",
       "name": "concealByTrial",
       "type": "funarg"
     },
@@ -522,6 +1081,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "erc_do_p.c",
       "name": "buildPredRegionYUV",
       "type": "funarg"
     },

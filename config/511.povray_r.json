@@ -1,7 +1,24 @@
 [
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN3pov15write_histogramEPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov9image_mapEPdPNS_14Pigment_StructEPf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "module": "image.cpp",
       "name": "_ZN3povL3mapEPdPNS_14Pattern_StructES0_S0_",
       "type": "funarg"
     },
@@ -10,6 +27,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "image.cpp",
       "name": "_ZN3povL3mapEPdPNS_14Pattern_StructES0_S0_",
       "type": "funarg"
     },
@@ -18,6 +36,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "image.cpp",
       "name": "_ZN3povL15image_colour_atEPNS_12Image_StructEddPfPi",
       "type": "funarg"
     },
@@ -25,7 +44,24 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12material_mapEPdPNS_14Texture_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov8bump_mapEPdPNS_14Tnormal_StructES0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 7,
+      "module": "media.cpp",
       "name": "_ZN3povL12sample_mediaEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEidPfS9_iS1_i",
       "type": "funarg"
     },
@@ -34,6 +70,7 @@
   {
     "pattern": {
       "index": 8,
+      "module": "media.cpp",
       "name": "_ZN3povL12sample_mediaEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEidPfS9_iS1_i",
       "type": "funarg"
     },
@@ -42,6 +79,7 @@
   {
     "pattern": {
       "index": 8,
+      "module": "media.cpp",
       "name": "_ZN3povL16sample_media_recEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEiddPfS9_S9_S9_S9_S9_iddS1_i",
       "type": "funarg"
     },
@@ -50,6 +88,7 @@
   {
     "pattern": {
       "index": 11,
+      "module": "media.cpp",
       "name": "_ZN3povL16sample_media_recEPNS_17Light_List_StructEiPNS_10Ray_StructEPPNS_12Media_StructEPNS_21Media_Interval_StructEiddPfS9_S9_S9_S9_S9_iddS1_i",
       "type": "funarg"
     },
@@ -58,6 +97,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "media.cpp",
       "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
       "type": "funarg"
     },
@@ -66,6 +106,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "media.cpp",
       "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
       "type": "funarg"
     },
@@ -74,6 +115,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "media.cpp",
       "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
       "type": "funarg"
     },
@@ -82,6 +124,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "media.cpp",
       "name": "_ZN3povL22scattering_attenuationEPPNS_12Media_StructEPfS3_S3_PNS_10Ray_StructES5_",
       "type": "funarg"
     },
@@ -99,14 +142,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN3pov15BuildRenderTimeEP9POVMSDatajiiii",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN3pov18BuildRenderOptionsEP9POVMSData",
       "type": "funarg"
     },
     "type": "value"
@@ -153,6 +188,30 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN3pov25POVMSUtil_SetFormatStringEP9POVMSDatajPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov25POVMSUtil_SetFormatStringEP9POVMSDatajPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov11Locate_FileEPcjS0_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN3pov16SetCommandOptionEP9POVMSDatajPNS_9shelldataE",
       "type": "funarg"
@@ -169,7 +228,256 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN3pov14extract_colorsEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov14extract_colorsEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov14extract_colorsEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov14extract_colorsEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov14extract_colorsEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov24extract_colors_nocorrectEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov24extract_colors_nocorrectEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov24extract_colors_nocorrectEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov24extract_colors_nocorrectEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov24extract_colors_nocorrectEPfPhS1_S1_S1_Pd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov17colour2photonRgbeEPhPf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "name": "_ZN3pov17photonRgbe2colourEPfPh",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov16Solve_PolynomialEiPdS0_id",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov16Solve_PolynomialEiPdS0_id",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov13Evaluate_TPatEPNS_14Pattern_StructEPdPNS_10istk_entryE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov18Translate_TpatternEPNS_14Pattern_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov15Rotate_TpatternEPNS_14Pattern_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov14Scale_TpatternEPNS_14Pattern_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov16Search_Blend_MapEdPNS_16Blend_Map_StructEPPNS_15Blend_Map_EntryES4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov16Search_Blend_MapEdPNS_16Blend_Map_StructEPPNS_15Blend_Map_EntryES4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov10PickInCubeEPdS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov10PickInCubeEPdS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12Clip_PolygonEPA3_dPiPKdS4_S4_S4_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov12Clip_PolygonEPA3_dPiPKdS4_S4_S4_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov12Clip_PolygonEPA3_dPiPKdS4_S4_S4_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov12Clip_PolygonEPA3_dPiPKdS4_S4_S4_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov12Clip_PolygonEPA3_dPiPKdS4_S4_S4_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov12Clip_PolygonEPA3_dPiPKdS4_S4_S4_dddd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov16Rotate_SkysphereEPNS_16Skysphere_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov15Scale_SkysphereEPNS_16Skysphere_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov19Translate_SkysphereEPNS_16Skysphere_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "module": "photons.cpp",
       "name": "_ZN3povL16setGatherOptionsEPNS_17photon_map_structEi",
       "type": "funarg"
     },
@@ -178,7 +486,64 @@
   {
     "pattern": {
       "index": 0,
+      "module": "photons.cpp",
       "name": "_ZN3povL14AllocatePhotonEPNS_17photon_map_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov14addMediaPhotonEPdS0_Pfd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov14addMediaPhotonEPdS0_Pfd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov13gatherPhotonsEPddS0_S0_iPNS_17photon_map_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov13gatherPhotonsEPddS0_S0_iPNS_17photon_map_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov13gatherPhotonsEPddS0_S0_iPNS_17photon_map_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov9ChooseRayEPNS_10Ray_StructEPdS1_S2_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov9ChooseRayEPNS_10Ray_StructEPdS1_S2_i",
       "type": "funarg"
     },
     "type": "value"
@@ -193,7 +558,24 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base16TextStreamBuffer5printEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "name": "_ZN3pov17Trace_Primary_RayEPNS_10Ray_StructEPfdi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL21project_bounding_slabEPNS_14Project_StructEPPNS_24Project_Tree_Node_StructEPNS_16BBox_Tree_StructE",
       "type": "funarg"
     },
@@ -202,6 +584,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL12project_bboxEPNS_14Project_StructEPA3_dPi",
       "type": "funarg"
     },
@@ -210,6 +593,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL12project_bboxEPNS_14Project_StructEPA3_dPi",
       "type": "funarg"
     },
@@ -218,6 +602,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL21project_raw_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
       "type": "funarg"
     },
@@ -226,6 +611,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL21project_raw_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
       "type": "funarg"
     },
@@ -234,6 +620,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
       "type": "funarg"
     },
@@ -242,6 +629,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
       "type": "funarg"
     },
@@ -250,6 +638,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
       "type": "funarg"
     },
@@ -258,6 +647,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
       "type": "funarg"
     },
@@ -266,7 +656,96 @@
   {
     "pattern": {
       "index": 4,
+      "module": "vbuffer.cpp",
       "name": "_ZN3povL20project_raw_triangleEPNS_14Project_StructEPdS2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov16Translate_CameraEPNS_13Camera_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov13Rotate_CameraEPNS_13Camera_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov12Scale_CameraEPNS_13Camera_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov10pov_mallocEmPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov10pov_mallocEmPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov10pov_callocEmmPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov10pov_callocEmmPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov11pov_reallocEPvmPKciS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov11pov_reallocEPvmPKciS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov8pov_freeEPvPKci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN12POVMS_Object5MergeERS_",
       "type": "funarg"
     },
     "type": "value"
@@ -275,6 +754,30 @@
     "pattern": {
       "index": 0,
       "name": "_ZN12POVMS_ObjectclEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN13POVMS_Message21SetDestinationAddressEPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z17POVMS_SendMessagePvR13POVMS_MessagePS0_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z17POVMS_SendMessagePvR13POVMS_MessagePS0_i",
       "type": "funarg"
     },
     "type": "value"
@@ -313,7 +816,240 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN3pov14Intersect_BCylEPNS_11BCyl_StructEPdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov14Intersect_BCylEPNS_11BCyl_StructEPdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "name": "_ZN3pov18Read_Rendered_PartEPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov6FNCode9ParameterEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov6FNCode7CompileEPNS_14ExprNodeStructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov6FNCode7SetFlagEjPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov21Compute_Mesh_TriangleEPNS_20Mesh_Triangle_StructEiPdS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov21Compute_Mesh_TriangleEPNS_20Mesh_Triangle_StructEiPdS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov21Compute_Mesh_TriangleEPNS_20Mesh_Triangle_StructEiPdS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov21Compute_Mesh_TriangleEPNS_20Mesh_Triangle_StructEiPdS2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov16Mesh_Hash_VertexEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov16Mesh_Hash_VertexEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov16Mesh_Hash_VertexEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov16Mesh_Hash_VertexEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov16Mesh_Hash_NormalEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov16Mesh_Hash_NormalEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov16Mesh_Hash_NormalEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov16Mesh_Hash_NormalEPiS0_PPA3_fPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov17Mesh_Hash_TextureEPiS0_PPPNS_14Texture_StructES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov17Mesh_Hash_TextureEPiS0_PPPNS_14Texture_StructES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov17Mesh_Hash_TextureEPiS0_PPPNS_14Texture_StructES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12Mesh_Hash_UVEPiS0_PPA2_dPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov12Mesh_Hash_UVEPiS0_PPA2_dPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov12Mesh_Hash_UVEPiS0_PPA2_dPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov12Mesh_Hash_UVEPiS0_PPA2_dPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov15Mesh_DegenerateEPdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov15Mesh_DegenerateEPdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov15Mesh_DegenerateEPdS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov16Mesh_InterpolateEPdS0_PNS_11Mesh_StructEPNS_20Mesh_Triangle_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "module": "mesh.cpp",
       "name": "_ZN3povL23intersect_mesh_triangleEPNS_10Ray_StructEPNS_11Mesh_StructEPNS_20Mesh_Triangle_StructEPd",
       "type": "funarg"
     },
@@ -322,7 +1058,80 @@
   {
     "pattern": {
       "index": 3,
+      "module": "mesh.cpp",
       "name": "_ZN3povL23intersect_mesh_triangleEPNS_10Ray_StructEPNS_11Mesh_StructEPNS_20Mesh_Triangle_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov5MZeroEPA4_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov7MTimesCEPA4_dS1_S1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov7MTimesCEPA4_dS1_S1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov10MTransposeEPA4_dS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov18MInvTransDirectionEPdS0_PNS_16Transform_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov24Compute_Matrix_TransformEPNS_16Transform_StructEPA4_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov24Compute_Matrix_TransformEPNS_16Transform_StructEPA4_d",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov29Compute_Translation_TransformEPNS_16Transform_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov26Compute_Rotation_TransformEPNS_16Transform_StructEPd",
       "type": "funarg"
     },
     "type": "value"
@@ -337,8 +1146,16 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN3pov8MInvers3EPA3_dS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
-      "name": "_ZN3pov31Compute_Axis_Rotation_TransformEPNS_16Transform_StructEPdd",
+      "name": "_ZN3pov8MInvers3EPA3_dS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -354,6 +1171,7 @@
   {
     "pattern": {
       "index": 9,
+      "module": "render.cpp",
       "name": "_ZN3povL15trace_sub_pixelEiPPNS_12Pixel_StructEiiiiiiiPfi",
       "type": "funarg"
     },
@@ -378,7 +1196,24 @@
   {
     "pattern": {
       "index": 4,
+      "module": "render.cpp",
       "name": "_ZN3povL21trace_ray_with_offsetEiiddPf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base11OTextStream6printfEPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8pov_base12pov_tsprintfEPKcz",
       "type": "funarg"
     },
     "type": "value"
@@ -401,7 +1236,48 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN3pov31Build_Bounding_Sphere_HierarchyEPPNS_19BSphere_Tree_StructEiPS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov23Determine_Blob_TexturesEPNS_11Blob_StructEPdPiPPNS_14Texture_StructES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov22Translate_Blob_ElementEPNS_19Blob_Element_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov19Rotate_Blob_ElementEPNS_19Blob_Element_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov18Scale_Blob_ElementEPNS_19Blob_Element_StructEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "module": "blob.cpp",
       "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
       "type": "funarg"
     },
@@ -410,6 +1286,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "blob.cpp",
       "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
       "type": "funarg"
     },
@@ -418,6 +1295,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "blob.cpp",
       "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
       "type": "funarg"
     },
@@ -426,6 +1304,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "blob.cpp",
       "name": "_ZN3povL17intersect_elementEPdS0_PNS_19Blob_Element_StructEdS0_S0_",
       "type": "funarg"
     },
@@ -434,6 +1313,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "blob.cpp",
       "name": "_ZN3povL10insert_hitEPNS_19Blob_Element_StructEddPNS_20Blob_Interval_StructEPj",
       "type": "funarg"
     },
@@ -442,6 +1322,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "blob.cpp",
       "name": "_ZN3povL23calculate_element_fieldEPNS_19Blob_Element_StructEPd",
       "type": "funarg"
     },
@@ -450,7 +1331,24 @@
   {
     "pattern": {
       "index": 1,
+      "module": "blob.cpp",
       "name": "_ZN3povL14element_normalEPdS0_PNS_19Blob_Element_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base14ProcessOptionsC2EPNS0_16INI_Parser_TableEPNS0_16Cmd_Parser_TableE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8pov_base14ProcessOptionsC2EPNS0_16INI_Parser_TableEPNS0_16Cmd_Parser_TableE",
       "type": "funarg"
     },
     "type": "value"
@@ -497,6 +1395,22 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN8pov_base14ProcessOptions11ParseStringEPKcP9POVMSDatab",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8pov_base14ProcessOptions11ParseStringEPKcP9POVMSDatab",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN8pov_base14ProcessOptions15Parse_CL_SwitchERPKciP9POVMSDatab",
       "type": "funarg"
@@ -513,8 +1427,56 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN8pov_base14ProcessOptions9WriteFileEPKcP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8pov_base14ProcessOptions9WriteFileEPKcP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN3pov15Build_BBox_TreeEPPNS_16BBox_Tree_StructElRS2_lS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov20Build_Bounding_SlabsEPPNS_16BBox_Tree_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov19Intersect_BBox_TreeEPNS_16BBox_Tree_StructEPNS_10Ray_StructEPNS_10istk_entryEPPNS_13Object_StructEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN3pov19Intersect_BBox_TreeEPNS_16BBox_Tree_StructEPNS_10Ray_StructEPNS_10istk_entryEPPNS_13Object_StructEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov14Create_RayinfoEPNS_10Ray_StructEPNS_14Rayinfo_StructE",
       "type": "funarg"
     },
     "type": "value"
@@ -529,6 +1491,22 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN3pov21Priority_Queue_DeleteEPNS_21Priority_Queue_StructEPdPPNS_16BBox_Tree_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov21Priority_Queue_DeleteEPNS_21Priority_Queue_StructEPdPPNS_16BBox_Tree_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN3pov20Convert_UTF8_To_UCS2EPhiPi",
       "type": "funarg"
@@ -537,7 +1515,40 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN3pov11Warp_EPointEPdS0_PNS_14Pattern_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov26Reinitialize_Lighting_CodeEiPPPNS_14Texture_StructEPPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "name": "_ZN3pov26Reinitialize_Lighting_CodeEiPPPNS_14Texture_StructEPPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov25Determine_Apparent_ColourEPNS_10istk_entryEPfPNS_10Ray_StructEd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "module": "lighting.cpp",
       "name": "_ZN3povL14do_texture_mapEPfPNS_14Texture_StructEPdS3_PNS_10Ray_StructEdPNS_10istk_entryEi",
       "type": "funarg"
     },
@@ -546,6 +1557,38 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN3pov11Test_ShadowEPNS_19Light_Source_StructEPdPNS_10Ray_StructES4_S2_Pf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov11Test_ShadowEPNS_19Light_Source_StructEPdPNS_10Ray_StructES4_S2_Pf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov11Test_ShadowEPNS_19Light_Source_StructEPdPNS_10Ray_StructES4_S2_Pf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov11Test_ShadowEPNS_19Light_Source_StructEPdPNS_10Ray_StructES4_S2_Pf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN3pov10do_diffuseEPNS_13Finish_StructEPNS_10Ray_StructEPdPfS5_S5_d",
       "type": "funarg"
     },
@@ -594,6 +1637,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "lighting.cpp",
       "name": "_ZN3povL7ReflectEPdPNS_10Ray_StructES0_S0_Pfd",
       "type": "funarg"
     },
@@ -602,6 +1646,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "lighting.cpp",
       "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
       "type": "funarg"
     },
@@ -610,6 +1655,7 @@
   {
     "pattern": {
       "index": 6,
+      "module": "lighting.cpp",
       "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
       "type": "funarg"
     },
@@ -618,6 +1664,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "lighting.cpp",
       "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
       "type": "funarg"
     },
@@ -626,6 +1673,7 @@
   {
     "pattern": {
       "index": 8,
+      "module": "lighting.cpp",
       "name": "_ZN3povL17Diffuse_One_LightEPNS_19Light_Source_StructEiPdPNS_13Finish_StructES2_PNS_10Ray_StructES2_PfS7_dPNS_13Object_StructE",
       "type": "funarg"
     },
@@ -634,6 +1682,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "lighting.cpp",
       "name": "_ZN3povL7do_iridEPNS_13Finish_StructEPNS_10Ray_StructEPdS4_Pf",
       "type": "funarg"
     },
@@ -642,6 +1691,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "lighting.cpp",
       "name": "_ZN3povL11do_blockingEPNS_10istk_entryEPNS_10Ray_StructEPfPNS_13istack_structE",
       "type": "funarg"
     },
@@ -650,6 +1700,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "lbuffer.cpp",
       "name": "_ZN3povL21project_bounding_slabEiPdPNS_14Project_StructEPPNS_24Project_Tree_Node_StructEPNS_16BBox_Tree_StructEiS2_",
       "type": "funarg"
     },
@@ -657,7 +1708,32 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN3pov20Intersect_Light_TreeEPNS_10Ray_StructEPNS_24Project_Tree_Node_StructEiiPNS_10istk_entryEPPNS_13Object_StructEPNS_19Light_Source_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov20Intersect_Light_TreeEPNS_10Ray_StructEPNS_24Project_Tree_Node_StructEiiPNS_10istk_entryEPPNS_13Object_StructEPNS_19Light_Source_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN3pov20Intersect_Light_TreeEPNS_10Ray_StructEPNS_24Project_Tree_Node_StructEiiPNS_10istk_entryEPPNS_13Object_StructEPNS_19Light_Source_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "lbuffer.cpp",
       "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
       "type": "funarg"
     },
@@ -666,6 +1742,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "lbuffer.cpp",
       "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
       "type": "funarg"
     },
@@ -674,6 +1751,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "lbuffer.cpp",
       "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
       "type": "funarg"
     },
@@ -682,6 +1760,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "lbuffer.cpp",
       "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
       "type": "funarg"
     },
@@ -690,7 +1769,48 @@
   {
     "pattern": {
       "index": 5,
+      "module": "lbuffer.cpp",
       "name": "_ZN3povL17project_rectangleEPNS_14Project_StructEPdS2_S2_S2_Pi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov15init_statisticsEPx",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov14sum_statisticsEPxS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov14sum_statisticsEPxS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov20Compute_Quadric_BBoxEPNS_14Quadric_StructEPdS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov20Compute_Quadric_BBoxEPNS_14Quadric_StructEPdS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -721,8 +1841,40 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZN3pov15Compute_PigmentEPfPNS_14Pigment_StructEPdPNS_10istk_entryE",
+      "index": 0,
+      "name": "_ZN12pov_frontend21DefaultRenderFrontend16PrintHelpScreensEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov11Where_ErrorEP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov13Where_WarningEP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov13IncludeHeaderEPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN12pov_frontend14RenderFrontend11StartRenderER12POVMS_Object",
       "type": "funarg"
     },
     "type": "value"
@@ -730,7 +1882,23 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN3pov7WarningEjPKcz",
+      "name": "_ZN12pov_frontend14RenderFrontend11StartRenderER12POVMS_Object",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov10Debug_InfoEPKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov9WarningAtEjPKclmS1_z",
       "type": "funarg"
     },
     "type": "value"
@@ -745,7 +1913,24 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "_ZN3pov7ErrorAtEPKclmS1_z",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov18POVFPU_AddFunctionEPNS_12FunctionCodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "module": "super.cpp",
       "name": "_ZN3povL10solve_hit1EPNS_21Superellipsoid_StructEdPddS2_S2_",
       "type": "funarg"
     },
@@ -754,6 +1939,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "super.cpp",
       "name": "_ZN3povL10solve_hit1EPNS_21Superellipsoid_StructEdPddS2_S2_",
       "type": "funarg"
     },
@@ -762,7 +1948,32 @@
   {
     "pattern": {
       "index": 5,
+      "module": "super.cpp",
       "name": "_ZN3povL10solve_hit1EPNS_21Superellipsoid_StructEdPddS2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z17POVMS_OpenContextPPv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z23POVMS_GetContextAddressPvPS_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z21POVMS_InstallReceiverPvPFiP9POVMSDataS1_iS_EjjS_",
       "type": "funarg"
     },
     "type": "value"
@@ -778,7 +1989,31 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_Z25POVMSMsg_GetSourceAddressP9POVMSDataPPv",
+      "name": "_Z22POVMSStream_ReadStringPcPhiPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z22POVMSStream_ReadStringPcPhiPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z19POVMSStream_ReadIntPiPhS_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z19POVMSStream_ReadIntPiPhS_",
       "type": "funarg"
     },
     "type": "value"
@@ -787,22 +2022,6 @@
     "pattern": {
       "index": 1,
       "name": "_Z25POVMSMsg_GetSourceAddressP9POVMSDataPPv",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_Z30POVMSMsg_SetDestinationAddressP9POVMSDataPv",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_Z30POVMSMsg_GetDestinationAddressP9POVMSDataPPv",
       "type": "funarg"
     },
     "type": "value"
@@ -841,8 +2060,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_Z10POVMS_SendPvP9POVMSDataS1_i",
+      "index": 2,
+      "name": "_Z16POVMSUtil_GetIntP9POVMSDatajPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z23POVMSStream_WriteStringPKcPhPi",
       "type": "funarg"
     },
     "type": "value"
@@ -850,7 +2077,23 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_Z10POVMS_SendPvP9POVMSDataS1_i",
+      "name": "_Z23POVMSStream_WriteStringPKcPhPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z20POVMSStream_WriteIntiPhPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z17POVMSUtil_GetTypeP9POVMSDatajPj",
       "type": "funarg"
     },
     "type": "value"
@@ -858,7 +2101,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_Z15POVMSObject_SetP9POVMSDataS0_j",
+      "name": "_Z24POVMSMsg_GetMessageClassP9POVMSDataPj",
       "type": "funarg"
     },
     "type": "value"
@@ -866,6 +2109,103 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_Z29POVMSMsg_GetMessageIdentifierP9POVMSDataPj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z14POVMSAttr_SizeP9POVMSDataPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z14POVMSAttr_SizeP9POVMSDataPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z19POVMSAttrList_CountP9POVMSDataPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z19POVMSAttrList_CountP9POVMSDataPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z25POVMSUtil_GetStringLengthP9POVMSDatajPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z19POVMSUtil_GetStringP9POVMSDatajPcPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z17POVMSUtil_GetLongP9POVMSDatajPx",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z18POVMSUtil_GetFloatP9POVMSDatajPf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z17POVMSUtil_GetBoolP9POVMSDatajPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov10Add_ColourEPfS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN3pov13ProcessNewTTFEPNS_13Object_StructEPcPtdPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "truetype.cpp",
       "name": "_ZN3povL19ExtractGlyphOutlineEPNS_18FontFileInfoStructEPjj",
       "type": "funarg"
     },
@@ -881,8 +2221,24 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZN3pov14Perturb_NormalEPdPNS_14Tnormal_StructES0_PNS_10istk_entryE",
+      "index": 1,
+      "name": "_ZN8pov_base6IOBase5writeEPvm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base7IStream7getlineEPcm",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN8pov_base7OStream6printfEPKcz",
       "type": "funarg"
     },
     "type": "value"
@@ -890,7 +2246,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN3pov18Parse_Float_Param2EPdS0_",
+      "name": "_ZN8pov_base10Split_PathEPcS0_S0_",
       "type": "funarg"
     },
     "type": "value"
@@ -898,7 +2254,55 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN3pov18Parse_Float_Param2EPdS0_",
+      "name": "_ZN8pov_base10Split_PathEPcS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN8pov_base10Split_PathEPcS0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov11DTurbulenceEPdS0_PNS_11Turb_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12Allow_VectorEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov20Parse_Unknown_VectorEPdbPb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov20Parse_Unknown_VectorEPdbPb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov18Parse_Scale_VectorEPd",
       "type": "funarg"
     },
     "type": "value"
@@ -906,6 +2310,15 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN3pov16Parse_Blend_ListEiPNS_16Blend_Map_StructEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "express.cpp",
       "name": "_ZN3povL14Parse_Rel_TermEPdPi",
       "type": "funarg"
     },
@@ -914,7 +2327,16 @@
   {
     "pattern": {
       "index": 0,
+      "module": "express.cpp",
       "name": "_ZN3povL11Parse_TraceEPd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov19Insert_Spline_EntryEPNS_13Spline_StructEdPd",
       "type": "funarg"
     },
     "type": "value"
@@ -923,6 +2345,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZN12pov_frontend20ProcessRenderOptions17OpenINIFileStreamEPKcjPcP9POVMSData",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN3pov22Determine_CSG_TexturesEPNS_10CSG_StructEPdPiPPNS_14Texture_StructES2_",
       "type": "funarg"
     },
     "type": "value"
@@ -953,6 +2383,14 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "_ZN3pov15Compute_AmbientEPdS0_S0_Pfd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN3pov19Found_Instead_ErrorEPKcS1_",
       "type": "funarg"
@@ -962,7 +2400,16 @@
   {
     "pattern": {
       "index": 0,
+      "module": "parse.cpp",
       "name": "_ZN3povL12Parse_CameraEPPNS_13Camera_StructE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov15Parse_TransformEPNS_16Transform_StructE",
       "type": "funarg"
     },
     "type": "value"
@@ -978,6 +2425,47 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN3pov8Not_WithEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov8Not_WithEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov7Only_InEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov7Only_InEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov11Warn_CompatEiPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "module": "parse.cpp",
       "name": "_ZN3povL20Parse_Three_UVCoordsEPdS0_S0_",
       "type": "funarg"
     },
@@ -986,6 +2474,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "parse.cpp",
       "name": "_ZN3povL20Parse_Three_UVCoordsEPdS0_S0_",
       "type": "funarg"
     },
@@ -994,6 +2483,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "parse.cpp",
       "name": "_ZN3povL20Parse_Three_UVCoordsEPdS0_S0_",
       "type": "funarg"
     },
@@ -1002,6 +2492,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "parse.cpp",
       "name": "_ZN3povL18Parse_Mesh_TextureEPPNS_14Texture_StructES2_",
       "type": "funarg"
     },
@@ -1010,6 +2501,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "parse.cpp",
       "name": "_ZN3povL18Parse_Mesh_TextureEPPNS_14Texture_StructES2_",
       "type": "funarg"
     },
@@ -1018,6 +2510,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "bezier.cpp",
       "name": "_ZN3povL20bezier_split_up_downEPA4_A4_A3_dS3_S3_",
       "type": "funarg"
     },
@@ -1026,6 +2519,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "bezier.cpp",
       "name": "_ZN3povL20bezier_split_up_downEPA4_A4_A3_dS3_S3_",
       "type": "funarg"
     },
@@ -1034,6 +2528,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "bezier.cpp",
       "name": "_ZN3povL23bezier_split_left_rightEPA4_A4_A3_dS3_S3_",
       "type": "funarg"
     },
@@ -1042,6 +2537,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "bezier.cpp",
       "name": "_ZN3povL23bezier_split_left_rightEPA4_A4_A3_dS3_S3_",
       "type": "funarg"
     },
@@ -1050,6 +2546,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1058,6 +2555,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1066,6 +2564,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1074,6 +2573,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1082,6 +2582,7 @@
   {
     "pattern": {
       "index": 6,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1090,6 +2591,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1098,6 +2600,7 @@
   {
     "pattern": {
       "index": 8,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1106,6 +2609,7 @@
   {
     "pattern": {
       "index": 9,
+      "module": "bezier.cpp",
       "name": "_ZN3povL18intersect_subpatchEPNS_20Bicubic_Patch_StructEPNS_10Ray_StructEPA3_dPdS6_S6_S6_S6_S6_S6_",
       "type": "funarg"
     },
@@ -1114,6 +2618,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "bezier.cpp",
       "name": "_ZN3povL12bezier_valueEPA4_A4_A3_dddPdS4_",
       "type": "funarg"
     },
@@ -1122,6 +2627,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "bezier.cpp",
       "name": "_ZN3povL12bezier_valueEPA4_A4_A3_dddPdS4_",
       "type": "funarg"
     },
@@ -1145,6 +2651,14 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN3pov15ot_index_sphereEPddPNS_12ot_id_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN3pov12ot_index_boxEPdS0_PNS_12ot_id_structE",
       "type": "funarg"
@@ -1155,6 +2669,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN3pov12ot_index_boxEPdS0_PNS_12ot_id_structE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN3pov12ot_free_treeEPPNS_14ot_node_structE",
       "type": "funarg"
     },
     "type": "value"
@@ -1194,6 +2716,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "hfield.cpp",
       "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
       "type": "funarg"
     },
@@ -1202,6 +2725,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "hfield.cpp",
       "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
       "type": "funarg"
     },
@@ -1210,6 +2734,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "hfield.cpp",
       "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
       "type": "funarg"
     },
@@ -1218,6 +2743,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "hfield.cpp",
       "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
       "type": "funarg"
     },
@@ -1226,6 +2752,7 @@
   {
     "pattern": {
       "index": 6,
+      "module": "hfield.cpp",
       "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
       "type": "funarg"
     },
@@ -1234,6 +2761,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "hfield.cpp",
       "name": "_ZN3povL13dda_traversalEPNS_10Ray_StructEPNS_13HField_StructEPdPNS_19HField_Block_StructERPNS_13istack_structERS1_RdSB_",
       "type": "funarg"
     },
@@ -1250,6 +2778,7 @@
   {
     "pattern": {
       "index": 9,
+      "module": "hfield.cpp",
       "name": "_ZN3povL17add_single_normalEPPtiiiiiiiiPd",
       "type": "funarg"
     },
@@ -1258,7 +2787,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN3pov18Normal_Calc_HComplEPdiPNS_14Fractal_StructE",
+      "name": "_ZN3pov18Calculate_Smooth_TEPdS0_S0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN3pov18Calculate_Smooth_TEPdS0_S0_S0_",
       "type": "funarg"
     },
     "type": "value"
@@ -1266,47 +2803,15 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZN3pov18Normal_Calc_HComplEPdiPNS_14Fractal_StructE",
+      "name": "_ZN3pov18Calculate_Smooth_TEPdS0_S0_S0_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN3pov21Normal_Calc_HCompl_z3EPdiPNS_14Fractal_StructE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZN3pov21Normal_Calc_HCompl_z3EPdiPNS_14Fractal_StructE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN3pov29Normal_Calc_HCompl_ReciprocalEPdiPNS_14Fractal_StructE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZN3pov29Normal_Calc_HCompl_ReciprocalEPdiPNS_14Fractal_StructE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN3pov23Normal_Calc_HCompl_FuncEPdiPNS_14Fractal_StructE",
+      "index": 3,
+      "name": "_ZN3pov18Calculate_Smooth_TEPdS0_S0_S0_",
       "type": "funarg"
     },
     "type": "value"

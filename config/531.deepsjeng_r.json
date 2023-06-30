@@ -1,6 +1,70 @@
 [
   {
     "pattern": {
+      "index": 0,
+      "name": "_Z7is_drawP11gamestate_tP7state_t",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z18initialize_zobristP7state_t",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z7ProbeTTP7state_tPiiiPjS1_S1_S1_S1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_Z7ProbeTTP7state_tPiiiPjS1_S1_S1_S1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_Z7ProbeTTP7state_tPiiiPjS1_S1_S1_S1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_Z7ProbeTTP7state_tPiiiPjS1_S1_S1_S1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_Z7ProbeTTP7state_tPiiiPjS1_S1_S1_S1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "_Z7ProbeTTP7state_tPiiiPjS1_S1_S1_S1_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_Z5fevalP7state_tiP12t_eval_comps",
       "type": "funarg"
@@ -9,7 +73,56 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_Z15init_parametersP11gamestate_t",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "name": "_Z9gen_quietP7state_tPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z3genP7state_tPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z15gen_good_checksP7state_tPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z12gen_evasionsP7state_tPii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z15FindFirstRemovePy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "search.cpp",
       "name": "_ZL16fast_order_movesP7state_tPiS1_ij",
       "type": "funarg"
     },
@@ -18,6 +131,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "search.cpp",
       "name": "_ZL16fast_order_movesP7state_tPiS1_ij",
       "type": "funarg"
     },
@@ -26,6 +140,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "search.cpp",
       "name": "_ZL15remove_one_fastPiS_S_i",
       "type": "funarg"
     },
@@ -34,6 +149,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "search.cpp",
       "name": "_ZL15remove_one_fastPiS_S_i",
       "type": "funarg"
     },
@@ -42,6 +158,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "search.cpp",
       "name": "_ZL15remove_one_fastPiS_S_i",
       "type": "funarg"
     },
@@ -50,6 +167,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "search.cpp",
       "name": "_ZL11order_movesP7state_tPiS1_ij",
       "type": "funarg"
     },
@@ -58,6 +176,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "search.cpp",
       "name": "_ZL11order_movesP7state_tPiS1_ij",
       "type": "funarg"
     },
@@ -67,6 +186,30 @@
     "pattern": {
       "index": 2,
       "name": "_Z14setup_epd_lineP11gamestate_tP7state_tPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z17run_epd_testsuiteP11gamestate_tP7state_tPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z17run_epd_testsuiteP11gamestate_tP7state_tPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z11check_phaseP11gamestate_tP7state_t",
       "type": "funarg"
     },
     "type": "value"
@@ -91,6 +234,30 @@
     "pattern": {
       "index": 2,
       "name": "_Z13comp_to_coordP7state_tiPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z13post_thinkingP7state_tiiPci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z16post_fh_thinkingP7state_tiiPci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z16post_fl_thinkingP7state_tiiPci",
       "type": "funarg"
     },
     "type": "value"

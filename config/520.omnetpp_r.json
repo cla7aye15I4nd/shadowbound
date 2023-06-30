@@ -1,8 +1,8 @@
 [
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 1,
+      "name": "_ZN10cOutVector7setNameEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -10,15 +10,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN13NEDFileBuffer3getE10my_yyltype",
+      "name": "_ZN13NEDFileBuffer8readFileEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -42,15 +34,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN13NEDFileBuffer14getFullTextPosEv",
       "type": "funarg"
     },
     "type": "value"
@@ -58,15 +42,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN6cLCG327intRandEv",
       "type": "funarg"
     },
     "type": "value"
@@ -74,15 +50,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK15cDensityEstBase12detailedInfoB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -91,22 +59,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt3mapIiiSt4lessIiESaISt4pairIKiiEEEixERS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -122,23 +74,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN16cStringTokenizer9nextTokenEv",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
+      "index": 0,
+      "name": "_ZN16cStringTokenizer13hasMoreTokensEv",
       "type": "funarg"
     },
     "type": "value"
@@ -185,23 +129,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
+      "module": "ned1generator.cc",
       "name": "_ZL13formatCommentB5cxx11PKcS0_S0_",
       "type": "funarg"
     },
@@ -466,30 +395,6 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
       "name": "_Z3eatP5_TaskjS0_",
       "type": "funarg"
     },
@@ -498,7 +403,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_Z13task_switchtoP5_Task",
+      "name": "_ZN17DisplayStringUtil30upgradeBackgroundDisplayStringB5cxx11EPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -506,15 +411,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN17DisplayStringUtil29upgradeSubmoduleDisplayStringB5cxx11EPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -522,15 +419,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN17DisplayStringUtil30upgradeConnectionDisplayStringB5cxx11EPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -538,7 +427,23 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN17DisplayStringUtil28toOldBackgroundDisplayStringB5cxx11EPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN17DisplayStringUtil27toOldSubmoduleDisplayStringB5cxx11EPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN17DisplayStringUtil28toOldConnectionDisplayStringB5cxx11EPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -546,7 +451,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN14NEDElementUtil20getLocalBoolPropertyEP10NEDElementPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -555,38 +460,6 @@
     "pattern": {
       "index": 4,
       "name": "_ZN10cException4initEPK7cObject12OppErrorCodePKcP13__va_list_tag",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -617,38 +490,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_Z12opp_typenameRKSt9type_info",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_St4lessIS5_ESaISt4pairIKS5_S5_EEEixERS9_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_St4lessIS5_ESaISt4pairIKS5_S5_EEEixERS9_",
       "type": "funarg"
@@ -658,7 +499,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN26cMethodCallContextSwitcher10methodCallEPKcz",
       "type": "funarg"
     },
     "type": "value"
@@ -666,7 +507,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN26cMethodCallContextSwitcher10methodCallEPKcz",
       "type": "funarg"
     },
     "type": "value"
@@ -675,14 +516,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_ED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN6MTRand4seedEv",
       "type": "funarg"
     },
     "type": "value"
@@ -753,16 +586,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN9Intervals8containsE7SimTime",
       "type": "funarg"
     },
     "type": "value"
@@ -786,6 +611,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "cmsgpar.cc",
       "name": "_ZL17parseQuotedStringRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERPKc",
       "type": "funarg"
     },
@@ -794,6 +620,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "cmsgpar.cc",
       "name": "_ZL17parseQuotedStringRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERPKc",
       "type": "funarg"
     },
@@ -802,6 +629,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "cmsgpar.cc",
       "name": "_ZL8parsedblRPKc",
       "type": "funarg"
     },
@@ -810,30 +638,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIP10NEDElementSaIS1_EE9push_backERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZNSt6vectorIP10NEDElementSaIS1_EE9push_backERKS1_",
       "type": "funarg"
     },
@@ -842,15 +646,8 @@
   {
     "pattern": {
       "index": 0,
+      "module": "msg2.tab.cc",
       "name": "_ZL10yydestructPKciPP10NEDElementP10my_yyltype",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_",
       "type": "funarg"
     },
     "type": "value"
@@ -889,22 +686,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_",
       "type": "funarg"
@@ -922,38 +703,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_St9_IdentityIS5_ESt4lessIS5_ESaIS5_EE16_M_insert_uniqueERKS5_",
       "type": "funarg"
     },
@@ -962,15 +711,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_St9_IdentityIS5_ESt4lessIS5_ESaIS5_EE16_M_insert_uniqueERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN15MatchExpression7matchesEPKNS_9MatchableE",
       "type": "funarg"
     },
     "type": "value"
@@ -978,23 +719,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN10cCoroutine5setupEPFvPvES0_j",
       "type": "funarg"
     },
     "type": "value"
@@ -1025,6 +750,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN14UnitConversion11getAllUnitsEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZNSt6vectorIPKcSaIS1_EE9push_backERKS1_",
       "type": "funarg"
@@ -1034,15 +767,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK7cModule12GateIterator3endEv",
       "type": "funarg"
     },
     "type": "value"
@@ -1066,7 +791,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN7cModule15ChannelIterator4initEPKS_",
+      "name": "_ZNK7cModule12GateIterator7currentEv",
       "type": "funarg"
     },
     "type": "value"
@@ -1074,15 +799,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN7cModule15ChannelIterator4initEPKS_",
       "type": "funarg"
     },
     "type": "value"
@@ -1130,30 +847,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNK7cHasher5parseEPKc",
       "type": "funarg"
     },
@@ -1162,15 +855,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK7cHasher3strB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1185,8 +870,112 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZNK13DisplayString3strEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN13DisplayString10updateWithERKS_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13DisplayString10getNumTagsEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN13DisplayString9setTagArgEPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN13DisplayString9setTagArgEPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13DisplayString10getTagNameEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13DisplayString11containsTagEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK13DisplayString11containsTagEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13DisplayString10getNumArgsEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK13DisplayString10getNumArgsEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13DisplayString9getTagArgEPKci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK13DisplayString9getTagArgEPKci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN13DisplayString9removeTagEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN13DisplayString9removeTagEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -1203,22 +992,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt4pairIK10opp_stringS0_ED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -1266,30 +1039,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN15NED2ParserStateC2Ev",
       "type": "funarg"
     },
@@ -1298,6 +1047,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "lex.ned2yy.cc",
       "name": "_ZL14yy_fatal_errorPKc",
       "type": "funarg"
     },
@@ -1329,22 +1079,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZSt15__copy_move_ditILb0EP10NEDElementRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZSt15__copy_move_ditILb0EP10NEDElementRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZSt15__copy_move_ditILb0EP10NEDElementRKS1_PS2_St15_Deque_iteratorIS1_RS1_PS1_EET3_S5_IT0_T1_T2_ESD_S9_",
       "type": "funarg"
@@ -1354,31 +1088,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN31cIndexedFileOutputVectorManagerD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1394,6 +1104,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "csimulation.cc",
       "name": "_ZL8xmlquoteRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
       "type": "funarg"
     },
@@ -1402,6 +1113,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "csimulation.cc",
       "name": "_ZL8xmlquoteRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
       "type": "funarg"
     },
@@ -1410,39 +1122,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN10cExceptionD2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN11cSimulation22getNedPackageForFolderB5cxx11EPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -1482,7 +1162,23 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN8Scenario10getNumRunsEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8Scenario7gotoRunEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK8Scenario3strB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1490,7 +1186,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK8Scenario3strB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1514,7 +1210,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK18cDynamicExpression5Value3strB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1522,6 +1218,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "cdynamicexpression.cc",
       "name": "_ZZNK18cDynamicExpression8evaluateEP10cComponentEN7FinallyD2Ev",
       "type": "funarg"
     },
@@ -1538,14 +1235,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
       "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
       "type": "funarg"
     },
@@ -1617,8 +1306,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 0,
+      "name": "_Z16slashifyFilenameB5cxx11PKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z12removeSpacesB5cxx1110my_yyltype",
       "type": "funarg"
     },
     "type": "value"
@@ -1626,7 +1323,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_Z11addPropertyP10NEDElementPKc",
+      "name": "_Z8storePosP10NEDElement10my_yyltypeS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z8storePosP10NEDElement10my_yyltypeS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -1641,8 +1346,8 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_Z13createLiterali10my_yyltypeS_",
+      "index": 1,
+      "name": "_Z15storeSourceCodeP10NEDElement10my_yyltype",
       "type": "funarg"
     },
     "type": "value"
@@ -1665,6 +1370,70 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_Z27storeBannerAndRightCommentsP10NEDElement10my_yyltypeS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z12addParameterP10NEDElementPKc10my_yyltype",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z10trimQuotes10my_yyltype",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z10trimQuotes10my_yyltype",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z16trimDoubleBraces10my_yyltype",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z16trimDoubleBraces10my_yyltype",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z9addVectorP10NEDElementPKc10my_yyltypeS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z9addVectorP10NEDElementPKc10my_yyltypeS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_Z13addExpressionP10NEDElementPKc10my_yyltypeS0_",
       "type": "funarg"
@@ -1674,6 +1443,22 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_Z12addLikeParamP10NEDElementPKc10my_yyltypeS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z12addLikeParamP10NEDElementPKc10my_yyltypeS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_Z14swapAttributesP10NEDElementPKcS2_",
       "type": "funarg"
     },
@@ -1699,6 +1484,22 @@
     "pattern": {
       "index": 2,
       "name": "_Z22swapExpressionChildrenP10NEDElementPKcS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z14createOperatorPKcP10NEDElementS2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z11createIdent10my_yyltypeS_P10NEDElement",
       "type": "funarg"
     },
     "type": "value"
@@ -1753,22 +1554,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_St9_IdentityIS5_ESt4lessIS5_ESaIS5_EE16_M_insert_uniqueERKS5_",
       "type": "funarg"
@@ -1786,7 +1571,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN11Speedometer5startE7SimTime",
       "type": "funarg"
     },
     "type": "value"
@@ -1794,7 +1579,23 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN11Speedometer5startE7SimTime",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11Speedometer8addEventE7SimTime",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11Speedometer8addEventE7SimTime",
       "type": "funarg"
     },
     "type": "value"
@@ -1811,14 +1612,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt6vectorIS_IP15MatchExpressionSaIS1_EESaIS3_EE9push_backERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1833,8 +1626,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 0,
+      "name": "_ZN13ObjectPrinter19printObjectToStringB5cxx11EP7cObject",
       "type": "funarg"
     },
     "type": "value"
@@ -1850,31 +1643,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK4cPar3strB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1913,32 +1682,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNSt3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEP11NEDTypeInfoSt4lessIS5_ESaISt4pairIKS5_S7_EEEixERSB_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN16NEDResourceCache14resolveNedTypeB5cxx11ERK16NEDLookupContextPKcPNS_13INEDTypeNamesE",
       "type": "funarg"
     },
     "type": "value"
@@ -2034,22 +1779,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN9MiniXPath17parseBracketedNumERiPKci",
       "type": "funarg"
     },
@@ -2082,47 +1811,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN9MiniXPath19matchPathExpressionEP11cXMLElementPKcS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -2145,8 +1834,32 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 1,
+      "name": "_ZN14cDisplayString9setTagArgEPKciS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN14EventLogWriter36recordModuleMethodBeginEntry_sm_tm_mEP8_IO_FILEiiPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN14EventLogWriter26recordEventEntry_e_t_m_msgEP8_IO_FILEl7SimTimeil",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN14EventLogWriter29recordEventEntry_e_t_m_ce_msgEP8_IO_FILEl7SimTimeill",
       "type": "funarg"
     },
     "type": "value"
@@ -2154,7 +1867,39 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN14EventLogWriter23recordEndSendEntry_t_isEP8_IO_FILE7SimTimeb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN14EventLogWriter36recordSendDirectEntry_sm_dm_dg_pd_tdEP8_IO_FILEiii7SimTimeS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN14EventLogWriter36recordSendDirectEntry_sm_dm_dg_pd_tdEP8_IO_FILEiii7SimTimeS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN14EventLogWriter30recordSendHopEntry_sm_sg_pd_tdEP8_IO_FILEii7SimTimeS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN14EventLogWriter30recordSendHopEntry_sm_sg_pd_tdEP8_IO_FILEii7SimTimeS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -2162,15 +1907,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK10MACAddress3strB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -2178,47 +1915,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN10MACAddress19generateAutoAddressEv",
       "type": "funarg"
     },
     "type": "value"
@@ -2274,30 +1971,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
       "type": "funarg"
     },
@@ -2425,14 +2098,6 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_EC2ERS6_S8_",
       "type": "funarg"
@@ -2521,16 +2186,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 0,
+      "name": "_Z11directoryOfB5cxx11PKc",
       "type": "funarg"
     },
     "type": "value"
@@ -2545,8 +2202,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
+      "index": 0,
+      "name": "_Z14toAbsolutePathB5cxx11PKc",
       "type": "funarg"
     },
     "type": "value"
@@ -2554,31 +2211,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z16concatDirAndFileB5cxx11PKcS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -2586,7 +2219,23 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z10removeFilePKcS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z10spec_qsortPvmmPFiPKvS1_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN20MatchExpressionLexer12getNextTokenEPPc",
       "type": "funarg"
     },
     "type": "value"
@@ -2618,6 +2267,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN16NEDValidatorBase8validateEP10NEDElement",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN15NED2ParserStateC2Ev",
       "type": "funarg"
     },
@@ -2626,15 +2283,8 @@
   {
     "pattern": {
       "index": 0,
+      "module": "ned2.tab.cc",
       "name": "_ZL19yyreportSyntaxErrorP10yyGLRStack",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_",
       "type": "funarg"
     },
     "type": "value"
@@ -2682,6 +2332,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "ned2.tab.cc",
       "name": "_ZL6yyfillP14yyGLRStackItemPiib",
       "type": "funarg"
     },
@@ -2698,6 +2349,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "ned2.tab.cc",
       "name": "_ZL14assertNonEmptyRSt5stackIP10NEDElementSt5dequeIS1_SaIS1_EEE",
       "type": "funarg"
     },
@@ -2714,6 +2366,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "ned2.tab.cc",
       "name": "_ZL15yyresolveActionP16yySemanticOptionP10yyGLRStackPP10NEDElementP10my_yyltype",
       "type": "funarg"
     },
@@ -2858,7 +2511,8 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "module": "expression.tab.cc",
+      "name": "_ZL10yydestructPKciPPc",
       "type": "funarg"
     },
     "type": "value"
@@ -2866,15 +2520,23 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK13cSimpleModule5errorEPKcz",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZL10yydestructPKciPPc",
+      "index": 2,
+      "name": "_ZN13cSimpleModule11sendDelayedEP8cMessage7SimTimePKci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN13cSimpleModule11sendDelayedEP8cMessage7SimTimePKci",
       "type": "funarg"
     },
     "type": "value"
@@ -2937,8 +2599,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN13cSimpleModule11cancelEventEP8cMessage",
+      "index": 1,
+      "name": "_ZN13cSimpleModule10scheduleAtE7SimTimeP8cMessage",
       "type": "funarg"
     },
     "type": "value"
@@ -2946,7 +2608,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z8opp_trimB5cxx11PKc",
       "type": "funarg"
     },
     "type": "value"
@@ -2954,7 +2616,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z11opp_stringfB5cxx11PKcz",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z11opp_vsscanfPKcS0_P13__va_list_tag",
       "type": "funarg"
     },
     "type": "value"
@@ -2962,7 +2632,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_Z18opp_parsequotedstrB5cxx11PKcRS0_",
+      "name": "_Z11opp_vsscanfPKcS0_P13__va_list_tag",
       "type": "funarg"
     },
     "type": "value"
@@ -2985,8 +2655,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 0,
+      "name": "_Z14opp_breaklinesB5cxx11PKci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z15opp_indentlinesB5cxx11PKcS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -2994,7 +2672,39 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z15opp_indentlinesB5cxx11PKcS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z10opp_concatPKcS0_S0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_Z10opp_concatPKcS0_S0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z10opp_concatPKcS0_S0_S0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_Z8opp_joinB5cxx11PKcS0_S0_",
       "type": "funarg"
     },
     "type": "value"
@@ -3018,7 +2728,71 @@
   {
     "pattern": {
       "index": 2,
+      "name": "_ZN19NEDDTDValidatorBase13checkSequenceEP10NEDElementPiPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN19NEDDTDValidatorBase13checkSequenceEP10NEDElementPiPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
       "name": "_ZN19NEDDTDValidatorBase14tryCheckChoiceEP10NEDElementRS1_Pic",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN19NEDDTDValidatorBase11checkChoiceEP10NEDElementPic",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN19NEDDTDValidatorBase17checkSeqOfChoicesEP10NEDElementPNS_6ChoiceEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN19NEDDTDValidatorBase22checkRequiredAttributeEP10NEDElementPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN19NEDDTDValidatorBase24checkEnumeratedAttributeEP10NEDElementPKcPS3_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN19NEDDTDValidatorBase24checkEnumeratedAttributeEP10NEDElementPKcPS3_i",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN19NEDDTDValidatorBase18checkNameAttributeEP10NEDElementPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -3049,22 +2823,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_P8cParImplESt10_Select1stISA_ESt4lessIS5_ESaISA_EE17_M_insert_unique_ESt23_Rb_tree_const_iteratorISA_ERKSA_",
       "type": "funarg"
@@ -3081,16 +2839,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 3,
+      "name": "_ZN7ArgList5parseEiPPcPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -3114,6 +2864,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK7ArgList14getLongOptionsB5cxx11Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_ED2Ev",
       "type": "funarg"
     },
@@ -3123,14 +2881,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt4pairIKcSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS7_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -3193,14 +2943,6 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN8cPSquareC2EPKci",
       "type": "funarg"
@@ -3210,7 +2952,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN9SAXParser10setHandlerEP10SAXHandler",
       "type": "funarg"
     },
     "type": "value"
@@ -3218,7 +2960,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN9SAXParser10setHandlerEP10SAXHandler",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9SAXParser5parseEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -3227,6 +2977,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN13NEDErrorStoreD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN16cMersenneTwister7intRandEv",
       "type": "funarg"
     },
     "type": "value"
@@ -3250,22 +3008,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN12cXMLDocCache13parseDocumentEPKc",
       "type": "funarg"
     },
@@ -3281,22 +3023,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_P11cXMLElementESt10_Select1stISA_ESt4lessIS5_ESaISA_EE17_M_insert_unique_ESt23_Rb_tree_const_iteratorISA_ERKSA_",
       "type": "funarg"
@@ -3305,14 +3031,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt3mapI10opp_stringS0_St4lessIS0_ESaISt4pairIKS0_S0_EEEixERS4_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZNSt3mapI10opp_stringS0_St4lessIS0_ESaISt4pairIKS0_S0_EEEixERS4_",
       "type": "funarg"
@@ -3321,16 +3039,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 2,
+      "name": "_ZN10cStatistic10freadvarsfEP8_IO_FILEPKcz",
       "type": "funarg"
     },
     "type": "value"
@@ -3385,8 +3095,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
+      "index": 2,
+      "name": "_Z18setupUserInterfaceiPPcP14cConfiguration",
       "type": "funarg"
     },
     "type": "value"
@@ -3402,15 +3112,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN8cVisitor7processEP7cObject",
       "type": "funarg"
     },
     "type": "value"
@@ -3418,15 +3120,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN8cVisitor17processChildrenOfEP7cObject",
       "type": "funarg"
     },
     "type": "value"
@@ -3434,15 +3128,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN18cExpressionBuilder7processEP17ExpressionElementb",
       "type": "funarg"
     },
     "type": "value"
@@ -3450,6 +3136,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "lex.msg2yy.cc",
       "name": "_ZL14yy_fatal_errorPKc",
       "type": "funarg"
     },
@@ -3458,14 +3145,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN7SimTime10rangeErrorEd",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
+      "module": "simtime.cc",
       "name": "_ZL5rangeB5cxx11v",
       "type": "funarg"
     },
@@ -3482,14 +3162,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN7SimTime19overflowSubtractingERKS_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZN7SimTime19overflowSubtractingERKS_",
       "type": "funarg"
     },
@@ -3514,15 +3186,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN7SimTime4ttoaEPcliRS0_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 3,
+      "name": "_ZN7SimTime4ttoaEPcliRS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -3530,7 +3202,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK5cGate25getTransmissionFinishTimeEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN16cClassDescriptor16oppstring2stringERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPci",
       "type": "funarg"
     },
     "type": "value"
@@ -3538,7 +3218,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN16cClassDescriptorC2EPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN16cClassDescriptorC2EPKcS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -3555,22 +3243,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt5dequeIPN9cTopology4NodeESaIS2_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -3610,22 +3282,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNSt4pairIK10opp_stringS0_EC2ERS1_S3_",
       "type": "funarg"
     },
@@ -3673,16 +3329,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN10NEDElement12stringToEnumEPKcPS1_Pii",
       "type": "funarg"
     },
     "type": "value"
@@ -3690,7 +3338,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
+      "name": "_ZN10NEDElement12stringToEnumEPKcPS1_Pii",
       "type": "funarg"
     },
     "type": "value"
@@ -3698,15 +3346,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN12cDefaultListC2EPKc",
+      "name": "_ZN10NEDElement12enumToStringEiPPKcPii",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 2,
+      "name": "_ZN10NEDElement12enumToStringEiPPKcPii",
       "type": "funarg"
     },
     "type": "value"
@@ -3714,7 +3362,31 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN10NEDElement12validateEnumEiPPKcPii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10NEDElement12validateEnumEiPPKcPii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10NEDElement26getFirstChildWithAttributeEiPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN12cDefaultList18takeAllObjectsFromERS_",
       "type": "funarg"
     },
     "type": "value"
@@ -3723,22 +3395,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt6vectorIS_IPKcSaIS1_EESaIS3_EE9push_backERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -3761,6 +3417,22 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN23cGlobalRegistrationList11getInstanceEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN23cGlobalRegistrationList5clearEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_P12cOwnedObjectESt10_Select1stISA_ESt4lessIS5_ESaISA_EE17_M_insert_unique_ESt23_Rb_tree_const_iteratorISA_ERKSA_",
       "type": "funarg"
@@ -3770,6 +3442,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "expr.tab.cc",
       "name": "_ZL10yydestructPKciPPc",
       "type": "funarg"
     },
@@ -3785,7 +3458,16 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN11cXMLElement24getDocumentElementByPathEPS_PKcPNS_13ParamResolverE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
+      "module": "cxmlelement.cc",
       "name": "_ZL9my_itostrB5cxx11i",
       "type": "funarg"
     },
@@ -3795,22 +3477,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_ED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -3857,8 +3523,24 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 1,
+      "name": "_ZNK8cMessage9arrivedOnEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN8cMessage11setSentFromEP7cModulei7SimTime",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN8cMessage10setArrivalEP7cModulei7SimTime",
       "type": "funarg"
     },
     "type": "value"
@@ -3866,7 +3548,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN8cMessage14setArrivalTimeE7SimTime",
       "type": "funarg"
     },
     "type": "value"
@@ -3874,15 +3556,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z12generateNED2RSoP10NEDElementP13NEDErrorStore",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 2,
+      "name": "_Z12generateNED2RSoP10NEDElementP13NEDErrorStore",
       "type": "funarg"
     },
     "type": "value"
@@ -3953,23 +3635,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
+      "module": "ned2generator.cc",
       "name": "_ZL13formatCommentB5cxx11PKcS0_S0_",
       "type": "funarg"
     },
@@ -4321,14 +3988,6 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN18cNEDNetworkBuilder6doGateEP7cModuleP11GateElementb",
       "type": "funarg"
@@ -4339,6 +3998,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN18cNEDNetworkBuilder10_submoduleEP7cModulePKci",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN18cNEDNetworkBuilder11buildInsideEP7cModuleP15cNEDDeclaration",
       "type": "funarg"
     },
     "type": "value"
@@ -4426,31 +4093,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt6vectorIP7cModuleSaIS9_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
       "type": "funarg"
     },
     "type": "value"
@@ -4498,6 +4141,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "lex.expryy.cc",
       "name": "_ZL14yy_fatal_errorPKc",
       "type": "funarg"
     },
@@ -4505,16 +4149,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_Z8parseXMLPKcP13NEDErrorStore",
       "type": "funarg"
     },
     "type": "value"
@@ -4561,14 +4197,6 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN15NEDXMLGenerator8generateERSoP10NEDElement",
       "type": "funarg"
@@ -4578,15 +4206,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN15StringTokenizer9nextTokenEv",
       "type": "funarg"
     },
     "type": "value"
@@ -4594,7 +4214,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN15StringTokenizer13hasMoreTokensEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN15StringTokenizer8asVectorB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4602,15 +4230,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
+      "name": "_ZN15StringTokenizer8asVectorB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4633,16 +4253,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN5cEnum13registerNamesEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -4659,14 +4271,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_iESt10_Select1stIS8_ESt4lessIS5_ESaIS8_EE17_M_insert_unique_ESt23_Rb_tree_const_iteratorIS8_ERKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
       "type": "funarg"
     },
     "type": "value"
@@ -4698,7 +4302,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK7cStdDev4infoB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4706,7 +4310,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK7cStdDev4infoB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4714,63 +4318,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZNK7cStdDev12detailedInfoB5cxx11Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -4785,16 +4333,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "index": 2,
+      "name": "_ZN8sRunData12writeRunDataEP8_IO_FILE10opp_string",
       "type": "funarg"
     },
     "type": "value"
@@ -4858,6 +4398,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "matchexpression.tab.cc",
       "name": "_ZL10yydestructPKciPPc",
       "type": "funarg"
     },
@@ -4874,15 +4415,8 @@
   {
     "pattern": {
       "index": 0,
+      "module": "ned1.tab.cc",
       "name": "_ZL10yydestructPKciPP10NEDElementP10my_yyltype",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_",
       "type": "funarg"
     },
     "type": "value"
@@ -4891,6 +4425,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11cStringPool3getEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -4899,6 +4441,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt3mapIPciN11cStringPool7strlessESaISt4pairIKS0_iEEEixERS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11cStringPool7releaseEPKc",
       "type": "funarg"
     },
     "type": "value"
@@ -4914,38 +4464,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
+      "module": "lex.ned1yy.cc",
       "name": "_ZL14yy_fatal_errorPKc",
       "type": "funarg"
     },
@@ -4954,6 +4473,30 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN9NEDParser12parseNEDFileEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN9NEDParser12parseNEDFileEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9NEDParser12parseNEDTextEPKcS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN13ValueIterator20parseAsNumericRegionERNS_4ItemE",
       "type": "funarg"
     },
@@ -4963,6 +4506,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN13ValueIterator20parseAsNumericRegionERNS_4ItemE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13ValueIterator6lengthEv",
       "type": "funarg"
     },
     "type": "value"
@@ -4977,22 +4528,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNSt6vectorIN13ValueIterator4ItemESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
       "type": "funarg"
@@ -5001,16 +4536,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN14cConfiguration9parseLongEPKcS1_l",
       "type": "funarg"
     },
     "type": "value"
@@ -5019,166 +4546,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS5_S7_EERKS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZSteqIcEN9__gnu_cxx11__enable_ifIXsr9__is_charIT_EE7__valueEbE6__typeERKNSt7__cxx1112basic_stringIS2_St11char_traitsIS2_ESaIS2_EEESC_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZSteqIcEN9__gnu_cxx11__enable_ifIXsr9__is_charIT_EE7__valueEbE6__typeERKNSt7__cxx1112basic_stringIS2_St11char_traitsIS2_ESaIS2_EEESC_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStneIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStneIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStltIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStleIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStleIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStgtIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStgtIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStgeIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStgeIcSt11char_traitsIcESaIcEEbRKNSt7__cxx1112basic_stringIT_T0_T1_EESA_",
       "type": "funarg"
     },
     "type": "value"
@@ -5209,22 +4576,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_P11cPropertiesESt10_Select1stISA_ESt4lessIS5_ESaISA_EE17_M_insert_unique_ESt23_Rb_tree_const_iteratorISA_ERKSA_",
       "type": "funarg"
@@ -5242,7 +4593,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN13NEDSAXHandler7getTreeEv",
       "type": "funarg"
     },
     "type": "value"
@@ -5250,39 +4601,31 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN10cComponent6bubbleEPKc",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
+      "index": 1,
+      "name": "_ZN10cComponent12recordScalarEPKcdS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN10cComponent12recordScalarEPKcdS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZNSt3mapI10opp_stringS0_St4lessIS0_ESaISt4pairIKS0_S0_EEEixERS4_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt3mapI10opp_stringS0_St4lessIS0_ESaISt4pairIKS0_S0_EEEixERS4_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -5346,7 +4689,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN10cSchedulerD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -5354,30 +4697,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
+      "module": "cnedfunction.cc",
       "name": "_ZL16splitTypeAndNameRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERcRS4_",
       "type": "funarg"
     },
@@ -5386,6 +4706,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "cnedfunction.cc",
       "name": "_ZL16splitTypeAndNameRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERcRS4_",
       "type": "funarg"
     },
@@ -5394,6 +4715,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "cnedfunction.cc",
       "name": "_ZL14substringAfterRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_",
       "type": "funarg"
     },
@@ -5402,6 +4724,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "cnedfunction.cc",
       "name": "_ZL14substringAfterRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_",
       "type": "funarg"
     },
@@ -5410,6 +4733,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "cnedfunction.cc",
       "name": "_ZL14substringAfterRKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_",
       "type": "funarg"
     },
@@ -5418,23 +4742,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_SA_",
+      "name": "_ZN12cNEDFunction6invokeEP10cComponentPN18cDynamicExpression5ValueEi",
       "type": "funarg"
     },
     "type": "value"
@@ -5451,6 +4759,46 @@
     "pattern": {
       "index": 0,
       "name": "_ZN13NEDErrorStore5EntryD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN13NEDErrorStore8addErrorEPKcS1_z",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13NEDErrorStore13containsErrorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK13NEDErrorStore12errorContextEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z16NEDInternalErrorPKciP10NEDElementS0_z",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_Z16NEDInternalErrorPKciP10NEDElementS0_z",
       "type": "funarg"
     },
     "type": "value"

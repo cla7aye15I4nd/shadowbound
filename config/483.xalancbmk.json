@@ -25,14 +25,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_59XMLString6equalsEPKtS2_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
       "type": "funarg"
@@ -67,6 +59,14 @@
     "pattern": {
       "index": 2,
       "name": "_ZNK11xercesc_2_514RefHashTableOfItE14findBucketElemEPKvRj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_815XercesDOMWalker8traverseEPKN11xercesc_2_57DOMNodeES4_",
       "type": "funarg"
     },
     "type": "value"
@@ -466,7 +466,40 @@
   {
     "pattern": {
       "index": 1,
+      "module": "DoubleSupport.cpp",
       "name": "_ZN10xalanc_1_8L10doValidateEPKtRb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_55XUtil22getFirstChildElementNSEPKNS_7DOMNodeEPPKtS5_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_55XUtil22getFirstChildElementNSEPKNS_7DOMNodeEPPKtS5_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_55XUtil23getNextSiblingElementNSEPKNS_7DOMNodeEPPKtS5_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_55XUtil23getNextSiblingElementNSEPKNS_7DOMNodeEPPKtS5_j",
       "type": "funarg"
     },
     "type": "value"
@@ -498,14 +531,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -545,14 +570,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNK11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZNK11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
       "type": "funarg"
@@ -563,14 +580,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
       "type": "funarg"
     },
     "type": "value"
@@ -603,14 +612,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_12KVStringPairEE11nextElementEv",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_59XMLString6equalsEPKtS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -681,6 +682,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_815FunctionNodeSetC2Eb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -699,14 +708,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_820CollectionClearGuardISt6vectorIS1_IdSaIdEESaIS3_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIN10xalanc_1_814XalanDOMStringESaIS1_EED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -770,22 +771,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -858,7 +843,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "name": "_ZN10xalanc_1_818XPathFunctionTable17UninstallFunctionEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -866,23 +851,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN10xalanc_1_818XPathFunctionTable15InstallFunctionEPKtRKNS_8FunctionE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZN10xalanc_1_818XPathFunctionTable15InstallFunctionEPKtRKNS_8FunctionE",
+      "name": "_ZN10xalanc_1_818XPathFunctionTable17UninstallFunctionEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -913,32 +882,24 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_517DOM_CharacterData10appendDataERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_517DOM_CharacterData10appendDataERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -954,14 +915,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_521MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_521MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1041,6 +994,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_56XMLUri13buildFullTextEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_56XMLUri13processSchemeEPKtRi",
       "type": "funarg"
@@ -1091,14 +1052,6 @@
     "pattern": {
       "index": 3,
       "name": "_ZNK10xalanc_1_811ElemValueOf18fireSelectionEventERNS_26StylesheetExecutionContextEPNS_9XalanNodeENS_10XObjectPtrERKNS_14XalanDOMStringE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -1170,14 +1123,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1202,6 +1147,22 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN10xalanc_1_816XalanTransformer9transformERKNS_15XSLTInputSourceES3_PvPFmPKcmS4_EPFvS4_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_816XalanTransformer9transformERKNS_15XSLTInputSourceES3_PvPFmPKcmS4_EPFvS4_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN10xalanc_1_823FormatSAXParseExceptionERKN11xercesc_2_517SAXParseExceptionERNS_14XalanDOMStringE",
       "type": "funarg"
     },
@@ -1211,6 +1172,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_815LongToDOMStringEl",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_816XalanTransformer17compileStylesheetERKNS_15XSLTInputSourceERPKNS_23XalanCompiledStylesheetE",
       "type": "funarg"
     },
     "type": "value"
@@ -1243,6 +1212,30 @@
     "pattern": {
       "index": 0,
       "name": "_ZNSt4pairIN10xalanc_1_814XalanDOMStringES1_ED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_816XalanTransformer9setIndentEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_816XalanTransformer13setEscapeURLsENS0_11eEscapeURLsE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_816XalanTransformer14setOmitMETATagENS0_12eOmitMETATagE",
       "type": "funarg"
     },
     "type": "value"
@@ -1314,7 +1307,47 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_59DOMStringaSERKS0_",
+      "name": "_ZN11xercesc_2_59DOMStringaSEPNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_59DOMStringeqEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_59DOMStringneEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_59DOMString13compareStringERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_5plERKNS_9DOMStringES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_5plERKNS_9DOMStringEt",
       "type": "funarg"
     },
     "type": "value"
@@ -1385,6 +1418,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_7GrammarEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_522NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -1411,6 +1452,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_515XMLTransService20makeNewTranscoderForENS_13XMLRecognizer9EncodingsERNS0_5CodesEjPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
@@ -1499,6 +1548,22 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK10xalanc_1_812XSLException13defaultFormatEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10xalanc_1_812XSLException13defaultFormatERNS_14XalanDOMStringE",
       "type": "funarg"
     },
     "type": "value"
@@ -1722,6 +1787,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_59RangeImpl25updateRangeForDeletedTextERNS_8DOM_NodeEji",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1729,31 +1802,7 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1809,8 +1858,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIN10xalanc_1_814XalanDOMStringESaIS1_EED2Ev",
+      "index": 5,
+      "name": "_ZN11xercesc_2_512XMLValidator9emitErrorENS_8XMLValid5CodesEPKtS4_S4_S4_",
       "type": "funarg"
     },
     "type": "value"
@@ -1842,14 +1891,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorIS_ItSaItEESaIS1_EED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZNSt6vectorIS_ItSaItEESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
       "type": "funarg"
     },
@@ -1881,24 +1922,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorIN10xalanc_1_814XalanDOMStringESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIN10xalanc_1_814XalanDOMStringESaIS1_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPtS1_EEmRKt",
       "type": "funarg"
     },
     "type": "value"
@@ -2250,6 +2275,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString14compareNStringEPKcS2_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -2259,6 +2292,62 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString9transcodeEPKcPtjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString9binToTextEjPtjjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_59XMLString15compareNIStringEPKtS2_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString15compareNIStringEPKtS2_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString7findAnyEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString7findAnyEPtPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLString12patternMatchEPKtS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -2275,6 +2364,30 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_521NumberFormatExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_59XMLString7releaseEPPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_520DOM_DocumentFragmentaSERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_518MemBufFormatTarget12getRawBufferEv",
       "type": "funarg"
     },
     "type": "value"
@@ -2322,15 +2435,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "name": "_ZN10xalanc_1_824XalanTranscodingServices17makeNewTranscoderERKNS_14XalanDOMStringERNS0_5eCodeEj",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNK10xalanc_1_810Stylesheet8isAttrOKEPKtRKN11xercesc_2_513AttributeListEiRNS_29StylesheetConstructionContextE",
+      "index": 1,
+      "name": "_ZN10xalanc_1_810Stylesheet17processKeyElementERKNS_14PrefixResolverERKN11xercesc_2_513AttributeListEPKNS4_7LocatorERNS_29StylesheetConstructionContextE",
       "type": "funarg"
     },
     "type": "value"
@@ -2346,7 +2459,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt3mapIN10xalanc_1_821XalanQNameByReferenceEPKNS0_12ElemTemplateESt4lessINS0_10XalanQNameEESaISt4pairIKS1_S4_EEEixERS9_",
+      "name": "_ZN10xalanc_1_810Stylesheet20addWhitespaceElementERKNS_20XalanSpaceNodeTesterE",
       "type": "funarg"
     },
     "type": "value"
@@ -2354,7 +2467,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "name": "_ZNSt3mapIN10xalanc_1_821XalanQNameByReferenceEPKNS0_12ElemTemplateESt4lessINS0_10XalanQNameEESaISt4pairIKS1_S4_EEEixERS9_",
       "type": "funarg"
     },
     "type": "value"
@@ -2435,30 +2548,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZNSt5dequeIS_IN10xalanc_1_89NameSpaceESaIS1_EESaIS3_EE16_M_push_back_auxERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZSt16__do_uninit_copyISt15_Deque_iteratorIN10xalanc_1_89NameSpaceERKS2_PS3_ES0_IS2_RS2_PS2_EET0_T_SB_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZSt16__do_uninit_copyISt15_Deque_iteratorIN10xalanc_1_89NameSpaceERKS2_PS3_ES0_IS2_RS2_PS2_EET0_T_SB_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZSt16__do_uninit_copyISt15_Deque_iteratorIN10xalanc_1_89NameSpaceERKS2_PS3_ES0_IS2_RS2_PS2_EET0_T_SB_SA_",
       "type": "funarg"
     },
     "type": "value"
@@ -2555,6 +2644,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_814AttributesImpl12addAttributeEPKtS2_S2_S2_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_515ContentSpecNodeD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -2977,14 +3074,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -3090,14 +3179,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -3218,7 +3299,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK11xercesc_2_515GrammarResolver20getGrammarEnumeratorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_7GrammarEE14nextElementKeyEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_515GrammarResolver13orphanGrammarEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -3386,15 +3483,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN10xalanc_1_815StringTokenizer9nextTokenEv",
+      "name": "_ZNK10xalanc_1_815StringTokenizer11countTokensEv",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "index": 0,
+      "name": "_ZN10xalanc_1_815StringTokenizer9nextTokenEv",
       "type": "funarg"
     },
     "type": "value"
@@ -3475,6 +3572,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_814VariablesStack16CommitPushParamsD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN10xalanc_1_814VariablesStack11findXObjectERKNS_10XalanQNameERNS_26StylesheetExecutionContextEbbRb",
       "type": "funarg"
     },
     "type": "value"
@@ -3754,7 +3859,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
+      "name": "_ZN11xercesc_2_516DOM_DocumentTypeaSERKS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -3762,7 +3867,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt8_Rb_treeIN10xalanc_1_814XalanDOMStringES1_St9_IdentityIS1_ESt4lessIS1_ESaIS1_EE16_M_insert_uniqueERKS1_",
+      "name": "_ZN11xercesc_2_516DOM_DocumentTypeaSERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -3795,6 +3908,134 @@
     "pattern": {
       "index": 5,
       "name": "_ZN10xalanc_1_823XalanSourceTreeDocument21getNamespaceForPrefixEPKtRKNS_14PrefixResolverERNS_14XalanDOMStringEbPS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_513AttributeListEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_513AttributeListEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_513AttributeListERKNS_14PrefixResolverEPNS_9XalanNodeESB_SB_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_513AttributeListERKNS_14PrefixResolverEPNS_9XalanNodeESB_SB_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtS2_S2_RKN11xercesc_2_510AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtS2_S2_RKN11xercesc_2_510AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_510AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_510AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createCommentNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createCommentNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument31createProcessingInstructionNodeEPKtS2_PNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument31createProcessingInstructionNodeEPKtS2_PNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument14createTextNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument14createTextNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createTextIWSNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_823XalanSourceTreeDocument17createTextIWSNodeEPKtjPNS_9XalanNodeES4_S4_",
       "type": "funarg"
     },
     "type": "value"
@@ -4019,6 +4260,46 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_524IllegalArgumentExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58NodeImpl14getXmlnsStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58NodeImpl17getXmlnsURIStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58NodeImpl12getXmlStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58NodeImpl15getXmlURIStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58NodeImpl9mapPrefixERKNS_9DOMStringES3_s",
       "type": "funarg"
     },
     "type": "value"
@@ -4641,14 +4922,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -4745,14 +5018,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -4819,14 +5084,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_59XMLReader16getNextCharIfNotEtRt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
       "type": "funarg"
     },
     "type": "value"
@@ -4913,14 +5170,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -4969,14 +5218,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -4995,6 +5236,22 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLReader10skipSpacesERb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59XMLReader10peekStringEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -5043,6 +5300,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_520NullPointerExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_9DTDAttDefEE11nextElementEv",
       "type": "funarg"
     },
     "type": "value"
@@ -5098,14 +5363,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -5242,6 +5499,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_510XMLScanner14senseNextTokenERj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -5313,6 +5578,22 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_517DatatypeValidator11setTypeNameEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_517DatatypeValidator11setTypeNameEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
       "type": "funarg"
@@ -5361,14 +5642,6 @@
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_514ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 5,
       "name": "_ZN11xercesc_2_514ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -5402,7 +5675,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN10xalanc_1_810URISupport16getURLFromStringERKNS_14XalanDOMStringES3_",
+      "name": "_ZN10xalanc_1_830XSLTProcessorEnvSupportDefault28installExternalFunctionLocalERKNS_14XalanDOMStringES3_RKNS_8FunctionE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_830XSLTProcessorEnvSupportDefault17setSourceDocumentERKNS_14XalanDOMStringEPNS_13XalanDocumentE",
       "type": "funarg"
     },
     "type": "value"
@@ -5433,14 +5714,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_516ValueHashTableOfIbE14findBucketElemEPKvRj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_516ValueHashTableOfIbE14findBucketElemEPKvRj",
       "type": "funarg"
@@ -5449,32 +5722,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_514RefHashTableOfINS_12KVStringPairEE3putEPvPS1_",
+      "index": 3,
+      "name": "_ZN10xalanc_1_822XSLTProcessorExceptionC2ERKN11xercesc_2_57LocatorERKNS_14XalanDOMStringES7_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_524DatatypeValidatorFactory23createDatatypeValidatorEPKtPNS_17DatatypeValidatorEPNS_14RefHashTableOfINS_12KVStringPairEEEPNS_16RefArrayVectorOfItEEbibPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_524DatatypeValidatorFactory23createDatatypeValidatorEPKtPNS_17DatatypeValidatorEPNS_14RefHashTableOfINS_12KVStringPairEEEPNS_16RefArrayVectorOfItEEbibPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
+      "index": 2,
+      "name": "_ZN10xalanc_1_822XSLTProcessorExceptionC2ERKNS_14XalanDOMStringES3_",
       "type": "funarg"
     },
     "type": "value"
@@ -5595,14 +5852,6 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIS_IN10xalanc_1_87CounterESaIS1_EESaIS3_EE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPS3_S5_EEmRKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -5817,6 +6066,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_529RefHash2KeysTableOfEnumeratorINS_12SchemaAttDefEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_522NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -5945,22 +6202,6 @@
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -6041,22 +6282,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_515XercesDOMParser5errorEjPKtNS_16XMLErrorReporter8ErrTypesES2_S2_S2_ll",
       "type": "funarg"
@@ -6129,14 +6354,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -6194,6 +6411,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN10xalanc_1_816FunctionEvaluateC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK11xercesc_2_512DOMRangeImpl10checkIndexEPKNS_7DOMNodeEm",
       "type": "funarg"
     },
@@ -6219,14 +6444,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt8_Rb_treeIN10xalanc_1_814XalanDOMStringES1_St9_IdentityIS1_ESt4lessIS1_ESaIS1_EE16_M_insert_uniqueERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -6306,15 +6523,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "name": "_ZN10xalanc_1_811DOMServices11getNodeDataERKNS_9XalanNodeE",
       "type": "funarg"
     },
     "type": "value"
@@ -6385,14 +6594,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -6417,24 +6618,16 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10xalanc_1_814StylesheetRoot25isCDATASectionElementNameERKNS_10XalanQNameE",
       "type": "funarg"
     },
     "type": "value"
@@ -6489,6 +6682,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_514TreeWalkerImpl14setCurrentNodeENS_8DOM_NodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_514TreeWalkerImpl13getParentNodeENS_8DOM_NodeE",
       "type": "funarg"
@@ -6531,6 +6732,54 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_511DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_511DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_511DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_511DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK10xalanc_1_811NodeRefList4itemEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK10xalanc_1_811NodeRefList9getLengthEv",
       "type": "funarg"
     },
     "type": "value"
@@ -6625,15 +6874,39 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "index": 0,
+      "name": "_ZN11xercesc_2_511DOM_ElementaSERKS0_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 1,
+      "name": "_ZN11xercesc_2_511DOM_ElementaSERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_515ContentSpecNodeD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_510DTDScanner14setScannerInfoEPNS_10XMLScannerEPNS_9ReaderMgrEPNS_12XMLBufferMgrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -6683,6 +6956,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZN11xercesc_2_510DTDScanner13scanEntityRefERtS1_Rb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_510DTDScanner18scanInternalSubsetEv",
       "type": "funarg"
     },
     "type": "value"
@@ -6809,8 +7090,24 @@
   },
   {
     "pattern": {
+      "index": 4,
+      "name": "_ZNK10xalanc_1_85XPath7executeEPNS_9XalanNodeERKNS_14PrefixResolverERNS_21XPathExecutionContextERd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 5,
       "name": "_ZNK10xalanc_1_85XPath11executeMoreEPNS_9XalanNodeEN9__gnu_cxx17__normal_iteratorIPKiSt6vectorIiSaIiEEEERNS_21XPathExecutionContextERNS_17FormatterListenerEMSD_FvPKtjE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10xalanc_1_85XPath13getTargetDataERSt6vectorINS0_10TargetDataESaIS2_EE",
       "type": "funarg"
     },
     "type": "value"
@@ -6905,14 +7202,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -6945,14 +7234,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -6970,14 +7251,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7003,6 +7276,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_828XalanSourceTreeParserLiaison14parseXMLStreamERKN11xercesc_2_511InputSourceERKNS_14XalanDOMStringE",
       "type": "funarg"
     },
     "type": "value"
@@ -7042,14 +7323,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7129,8 +7402,48 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_816toLowerCaseASCIIERKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_822MakeXalanDOMCharVectorEPKcb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN10xalanc_1_822CopyWideStringToVectorEPKtRSt6vectorIcSaIcEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_84trimERKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_816FunctionDistinctC2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -7146,7 +7459,39 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt8_Rb_treeIN10xalanc_1_814XalanDOMStringES1_St9_IdentityIS1_ESt4lessIS1_ESaIS1_EE16_M_insert_uniqueERKS1_",
+      "name": "_ZN11xercesc_2_516XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_516XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_516XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_516XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_516XMLPlatformUtils10loadMsgSetEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -7194,14 +7539,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7353,6 +7690,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_817NamespacesHandler13PrefixCheckerC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZNSt3mapIPKN10xalanc_1_814XalanDOMStringES3_NS0_32DOMStringPointerLessThanFunctionESaISt4pairIKS3_S3_EEEixERS6_",
       "type": "funarg"
@@ -7361,8 +7706,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "index": 5,
+      "name": "_ZN10xalanc_1_817NamespacesHandler16postConstructionERNS_29StylesheetConstructionContextEbRKNS_14XalanDOMStringEPKS0_PKNS0_13PrefixCheckerE",
       "type": "funarg"
     },
     "type": "value"
@@ -7434,6 +7779,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_524AbstractNumericValidator11boundsCheckEPKNS_9XMLNumberEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7497,14 +7850,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -7522,7 +7867,39 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "name": "_ZN10xalanc_1_810XalanQName21getNamespaceForPrefixESt15_Deque_iteratorISt5dequeINS_9NameSpaceESaIS3_EERKS5_PS6_ES9_RKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN10xalanc_1_810XalanQName21getNamespaceForPrefixESt15_Deque_iteratorISt5dequeINS_9NameSpaceESaIS3_EERKS5_PS6_ES9_RKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_810XalanQName21getPrefixForNamespaceESt15_Deque_iteratorISt5dequeINS_9NameSpaceESaIS3_EERKS5_PS6_ES9_RKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN10xalanc_1_810XalanQName21getPrefixForNamespaceESt15_Deque_iteratorISt5dequeINS_9NameSpaceESaIS3_EERKS5_PS6_ES9_RKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58DOM_Text9splitTextEj",
       "type": "funarg"
     },
     "type": "value"
@@ -7586,7 +7963,47 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xercesc_2_521DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_521DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_521DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_521DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_10KeyRefPairIvNS_18DOMUserDataHandlerEEEE14nextElementKeyEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_511RefVectorOfINS_7DOMNodeEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -7697,15 +8114,39 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_521MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "index": 0,
+      "name": "_ZNK11xercesc_2_56XMLURL10isRelativeEv",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 0,
+      "name": "_ZN11xercesc_2_56XMLURL6setURLEPKtS2_RS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_56XMLURL6setURLEPKtS2_RS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_56XMLURL14hasInvalidCharEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_521MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7737,8 +8178,56 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_826StylesheetExecutionContext13ParamsPushPop6doPushERKNS_19ElemTemplateElementEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_826StylesheetExecutionContext13ParamsPushPop6doPushERKNS_19ElemTemplateElementE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_515ContentSpecNodeD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_515ContentSpecNode10formatSpecERNS_9XMLBufferE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZNSt6vectorItSaItEE6insertEN9__gnu_cxx17__normal_iteratorIPtS1_EERKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK10xalanc_1_814XalanDOMString9transcodeEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10xalanc_1_814XalanDOMString9transcodeEv",
       "type": "funarg"
     },
     "type": "value"
@@ -7786,14 +8275,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7883,6 +8364,14 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_514RefHashTableOfINS_12XSAnnotationEE14findBucketElemEPKvRj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_818FunctionDifferenceC2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -8609,8 +9098,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN10xalanc_1_814XalanDOMStringaSEPKt",
+      "index": 2,
+      "name": "_ZN10xalanc_1_814FormatterToXMLC2ERNS_6WriterERKNS_14XalanDOMStringEbiS5_S5_S5_S5_bS5_NS_17FormatterListener7eFormatEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "_ZN10xalanc_1_814FormatterToXMLC2ERNS_6WriterERKNS_14XalanDOMStringEbiS5_S5_S5_S5_bS5_NS_17FormatterListener7eFormatEb",
       "type": "funarg"
     },
     "type": "value"
@@ -8626,14 +9123,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8681,6 +9170,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_511InputSource11setSystemIdEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -8690,14 +9187,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8721,6 +9210,22 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_521XML256TableTranscoderC2EPKtjS2_PKNS_15XMLTransService8TransRecEjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_521XML256TableTranscoderC2EPKtjS2_PKNS_15XMLTransService8TransRecEjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_519EmptyStackExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -8731,6 +9236,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_522NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZNK11xercesc_2_59ElemStack14mapPrefixToURIEPKtNS0_8MapModesERb",
       "type": "funarg"
     },
     "type": "value"
@@ -8754,14 +9267,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8818,7 +9323,79 @@
   {
     "pattern": {
       "index": 2,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesERKNS_14XalanDOMStringES5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesERKNS_14XalanDOMStringES5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesERKNS_14XalanDOMStringES5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesEPKcS4_S4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesEPKcS4_S4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesEPKcS4_S4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesEPKcS4_S4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
       "name": "_ZN10xalanc_1_818XalanMessageLoader4loadENS_13XalanMessages5CodesEPtjPKcS5_S5_S5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN10xalanc_1_818XalanMessageLoader10getMessageENS_13XalanMessages5CodesEPKtS4_S4_S4_",
       "type": "funarg"
     },
     "type": "value"
@@ -8921,14 +9498,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -9001,6 +9570,14 @@
   },
   {
     "pattern": {
+      "index": 5,
+      "name": "_ZN11xercesc_2_521XercesElementWildcard8conflictEPNS_13SchemaGrammarENS_15ContentSpecNode9NodeTypesEPNS_5QNameES4_S6_PNS_27SubstitutionGroupComparatorE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
       "name": "_ZN11xercesc_2_512IGXMLScanner22anyAttributeValidationEPNS_12SchemaAttDefEjRbS3_",
       "type": "funarg"
@@ -9026,14 +9603,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -9082,6 +9651,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_512IGXMLScanner20laxElementValidationEPNS_5QNameEPNS_25ContentLeafNameTypeVectorEPKNS_15XMLContentModelEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -9107,14 +9684,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_510NameIdPoolINS_13DTDEntityDeclEE14findBucketElemEPKtRj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
       "type": "funarg"
     },
     "type": "value"
@@ -9153,16 +9722,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_59XMLString6equalsEPKtS2_",
+      "index": 0,
+      "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
+      "index": 2,
+      "name": "_ZN10xalanc_1_819XercesParserLiaison14parseXMLStreamERKN11xercesc_2_511InputSourceERKNS_14XalanDOMStringE",
       "type": "funarg"
     },
     "type": "value"
@@ -9266,6 +9835,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN10xalanc_1_814XalanParsedURI7resolveEPKtjS2_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN10xalanc_1_814XalanParsedURIC2EPKtj",
       "type": "funarg"
     },
@@ -9275,6 +9852,22 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_814XalanParsedURID2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DocumentImpl18createNodeIteratorENS_8DOM_NodeEmPNS_14DOM_NodeFilterEbPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DocumentImpl16createTreeWalkerENS_8DOM_NodeEmPNS_14DOM_NodeFilterEbPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
@@ -9409,22 +10002,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11SAX2Handler12startElementEPKtS1_S1_RKN11xercesc_2_510AttributesE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "_ZN11SAX2Handler12startElementEPKtS1_S1_RKN11xercesc_2_510AttributesE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN11SAX2Handler5errorERKN11xercesc_2_517SAXParseExceptionE",
       "type": "funarg"
@@ -9474,22 +10051,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -9625,6 +10186,14 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_516XMLPlatformUtils14compareAndSwapEPPvPKvS4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_512ArrayJanitorItED2Ev",
       "type": "funarg"
@@ -9729,14 +10298,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -9753,6 +10314,30 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_810TreeWalker8traverseEPKNS_9XalanNodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_810TreeWalker8traverseEPNS_9XalanNodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_810TreeWalker15traverseSubtreeEPNS_9XalanNodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZNK10xalanc_1_816FunctionDocument9doExecuteERNS_21XPathExecutionContextEPNS_9XalanNodeERKNS_10XObjectPtrEPNS_14XalanDOMStringEiPKN11xercesc_2_57LocatorEb",
       "type": "funarg"
@@ -9770,6 +10355,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "FunctionDocument.cpp",
       "name": "_ZN10xalanc_1_8L6getDocERNS_21XPathExecutionContextERKNS_14XalanDOMStringES4_RNS0_30BorrowReturnMutableNodeRefListEPKNS_9XalanNodeEPKN11xercesc_2_57LocatorE",
       "type": "funarg"
     },
@@ -9778,15 +10364,8 @@
   {
     "pattern": {
       "index": 3,
+      "module": "FunctionDocument.cpp",
       "name": "_ZN10xalanc_1_8L6getDocERNS_21XPathExecutionContextERKNS_14XalanDOMStringES4_RNS0_30BorrowReturnMutableNodeRefListEPKNS_9XalanNodeEPKN11xercesc_2_57LocatorE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -9803,14 +10382,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_59XMLString6equalsEPKtS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -9851,6 +10422,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_15XercesGroupInfoEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_528RefHash3KeysIdPoolEnumeratorINS_17SchemaElementDeclEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -9969,14 +10548,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
       "type": "funarg"
@@ -10019,6 +10590,22 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_817StylesheetHandlerC2ERNS_10StylesheetERNS_29StylesheetConstructionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_817StylesheetHandler13startDocumentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_817StylesheetHandler11endDocumentEv",
       "type": "funarg"
     },
     "type": "value"
@@ -10369,14 +10956,6 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "_ZNSt6vectorIN10xalanc_1_814XalanDOMStringESaIS1_EE17_M_realloc_insertEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 4,
       "name": "_ZSt9__find_ifISt19_Bit_const_iteratorN9__gnu_cxx5__ops16_Iter_equals_valIKbEEET_S6_S6_T0_St26random_access_iterator_tag",
       "type": "funarg"
@@ -10395,6 +10974,14 @@
     "pattern": {
       "index": 2,
       "name": "_ZNSt6vectorIPN10xalanc_1_89XalanNodeESaIS2_EE6insertEN9__gnu_cxx17__normal_iteratorIPS2_S4_EERKS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_818MutableNodeRefList7setNodeEjPNS_9XalanNodeE",
       "type": "funarg"
     },
     "type": "value"
@@ -10499,14 +11086,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_514RefHashTableOfINS_8XSObjectEE14findBucketElemEPKvRj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_514RefHashTableOfINS_17DatatypeValidatorEE14findBucketElemEPKvRj",
       "type": "funarg"
     },
     "type": "value"
@@ -10618,6 +11197,30 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN10xalanc_1_820DOMStringPrintWriter5printERKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_820DOMStringPrintWriter7printlnEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_515ContentSpecNodeD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_529RefHash2KeysTableOfEnumeratorINS_12SchemaAttDefEE11nextElementEv",
       "type": "funarg"
     },
@@ -10697,6 +11300,38 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN10xalanc_1_814XSLTEngineImpl22getStylesheetFromPIURLERKNS_14XalanDOMStringERNS_9XalanNodeES3_bRNS_29StylesheetConstructionContextE",
       "type": "funarg"
@@ -10713,8 +11348,24 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceERNS_16XSLTResultTargetERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
-      "name": "_ZN10xalanc_1_814XSLTEngineImpl15displayDurationERKNS_14XalanDOMStringEPKv",
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceERNS_16XSLTResultTargetERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl7processERKNS_15XSLTInputSourceERNS_16XSLTResultTargetERNS_26StylesheetExecutionContextE",
       "type": "funarg"
     },
     "type": "value"
@@ -10755,6 +11406,22 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_813GenerateEventD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl12evalXPathStrERKNS_14XalanDOMStringEPNS_9XalanNodeERKNS_14PrefixResolverERNS_21XPathExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_814XSLTEngineImpl18setStylesheetParamERKNS_14XalanDOMStringES3_",
       "type": "funarg"
     },
     "type": "value"
@@ -10802,7 +11469,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN10xalanc_1_817XalanOutputStream5writeEPKtj",
+      "name": "_ZN10xalanc_1_817XalanOutputStream26XalanOutputStreamExceptionC2ERKNS_14XalanDOMStringES4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN10xalanc_1_817XalanOutputStream26XalanOutputStreamExceptionC2ERKNS_14XalanDOMStringES4_",
       "type": "funarg"
     },
     "type": "value"
@@ -10811,6 +11486,22 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt6vectorIcSaIcEE14_M_fill_insertEN9__gnu_cxx17__normal_iteratorIPcS1_EEmRKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_828XalanNumberingResourceBundle4swapERS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN10xalanc_1_828XalanNumberingResourceBundle4swapERS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -10859,6 +11550,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_523XSerializationExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_516XSerializeEngine10readStringERPtRiS3_b",
       "type": "funarg"
     },
     "type": "value"
@@ -10923,22 +11622,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN10xalanc_1_87XObject33XObjectInvalidConversionExceptionC2ERKNS_14XalanDOMStringES4_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -11185,6 +11868,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_818XPathProcessorImpl9initXPathERNS_5XPathERNS_24XPathConstructionContextERKNS_14XalanDOMStringERKNS_14PrefixResolverEPKN11xercesc_2_57LocatorE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZNK10xalanc_1_818XPathProcessorImpl5errorERKNS_14XalanDOMStringE",
       "type": "funarg"
@@ -11195,14 +11886,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN10xalanc_1_86equalsERKNS_14XalanDOMStringEPKt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN10xalanc_1_814XalanDOMStringaSEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -11227,6 +11910,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZNSt8_Rb_treeIN10xalanc_1_814XalanDOMStringESt4pairIKS1_PS3_ESt10_Select1stIS5_ESt4lessIS1_ESaIS5_EE17_M_insert_unique_INSB_11_Alloc_nodeEEESt17_Rb_tree_iteratorIS5_ESt23_Rb_tree_const_iteratorIS5_ERKS5_RT_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_827XalanHTMLElementsProperties4findEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -11307,6 +11998,22 @@
     "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_815XPathExpression24InvalidArgumentException18FormatErrorMessageEii",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN10xalanc_1_815XPathExpression13setOpCodeArgsENS0_8eOpCodesEiRKSt6vectorIiSaIiEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK10xalanc_1_815XPathExpression23dumpRemainingTokenQueueERNS_11PrintWriterE",
       "type": "funarg"
     },
     "type": "value"
@@ -11457,6 +12164,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_519XTemplateSerializer11storeObjectEPNS_14RefHashTableOfINS_7GrammarEEERNS_16XSerializeEngineE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_7GrammarEE11nextElementEv",
       "type": "funarg"
@@ -11467,6 +12182,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_524RefHashTableOfEnumeratorINS_7GrammarEE14nextElementKeyEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_519XTemplateSerializer10loadObjectEPPNS_14RefHashTableOfINS_7GrammarEEEibRNS_16XSerializeEngineE",
       "type": "funarg"
     },
     "type": "value"
@@ -11785,6 +12508,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_513XMLEntityDeclC2EPKttPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN10xalanc_1_814throwExceptionERKNS_14XalanDOMStringEPKN11xercesc_2_57LocatorE",
       "type": "funarg"
@@ -11833,14 +12564,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -11851,6 +12574,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_512XMLFormatter8writeBOMEPKhj",
       "type": "funarg"
     },
     "type": "value"
@@ -11874,14 +12605,38 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "name": "_ZN11xercesc_2_513RangeTokenMap11addCategoryEPKt",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 1,
+      "name": "_ZN11xercesc_2_513RangeTokenMap11addRangeMapEPKtPNS_12RangeFactoryE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_513RangeTokenMap13addKeywordMapEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_513RangeTokenMap13addKeywordMapEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -11899,6 +12654,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_513RangeTokenMap13setRangeTokenEPKtPNS_10RangeTokenEb",
       "type": "funarg"
     },
     "type": "value"
@@ -11937,16 +12700,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNSt6vectorItSaItEEaSERKS1_",
+      "index": 12,
+      "name": "_ZN11xercesc_2_511PSVIElement5resetENS_8PSVIItem14VALIDITY_STATEENS1_15ASSESSMENT_TYPEEPKtbPNS_20XSElementDeclarationEPNS_16XSTypeDefinitionEPNS_22XSSimpleTypeDefinitionEPNS_7XSModelES5_S5_PtPNS_21XSNotationDeclarationE",
       "type": "funarg"
     },
     "type": "value"
@@ -12002,14 +12757,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -12193,6 +12940,110 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_58DOM_NodeneEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_58DOM_NodeeqEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58DOM_Node11appendChildERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node12getNodeValueEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node13getParentNodeEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node13getFirstChildEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node12getLastChildEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node18getPreviousSiblingEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node14getNextSiblingEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_58DOM_Node16getOwnerDocumentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_58DOM_Node12insertBeforeERKS0_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_58DOM_Node12insertBeforeERKS0_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_58DOM_Node12setNodeValueERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_511XMLDateTime11addDurationEPS0_PKS0_i",
       "type": "funarg"
@@ -12257,8 +13108,40 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_511XMLDateTime34getDateTimeCanonicalRepresentationEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_511XMLDateTime30getTimeCanonicalRepresentationEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_523SchemaDateTimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_518XMLStringTokenizer9nextTokenEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_518XMLStringTokenizer13hasMoreTokensEv",
       "type": "funarg"
     },
     "type": "value"
@@ -12409,14 +13292,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_529InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -12459,6 +13334,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZNK10xalanc_1_823XalanDOMStringHashTable4findEPKtjPm",
       "type": "funarg"
     },
     "type": "value"
@@ -12490,6 +13373,174 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document14createDocumentEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document13createElementEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document22createDocumentFragmentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document14createTextNodeERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document14createTextNodeERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document13createCommentERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document13createCommentERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document18createCDATASectionERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document18createCDATASectionERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document27createProcessingInstructionERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document27createProcessingInstructionERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_512DOM_Document27createProcessingInstructionERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document21createEntityReferenceERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document21createEntityReferenceERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document15createElementNSERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document15createElementNSERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_512DOM_Document15createElementNSERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_512DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_512DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_512DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_512DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZNK10xalanc_1_812ElemVariable8getValueERNS_26StylesheetExecutionContextEPNS_9XalanNodeE",
       "type": "funarg"
     },
@@ -12507,6 +13558,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_520TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_510SchemaInfo20getTopLevelComponentEtPKtS2_PPS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -12546,7 +13605,39 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_59ReaderMgr11skipIfQuoteERt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59ReaderMgr11skipUntilInEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_59ReaderMgr15skipUntilInOrWSEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_516RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN11xercesc_2_59ReaderMgr12createReaderEPKtS2_bNS_9XMLReader7RefFromENS3_5TypesENS3_7SourcesERPNS_11InputSourceEb",
       "type": "funarg"
     },
     "type": "value"
@@ -12569,6 +13660,14 @@
   },
   {
     "pattern": {
+      "index": 8,
+      "name": "_ZN11xercesc_2_59ReaderMgr12createReaderEPKtS2_S2_bNS_9XMLReader7RefFromENS3_5TypesENS3_7SourcesERPNS_11InputSourceEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_530ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -12579,6 +13678,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_519EmptyStackExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN10xalanc_1_820FunctionIntersectionC2Ev",
       "type": "funarg"
     },
     "type": "value"

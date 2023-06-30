@@ -18,6 +18,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "regexec.c",
       "name": "S_find_byclass",
       "type": "funarg"
     },
@@ -26,6 +27,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regexec.c",
       "name": "S_regtry",
       "type": "funarg"
     },
@@ -34,6 +36,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regexec.c",
       "name": "S_backup_one_SB",
       "type": "funarg"
     },
@@ -42,6 +45,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "regexec.c",
       "name": "S_advance_one_SB",
       "type": "funarg"
     },
@@ -50,6 +54,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "regexec.c",
       "name": "S_backup_one_WB",
       "type": "funarg"
     },
@@ -58,6 +63,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regexec.c",
       "name": "S_backup_one_WB",
       "type": "funarg"
     },
@@ -66,6 +72,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "regexec.c",
       "name": "S_advance_one_WB",
       "type": "funarg"
     },
@@ -74,6 +81,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regexec.c",
       "name": "S_regcppop",
       "type": "funarg"
     },
@@ -82,6 +90,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regexec.c",
       "name": "S_regrepeat",
       "type": "funarg"
     },
@@ -90,6 +99,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "MD5.c",
       "name": "make_mortal_sv",
       "type": "funarg"
     },
@@ -98,6 +108,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "Parser.c",
       "name": "tokens_grow",
       "type": "funarg"
     },
@@ -106,6 +117,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "Parser.c",
       "name": "tokens_grow",
       "type": "funarg"
     },
@@ -115,22 +127,6 @@
     "pattern": {
       "index": 4,
       "name": "Perl_pv_escape",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "Perl_pv_pretty",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "Perl_pv_pretty",
       "type": "funarg"
     },
     "type": "value"
@@ -161,8 +157,56 @@
   },
   {
     "pattern": {
+      "index": 5,
+      "name": "Perl_delimcpy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_instr",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "Perl_form",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_mess",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_vmess",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_vmess",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_die",
       "type": "funarg"
     },
     "type": "value"
@@ -178,7 +222,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "Perl_croak",
+      "name": "Perl_warn",
       "type": "funarg"
     },
     "type": "value"
@@ -201,8 +245,32 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "Perl_my_popen_list",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
-      "name": "Perl_warner",
+      "name": "Perl_wait4pid",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_find_script",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_my_strlcpy",
       "type": "funarg"
     },
     "type": "value"
@@ -250,7 +318,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "Perl_my_snprintf",
+      "name": "Perl_parse_unicode_opts",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_get_hash_seed",
       "type": "funarg"
     },
     "type": "value"
@@ -258,7 +334,31 @@
   {
     "pattern": {
       "index": 2,
-      "name": "Perl_my_snprintf",
+      "name": "Perl_xs_handshake",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_my_strlcat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_my_strlcat",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_get_db_sub",
       "type": "funarg"
     },
     "type": "value"
@@ -345,6 +445,22 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "Perl_grok_number",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_grok_atoUV",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "Perl_my_atof2",
       "type": "funarg"
@@ -354,6 +470,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "Glob.c",
       "name": "iterate",
       "type": "funarg"
     },
@@ -362,6 +479,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "hv.c",
       "name": "S_hv_notallowed",
       "type": "funarg"
     },
@@ -378,7 +496,47 @@
   {
     "pattern": {
       "index": 1,
-      "name": "Perl_hv_name_set",
+      "name": "Perl_hv_iterkey",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_hv_iternextsv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_hv_iternextsv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_cop_fetch_label",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_cop_fetch_label",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_mro_get_private_data",
       "type": "funarg"
     },
     "type": "value"
@@ -434,6 +592,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_pat_upgrade_to_utf8",
       "type": "funarg"
     },
@@ -442,6 +601,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_pat_upgrade_to_utf8",
       "type": "funarg"
     },
@@ -450,6 +610,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_reg",
       "type": "funarg"
     },
@@ -466,6 +627,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_study_chunk",
       "type": "funarg"
     },
@@ -474,6 +636,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "re_comp.c",
       "name": "S_study_chunk",
       "type": "funarg"
     },
@@ -482,6 +645,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "re_comp.c",
       "name": "S_is_ssc_worth_it",
       "type": "funarg"
     },
@@ -490,6 +654,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "re_comp.c",
       "name": "S_ssc_finalize",
       "type": "funarg"
     },
@@ -498,6 +663,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_put_charclass_bitmap_innards",
       "type": "funarg"
     },
@@ -506,6 +672,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_invlist_iternext",
       "type": "funarg"
     },
@@ -514,6 +681,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_invlist_iternext",
       "type": "funarg"
     },
@@ -522,6 +690,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_populate_ANYOF_from_invlist",
       "type": "funarg"
     },
@@ -530,6 +699,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_re_croak2",
       "type": "funarg"
     },
@@ -538,6 +708,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_re_croak2",
       "type": "funarg"
     },
@@ -546,6 +717,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_regbranch",
       "type": "funarg"
     },
@@ -554,6 +726,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_handle_regex_sets",
       "type": "funarg"
     },
@@ -562,6 +735,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "re_comp.c",
       "name": "S_regnode_guts",
       "type": "funarg"
     },
@@ -570,6 +744,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_regatom",
       "type": "funarg"
     },
@@ -578,6 +753,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "re_comp.c",
       "name": "S_regclass",
       "type": "funarg"
     },
@@ -586,6 +762,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_N",
       "type": "funarg"
     },
@@ -594,6 +771,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_N",
       "type": "funarg"
     },
@@ -602,6 +780,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_N",
       "type": "funarg"
     },
@@ -610,6 +789,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_o",
       "type": "funarg"
     },
@@ -618,6 +798,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_o",
       "type": "funarg"
     },
@@ -626,6 +807,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_x",
       "type": "funarg"
     },
@@ -634,6 +816,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_comp.c",
       "name": "S_grok_bslash_x",
       "type": "funarg"
     },
@@ -642,6 +825,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_comp.c",
       "name": "S_reg_recode",
       "type": "funarg"
     },
@@ -650,7 +834,88 @@
   {
     "pattern": {
       "index": 2,
+      "module": "av.c",
       "name": "S_adjust_index",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_av_create_and_push",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_av_create_and_unshift_one",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_sys_init3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_sys_init3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_sys_init3",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "perl_parse",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "perl_parse",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_get_cv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_call_pv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_require_pv",
       "type": "funarg"
     },
     "type": "value"
@@ -666,6 +931,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "perl.c",
       "name": "S_incpush_use_sep",
       "type": "funarg"
     },
@@ -689,8 +955,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "Perl_filter_add",
+      "index": 0,
+      "name": "Perl_filter_del",
       "type": "funarg"
     },
     "type": "value"
@@ -698,6 +964,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "toke.c",
       "name": "S_scan_word",
       "type": "funarg"
     },
@@ -706,6 +973,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "toke.c",
       "name": "S_scan_str",
       "type": "funarg"
     },
@@ -714,6 +982,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "toke.c",
       "name": "S_no_op",
       "type": "funarg"
     },
@@ -722,6 +991,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "toke.c",
       "name": "S_missingterm",
       "type": "funarg"
     },
@@ -730,6 +1000,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "toke.c",
       "name": "S_strip_spaces",
       "type": "funarg"
     },
@@ -738,6 +1009,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "toke.c",
       "name": "S_checkcomma",
       "type": "funarg"
     },
@@ -746,6 +1018,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "toke.c",
       "name": "S_parse_ident",
       "type": "funarg"
     },
@@ -754,6 +1027,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "toke.c",
       "name": "S_parse_ident",
       "type": "funarg"
     },
@@ -762,6 +1036,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "toke.c",
       "name": "S_pmflag",
       "type": "funarg"
     },
@@ -770,6 +1045,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "toke.c",
       "name": "S_pmflag",
       "type": "funarg"
     },
@@ -778,7 +1054,40 @@
   {
     "pattern": {
       "index": 4,
+      "module": "toke.c",
       "name": "S_pmflag",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "PerlIO_intmode2str",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "PerlIO_intmode2str",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "PerlIO_debug",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "PerlIO_fdupopen",
       "type": "funarg"
     },
     "type": "value"
@@ -794,15 +1103,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "PerlIO_openn",
+      "name": "PerlIO_define_layer",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 7,
-      "name": "PerlIO_openn",
+      "index": 2,
+      "name": "PerlIO_layer_fetch",
       "type": "funarg"
     },
     "type": "value"
@@ -811,6 +1120,14 @@
     "pattern": {
       "index": 1,
       "name": "Perl_PerlIO_unread",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "PerlIO_modestr",
       "type": "funarg"
     },
     "type": "value"
@@ -841,8 +1158,8 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "PerlIO_vprintf",
+      "index": 1,
+      "name": "PerlIO_open",
       "type": "funarg"
     },
     "type": "value"
@@ -850,39 +1167,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "Perl_re_op_compile",
+      "name": "Perl_noperl_die",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "Perl_re_op_compile",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "Perl_re_op_compile",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "Perl_re_op_compile",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "Perl_re_op_compile",
+      "index": 0,
+      "name": "Perl__new_invlist_C_array",
       "type": "funarg"
     },
     "type": "value"
@@ -890,6 +1183,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_pat_upgrade_to_utf8",
       "type": "funarg"
     },
@@ -898,6 +1192,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regcomp.c",
       "name": "S_pat_upgrade_to_utf8",
       "type": "funarg"
     },
@@ -906,6 +1201,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regcomp.c",
       "name": "S_reg",
       "type": "funarg"
     },
@@ -914,6 +1210,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_study_chunk",
       "type": "funarg"
     },
@@ -922,6 +1219,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "regcomp.c",
       "name": "S_study_chunk",
       "type": "funarg"
     },
@@ -930,6 +1228,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "regcomp.c",
       "name": "S_is_ssc_worth_it",
       "type": "funarg"
     },
@@ -937,7 +1236,16 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "Perl__setup_canned_invlist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_invlist_iternext",
       "type": "funarg"
     },
@@ -946,6 +1254,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regcomp.c",
       "name": "S_invlist_iternext",
       "type": "funarg"
     },
@@ -953,7 +1262,24 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "Perl__invlist_dump",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "Perl__get_regclass_nonbitmap_data",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_populate_ANYOF_from_invlist",
       "type": "funarg"
     },
@@ -962,6 +1288,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_re_croak2",
       "type": "funarg"
     },
@@ -970,6 +1297,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regcomp.c",
       "name": "S_re_croak2",
       "type": "funarg"
     },
@@ -978,6 +1306,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_regbranch",
       "type": "funarg"
     },
@@ -986,6 +1315,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_handle_regex_sets",
       "type": "funarg"
     },
@@ -994,6 +1324,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_regatom",
       "type": "funarg"
     },
@@ -1002,6 +1333,7 @@
   {
     "pattern": {
       "index": 7,
+      "module": "regcomp.c",
       "name": "S_regclass",
       "type": "funarg"
     },
@@ -1010,6 +1342,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_grok_bslash_N",
       "type": "funarg"
     },
@@ -1018,6 +1351,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regcomp.c",
       "name": "S_grok_bslash_N",
       "type": "funarg"
     },
@@ -1026,6 +1360,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "regcomp.c",
       "name": "S_grok_bslash_N",
       "type": "funarg"
     },
@@ -1034,6 +1369,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_grok_bslash_x",
       "type": "funarg"
     },
@@ -1042,6 +1378,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "regcomp.c",
       "name": "S_grok_bslash_x",
       "type": "funarg"
     },
@@ -1050,6 +1387,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "regcomp.c",
       "name": "S_reg_recode",
       "type": "funarg"
     },
@@ -1074,6 +1412,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "op.c",
       "name": "S_op_pretty",
       "type": "funarg"
     },
@@ -1082,39 +1421,8 @@
   {
     "pattern": {
       "index": 2,
+      "module": "op.c",
       "name": "S_op_pretty",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "Perl_load_module",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "Perl_my_attrs",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "Perl_pmruntime",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "Perl_newSTATEOP",
       "type": "funarg"
     },
     "type": "value"
@@ -1138,6 +1446,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "op.c",
       "name": "S_new_logop",
       "type": "funarg"
     },
@@ -1146,6 +1455,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "op.c",
       "name": "S_new_logop",
       "type": "funarg"
     },
@@ -1154,6 +1464,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "op.c",
       "name": "S_move_proto_attr",
       "type": "funarg"
     },
@@ -1162,6 +1473,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "op.c",
       "name": "S_move_proto_attr",
       "type": "funarg"
     },
@@ -1170,6 +1482,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "op.c",
       "name": "S_already_defined",
       "type": "funarg"
     },
@@ -1185,7 +1498,56 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "Perl_newXS",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_newXS",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_newXS",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_newXS_flags",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_newXS_deffile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_newXS_deffile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
+      "module": "op.c",
       "name": "S_bad_type_gv",
       "type": "funarg"
     },
@@ -1194,7 +1556,15 @@
   {
     "pattern": {
       "index": 1,
-      "name": "Perl_croak_xs_usage",
+      "name": "Perl_cv_set_call_checker",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "Perl_core_prototype",
       "type": "funarg"
     },
     "type": "value"
@@ -1202,6 +1572,55 @@
   {
     "pattern": {
       "index": 1,
+      "name": "Perl_wrap_op_checker",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_wrap_op_checker",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_save_strlen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_save_hptr",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_save_aptr",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_save_destructor_x",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "universal.c",
       "name": "S_version_check_key",
       "type": "funarg"
     },
@@ -1209,7 +1628,24 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "Perl_deb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "Perl_do_openn",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "doio.c",
       "name": "S_openn_setup",
       "type": "funarg"
     },
@@ -1218,6 +1654,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "doio.c",
       "name": "S_openn_setup",
       "type": "funarg"
     },
@@ -1226,6 +1663,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "doio.c",
       "name": "S_openn_setup",
       "type": "funarg"
     },
@@ -1234,6 +1672,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "doio.c",
       "name": "S_openn_setup",
       "type": "funarg"
     },
@@ -1242,6 +1681,7 @@
   {
     "pattern": {
       "index": 5,
+      "module": "doio.c",
       "name": "S_openn_setup",
       "type": "funarg"
     },
@@ -1250,6 +1690,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "doio.c",
       "name": "S_openn_cleanup",
       "type": "funarg"
     },
@@ -1257,8 +1698,24 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "Perl_io_close",
+      "index": 2,
+      "name": "Perl_cando",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "bsd_glob",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "bsd_glob",
       "type": "funarg"
     },
     "type": "value"
@@ -1266,6 +1723,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "bsd_glob.c",
       "name": "globexp1",
       "type": "funarg"
     },
@@ -1273,7 +1731,16 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "bsd_globfree",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "bsd_glob.c",
       "name": "g_stat",
       "type": "funarg"
     },
@@ -1282,6 +1749,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "pp_pack.c",
       "name": "S_unpack_rec",
       "type": "funarg"
     },
@@ -1290,6 +1758,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "pp_pack.c",
       "name": "S_utf8_to_bytes",
       "type": "funarg"
     },
@@ -1298,6 +1767,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "pp_pack.c",
       "name": "doencodes",
       "type": "funarg"
     },
@@ -1329,7 +1799,16 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "Perl_gv_override",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 3,
+      "module": "gv.c",
       "name": "S_require_tie_mod",
       "type": "funarg"
     },
@@ -1346,6 +1825,7 @@
   {
     "pattern": {
       "index": 4,
+      "module": "re_exec.c",
       "name": "S_find_byclass",
       "type": "funarg"
     },
@@ -1354,6 +1834,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_exec.c",
       "name": "S_regtry",
       "type": "funarg"
     },
@@ -1362,6 +1843,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_exec.c",
       "name": "S_backup_one_SB",
       "type": "funarg"
     },
@@ -1370,6 +1852,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "re_exec.c",
       "name": "S_advance_one_SB",
       "type": "funarg"
     },
@@ -1378,6 +1861,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "re_exec.c",
       "name": "S_backup_one_WB",
       "type": "funarg"
     },
@@ -1386,6 +1870,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "re_exec.c",
       "name": "S_backup_one_WB",
       "type": "funarg"
     },
@@ -1394,6 +1879,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "re_exec.c",
       "name": "S_advance_one_WB",
       "type": "funarg"
     },
@@ -1402,6 +1888,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_exec.c",
       "name": "S_regcppop",
       "type": "funarg"
     },
@@ -1410,6 +1897,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "re_exec.c",
       "name": "S_regrepeat",
       "type": "funarg"
     },
@@ -1417,7 +1905,16 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "Perl_sortsv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 4,
+      "module": "Storable.c",
       "name": "do_store",
       "type": "funarg"
     },
@@ -1426,6 +1923,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "Storable.c",
       "name": "pkg_can",
       "type": "funarg"
     },
@@ -1433,8 +1931,81 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "Perl_is_utf8_string_loclen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "name": "Perl_utf8_to_bytes",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_bytes_from_utf8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_bytes_from_utf8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_bytes_to_utf8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "Perl_utf16_to_utf8_reversed",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "utf8.c",
       "name": "S_is_utf8_common",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl__to_upper_title_latin1",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_to_uni_upper",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_to_uni_upper",
       "type": "funarg"
     },
     "type": "value"
@@ -1458,7 +2029,47 @@
   {
     "pattern": {
       "index": 1,
-      "name": "Perl__to_uni_fold_flags",
+      "name": "Perl_to_uni_title",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_to_uni_title",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_to_uni_lower",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_to_uni_lower",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl__to_fold_latin1",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl__to_fold_latin1",
       "type": "funarg"
     },
     "type": "value"
@@ -1481,7 +2092,24 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "Perl_swash_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_swash_init",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
+      "module": "utf8.c",
       "name": "S_swash_scan_list_line",
       "type": "funarg"
     },
@@ -1490,6 +2118,7 @@
   {
     "pattern": {
       "index": 3,
+      "module": "utf8.c",
       "name": "S_swash_scan_list_line",
       "type": "funarg"
     },
@@ -1498,7 +2127,40 @@
   {
     "pattern": {
       "index": 4,
+      "module": "utf8.c",
       "name": "S_swash_scan_list_line",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_foldEQ_utf8_flags",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "Perl_foldEQ_utf8_flags",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_uvuni_to_utf8",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_sv_2pvbyte",
       "type": "funarg"
     },
     "type": "value"
@@ -1521,8 +2183,16 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "Perl_sv_insert_flags",
+      "index": 1,
+      "name": "Perl_sv_setpv_mg",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_sv_pos_u2b_flags",
       "type": "funarg"
     },
     "type": "value"
@@ -1530,6 +2200,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "sv.c",
       "name": "S_sv_pos_u2b_cached",
       "type": "funarg"
     },
@@ -1537,8 +2208,72 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "Perl_sv_pos_u2b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_sv_pos_u2b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
-      "name": "Perl_sv_ref",
+      "name": "Perl_newSVpv_share",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_vnewSVpvf",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "Perl_sv_vsetpvfn",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_sv_2cv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Perl_sv_2cv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_sv_pvbyten_force",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Perl_sv_pvutf8n_force",
       "type": "funarg"
     },
     "type": "value"
@@ -1554,7 +2289,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "Perl_sv_catpvf",
+      "name": "Perl_sv_setpvf_mg",
       "type": "funarg"
     },
     "type": "value"
@@ -1570,6 +2305,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "sv.c",
       "name": "S_F0convert",
       "type": "funarg"
     },
@@ -1578,6 +2314,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "sv.c",
       "name": "S_F0convert",
       "type": "funarg"
     },
@@ -1586,6 +2323,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "sv.c",
       "name": "S_hextract",
       "type": "funarg"
     },
@@ -1594,6 +2332,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "sv.c",
       "name": "S_hextract",
       "type": "funarg"
     },
@@ -1601,16 +2340,25 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "Perl_sv_cat_decode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "Perl_sv_cat_decode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
+      "module": "sv.c",
       "name": "S_sv_display",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "Perl_softref2xv",
       "type": "funarg"
     },
     "type": "value"
@@ -1619,6 +2367,22 @@
     "pattern": {
       "index": 3,
       "name": "Perl_softref2xv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "Perl_translate_substr_offsets",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "Perl_translate_substr_offsets",
       "type": "funarg"
     },
     "type": "value"
@@ -1634,7 +2398,16 @@
   {
     "pattern": {
       "index": 0,
+      "module": "pp_ctl.c",
       "name": "S_unwind_loop",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "Perl_find_runcv",
       "type": "funarg"
     },
     "type": "value"
@@ -1650,6 +2423,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "pp_sys.c",
       "name": "S_ft_return_false",
       "type": "funarg"
     },
@@ -1658,6 +2432,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "pp_sys.c",
       "name": "S_ft_return_true",
       "type": "funarg"
     },
@@ -1666,6 +2441,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "pp_sys.c",
       "name": "S_gmtime64_r",
       "type": "funarg"
     },
@@ -1674,6 +2450,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "pp_sys.c",
       "name": "S_gmtime64_r",
       "type": "funarg"
     },
@@ -1682,6 +2459,7 @@
   {
     "pattern": {
       "index": 0,
+      "module": "Dumper.c",
       "name": "sv_x",
       "type": "funarg"
     },

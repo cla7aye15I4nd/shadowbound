@@ -17,14 +17,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_79XMLString6equalsEPKtS2_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorItED2Ev",
       "type": "funarg"
@@ -51,6 +43,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIPNS_22RefHashTableBucketElemItEEED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1015XercesDOMWalker8traverseEPKN11xercesc_2_77DOMNodeES4_",
       "type": "funarg"
     },
     "type": "value"
@@ -114,6 +114,7 @@
   {
     "pattern": {
       "index": 1,
+      "module": "DoubleSupport.cpp",
       "name": "_ZN11xalanc_1_10L10doValidateEPKtRb",
       "type": "funarg"
     },
@@ -130,14 +131,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcPKcS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_12AVTPartXPathEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
     },
@@ -153,8 +146,32 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZNK11xalanc_1_1027XalanEXSLTFunctionDecodeURI14hexCharsToByteERNS_21XPathExecutionContextEPNS_9XalanNodeEPKN11xercesc_2_77LocatorEtt",
+      "index": 1,
+      "name": "_ZN11xercesc_2_75XUtil22getFirstChildElementNSEPKNS_7DOMNodeEPPKtS5_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_75XUtil22getFirstChildElementNSEPKNS_7DOMNodeEPPKtS5_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_75XUtil23getNextSiblingElementNSEPKNS_7DOMNodeEPPKtS5_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_75XUtil23getNextSiblingElementNSEPKNS_7DOMNodeEPPKtS5_j",
       "type": "funarg"
     },
     "type": "value"
@@ -162,7 +179,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZNK11xalanc_1_1027XalanEXSLTFunctionDecodeURI14hexCharsToByteERNS_21XPathExecutionContextEPNS_9XalanNodeEPKN11xercesc_2_77LocatorEtt",
       "type": "funarg"
     },
     "type": "value"
@@ -178,14 +195,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -234,22 +243,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZNK11xercesc_2_724DatatypeValidatorFactory20getDatatypeValidatorEPKt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK11xercesc_2_724DatatypeValidatorFactory20getDatatypeValidatorEPKt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xercesc_2_721GeneralAttributeCheck13mapAttributesEv",
       "type": "funarg"
     },
@@ -267,14 +260,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_12KVStringPairEE11nextElementEv",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_79XMLString6equalsEPKtS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -329,6 +314,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1015FunctionNodeSetC2Eb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -355,14 +348,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorIdNS_31MemoryManagedConstructionTraitsIdEEE6resizeEmRKd",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -449,14 +434,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6resizeEmRKS1_",
       "type": "funarg"
@@ -466,14 +443,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -554,7 +523,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
+      "name": "_ZN11xalanc_1_1018XPathFunctionTable17UninstallFunctionEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -562,31 +531,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xalanc_1_1018XPathFunctionTable15InstallFunctionEPKtRKNS_8FunctionE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "_ZN11xalanc_1_1018XPathFunctionTable15InstallFunctionEPKtRKNS_8FunctionE",
+      "name": "_ZN11xalanc_1_1018XPathFunctionTable17UninstallFunctionEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -625,6 +570,22 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_717DOM_CharacterData10appendDataERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_717DOM_CharacterData10appendDataERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -642,14 +603,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_721MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_721MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -722,7 +675,31 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xercesc_2_76XMLUri13buildFullTextEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1028XPathExecutionContextDefault6createERN11xercesc_2_713MemoryManagerEPNS_9XalanNodeEPKNS_15NodeRefListBaseEPKNS_14PrefixResolverE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1028XPathExecutionContextDefault6createERN11xercesc_2_713MemoryManagerEPNS_9XalanNodeEPKNS_15NodeRefListBaseEPKNS_14PrefixResolverE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xalanc_1_1028XPathExecutionContextDefault6createERN11xercesc_2_713MemoryManagerEPNS_9XalanNodeEPKNS_15NodeRefListBaseEPKNS_14PrefixResolverE",
       "type": "funarg"
     },
     "type": "value"
@@ -739,22 +716,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIPNS_18MutableNodeRefListENS_31MemoryManagedConstructionTraitsIS2_EEE6insertEPS2_PKS2_S8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEE6insertEPS2_PKS2_S8_",
       "type": "funarg"
     },
     "type": "value"
@@ -873,24 +834,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -915,6 +860,30 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1016XalanTransformer11parseSourceERKNS_15XSLTInputSourceERPKNS_17XalanParsedSourceEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1016XalanTransformer9transformERKNS_15XSLTInputSourceES3_PvPFmPKcmS4_EPFvS4_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1016XalanTransformer9transformERKNS_15XSLTInputSourceES3_PvPFmPKcmS4_EPFvS4_E",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1016XalanTransformer17compileStylesheetERKNS_15XSLTInputSourceERPKNS_23XalanCompiledStylesheetE",
       "type": "funarg"
     },
     "type": "value"
@@ -946,6 +915,30 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xalanc_1_1016XalanTransformer9setIndentEi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1016XalanTransformer13setEscapeURLsENS0_11eEscapeURLsE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1016XalanTransformer14setOmitMETATagENS0_12eOmitMETATagE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xalanc_1_1016XalanTransformer27EnsureFunctionsInstallationD2Ev",
       "type": "funarg"
     },
@@ -954,31 +947,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcmRKc",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcPKcS6_",
       "type": "funarg"
     },
     "type": "value"
@@ -1106,7 +1075,47 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_79DOMStringaSERKS0_",
+      "name": "_ZN11xercesc_2_79DOMStringaSEPNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_79DOMStringeqEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_79DOMStringneEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_79DOMString13compareStringERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_7plERKNS_9DOMStringES2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_7plERKNS_9DOMStringEt",
       "type": "funarg"
     },
     "type": "value"
@@ -1250,7 +1259,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_7GrammarEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorItED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_715XMLTransService20makeNewTranscoderForENS_13XMLRecognizer9EncodingsERNS0_5CodesEjPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
@@ -1282,14 +1307,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1369,6 +1386,14 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_77XSValue14getActualValueEPKtNS0_8DataTypeERNS0_6StatusENS0_10XMLVersionEbPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorItED2Ev",
       "type": "funarg"
@@ -1385,14 +1410,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_79XMLString6equalsEPKtS2_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIcED2Ev",
       "type": "funarg"
@@ -1403,6 +1420,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_722NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xalanc_1_1012XSLException13defaultFormatERNS_14XalanDOMStringE",
       "type": "funarg"
     },
     "type": "value"
@@ -1451,14 +1476,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6resizeEmRKt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -1650,6 +1667,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_79RangeImpl25updateRangeForDeletedTextERNS_8DOM_NodeEji",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1674,14 +1699,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -1737,6 +1754,14 @@
   },
   {
     "pattern": {
+      "index": 5,
+      "name": "_ZN11xercesc_2_712XMLValidator9emitErrorENS_8XMLValid5CodesEPKtS4_S4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorImNS_31MemoryManagedConstructionTraitsImEEE6resizeEmRKm",
       "type": "funarg"
@@ -1747,14 +1772,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorImNS_31MemoryManagedConstructionTraitsImEEE6resizeEmRKm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -1786,14 +1803,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS0_ItNS_31MemoryManagedConstructionTraitsItEEEENS1_IS3_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS0_ItNS_31MemoryManagedConstructionTraitsItEEEENS1_IS3_EEE6resizeEmRKS3_",
       "type": "funarg"
     },
@@ -1803,14 +1812,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorINS0_ItNS_31MemoryManagedConstructionTraitsItEEEENS1_IS3_EEE6resizeEmRKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS0_ItNS_31MemoryManagedConstructionTraitsItEEEENS1_IS3_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -1826,23 +1827,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorImNS_31MemoryManagedConstructionTraitsImEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorImNS_31MemoryManagedConstructionTraitsImEEE6insertEPmPKmS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6resizeEmRKS1_",
       "type": "funarg"
     },
     "type": "value"
@@ -1851,30 +1836,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6resizeEmRKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6resizeEmRKt",
       "type": "funarg"
     },
     "type": "value"
@@ -1945,14 +1906,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_724IllegalArgumentExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -1963,6 +1916,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString14compareNStringEPKcS2_j",
       "type": "funarg"
     },
     "type": "value"
@@ -1985,6 +1946,54 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString9binToTextEjPtjjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_79XMLString15compareNIStringEPKtS2_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString15compareNIStringEPKtS2_j",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString7findAnyEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString7findAnyEPtPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString12patternMatchEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIcED2Ev",
       "type": "funarg"
@@ -1995,6 +2004,38 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_721NumberFormatExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLString10removeCharEPKtRS1_RNS_9XMLBufferE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_79XMLString7releaseEPPc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_720DOM_DocumentFragmentaSERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_718MemBufFormatTarget12getRawBufferEv",
       "type": "funarg"
     },
     "type": "value"
@@ -2090,7 +2131,15 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZNK11xalanc_1_1010Stylesheet8isAttrOKEPKtRKN11xercesc_2_713AttributeListEiRNS_29StylesheetConstructionContextE",
+      "name": "_ZN11xalanc_1_1024XalanTranscodingServices17makeNewTranscoderERN11xercesc_2_713MemoryManagerERKNS_14XalanDOMStringERNS0_5eCodeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1010Stylesheet17processKeyElementERKNS_14PrefixResolverERKN11xercesc_2_713AttributeListEPKNS4_7LocatorERNS_29StylesheetConstructionContextE",
       "type": "funarg"
     },
     "type": "value"
@@ -2113,6 +2162,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1010Stylesheet20addWhitespaceElementERKNS_20XalanSpaceNodeTesterE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_108XalanMapINS_21XalanQNameByReferenceEPKNS_12ElemTemplateENS_17XalanMapKeyTraitsIS1_EEE4findERKS1_",
       "type": "funarg"
@@ -2123,14 +2180,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_108XalanMapINS_21XalanQNameByReferenceEPKNS_12ElemTemplateENS_17XalanMapKeyTraitsIS1_EEE4findERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -2203,22 +2252,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringENS_11XalanVectorIPKNS_21XalanMatchPatternDataENS_31MemoryManagedConstructionTraitsIS5_EEEENS_17XalanMapKeyTraitsIS1_EEE13doRemoveEntryERKNS_16XalanMapIteratorINS_22XalanMapIteratorTraitsISt4pairIKS1_S8_EEENS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINSB_5EntryEEENS_9XalanListISK_E4NodeEEEEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
       "type": "funarg"
     },
     "type": "value"
@@ -2474,7 +2507,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xercesc_2_715ContentSpecNodeD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -2483,14 +2516,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_714TraverseSchema17reportSchemaErrorEPKNS_10DOMElementEPKti",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_79XMLBuffer6appendEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -2809,14 +2834,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -2945,14 +2962,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -3042,7 +3051,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK11xercesc_2_715GrammarResolver20getGrammarEnumeratorEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_7GrammarEE14nextElementKeyEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_715GrammarResolver13orphanGrammarEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -3145,14 +3170,6 @@
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -3219,6 +3236,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_724IllegalArgumentExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xalanc_1_1015StringTokenizer11countTokensEv",
       "type": "funarg"
     },
     "type": "value"
@@ -3305,6 +3330,14 @@
   },
   {
     "pattern": {
+      "index": 6,
+      "name": "_ZN11xalanc_1_1014VariablesStack11findXObjectERKNS_10XalanQNameERNS_26StylesheetExecutionContextEbbRb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_109EnsurePopD2Ev",
       "type": "funarg"
@@ -3370,22 +3403,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEE6insertEPS2_PKS2_S8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_21XercesDocumentWrapper22BuildWrapperTreeWalker23NavigatorStackEntryTypeENS_31MemoryManagedConstructionTraitsIS3_EEEC2ERKS6_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
@@ -3402,31 +3419,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xercesc_2_716DOM_DocumentTypeaSERKS0_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEE6insertEPS2_PKS2_S8_",
+      "index": 1,
+      "name": "_ZN11xercesc_2_716DOM_DocumentTypeaSERKS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -3466,14 +3467,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PKb",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PKb",
       "type": "funarg"
     },
@@ -3569,16 +3562,128 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
+      "index": 4,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_713AttributeListEPNS_9XalanNodeES8_S8_b",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_713AttributeListEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_713AttributeListERKNS_14PrefixResolverEPNS_9XalanNodeESB_SB_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_713AttributeListERKNS_14PrefixResolverEPNS_9XalanNodeESB_SB_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtS2_S2_RKN11xercesc_2_710AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtS2_S2_RKN11xercesc_2_710AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_710AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createElementNodeEPKtRKN11xercesc_2_710AttributesEPNS_9XalanNodeES8_S8_b",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createCommentNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createCommentNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument31createProcessingInstructionNodeEPKtS2_PNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument31createProcessingInstructionNodeEPKtS2_PNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument14createTextNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument14createTextNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createTextIWSNodeEPKtjPNS_9XalanNodeES4_S4_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1023XalanSourceTreeDocument17createTextIWSNodeEPKtjPNS_9XalanNodeES4_S4_",
       "type": "funarg"
     },
     "type": "value"
@@ -3650,14 +3755,6 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
       "type": "funarg"
     },
@@ -3817,14 +3914,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xalanc_1_1016XalanFileUtility11collectDataEPKcRKNS_14XalanDOMStringES5_S5_",
       "type": "funarg"
@@ -3857,14 +3946,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xalanc_1_1018EnumerateDirectoryISt20back_insert_iteratorINS_11XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS3_EEEEENS_24FilesOnlyFilterPredicateES3_NS_14c_wstr_functorEEEvRN11xercesc_2_713MemoryManagerERKT1_T_T0_T2_b",
       "type": "funarg"
@@ -3875,38 +3956,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcPKcS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
       "type": "funarg"
     },
     "type": "value"
@@ -3946,14 +3995,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
       "type": "funarg"
     },
@@ -4026,14 +4067,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_15ElemTextLiteralEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
     },
@@ -4066,7 +4099,39 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xercesc_2_78NodeImpl14getXmlnsStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_78NodeImpl17getXmlnsURIStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_78NodeImpl12getXmlStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_78NodeImpl15getXmlURIStringEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_78NodeImpl9mapPrefixERKNS_9DOMStringES3_s",
       "type": "funarg"
     },
     "type": "value"
@@ -4193,14 +4258,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -4211,6 +4268,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_712SGXMLScannerC2EPNS_12XMLValidatorEPNS_15GrammarResolverEPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
@@ -4282,14 +4347,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -4433,14 +4490,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -4465,8 +4514,32 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_79XMLReader8getQNameERNS_9XMLBufferEPi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_79XMLReader9handleEOLERtb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLReader10skipSpacesERbb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79XMLReader10peekStringEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -4521,8 +4594,24 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_9DTDAttDefEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_722NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_717DOMImplementation19loadDOMExceptionMsgENS_12DOMException13ExceptionCodeEPtj",
       "type": "funarg"
     },
     "type": "value"
@@ -4554,14 +4643,30 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "name": "_ZN11xercesc_2_713XMLBigInteger13compareValuesEPKtRKiS2_S4_PNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 2,
+      "name": "_ZN11xercesc_2_713XMLBigInteger13compareValuesEPKtRKiS2_S4_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_713XMLBigInteger13compareValuesEPKtRKiS2_S4_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -4611,14 +4716,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xercesc_2_721MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
@@ -4714,6 +4811,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_710XMLScanner14senseNextTokenERj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -4762,14 +4867,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorItED2Ev",
       "type": "funarg"
     },
@@ -4786,22 +4883,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_714ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_714ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_714ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -4834,7 +4915,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1010URISupport16getURLFromStringERKNS_14XalanDOMStringES3_RN11xercesc_2_713MemoryManagerE",
+      "name": "_ZN11xalanc_1_1030XSLTProcessorEnvSupportDefault28installExternalFunctionLocalERKNS_14XalanDOMStringES3_RKNS_8FunctionE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1030XSLTProcessorEnvSupportDefault17setSourceDocumentERKNS_14XalanDOMStringEPNS_13XalanDocumentE",
       "type": "funarg"
     },
     "type": "value"
@@ -4843,38 +4932,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_714RefHashTableOfINS_12KVStringPairEE3putEPvPS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_724DatatypeValidatorFactory23createDatatypeValidatorEPKtPNS_17DatatypeValidatorEPNS_14RefHashTableOfINS_12KVStringPairEEEPNS_16RefArrayVectorOfItEEbibPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_724DatatypeValidatorFactory23createDatatypeValidatorEPKtPNS_17DatatypeValidatorEPNS_14RefHashTableOfINS_12KVStringPairEEEPNS_16RefArrayVectorOfItEEbibPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZNK11xercesc_2_724DatatypeValidatorFactory20getDatatypeValidatorEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -4939,6 +4996,30 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_722NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1033StylesheetExecutionContextDefault6createERN11xercesc_2_713MemoryManagerEPNS_9XalanNodeEPKNS_15NodeRefListBaseEPKNS_14PrefixResolverE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1033StylesheetExecutionContextDefault6createERN11xercesc_2_713MemoryManagerEPNS_9XalanNodeEPKNS_15NodeRefListBaseEPKNS_14PrefixResolverE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xalanc_1_1033StylesheetExecutionContextDefault6createERN11xercesc_2_713MemoryManagerEPNS_9XalanNodeEPKNS_15NodeRefListBaseEPKNS_14PrefixResolverE",
       "type": "funarg"
     },
     "type": "value"
@@ -5155,22 +5236,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIPKNS_19ElemTemplateElementENS_31MemoryManagedConstructionTraitsIS3_EEE6insertEPS3_PKS3_S9_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINS_8XalanMapIPKNS_9XalanNodeEPNS_8KeyTableENS_17XalanMapKeyTraitsIS6_EEE5EntryEEENS_9XalanListISC_E4NodeEEENS_31MemoryManagedConstructionTraitsISH_EEEC2ERKSK_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINS_8XalanMapIPKNS_9XalanNodeEPNS_8KeyTableENS_17XalanMapKeyTraitsIS6_EEE5EntryEEENS_9XalanListISC_E4NodeEEENS_31MemoryManagedConstructionTraitsISH_EEE6insertEPSH_PKSH_SN_",
       "type": "funarg"
     },
     "type": "value"
@@ -5513,22 +5578,6 @@
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -5601,14 +5650,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_714ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_714ParseExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -5643,14 +5684,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcmRKc",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcPKcS6_",
       "type": "funarg"
     },
     "type": "value"
@@ -5785,14 +5818,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -5850,6 +5875,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xalanc_1_1016FunctionEvaluateC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_711RefVectorOfINS_7DOMNodeEED2Ev",
       "type": "funarg"
     },
@@ -5874,14 +5907,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE4findERKS1_",
       "type": "funarg"
     },
@@ -5890,14 +5915,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PKb",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PKb",
       "type": "funarg"
     },
@@ -6145,14 +6162,6 @@
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -6170,14 +6179,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -6210,14 +6211,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_7CounterENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_7CounterENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
       "type": "funarg"
     },
@@ -6225,23 +6218,7 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_7CounterENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -6273,22 +6250,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -6298,31 +6259,15 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZNK11xalanc_1_1014StylesheetRoot25isCDATASectionElementNameERKNS_10XalanQNameE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xalanc_1_108XalanMapIPKNS_9XalanNodeEPNS_8KeyTableENS_17XalanMapKeyTraitsIS3_EEEixERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -6379,14 +6324,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS0_INS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINS_8XalanMapIPKNS_9XalanNodeEPNS_8KeyTableENS_17XalanMapKeyTraitsIS6_EEE5EntryEEENS_9XalanListISC_E4NodeEEENS_31MemoryManagedConstructionTraitsISH_EEEENS_32ConstructWithMemoryManagerTraitsISK_EEE6insertEPSK_PKSK_SQ_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS0_INS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINS_8XalanMapIPKNS_9XalanNodeEPNS_8KeyTableENS_17XalanMapKeyTraitsIS6_EEE5EntryEEENS_9XalanListISC_E4NodeEEENS_31MemoryManagedConstructionTraitsISH_EEEENS_32ConstructWithMemoryManagerTraitsISK_EEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -6497,6 +6434,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_714TreeWalkerImpl14setCurrentNodeENS_8DOM_NodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN11xercesc_2_714TreeWalkerImpl13getParentNodeENS_8DOM_NodeE",
       "type": "funarg"
@@ -6545,6 +6490,54 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_711DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_711DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_711DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_711DStringPool15getStaticStringEPKcPPNS_9DOMStringEPFvvERNS_18XMLRegisterCleanupE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xalanc_1_1011NodeRefList4itemEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xalanc_1_1011NodeRefList9getLengthEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -6554,14 +6547,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -6681,15 +6666,39 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "index": 0,
+      "name": "_ZN11xercesc_2_711DOM_ElementaSERKS0_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 1,
+      "name": "_ZN11xercesc_2_711DOM_ElementaSERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_715ContentSpecNodeD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_710DTDScanner14setScannerInfoEPNS_10XMLScannerEPNS_9ReaderMgrEPNS_12XMLBufferMgrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -6739,6 +6748,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZN11xercesc_2_710DTDScanner13scanEntityRefERtS1_Rb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_710DTDScanner18scanInternalSubsetEv",
       "type": "funarg"
     },
     "type": "value"
@@ -6833,6 +6850,22 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_105XPath6createERN11xercesc_2_713MemoryManagerEPKNS1_7LocatorE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZNK11xalanc_1_105XPath7executeEPNS_9XalanNodeERKNS_14PrefixResolverERNS_21XPathExecutionContextERd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 5,
       "name": "_ZNK11xalanc_1_105XPath11executeMoreEPNS_9XalanNodeEPKiRNS_21XPathExecutionContextERNS_17FormatterListenerEMS7_FvPKtjE",
       "type": "funarg"
@@ -6841,8 +6874,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_10XObjectPtrENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
+      "index": 1,
+      "name": "_ZNK11xalanc_1_105XPath13getTargetDataERNS_11XalanVectorINS0_10TargetDataENS_31MemoryManagedConstructionTraitsIS2_EEEE",
       "type": "funarg"
     },
     "type": "value"
@@ -6945,14 +6978,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -7009,14 +7034,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -7033,31 +7050,7 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7090,14 +7083,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_12ElemTemplateEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
     },
@@ -7107,6 +7092,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_12ElemTemplateEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1028XalanSourceTreeParserLiaison14parseXMLStreamERKN11xercesc_2_711InputSourceERKNS_14XalanDOMStringE",
       "type": "funarg"
     },
     "type": "value"
@@ -7193,14 +7186,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -7274,7 +7259,23 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xalanc_1_1012OutputStringERSoRKNS_11XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1012OutputStringERSoRKNS_11XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1022CopyWideStringToVectorEPKtRNS_11XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEEE",
       "type": "funarg"
     },
     "type": "value"
@@ -7298,22 +7299,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPKNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS3_EEEC2ERKS6_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIPKNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS3_EEE6insertEPS3_PKS3_S9_",
       "type": "funarg"
     },
@@ -7322,7 +7307,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEED2Ev",
+      "name": "_ZN11xalanc_1_1016FunctionDistinctC2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -7330,14 +7315,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PKb",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringEbNS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PKb",
       "type": "funarg"
     },
@@ -7385,6 +7362,46 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_716XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_716XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_716XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_716XMLPlatformUtils10InitializeEPKcS2_PNS_12PanicHandlerEPNS_13MemoryManagerEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_716XMLPlatformUtils10loadMsgSetEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -7426,14 +7443,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7602,14 +7611,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_11NodeSortKeyENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_11NodeSortKeyENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
       "type": "funarg"
     },
@@ -7619,6 +7620,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_719EmptyStackExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_724XMLSchemaDescriptionImpl16setLocationHintsEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -7650,14 +7659,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_36XalanSourceTreeProcessingInstructionEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
     },
@@ -7674,7 +7675,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xalanc_1_1017NamespacesHandler13PrefixCheckerC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1017NamespacesHandler16postConstructionERNS_29StylesheetConstructionContextEbRKNS_14XalanDOMStringEPKS0_PKNS0_13PrefixCheckerE",
       "type": "funarg"
     },
     "type": "value"
@@ -7770,6 +7779,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_724AbstractNumericValidator11boundsCheckEPKNS_9XMLNumberEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -7833,14 +7850,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -7874,15 +7883,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xercesc_2_78DOM_Text9splitTextEj",
       "type": "funarg"
     },
     "type": "value"
@@ -7922,6 +7923,38 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xercesc_2_721DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_721DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_721DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_721DOM_DOMImplementation18createDocumentTypeERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_729RefHash2KeysTableOfEnumeratorINS_10KeyRefPairIvNS_18DOMUserDataHandlerEEEED2Ev",
       "type": "funarg"
     },
@@ -7931,6 +7964,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_724IllegalArgumentExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_711RefVectorOfINS_7DOMNodeEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -7993,6 +8034,14 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1030XalanCompiledStylesheetDefault6createERN11xercesc_2_713MemoryManagerERKNS_15XSLTInputSourceERNS_14XSLTEngineImplEPNS1_12ErrorHandlerEPNS1_14EntityResolverE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -8033,15 +8082,39 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_721MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "index": 0,
+      "name": "_ZNK11xercesc_2_76XMLURL10isRelativeEv",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 0,
+      "name": "_ZN11xercesc_2_76XMLURL6setURLEPKtS2_RS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_76XMLURL6setURLEPKtS2_RS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_76XMLURL14hasInvalidCharEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_721MalformedURLExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8073,8 +8146,72 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_715ContentSpecNodeD2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_715ContentSpecNode10formatSpecERNS_9XMLBufferE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6resizeEmRKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xalanc_1_1014XalanDOMString7compareEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1014XalanDOMString5resetERN11xercesc_2_713MemoryManagerEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1014XalanDOMString5resetERN11xercesc_2_713MemoryManagerEPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1014XalanDOMString5resetERN11xercesc_2_713MemoryManagerEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1014XalanDOMString5resetERN11xercesc_2_713MemoryManagerEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1024TranscodeToLocalCodePageEPKtRNS_11XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEEEbc",
       "type": "funarg"
     },
     "type": "value"
@@ -8097,14 +8234,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_720NullPointerExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -8114,14 +8243,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8193,32 +8314,16 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1018FunctionDifferenceC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1020XalanStdOutputStream34XalanStdOutputStreamWriteExceptionC2EiRNS_14XalanDOMStringE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1010XalanDequeINS_9NameSpaceENS_32ConstructWithMemoryManagerTraitsIS1_EEEC2ERN11xercesc_2_713MemoryManagerEmm",
       "type": "funarg"
     },
     "type": "value"
@@ -8345,16 +8450,40 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xalanc_1_1014XalanDOMStringaSEPKt",
+      "index": 2,
+      "name": "_ZN11xalanc_1_1014FormatterToXML6createERN11xercesc_2_713MemoryManagerERNS_6WriterERKNS_14XalanDOMStringEbiS8_S8_S8_S8_bS8_NS_17FormatterListener7eFormatEb",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "index": 6,
+      "name": "_ZN11xalanc_1_1014FormatterToXML6createERN11xercesc_2_713MemoryManagerERNS_6WriterERKNS_14XalanDOMStringEbiS8_S8_S8_S8_bS8_NS_17FormatterListener7eFormatEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN11xalanc_1_1014FormatterToXML6createERN11xercesc_2_713MemoryManagerERNS_6WriterERKNS_14XalanDOMStringEbiS8_S8_S8_S8_bS8_NS_17FormatterListener7eFormatEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "_ZN11xalanc_1_1014FormatterToXML6createERN11xercesc_2_713MemoryManagerERNS_6WriterERKNS_14XalanDOMStringEbiS8_S8_S8_S8_bS8_NS_17FormatterListener7eFormatEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 10,
+      "name": "_ZN11xalanc_1_1014FormatterToXML6createERN11xercesc_2_713MemoryManagerERNS_6WriterERKNS_14XalanDOMStringEbiS8_S8_S8_S8_bS8_NS_17FormatterListener7eFormatEb",
       "type": "funarg"
     },
     "type": "value"
@@ -8465,6 +8594,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_711InputSource11setSystemIdEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -8474,14 +8611,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8505,6 +8634,22 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_721XML256TableTranscoderC2EPKtjS2_PKNS_15XMLTransService8TransRecEjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_721XML256TableTranscoderC2EPKtjS2_PKNS_15XMLTransService8TransRecEjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_719EmptyStackExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -8515,6 +8660,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_722NoSuchElementExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZNK11xercesc_2_79ElemStack14mapPrefixToURIEPKtNS0_8MapModesERb",
       "type": "funarg"
     },
     "type": "value"
@@ -8538,14 +8691,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -8857,22 +9002,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_19ElemTemplateElementENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_19ElemTemplateElementENS_31MemoryManagedConstructionTraitsIS2_EEE6insertEPS2_PKS2_S8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6resizeEmRKt",
       "type": "funarg"
@@ -8882,15 +9011,63 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesERKS1_S6_S6_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
+      "index": 2,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesERKS1_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesERKS1_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesERKS1_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesEPKcS6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesEPKcS6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesEPKcS6_S6_S6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesEPKcS6_S6_S6_",
       "type": "funarg"
     },
     "type": "value"
@@ -8899,6 +9076,14 @@
     "pattern": {
       "index": 3,
       "name": "_ZN11xalanc_1_1018XalanMessageLoader4loadENS_13XalanMessages5CodesERN11xercesc_2_713MemoryManagerEPtjPKcS8_S8_S8_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "_ZN11xalanc_1_1018XalanMessageLoader10getMessageERNS_14XalanDOMStringENS_13XalanMessages5CodesEPKtS6_S6_S6_",
       "type": "funarg"
     },
     "type": "value"
@@ -9009,14 +9194,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -9097,16 +9274,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
+      "index": 5,
+      "name": "_ZN11xercesc_2_721XercesElementWildcard8conflictEPNS_13SchemaGrammarENS_15ContentSpecNode9NodeTypesEPNS_5QNameES4_S6_PNS_27SubstitutionGroupComparatorE",
       "type": "funarg"
     },
     "type": "value"
@@ -9169,14 +9338,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -9211,6 +9372,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_722UnexpectedEOFExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_712IGXMLScanner20laxElementValidationEPNS_5QNameEPNS_25ContentLeafNameTypeVectorEPKNS_15XMLContentModelEj",
       "type": "funarg"
     },
     "type": "value"
@@ -9257,16 +9426,16 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_79XMLString6equalsEPKtS2_",
+      "index": 0,
+      "name": "_ZN11xercesc_2_712ArrayJanitorItED2Ev",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xercesc_2_712ArrayJanitorItED2Ev",
+      "index": 2,
+      "name": "_ZN11xalanc_1_1019XercesParserLiaison14parseXMLStreamERKN11xercesc_2_711InputSourceERKNS_14XalanDOMStringE",
       "type": "funarg"
     },
     "type": "value"
@@ -9417,6 +9586,14 @@
   },
   {
     "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1014XalanParsedURI7resolveEPKtjS2_jRNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1014XalanParsedURIC2EPKtjRN11xercesc_2_713MemoryManagerE",
       "type": "funarg"
@@ -9434,7 +9611,15 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xercesc_2_712DocumentImpl18createNodeIteratorENS_8DOM_NodeEmPNS_14DOM_NodeFilterEbPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DocumentImpl16createTreeWalkerENS_8DOM_NodeEmPNS_14DOM_NodeFilterEbPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
@@ -9577,22 +9762,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11SAX2Handler12startElementEPKtS1_S1_RKN11xercesc_2_710AttributesE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "_ZN11SAX2Handler12startElementEPKtS1_S1_RKN11xercesc_2_710AttributesE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "_ZN11SAX2Handler5errorERKN11xercesc_2_717SAXParseExceptionE",
       "type": "funarg"
@@ -9619,14 +9788,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -9665,39 +9826,7 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -9809,14 +9938,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -9849,22 +9970,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xercesc_2_79XMLBuffer6appendEPKt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xercesc_2_79XMLBuffer6appendEt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -9891,6 +9996,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIcED2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_716XMLPlatformUtils14compareAndSwapEPPvPKvS4_",
       "type": "funarg"
     },
     "type": "value"
@@ -10129,23 +10242,7 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_729InvalidDatatypeValueExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -10169,6 +10266,30 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1010TreeWalker8traverseEPKNS_9XalanNodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1010TreeWalker8traverseEPNS_9XalanNodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1010TreeWalker15traverseSubtreeEPNS_9XalanNodeE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZNK11xalanc_1_1016FunctionDocument9doExecuteERNS_21XPathExecutionContextEPNS_9XalanNodeERKNS_10XObjectPtrEPNS_14XalanDOMStringEiPKN11xercesc_2_77LocatorEb",
       "type": "funarg"
@@ -10178,15 +10299,8 @@
   {
     "pattern": {
       "index": 3,
+      "module": "FunctionDocument.cpp",
       "name": "_ZN11xalanc_1_10L6getDocERNS_21XPathExecutionContextERKNS_14XalanDOMStringES4_RNS0_30BorrowReturnMutableNodeRefListEPKNS_9XalanNodeEPKN11xercesc_2_77LocatorE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -10203,14 +10317,6 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_79XMLString6equalsEPKtS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -10259,6 +10365,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_15XercesGroupInfoEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_728RefHash3KeysIdPoolEnumeratorINS_17SchemaElementDeclEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -10401,6 +10515,22 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1017StylesheetHandler13startDocumentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1017StylesheetHandler11endDocumentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 5,
       "name": "_ZN11xalanc_1_1017StylesheetHandler22processTopLevelElementEPKtRKN11xercesc_2_713AttributeListEiPKNS3_7LocatorERbSA_",
       "type": "funarg"
@@ -10467,14 +10597,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_9NameSpaceENS_32ConstructWithMemoryManagerTraitsIS1_EEE6insertEPS1_PKS1_S7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -10594,30 +10716,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1031ConstructValueWithMemoryManagerINS_9NameSpaceEED2Ev",
       "type": "funarg"
     },
@@ -10651,22 +10749,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_10XalanDequeINS_9NameSpaceENS_32ConstructWithMemoryManagerTraitsIS2_EEEENS3_IS5_EEE6insertEPS5_PKS5_SA_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
       "type": "funarg"
     },
     "type": "value"
@@ -10713,16 +10795,17 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "_ZN11xalanc_1_10L30findInsertionPointBinarySearchEPNS_9XalanNodeEPS1_S2_RS2_",
+      "index": 2,
+      "name": "_ZN11xalanc_1_1018MutableNodeRefList7setNodeEjPNS_9XalanNodeE",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
+      "index": 3,
+      "module": "MutableNodeRefList.cpp",
+      "name": "_ZN11xalanc_1_10L30findInsertionPointBinarySearchEPNS_9XalanNodeEPS1_S2_RS2_",
       "type": "funarg"
     },
     "type": "value"
@@ -10905,8 +10988,24 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xercesc_2_715ComplexTypeInfo11setTypeNameEPKt",
+      "index": 0,
+      "name": "_ZN11xalanc_1_1020DOMStringPrintWriter5printERKNS_14XalanDOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1020DOMStringPrintWriter7printlnEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_715ContentSpecNodeD2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -10985,8 +11084,64 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceES3_RNS_16XSLTResultTargetERNS_29StylesheetConstructionContextERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xalanc_1_1014XSLTEngineImpl22getStylesheetFromPIURLERKNS_14XalanDOMStringERNS_9XalanNodeES3_bRNS_29StylesheetConstructionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceERNS_16XSLTResultTargetERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceERNS_16XSLTResultTargetERNS_26StylesheetExecutionContextE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl7processERKNS_15XSLTInputSourceERNS_16XSLTResultTargetERNS_26StylesheetExecutionContextE",
       "type": "funarg"
     },
     "type": "value"
@@ -11017,16 +11172,8 @@
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "_ZN11xalanc_1_1014XSLTEngineImpl12evalXPathStrERKNS_14XalanDOMStringEPNS_9XalanNodeERKNS_14PrefixResolverERNS_21XPathExecutionContextE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "name": "_ZN11xalanc_1_1014XSLTEngineImpl18setStylesheetParamERKNS_14XalanDOMStringES3_",
       "type": "funarg"
     },
     "type": "value"
@@ -11067,14 +11214,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIPKNS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS3_EEEC2ERKS6_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPKNS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS3_EEE6insertEPS3_PKS3_S9_",
       "type": "funarg"
     },
     "type": "value"
@@ -11129,14 +11268,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "_ZN11xalanc_1_1017XalanOutputStream5writeEPKtj",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1017XalanOutputStream28UnsupportedEncodingExceptionC2ERKNS_14XalanDOMStringERS2_",
       "type": "funarg"
@@ -11161,14 +11292,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6resizeEmRKc",
       "type": "funarg"
@@ -11186,14 +11309,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIcNS_31MemoryManagedConstructionTraitsIcEEE6insertEPcPKcS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_22XalanSourceTreeTextIWSEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
     },
@@ -11203,6 +11318,22 @@
     "pattern": {
       "index": 1,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_22XalanSourceTreeTextIWSEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1028XalanNumberingResourceBundle4swapERS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xalanc_1_1028XalanNumberingResourceBundle4swapERS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -11241,16 +11372,16 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "index": 2,
+      "name": "_ZN11xalanc_1_1020XalanXMLFileReporter16logElementWAttrsEiRKNS_14XalanDOMStringERNS_8XalanMapIS1_S1_NS_17XalanMapKeyTraitsIS1_EEEES3_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE4findERKS1_",
+      "index": 4,
+      "name": "_ZN11xalanc_1_1020XalanXMLFileReporter16logElementWAttrsEiRKNS_14XalanDOMStringERNS_8XalanMapIS1_S1_NS_17XalanMapKeyTraitsIS1_EEEES3_",
       "type": "funarg"
     },
     "type": "value"
@@ -11258,15 +11389,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE4findERKS1_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
+      "name": "_ZN11xalanc_1_1020XalanXMLFileReporter12logCheckFailERKNS_14XalanDOMStringERKNS_8XalanMapIS1_S1_NS_17XalanMapKeyTraitsIS1_EEEE",
       "type": "funarg"
     },
     "type": "value"
@@ -11274,7 +11397,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
+      "name": "_ZN11xalanc_1_1020XalanXMLFileReporter12logCheckFailERKNS_14XalanDOMStringERKNS_8XalanMapIS1_S1_NS_17XalanMapKeyTraitsIS1_EEEES9_",
       "type": "funarg"
     },
     "type": "value"
@@ -11282,6 +11405,30 @@
   {
     "pattern": {
       "index": 3,
+      "name": "_ZN11xalanc_1_1020XalanXMLFileReporter12logCheckFailERKNS_14XalanDOMStringERKNS_8XalanMapIS1_S1_NS_17XalanMapKeyTraitsIS1_EEEES9_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE4findERKS1_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
       "name": "_ZN11xalanc_1_108XalanMapINS_14XalanDOMStringES1_NS_17XalanMapKeyTraitsIS1_EEE13doCreateEntryERKS1_PS5_",
       "type": "funarg"
     },
@@ -11291,14 +11438,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS0_INS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINS_8XalanMapINS_14XalanDOMStringES4_NS_17XalanMapKeyTraitsIS4_EEE5EntryEEENS_9XalanListIS8_E4NodeEEENS_31MemoryManagedConstructionTraitsISD_EEEENS_32ConstructWithMemoryManagerTraitsISG_EEE6insertEPSG_PKSG_SM_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS0_INS_21XalanListIteratorBaseINS_23XalanListIteratorTraitsINS_8XalanMapINS_14XalanDOMStringES4_NS_17XalanMapKeyTraitsIS4_EEE5EntryEEENS_9XalanListIS8_E4NodeEEENS_31MemoryManagedConstructionTraitsISD_EEEENS_32ConstructWithMemoryManagerTraitsISG_EEED2Ev",
       "type": "funarg"
     },
     "type": "value"
@@ -11371,6 +11510,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_723XSerializationExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_716XSerializeEngine10readStringERPtRiS3_b",
       "type": "funarg"
     },
     "type": "value"
@@ -11594,14 +11741,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIPNS_7XStringENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
@@ -11665,6 +11804,14 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1018XPathProcessorImpl9initXPathERNS_5XPathERNS_24XPathConstructionContextERKNS_14XalanDOMStringERKNS_14PrefixResolverEPKN11xercesc_2_77LocatorEbb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xalanc_1_106equalsERKNS_14XalanDOMStringEPKt",
       "type": "funarg"
@@ -11698,23 +11845,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorINS_6XTokenENS_31MemoryManagedConstructionTraitsIS1_EEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_6XTokenENS_31MemoryManagedConstructionTraitsIS1_EEE6insertEPS1_PKS1_S7_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
     },
     "type": "value"
@@ -11778,14 +11909,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIiNS_31MemoryManagedConstructionTraitsIiEEE6insertEPimRKi",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIiNS_31MemoryManagedConstructionTraitsIiEEE6insertEPiPKiS6_",
       "type": "funarg"
     },
@@ -11811,6 +11934,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIbNS_31MemoryManagedConstructionTraitsIbEEE6insertEPbPKbS6_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1027XalanHTMLElementsProperties4findEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -11929,6 +12060,22 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "_ZN11xalanc_1_1015XPathExpression13setOpCodeArgsENS0_8eOpCodesEiRKNS_11XalanVectorIiNS_31MemoryManagedConstructionTraitsIiEEEE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xalanc_1_1015XPathExpression23dumpRemainingTokenQueueERNS_11PrintWriterE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorINS_6XTokenENS_31MemoryManagedConstructionTraitsIS1_EEEC2ERKS4_RN11xercesc_2_713MemoryManagerEm",
       "type": "funarg"
@@ -11947,22 +12094,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xalanc_1_1011XalanVectorIiNS_31MemoryManagedConstructionTraitsIiEEE6insertEPiPKiS6_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIdNS_31MemoryManagedConstructionTraitsIdEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIdNS_31MemoryManagedConstructionTraitsIdEEE6insertEPdPKdS6_",
       "type": "funarg"
     },
     "type": "value"
@@ -12113,6 +12244,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_719XTemplateSerializer11storeObjectEPNS_14RefHashTableOfINS_7GrammarEEERNS_16XSerializeEngineE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_7GrammarEE11nextElementEv",
       "type": "funarg"
@@ -12123,6 +12262,14 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_7GrammarEE14nextElementKeyEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_719XTemplateSerializer10loadObjectEPPNS_14RefHashTableOfINS_7GrammarEEEibRNS_16XSerializeEngineE",
       "type": "funarg"
     },
     "type": "value"
@@ -12314,6 +12461,14 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN11xercesc_2_724RefHashTableOfEnumeratorINS_12XSAnnotationEE11nextElementEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIPNS_22RefHashTableBucketElemINS_12XSAnnotationEEEED2Ev",
       "type": "funarg"
     },
@@ -12346,14 +12501,14 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "name": "_ZN11xercesc_2_713XMLEntityDeclC2EPKttPNS_13MemoryManagerE",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 4,
+      "index": 1,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -12377,6 +12532,22 @@
   },
   {
     "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_724XML256TableTranscoder390C2EPKtjS2_PKNS_15XMLTransService8TransRecEjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_724XML256TableTranscoder390C2EPKtjS2_PKNS_15XMLTransService8TransRecEjPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_16ElemCallTemplateEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
@@ -12410,6 +12581,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZNK11xalanc_1_1017XalanQNameByValue12getLocalPartEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xalanc_1_1017XalanQNameByValue12getNamespaceEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "module": "XalanQNameByValue.cpp",
       "name": "_ZN11xalanc_1_10L14throwExceptionERKNS_14XalanDOMStringEPKN11xercesc_2_77LocatorERS0_",
       "type": "funarg"
     },
@@ -12418,6 +12606,7 @@
   {
     "pattern": {
       "index": 2,
+      "module": "XalanQNameByValue.cpp",
       "name": "_ZN11xalanc_1_10L14throwExceptionERKNS_14XalanDOMStringEPKN11xercesc_2_77LocatorERS0_",
       "type": "funarg"
     },
@@ -12425,14 +12614,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesES2_S2_S2_S2_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -12473,14 +12654,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -12491,6 +12664,14 @@
     "pattern": {
       "index": 7,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_712XMLFormatter8writeBOMEPKhj",
       "type": "funarg"
     },
     "type": "value"
@@ -12514,14 +12695,22 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
+      "name": "_ZN11xercesc_2_713RangeTokenMap13addKeywordMapEPKtS2_",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
+      "index": 2,
+      "name": "_ZN11xercesc_2_713RangeTokenMap13addKeywordMapEPKtS2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -12545,6 +12734,14 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_713RangeTokenMap13setRangeTokenEPKtPNS_10RangeTokenEb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIPNS_22RefHashTableBucketElemINS_12RangeFactoryEEEED2Ev",
       "type": "funarg"
@@ -12555,22 +12752,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN11xercesc_2_712ArrayJanitorIPNS_22RefHashTableBucketElemINS_17RangeTokenElemMapEEEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEE6insertEPtPKtS6_",
       "type": "funarg"
     },
     "type": "value"
@@ -12593,40 +12774,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEEC2ERKS5_RN11xercesc_2_713MemoryManagerEm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPNS_9XalanNodeENS_31MemoryManagedConstructionTraitsIS2_EEE6insertEPS2_PKS2_S8_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEaSERKS3_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorItNS_31MemoryManagedConstructionTraitsItEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "index": 12,
+      "name": "_ZN11xercesc_2_711PSVIElement5resetENS_8PSVIItem14VALIDITY_STATEENS1_15ASSESSMENT_TYPEEPKtbPNS_20XSElementDeclarationEPNS_16XSTypeDefinitionEPNS_22XSSimpleTypeDefinitionEPNS_7XSModelES5_S5_PtPNS_21XSNotationDeclarationE",
       "type": "funarg"
     },
     "type": "value"
@@ -12682,14 +12831,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
     },
@@ -12849,6 +12990,110 @@
   },
   {
     "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_78DOM_NodeneEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZNK11xercesc_2_78DOM_NodeeqEPKNS_11DOM_NullPtrE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_78DOM_Node11appendChildERKS0_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node12getNodeValueEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node13getParentNodeEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node13getFirstChildEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node12getLastChildEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node18getPreviousSiblingEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node14getNextSiblingEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_78DOM_Node16getOwnerDocumentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_78DOM_Node12insertBeforeERKS0_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_78DOM_Node12insertBeforeERKS0_S2_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_78DOM_Node12setNodeValueERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 0,
       "name": "_ZSt8for_eachIN11xalanc_1_1021XalanListIteratorBaseINS0_23XalanListIteratorTraitsIPNS0_10ArenaBlockINS0_19XalanSourceTreeAttrEmEEEENS0_9XalanListIS6_E4NodeEEENS0_13DeleteFunctorIS5_EEET0_T_SF_SE_",
       "type": "funarg"
@@ -12929,8 +13174,48 @@
   },
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_711XMLDateTime34getDateTimeCanonicalRepresentationEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_711XMLDateTime30getDateCanonicalRepresentationEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xercesc_2_711XMLDateTime30getTimeCanonicalRepresentationEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_723SchemaDateTimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_718XMLStringTokenizer9nextTokenEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_718XMLStringTokenizer13hasMoreTokensEv",
       "type": "funarg"
     },
     "type": "value"
@@ -13137,14 +13422,6 @@
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 6,
       "name": "_ZN11xercesc_2_729InvalidDatatypeFacetExceptionC2EPKcjNS_10XMLExcepts5CodesEPKtS6_S6_S6_PNS_13MemoryManagerE",
       "type": "funarg"
@@ -13195,14 +13472,6 @@
     "pattern": {
       "index": 2,
       "name": "_ZN11xalanc_1_1025XalanXMLSerializerFactory11setEncodingERN11xercesc_2_713MemoryManagerERNS_6WriterERNS_14XalanDOMStringE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "_ZN11xalanc_1_1014XalanDOMStringaSEPKt",
       "type": "funarg"
     },
     "type": "value"
@@ -13417,8 +13686,8 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorImNS_31MemoryManagedConstructionTraitsImEEEC2ERKS3_RN11xercesc_2_713MemoryManagerEm",
+      "index": 3,
+      "name": "_ZNK11xalanc_1_1023XalanDOMStringHashTable4findEPKtjPm",
       "type": "funarg"
     },
     "type": "value"
@@ -13441,14 +13710,6 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "_ZN11xalanc_1_1011XalanVectorIPKNS_14XalanDOMStringENS_31MemoryManagedConstructionTraitsIS3_EEE6insertEPS3_PKS3_S9_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -13459,6 +13720,182 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document14createDocumentEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document13createElementEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document22createDocumentFragmentEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document14createTextNodeERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document14createTextNodeERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document13createCommentERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document13createCommentERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document18createCDATASectionERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document18createCDATASectionERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document27createProcessingInstructionERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document27createProcessingInstructionERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_712DOM_Document27createProcessingInstructionERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document21createEntityReferenceERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document21createEntityReferenceERKNS_9DOMStringE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document15createElementNSERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document15createElementNSERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_712DOM_Document15createElementNSERKNS_9DOMStringES3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xercesc_2_712DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_712DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "_ZN11xercesc_2_712DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "_ZN11xercesc_2_712DOM_Document13createXMLDeclERKNS_9DOMStringES3_S3_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZNK11xalanc_1_1012ElemVariable8getValueERNS_26StylesheetExecutionContextEPNS_9XalanNodeE",
       "type": "funarg"
     },
     "type": "value"
@@ -13491,6 +13928,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_720TranscodingExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11xercesc_2_710SchemaInfo20getTopLevelComponentEtPKtS2_PPS0_",
       "type": "funarg"
     },
     "type": "value"
@@ -13570,7 +14015,39 @@
   {
     "pattern": {
       "index": 1,
+      "name": "_ZN11xercesc_2_79ReaderMgr11skipIfQuoteERt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79ReaderMgr11skipUntilInEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11xercesc_2_79ReaderMgr15skipUntilInOrWSEPKt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "_ZN11xercesc_2_716RuntimeExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "_ZN11xercesc_2_79ReaderMgr12createReaderEPKtS2_bNS_9XMLReader7RefFromENS3_5TypesENS3_7SourcesERPNS_11InputSourceEbb",
       "type": "funarg"
     },
     "type": "value"
@@ -13593,6 +14070,14 @@
   },
   {
     "pattern": {
+      "index": 8,
+      "name": "_ZN11xercesc_2_79ReaderMgr12createReaderEPKtS2_S2_bNS_9XMLReader7RefFromENS3_5TypesENS3_7SourcesERPNS_11InputSourceEbb",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_730ArrayIndexOutOfBoundsExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
       "type": "funarg"
@@ -13603,6 +14088,14 @@
     "pattern": {
       "index": 1,
       "name": "_ZN11xercesc_2_719EmptyStackExceptionC2EPKcjNS_10XMLExcepts5CodesEPNS_13MemoryManagerE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11xalanc_1_1020FunctionIntersectionC2Ev",
       "type": "funarg"
     },
     "type": "value"

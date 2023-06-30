@@ -1,6 +1,86 @@
 [
   {
     "pattern": {
+      "index": 0,
+      "name": "_ZN11ComputeList8readfileEP8_IO_FILEP9PatchList",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN11ComputeList8readfileEP8_IO_FILEP9PatchList",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN11ComputeList11runComputesEP9PatchList",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN11ComputeList11runComputesEP9PatchList",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9PatchList9moveatomsEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9PatchList11zeroresultsEv",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9PatchList10setresultsEP9ResultSet",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN9PatchList10setresultsEP9ResultSet",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9PatchList8readfileEP8_IO_FILEP8Molecule",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN9PatchList8readfileEP8_IO_FILEP8Molecule",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 1,
       "name": "_Z11parse_paramPKcS0_S0_Ri",
       "type": "funarg"
@@ -11,6 +91,102 @@
     "pattern": {
       "index": 1,
       "name": "_Z11parse_paramPKcS0_S0_Rd",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN13SimParameters8readfileEP8_IO_FILE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN20ComputeNonbondedUtil6selectEP13SimParametersP8MoleculeP7LJTable",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN20ComputeNonbondedUtil6selectEP13SimParametersP8MoleculeP7LJTable",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "_ZN20ComputeNonbondedUtil6selectEP13SimParametersP8MoleculeP7LJTable",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN8Molecule8readfileEP8_IO_FILE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN7LJTable8readfileEP8_IO_FILE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9ResultSet9writefileEP8_IO_FILE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9ResultSet8readfileEP8_IO_FILE",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9ResultSet8samemodeERS_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN9ResultSet8samemodeERS_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN9ResultSet7compareERS_",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "_ZN9ResultSet7compareERS_",
       "type": "funarg"
     },
     "type": "value"
@@ -43,6 +219,22 @@
     "pattern": {
       "index": 0,
       "name": "_ZN26ComputeNonbondedWorkArraysC2Ev",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z8NAMD_bugPKc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_Z8NAMD_diePKc",
       "type": "funarg"
     },
     "type": "value"
