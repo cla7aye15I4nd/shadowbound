@@ -67,7 +67,7 @@ void dumpPatternOptFile(string Filename, vector<Module *> &Modules) {
   vector<PatternBase *> Patterns;
 
   findSafeFunctionArguments(Modules, Patterns);
-  // findSafeStructMembers(Modules, Patterns);
+  findSafeStructMembers(Modules, Patterns);
 
   printPatternOptFile(Filename, Patterns);
 }
