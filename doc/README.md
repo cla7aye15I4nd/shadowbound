@@ -79,11 +79,11 @@ As mentioned in the previous section, we can infer that the out-of-bound checkin
 Additionally, it's worth noting that several state-of-the-art use-after-free defense mechanisms, such as MarkUs and FFmalloc, are based on the replacement of the allocator. However, since the out-of-bound checking mechanism does not rely on allocator replacement, it can be easily combined with use-after-free defense mechanisms.
 
 
-| Name    | Performance Overhead | Memory Overhead | Design |
-| ------- | -------------------- | --------------- | --|
-| MarkUS  | 9.62%                | 17.76%          | Allocator Replacement
-| FFmalloc| 2.27%                | 125.57%         | Allocator Replacement |
-| PUMM    | 0.57%                | 0.09%           | Binary Instrument |
+| Name    | Runtime | Memory |        Algorithm    | Implemtation          |
+| ------- | --------| ------ | ------------------- | --------------------- |
+| MarkUS  | 9.62%   | 17.76% | Grbage Collector    | Allocator Replacement |
+| FFmalloc| 2.27%   | 125.57%| One-time Allocation | Allocator Replacement |
+| PUMM    | 0.57%   | 0.09%  | Grbage Collector    | Binary Instrument     |
 
 
 By combining the out-of-bound checking and use-after-free defense mechanisms, we can achieve a more comprehensive memory safety solution. This integration can help to detect and prevent both out-of-bound access and use-after-free vulnerabilities, which are among the most common types of memory safety issues.
@@ -304,7 +304,7 @@ If `num_args` is initially zero, then the `new_arg_info` pointer will only alloc
 
 However, I found the code only accesses `reg_function->common.arg_info[-1]` and never accesses any memory locations beyond the allocated memory, then the buffer overflow issue will not occur. However, this still leaves room for potential bugs or errors in the future, as the code may be modified or updated to access other memory locations.
 
-**Named**
+**508.named_r**
 
 ```c++
 Type *getNewArray(int n)
@@ -324,7 +324,7 @@ Type *getNewArray(int n)
   return rpos;
 }
 ```
-**Blender**
+**526.blender_r**
 ```c++
 if (coords_sign == 1) {
   for (i = 0; i < coords_tot; i++) {
@@ -347,7 +347,7 @@ indices[0].prev = &indices[coords_tot - 1]; // cover the overflow pointer
 indices[coords_tot - 1].next = &indices[0]; // cover the overflow pointer
 ```
 
-**mcf**
+**429.mcf**
 ```c
 for( ; arc < stop_arcs; arc += nr_group ) {
   // not handle arc in loop optimization
