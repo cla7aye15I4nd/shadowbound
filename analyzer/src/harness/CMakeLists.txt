@@ -1,4 +1,4 @@
-set(source main.cpp pattern.cpp)
+set(source main.cpp pattern.cpp funarg.cpp struct.cpp)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
