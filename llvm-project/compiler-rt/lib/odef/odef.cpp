@@ -78,7 +78,9 @@ void __odef_init() {
 
   InitializeInterceptors();
 
-  InitShadow();
+  InitTlsSize();
+
+  InitShadow(); 
 
   OdefTSDInit(OdefTSDDtor);
 

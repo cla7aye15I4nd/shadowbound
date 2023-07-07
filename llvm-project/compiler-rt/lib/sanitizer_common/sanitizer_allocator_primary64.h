@@ -871,6 +871,7 @@ class SizeClassAllocator64 {
       return;  // Nothing new to release.
     }
 
+
     if (!force) {
       s32 interval_ms = ReleaseToOSIntervalMs();
       if (interval_ms < 0)

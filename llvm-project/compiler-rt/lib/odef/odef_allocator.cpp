@@ -19,10 +19,11 @@ struct OdefMapUnmapCallback {
 static const uptr kReservedBytes = 0x20;
 static const uptr kAllocatorSpace = 0x600000000000ULL;
 static const uptr kMaxAllowedMallocSize = 8UL << 30;
+static const s32 kAllocatorReleaseToOsIntervalMs = 5000;
 
 struct AP64 { // Allocator64 parameters. Deliberately using a short name.
   static const uptr kSpaceBeg = kAllocatorSpace;
-  static const uptr kSpaceSize = 0x20000000000; // 2T.
+  static const uptr kSpaceSize = 0x40000000000; // 4T.
   static const uptr kMetadataSize = 0;
   typedef DefaultSizeClassMap SizeClassMap;
   typedef OdefMapUnmapCallback MapUnmapCallback;
@@ -41,13 +42,8 @@ static StaticSpinMutex fallback_mutex;
 static uptr max_malloc_size;
 
 void OdefAllocatorInit() {
-  SetAllocatorMayReturnNull(common_flags()->allocator_may_return_null);
-  allocator.Init(common_flags()->allocator_release_to_os_interval_ms);
-  if (common_flags()->max_allocation_size_mb)
-    max_malloc_size = Min(common_flags()->max_allocation_size_mb << 20,
-                          kMaxAllowedMallocSize);
-  else
-    max_malloc_size = kMaxAllowedMallocSize;
+  allocator.Init(kAllocatorReleaseToOsIntervalMs);
+  max_malloc_size = kMaxAllowedMallocSize;
 }
 
 AllocatorCache *GetAllocatorCache(OdefThreadLocalMallocStorage *ms) {

@@ -84,6 +84,7 @@ public:
   bool needsTsanRt() const { return Sanitizers.has(SanitizerKind::Thread); }
   bool needsMsanRt() const { return Sanitizers.has(SanitizerKind::Memory); }
   bool needsOdefRt() const { return Sanitizers.has(SanitizerKind::OverflowDefense); }
+  bool needsMempRt() const { return Sanitizers.has(SanitizerKind::MemProtect); }
   bool needsFuzzer() const { return Sanitizers.has(SanitizerKind::Fuzzer); }
   bool needsLsanRt() const {
     return Sanitizers.has(SanitizerKind::Leak) &&

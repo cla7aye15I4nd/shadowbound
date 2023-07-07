@@ -16,6 +16,7 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
+#include "llvm/Transforms/Utils/Identification.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
 #include <fstream>
@@ -80,9 +81,10 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::Hidden, cl::init(false));
 
 // ==== Optimization Option ==== //
-static cl::opt<bool> ClStructFieldOpt("odef-struct-field-opt",
-                                      cl::desc("optimize struct field checks"),
-                                      cl::Hidden, cl::init(false));
+static cl::opt<bool>
+    ClStructPointerOpt("odef-struct-pointer-opt",
+                       cl::desc("optimize struct pointer checks"), cl::Hidden,
+                       cl::init(true));
 
 static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
@@ -99,6 +101,10 @@ static cl::opt<bool> ClLoopOpt("odef-loop-opt",
 static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
+
+static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
+                                             cl::desc("pattern opt file"),
+                                             cl::Hidden, cl::init(""));
 
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
@@ -121,8 +127,6 @@ enum CheckType {
   kClusterCheck = 1,
   kBuiltInCheck = 2,
   kInFieldCheck = 3,
-  kRuntimeOptCheck = 4,
-  kClusterOptCheck = 5,
   kCheckTypeEnd
 };
 
@@ -230,6 +234,10 @@ private:
                      ScalarEvolution &SE);
   bool isSafeFieldAccess(Instruction *I);
   bool isAccessMember(Instruction *I);
+  bool isAccessMemberBoost(Instruction *I, ScalarEvolution &SE);
+  void structPointerOptimizae(Function &F, ScalarEvolution &SE);
+  bool patternMatch(Function &F, Instruction *I, PatternBase *P);
+  void patternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
                           PostDominatorTree &PDT, ScalarEvolution &SE);
   void loopOptimize(Function &F, LoopInfo &LI, ScalarEvolution &SE,
@@ -369,6 +377,9 @@ bool isUnionType(Type *Ty) {
 }
 
 bool isFlexibleStructure(StructType *STy) {
+  if (STy->getNumElements() == 0)
+    return false;
+
   if (ArrayType *Aty = dyn_cast<ArrayType>(STy->elements().back())) {
     // Avoid Check Some Flexible Array Member
     // struct page_entry {
@@ -405,6 +416,13 @@ bool isVirtualTableGep(Instruction *I) {
   return false;
 }
 
+unsigned getFixedSize(Type *Ty, const DataLayout *DL) {
+  if (Ty->isArrayTy() || Ty->isStructTy())
+    return DL->getTypeStoreSize(Ty);
+
+  ASSERT(false);
+}
+
 bool isFixedSizeType(Type *Ty) {
   if (isUnionType(Ty))
     return false;
@@ -429,7 +447,26 @@ bool isStdFunction(StringRef name) {
 
   pclose(pipe);
 
-  return StringRef(result).startswith("std::");
+  std::string fname;
+  size_t start_pos = 0, end_pos = 0, count = 0;
+
+  while (end_pos < result.size()) {
+    if (result[end_pos] == '(') {
+      fname = result.substr(start_pos, end_pos - start_pos);
+      break;
+    }
+
+    if (result[end_pos] == '<' && result[end_pos + 1] != '(')
+      count++;
+    else if (result[end_pos] == '>')
+      count--;
+    else if (result[end_pos] == ' ' && count == 0)
+      start_pos = end_pos + 1;
+
+    end_pos++;
+  }
+
+  return StringRef(fname).startswith("std::");
 }
 
 void insertModuleCtor(Module &M) {
@@ -575,6 +612,8 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     // Loop Optimization may introduce new instructions to instrument
     dependencyOptimize(F, DT, PDT, SE);
   }
+  structPointerOptimizae(F, SE);
+  patternOptimize(F);
 
   // Instrument subfield access
   // TODO: instrument subfield access do not require *any* runtime support, but
@@ -589,13 +628,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
     dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n";
     dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
-
-    if (ClStructFieldOpt)
-      dbgs() << "  Cluster Optim: " << Counter[kClusterOptCheck] << "\n";
     dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n";
-
-    if (ClStructFieldOpt)
-      dbgs() << "  Runtime Optim: " << Counter[kRuntimeOptCheck] << "\n";
     dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n";
   }
 
@@ -846,6 +879,82 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   GepToInstrument.swap(NewGepToInstrument);
 }
 
+bool OverflowDefense::patternMatch(Function &F, Instruction *I,
+                                   PatternBase *P) {
+
+  if (P->getType() == PT_VALUE) {
+    ValueIdentBase *VI = static_cast<ValuePattern *>(P)->getIdent();
+
+    if (VI->getType() == VIT_FUNARG) {
+      FunArgIdent *FAI = static_cast<FunArgIdent *>(VI);
+
+      // F is a static function, we need to check the module name
+      if (F.hasLocalLinkage() &&
+          !StringRef(F.getParent()->getModuleIdentifier())
+               .endswith(FAI->getModuleName()))
+        return false;
+      if (FAI->getName() == F.getName()) {
+        if (auto Arg = dyn_cast<Argument>(getSource(I))) {
+          if (Arg->getArgNo() == FAI->getIndex()) {
+            return true;
+          }
+        }
+      }
+    } else if (VI->getType() == VIT_STRUCT) {
+      // TODO: support struct pattern
+    }
+  } else if (P->getType() == PT_ARRAY) {
+    // TODO: support array pattern
+  }
+
+  return false;
+}
+
+void OverflowDefense::patternOptimize(Function &F) {
+  if (ClPatternOptFile == "")
+    return;
+
+  auto Patterns = parsePatternFile(ClPatternOptFile);
+  if (Patterns.empty())
+    return;
+
+  auto match = [&](Instruction *I) {
+    for (auto P : Patterns)
+      if (patternMatch(F, I, P))
+        return true;
+    return false;
+  };
+
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  SmallVector<BitCastInst *, 16> NewBcToInstrument;
+
+  for (auto *Gep : GepToInstrument)
+    if (!match(Gep))
+      NewGepToInstrument.push_back(Gep);
+  for (auto *Bc : BcToInstrument)
+    if (!match(Bc))
+      NewBcToInstrument.push_back(Bc);
+
+  GepToInstrument.swap(NewGepToInstrument);
+  BcToInstrument.swap(NewBcToInstrument);
+}
+
+void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
+  if (!ClStructPointerOpt)
+    return;
+
+  SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  for (auto *GEP : GepToInstrument) {
+    if (isAccessMember(GEP))
+      continue;
+    if (isAccessMemberBoost(GEP, SE))
+      continue;
+    NewGepToInstrument.push_back(GEP);
+  }
+
+  GepToInstrument.swap(NewGepToInstrument);
+}
+
 SmallVector<BitCastInst *, 16>
 OverflowDefense::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
                                          PostDominatorTree &PDT,
@@ -886,13 +995,14 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                                           PostDominatorTree &PDT,
                                           ScalarEvolution &SE) {
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
+  DenseSet<int> OptimizedIndex;
 
   for (size_t i = 0; i < GepToInstrument.size(); ++i) {
     bool optimized = false;
     auto I = GepToInstrument[i];
 
     for (size_t j = 0; j < GepToInstrument.size(); ++j) {
-      if (i != j) {
+      if (i != j && OptimizedIndex.count(j) == 0) {
         auto J = GepToInstrument[j];
         if (DT.dominates(J, I) || PDT.dominates(J, I)) {
 
@@ -939,7 +1049,8 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                 // If the max offset of I is larger than the min offset of J,
                 // then it is possible that the offset of I is greater than the
                 // offset of J at runtime.
-                if (SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
+                if (IOffset != JOffset &&
+                    SE.getUnsignedRangeMin(SE.getSCEV(JOffset))
                         .ult(SE.getUnsignedRangeMax(SE.getSCEV(IOffset)))) {
                   Greater = false;
                   break;
@@ -973,6 +1084,8 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
 
     if (!optimized)
       NewGepToInstrument.push_back(GepToInstrument[i]);
+    else
+      OptimizedIndex.insert(i);
   }
 
   return NewGepToInstrument;
@@ -1045,8 +1158,6 @@ void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
-    if (isAccessMember(I))
-      continue;
     Value *Source = getSource(I);
     SourceMap[Source].push_back(I);
   }
@@ -1178,6 +1289,58 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
   return false;
 }
 
+bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
+  // Optimize the following case:
+  //  Obj* obj = ...
+  //  u8* buf = (u8*) obj;
+  //  buf[1] = 0;
+
+#define HANDLE_GEP(GEP)                                                        \
+  do {                                                                         \
+    V = GEP->getPointerOperand();                                              \
+                                                                               \
+    if (GEP->getNumIndices() != 1)                                             \
+      return false;                                                            \
+                                                                               \
+    auto Range = SE.getUnsignedRange(SE.getSCEV(GEP->getOperand(1)));          \
+    maxOffset += Range.getUnsignedMax().getZExtValue();                        \
+                                                                               \
+    if (maxOffset > size)                                                      \
+      return false;                                                            \
+  } while (0)
+
+  Value *Src = getSource(I);
+
+  ASSERT(Src->getType()->isPointerTy());
+  Type *ty = dyn_cast<PointerType>(Src->getType())->getPointerElementType();
+
+  if (isFixedSizeType(ty)) {
+    unsigned long long size = getFixedSize(ty, DL);
+    unsigned long long maxOffset =
+        DL->getTypeStoreSize(I->getType()->getPointerElementType());
+
+    Value *V = I;
+    while (V != Src) {
+      if (isa<PHINode>(V))
+        return false;
+      if (auto *BC = dyn_cast<BitCastInst>(V))
+        V = BC->getOperand(0);
+      else if (auto *BCO = dyn_cast<BitCastOperator>(V))
+        V = BCO->getOperand(0);
+      else if (auto *GEP = dyn_cast<GetElementPtrInst>(V))
+        HANDLE_GEP(GEP);
+      else if (auto *GEPO = dyn_cast<GEPOperator>(V))
+        HANDLE_GEP(GEPO);
+    }
+
+    return true;
+  }
+
+  return false;
+
+#undef HANDLE_GEP
+}
+
 void OverflowDefense::collectChunkCheckImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
     LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
@@ -1194,12 +1357,8 @@ void OverflowDefense::collectChunkCheckImpl(
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
-    if (STy != nullptr && ClStructFieldOpt)
-      Counter[kRuntimeOptCheck] += Insts.size();
     Checks.push_back(new RuntimeCheck(Src, Insts));
   } else {
-    if (STy != nullptr && ClStructFieldOpt)
-      Counter[kClusterOptCheck]++;
     Checks.push_back(new ClusterCheck(Src, Insts));
   }
 }
@@ -1240,13 +1399,8 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
       MonoLoop *ML = MonoLoopMap[Loop];
 
       if (ML->getStepInst() == GEP) {
-        if (auto *GEPUpper = dyn_cast<GetElementPtrInst>(ML->Upper)) {
-          if (GepSet.count(GEPUpper) == 0) {
-            GepSet.insert(GEPUpper);
-            NewGepToInstrument.push_back(GEPUpper);
-          }
-        }
-        continue;
+        if (!isa<GetElementPtrInst>(ML->Upper))
+          continue;
       }
 
       if (monotonicLoopOptimize(F, GEP, Loop, SE))
@@ -1675,6 +1829,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   End->addIncoming(ThenEnd, Then);
   End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
 
+  // TODO: Move tail check to here
   // Check if Ptr is in [Begin, End).
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
