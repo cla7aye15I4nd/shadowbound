@@ -25686,5 +25686,117 @@
       "type": "funarg"
     },
     "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "struct.gz_state",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "struct.gz_state",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "class.STR_String.18803",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 18,
+      "name": "struct.gz_state.45700",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "struct.DynStrElem",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "struct.DynStrElem",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 16,
+      "name": "struct.params",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 13,
+      "name": "struct.TargaImage",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 14,
+      "name": "struct.TargaImage",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 14,
+      "name": "struct.TargaImage",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 13,
+      "name": "struct.TargaImage",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 14,
+      "name": "struct.TargaImage",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "struct.gz_state.98716",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "struct.gz_state.98716",
+      "type": "struct"
+    },
+    "type": "value"
   }
 ]

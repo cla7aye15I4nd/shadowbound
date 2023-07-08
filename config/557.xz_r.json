@@ -524,5 +524,13 @@
       "type": "funarg"
     },
     "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "struct.spec_fd_t.301",
+      "type": "struct"
+    },
+    "type": "value"
   }
 ]

@@ -686,5 +686,29 @@
       "type": "funarg"
     },
     "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 115,
+      "name": "struct.InputParameters.83",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 112,
+      "name": "struct.InputParameters.83",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 113,
+      "name": "struct.InputParameters.83",
+      "type": "struct"
+    },
+    "type": "value"
   }
 ]

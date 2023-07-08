@@ -2464,5 +2464,21 @@
       "type": "funarg"
     },
     "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "struct._reg_ac_data.781",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "struct._reg_ac_data.1422",
+      "type": "struct"
+    },
+    "type": "value"
   }
 ]
