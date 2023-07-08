@@ -15,8 +15,10 @@
 using namespace std;
 using namespace llvm;
 
+static set<pair<string, int>> SafeStructMembers;
+
 static vector<pair<StoreInst *, int64_t>>
-findStorePlace(Function *F, Instruction *I, DataLayout *DL) {
+findPointerStorePlace(Function *F, Instruction *I, DataLayout *DL) {
   vector<pair<StoreInst *, int64_t>> result;
 
   SmallVector<Value *, 16> Worklist;
@@ -53,6 +55,39 @@ findStorePlace(Function *F, Instruction *I, DataLayout *DL) {
             Stores.insert(ST);
             result.push_back(make_pair(ST, Offset[V]));
           }
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+static LoadInst *findLengthLoadPlace(Function *F, Value *Val) {
+  LoadInst *result = nullptr;
+
+  SmallVector<Value *, 16> Worklist;
+  SmallPtrSet<Value *, 16> Visited;
+
+  Worklist.push_back(Val);
+
+  while (!Worklist.empty()) {
+    Value *V = Worklist.pop_back_val();
+
+    if (Visited.find(V) != Visited.end())
+      continue;
+
+    Visited.insert(V);
+
+    if (auto *I = dyn_cast<Instruction>(V)) {
+      for (auto &U : I->operands()) {
+        if (auto *LI = dyn_cast<LoadInst>(U)) {
+          if (result == nullptr)
+            result = LI;
+          else
+            return nullptr;
+        } else {
+          Worklist.push_back(U);
         }
       }
     }
@@ -121,19 +156,29 @@ static void findSafeStructMembersInCall(Function *F, CallBase *CI,
   if (!CalledFn)
     return;
 
-  if (CalledFn->getName() != "_Znam")
+  if (CalledFn->getName() != "_Znam" && CalledFn->getName() != "malloc")
     return;
 
-  DataLayout *DL = getDataLayout(F->getParent());
-  vector<pair<StoreInst *, int64_t>> StorePlaces = findStorePlace(F, CI, DL);
+  assert(CI->arg_size() == 1);
 
-  for (auto &SP : StorePlaces) {
+  DataLayout *DL = getDataLayout(F->getParent());
+  for (auto &SP : findPointerStorePlace(F, CI, DL)) {
     StoreInst *ST = SP.first;
     int64_t Offset = SP.second;
 
-    StructMemberIdent *SMI = findStructMember(F, ST->getPointerOperand());
-    if (SMI) {
-      dbgs() << "Found safe struct member: " << *SMI << "\n";
+    StructMemberIdent *PtrSM = findStructMember(F, ST->getPointerOperand());
+    if (PtrSM) {
+      if (SafeStructMembers.find(make_pair(
+              PtrSM->getName(), PtrSM->getIndex())) != SafeStructMembers.end())
+        continue;
+
+      Value *Size = CI->getArgOperand(0);
+      LoadInst *LI = findLengthLoadPlace(F, Size);
+      if (LI)
+        Patterns.push_back(new ValuePattern(PtrSM));
+      else {
+        // Store Pattern (not implemented yet)
+      }
     }
   }
 }
