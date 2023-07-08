@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#define ASSERT(X)                                                              \
+#define LOCAL_ASSERT(X)                                                        \
   do {                                                                         \
     if (!(X)) {                                                                \
       printf("Assertion failed: " __FILE__ ":%d\n", __LINE__);                 \
@@ -35,8 +35,8 @@ public:
   ValueIdentBase(ValueIdentType Type) : Type(Type) {}
   ValueIdentType getType() const { return Type; }
 
-  virtual void print(raw_ostream &OS) const { ASSERT(0); }
-  virtual json::Value toJSON() const { ASSERT(0); }
+  virtual void print(raw_ostream &OS) const { LOCAL_ASSERT(0); }
+  virtual json::Value toJSON() const { LOCAL_ASSERT(0); }
   friend raw_ostream &operator<<(raw_ostream &OS, const ValueIdentBase &VI) {
     VI.print(OS);
     return OS;
@@ -129,13 +129,13 @@ public:
   PatternBase(PatternType Type) : Type(Type) {}
   PatternType getType() const { return Type; }
 
-  virtual void print(raw_ostream &OS) const { ASSERT(0); }
+  virtual void print(raw_ostream &OS) const { LOCAL_ASSERT(0); }
   friend raw_ostream &operator<<(raw_ostream &OS, const PatternBase &P) {
     P.print(OS);
     return OS;
   }
 
-  virtual json::Value toJSON() const { ASSERT(0); }
+  virtual json::Value toJSON() const { LOCAL_ASSERT(0); }
 };
 
 class ValuePattern : public PatternBase {
@@ -188,6 +188,7 @@ public:
   }
 };
 
+StructMemberIdent *findStructMember(llvm::Function *F, llvm::Value *V);
 std::vector<PatternBase *> parsePatternFile(std::string Filename);
 
 } // end namespace llvm

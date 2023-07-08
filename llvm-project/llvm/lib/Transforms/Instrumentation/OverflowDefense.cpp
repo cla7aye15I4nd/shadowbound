@@ -901,7 +901,14 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
         }
       }
     } else if (VI->getType() == VIT_STRUCT) {
-      // TODO: support struct pattern
+      StructMemberIdent *SI = static_cast<StructMemberIdent *>(VI);
+      if (auto *LI = dyn_cast<LoadInst>(getSource(I))) {
+        StructMemberIdent *LSI = findStructMember(&F, LI->getPointerOperand());
+        if (LSI != nullptr && LSI->getName() == SI->getName() &&
+            LSI->getIndex() == SI->getIndex()) {
+          return true;
+        }
+      }
     }
   } else if (P->getType() == PT_ARRAY) {
     // TODO: support array pattern
