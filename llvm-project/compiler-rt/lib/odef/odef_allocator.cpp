@@ -23,7 +23,7 @@ static const s32 kAllocatorReleaseToOsIntervalMs = 5000;
 
 struct AP64 { // Allocator64 parameters. Deliberately using a short name.
   static const uptr kSpaceBeg = kAllocatorSpace;
-  static const uptr kSpaceSize = 0x40000000000; // 4T.
+  static const uptr kSpaceSize = 0x20000000000; // 2T.
   static const uptr kMetadataSize = 0;
   typedef DefaultSizeClassMap SizeClassMap;
   typedef OdefMapUnmapCallback MapUnmapCallback;

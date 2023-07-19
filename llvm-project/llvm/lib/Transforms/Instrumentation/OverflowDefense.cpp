@@ -41,8 +41,8 @@ static const int kReservedBytes = 0x20;
 
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
-static const uint64_t kAllocatorSpaceBegin = 0x600000000000ULL;
-static const uint64_t kAllocatorSpaceEnd = 0x800000000000ULL;
+static const uint64_t kHeapSpaceBeg = 0x600000000000ULL;
+static const uint64_t kHeapSpaceEnd = 0x700000000000ULL;
 static const uint64_t kMaxAddress = 0x1000000000000ULL;
 
 static cl::opt<bool>
@@ -1575,9 +1575,8 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   {
     // FIXME: This block can be removed?
     Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr,
-                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
@@ -1624,9 +1623,8 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   {
     // FIXME: This block can be removed?
     Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr,
-                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
@@ -1807,9 +1805,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   {
     // FIXME: This block can be removed?
     Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr,
-                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
