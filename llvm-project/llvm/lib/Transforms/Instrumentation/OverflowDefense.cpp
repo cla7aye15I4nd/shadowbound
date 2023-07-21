@@ -498,6 +498,12 @@ void insertGlobalVariable(Module &M) {
         ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt ? 1 : 0),
         "__odef_only_small_alloc_opt");
   });
+  M.getOrInsertGlobal("__odef_keep_going", Type::getInt32Ty(C), [&] {
+    return new GlobalVariable(
+        M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
+        ConstantInt::get(Type::getInt32Ty(C), ClKeepGoing || ClSkipInstrument ? 1 : 0),
+        "__odef_keep_going");
+  });
 }
 
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
