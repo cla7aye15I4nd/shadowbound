@@ -39,12 +39,7 @@ static Allocator allocator;
 static AllocatorCache fallback_allocator_cache;
 static StaticSpinMutex fallback_mutex;
 
-static uptr max_malloc_size;
-
-void OdefAllocatorInit() {
-  allocator.Init(kAllocatorReleaseToOsIntervalMs);
-  max_malloc_size = kMaxAllowedMallocSize;
-}
+void OdefAllocatorInit() { allocator.Init(kAllocatorReleaseToOsIntervalMs); }
 
 AllocatorCache *GetAllocatorCache(OdefThreadLocalMallocStorage *ms) {
   return reinterpret_cast<AllocatorCache *>(ms->allocator_cache);
@@ -55,8 +50,12 @@ void OdefThreadLocalMallocStorage::CommitBack() {
 }
 
 static void *OdefAllocate(uptr size, uptr alignment) {
-  // FIXME: CHECK size is larger than max_malloc_size.
-  // FIXME: CHECK if RSS limit is exceeded.
+  if (size > kMaxAllowedMallocSize) {
+    Report(" ERROR: odef_malloc(%zu) exceeds the maximum supported size "
+           "of %zu\n",
+           size, kMaxAllowedMallocSize);
+    Die();
+  }
 
   OdefThread *t = GetCurrentThread();
   void *allocated;
