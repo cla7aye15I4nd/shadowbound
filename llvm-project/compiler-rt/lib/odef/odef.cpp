@@ -81,6 +81,8 @@ void __odef_init() {
 
   odef_init_is_running = true;
 
+  SetCommonFlagsDefaults();
+
   InitializeInterceptors();
 
   InitTlsSize();
