@@ -23,6 +23,9 @@ void SetShadow(const void *ptr, uptr size) {
   // else
   //    |0x00|0x20|0x01|0x1f|0x02|0x1e|....|0x1e|0x02|0x1f|0x01|0x20|0x00|
 
+  if (!MEM_IS_APP(ptr))
+    return;
+
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 
@@ -41,9 +44,11 @@ void SetShadow(const void *ptr, uptr size) {
 #pragma unroll
 #endif
     while (shadow_beg < shadow_end) {
-      *(shadow_beg + 0) = b -= sizeof(u64);
-      *(shadow_beg + 1) = a += sizeof(u64);
+      *(shadow_beg + 0) = b;
+      *(shadow_beg + 1) = a;
       shadow_beg += 2;
+      b -= sizeof(u64);
+      a += sizeof(u64);
     }
   } else {
     u32 a = 0;

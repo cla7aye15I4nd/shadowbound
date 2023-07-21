@@ -123,7 +123,7 @@ bool InitShadow() {
     }
   }
 
-  HackDynLib();
+  // HackDynLib();
 
   return true;
 }

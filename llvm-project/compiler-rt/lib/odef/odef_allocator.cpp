@@ -25,7 +25,7 @@ struct AP64 { // Allocator64 parameters. Deliberately using a short name.
   static const uptr kSpaceBeg = kAllocatorSpace;
   static const uptr kSpaceSize = 0x20000000000; // 2T.
   static const uptr kMetadataSize = 0;
-  typedef DefaultSizeClassMap SizeClassMap;
+  typedef LargeSizeClassMap SizeClassMap;
   typedef OdefMapUnmapCallback MapUnmapCallback;
   static const uptr kFlags = 0;
   using AddressSpaceView = LocalAddressSpaceView;

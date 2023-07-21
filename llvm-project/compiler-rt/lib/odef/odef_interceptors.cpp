@@ -114,7 +114,6 @@ INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
   return odef_allocated_size(ptr);
 }
 
-
 extern "C" int pthread_attr_init(void *attr);
 extern "C" int pthread_attr_destroy(void *attr);
 
@@ -126,8 +125,8 @@ static void *OdefThreadStartFunc(void *arg) {
   return t->ThreadStart();
 }
 
-INTERCEPTOR(int, pthread_create, void *th, void *attr, void *(*callback)(void*),
-            void * param) {
+INTERCEPTOR(int, pthread_create, void *th, void *attr,
+            void *(*callback)(void *), void *param) {
   ENSURE_ODEF_INITED(); // for GetTlsSize()
   __sanitizer_pthread_attr_t myattr;
   if (!attr) {
@@ -154,6 +153,23 @@ INTERCEPTOR(int, pthread_join, void *th, void **retval) {
 
 DEFINE_REAL_PTHREAD_FUNCTIONS
 
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
+
+void check_range(uptr ptr, uptr size) {
+  if (!MEM_IS_APP(ptr))
+    return;
+  if (__builtin_expect(__odef_only_small_alloc_opt, 1)) {
+    if (((uptr)(*((u32 *)MEM_TO_SHADOW(ptr)))) > size) {
+      Report("ERROR: overflow detected\n");
+      Die();
+    }
+  } else {
+    if (((uptr)(*((u32 *)MEM_TO_SHADOW(ptr)))) * sizeof(u32) > size) {
+      Report("ERROR: overflow detected\n");
+      Die();
+    }
+  }
+}
 
 #define ODEF_INTERCEPT_FUNC(name)                                              \
   do {                                                                         \
@@ -174,19 +190,28 @@ DEFINE_REAL_PTHREAD_FUNCTIONS
               #name, ver, #name);                                              \
   } while (0)
 
-#define PASS                                                             \
-  do {                                                                         \
-  } while (false)
 #define COMMON_INTERCEPT_FUNCTION(name) ODEF_INTERCEPT_FUNC(name)
 #define COMMON_INTERCEPT_FUNCTION_VER(name, ver)                               \
   ODEF_INTERCEPT_FUNC_VER(name, ver)
 #define COMMON_INTERCEPT_FUNCTION_VER_UNVERSIONED_FALLBACK(name, ver)          \
   ODEF_INTERCEPT_FUNC_VER_UNVERSIONED_FALLBACK(name, ver)
-#define COMMON_INTERCEPTOR_UNPOISON_PARAM(count) PASS
-#define COMMON_INTERCEPTOR_WRITE_RANGE(ctx, ptr, size) PASS
-#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size) PASS
-#define COMMON_INTERCEPTOR_READ_RANGE(ctx, ptr, size) PASS
-#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size) PASS
+#define COMMON_INTERCEPTOR_UNPOISON_PARAM(count)                               \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_WRITE_RANGE(ctx, ptr, size)                         \
+  do {                                                                         \
+    check_range((uptr)ptr, (uptr)size);                                        \
+  } while (0)
+#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size)                         \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_READ_RANGE(ctx, ptr, size)                          \
+  do {                                                                         \
+    check_range((uptr)ptr, (uptr)size);                                        \
+  } while (0)
+#define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size)                         \
+  do {                                                                         \
+  } while (0)
 #define COMMON_INTERCEPTOR_ENTER(ctx, func, ...)                               \
   if (odef_init_is_running)                                                    \
     return REAL(func)(__VA_ARGS__);                                            \
@@ -195,12 +220,24 @@ DEFINE_REAL_PTHREAD_FUNCTIONS
   ctx = (void *)&odef_ctx;                                                     \
   (void)ctx;                                                                   \
   InterceptorScope interceptor_scope;
-#define COMMON_INTERCEPTOR_DIR_ACQUIRE(ctx, path) PASS
-#define COMMON_INTERCEPTOR_FD_ACQUIRE(ctx, fd) PASS
-#define COMMON_INTERCEPTOR_FD_RELEASE(ctx, fd) PASS
-#define COMMON_INTERCEPTOR_FD_SOCKET_ACCEPT(ctx, fd, newfd) PASS
-#define COMMON_INTERCEPTOR_SET_THREAD_NAME(ctx, name) PASS
-#define COMMON_INTERCEPTOR_SET_PTHREAD_NAME(ctx, thread, name) PASS
+#define COMMON_INTERCEPTOR_DIR_ACQUIRE(ctx, path)                              \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_FD_ACQUIRE(ctx, fd)                                 \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_FD_RELEASE(ctx, fd)                                 \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_FD_SOCKET_ACCEPT(ctx, fd, newfd)                    \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_SET_THREAD_NAME(ctx, name)                          \
+  do {                                                                         \
+  } while (0)
+#define COMMON_INTERCEPTOR_SET_PTHREAD_NAME(ctx, thread, name)                 \
+  do {                                                                         \
+  } while (0)
 #define COMMON_INTERCEPTOR_BLOCK_REAL(name) REAL(name)
 #define COMMON_INTERCEPTOR_ON_EXIT(ctx) (0)
 
