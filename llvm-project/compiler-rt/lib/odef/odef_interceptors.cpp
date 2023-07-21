@@ -161,12 +161,12 @@ void check_range(uptr ptr, uptr size) {
     return;
   if (__builtin_expect(__odef_only_small_alloc_opt, 1)) {
     if (((uptr)(*((u32 *)MEM_TO_SHADOW(ptr)))) < size) {
-      Report("ERROR: overflow detected (check_range)\n");
+      Report(" Overflow detected (check_range)\n");
       Die();
     }
   } else {
     if (((uptr)(*((u32 *)MEM_TO_SHADOW(ptr)))) * sizeof(u32) < size) {
-      Report("ERROR: overflow detected (check_range)\n");
+      Report(" Overflow detected (check_range)\n");
       Die();
     }
   }
