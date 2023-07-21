@@ -11,6 +11,8 @@
 #include "sanitizer_common/sanitizer_linux.h"
 
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_skip_instrument;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_perf_test;
 
 namespace __odef {
 
@@ -23,8 +25,13 @@ void SetShadow(const void *ptr, uptr size) {
   // else
   //    |0x00|0x20|0x01|0x1f|0x02|0x1e|....|0x1e|0x02|0x1f|0x01|0x20|0x00|
 
-  if (!MEM_IS_APP(ptr))
+  if (__odef_skip_instrument || !MEM_IS_APP(ptr))
     return;
+
+  if (__odef_perf_test) {
+    internal_memset((void *)MEM_TO_SHADOW(ptr), u8(-1), size);
+    return;
+  }
 
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
