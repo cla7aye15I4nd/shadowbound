@@ -779,5 +779,125 @@
       "type": "funarg"
     },
     "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "class.soplex::CLUFactor::Temp",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "class.soplex::CLUFactor::Temp",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "class.soplex::CLUFactor::Temp",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "class.soplex::CLUFactor::Temp",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 11,
+      "name": "struct.soplex::CLUFactor::L",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.soplex::DSVector.409",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.soplex::DSVector.409",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.soplex::DSVector.409",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.soplex::NameSet.984",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "struct.soplex::CLUFactor::U::Col.1447",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "struct.soplex::CLUFactor::U::Col.1447",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "struct.soplex::CLUFactor::U::Col.1447",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.soplex::IdxSet.1655",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.soplex::IdxSet.1655",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.soplex::Array.2017",
+      "type": "struct"
+    },
+    "type": "value"
   }
 ]

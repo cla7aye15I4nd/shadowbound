@@ -30,8 +30,8 @@ void OdefThread::SetThreadStackAndTls() {
 
 void OdefThread::Init() {
   SetThreadStackAndTls();
-  CHECK(MEM_IS_APP(stack_.bottom));
-  CHECK(MEM_IS_APP(stack_.top - 1));
+  // CHECK(MEM_IS_APP(stack_.bottom));
+  // CHECK(MEM_IS_APP(stack_.top - 1));
   // ClearShadowForThreadStackAndTLS();
 }
 

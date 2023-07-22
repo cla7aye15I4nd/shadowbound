@@ -11,6 +11,8 @@
 #include "sanitizer_common/sanitizer_linux.h"
 
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_skip_instrument;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_perf_test;
 
 namespace __odef {
 
@@ -22,6 +24,14 @@ void SetShadow(const void *ptr, uptr size) {
   //    |0x000|0x100|0x008|0x0f8|0x010|0x0f0|....|0x0f0|0x010|0x0f8|0x008|0x100|0x000|
   // else
   //    |0x00|0x20|0x01|0x1f|0x02|0x1e|....|0x1e|0x02|0x1f|0x01|0x20|0x00|
+
+  if (__odef_skip_instrument || !MEM_IS_APP(ptr))
+    return;
+
+  if (__odef_perf_test) {
+    internal_memset((void *)MEM_TO_SHADOW(ptr), u8(-1), size);
+    return;
+  }
 
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
@@ -41,9 +51,11 @@ void SetShadow(const void *ptr, uptr size) {
 #pragma unroll
 #endif
     while (shadow_beg < shadow_end) {
-      *(shadow_beg + 0) = b -= sizeof(u64);
-      *(shadow_beg + 1) = a += sizeof(u64);
+      *(shadow_beg + 0) = b;
+      *(shadow_beg + 1) = a;
       shadow_beg += 2;
+      b -= sizeof(u64);
+      a += sizeof(u64);
     }
   } else {
     u32 a = 0;
@@ -75,6 +87,8 @@ void __odef_init() {
     return;
 
   odef_init_is_running = true;
+
+  SetCommonFlagsDefaults();
 
   InitializeInterceptors();
 

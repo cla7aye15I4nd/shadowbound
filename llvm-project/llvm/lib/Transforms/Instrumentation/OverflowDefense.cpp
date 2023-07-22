@@ -41,14 +41,27 @@ static const int kReservedBytes = 0x20;
 
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
-static const uint64_t kAllocatorSpaceBegin = 0x600000000000ULL;
-static const uint64_t kAllocatorSpaceEnd = 0x800000000000ULL;
+static const uint64_t kHeapSpaceBeg = 0x600000000000ULL;
+static const uint64_t kHeapSpaceEnd = 0x700000000000ULL;
 static const uint64_t kMaxAddress = 0x1000000000000ULL;
 
 static cl::opt<bool>
     ClEnableKodef("odef-kernel",
                   cl::desc("Enable KernelOverflowDefense instrumentation"),
                   cl::Hidden, cl::init(false));
+
+// ===== Modification in Different Mode =====
+// +-----------------+--------------+-----------------------+
+// | Name            | Instrument   | Runtime Check         |
+// +-----------------+--------------+-----------------------+
+// | Normal          | N/A          | N/A                   |
+// +-----------------+--------------+-----------------------+
+// | Keep Going      | CreateTrapBB | check_range           |
+// +-----------------+--------------+-----------------------+
+// | Skip Instrument | No Instrument| check_range/SetShadow |
+// +-----------------+--------------+-----------------------+
+// | Perf Test       | N/A          | SetShadow             |
+// +-----------------+--------------+-----------------------+
 
 static cl::opt<bool> ClKeepGoing("odef-keep-going",
                                  cl::desc("keep going after reporting a error"),
@@ -58,6 +71,9 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
                                       cl::desc("skip instrumenting"),
                                       cl::Hidden, cl::init(false));
 
+static cl::opt<bool> ClPerfTest("odef-perf-test",
+                                cl::desc("performance test"), cl::Hidden,
+                                cl::init(false));
 // Please note that due to limitations in the current implementation, we cannot
 // guarantee that all corresponding checks will be disabled when the
 // odef-check-[heap|stack|global] option is set to false. However, in most
@@ -498,6 +514,25 @@ void insertGlobalVariable(Module &M) {
         ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt ? 1 : 0),
         "__odef_only_small_alloc_opt");
   });
+  M.getOrInsertGlobal("__odef_keep_going", Type::getInt32Ty(C), [&] {
+    return new GlobalVariable(
+        M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
+        ConstantInt::get(Type::getInt32Ty(C), ClKeepGoing ? 1 : 0),
+        "__odef_keep_going");
+  });
+  M.getOrInsertGlobal("__odef_skip_instrument", Type::getInt32Ty(C), [&] {
+    return new GlobalVariable(
+        M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
+        ConstantInt::get(Type::getInt32Ty(C), ClSkipInstrument ? 1 : 0),
+        "__odef_skip_instrument");
+  });
+  M.getOrInsertGlobal("__odef_perf_test", Type::getInt32Ty(C), [&] {
+    return new GlobalVariable(
+        M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
+        ConstantInt::get(Type::getInt32Ty(C), ClPerfTest ? 1 : 0),
+        "__odef_perf_test");
+  });
+
 }
 
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
@@ -901,7 +936,14 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
         }
       }
     } else if (VI->getType() == VIT_STRUCT) {
-      // TODO: support struct pattern
+      StructMemberIdent *SI = static_cast<StructMemberIdent *>(VI);
+      if (auto *LI = dyn_cast<LoadInst>(getSource(I))) {
+        StructMemberIdent *LSI = findStructMember(&F, LI->getPointerOperand());
+        if (LSI != nullptr && LSI->getName() == SI->getName() &&
+            LSI->getIndex() == SI->getIndex()) {
+          return true;
+        }
+      }
     }
   } else if (P->getType() == PT_ARRAY) {
     // TODO: support array pattern
@@ -1568,9 +1610,8 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   {
     // FIXME: This block can be removed?
     Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr,
-                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
@@ -1617,9 +1658,8 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   {
     // FIXME: This block can be removed?
     Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr,
-                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
@@ -1800,9 +1840,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   {
     // FIXME: This block can be removed?
     Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr,
-                          ConstantInt::get(int64Type, kAllocatorSpaceBegin)),
-        IRB.CreateICmpULT(Ptr, readRegister(F, IRB, "rsp")));
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 

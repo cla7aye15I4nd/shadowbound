@@ -23,9 +23,9 @@ static const s32 kAllocatorReleaseToOsIntervalMs = 5000;
 
 struct AP64 { // Allocator64 parameters. Deliberately using a short name.
   static const uptr kSpaceBeg = kAllocatorSpace;
-  static const uptr kSpaceSize = 0x40000000000; // 4T.
+  static const uptr kSpaceSize = 0x20000000000; // 2T.
   static const uptr kMetadataSize = 0;
-  typedef DefaultSizeClassMap SizeClassMap;
+  typedef LargeSizeClassMap SizeClassMap;
   typedef OdefMapUnmapCallback MapUnmapCallback;
   static const uptr kFlags = 0;
   using AddressSpaceView = LocalAddressSpaceView;
@@ -39,12 +39,7 @@ static Allocator allocator;
 static AllocatorCache fallback_allocator_cache;
 static StaticSpinMutex fallback_mutex;
 
-static uptr max_malloc_size;
-
-void OdefAllocatorInit() {
-  allocator.Init(kAllocatorReleaseToOsIntervalMs);
-  max_malloc_size = kMaxAllowedMallocSize;
-}
+void OdefAllocatorInit() { allocator.Init(kAllocatorReleaseToOsIntervalMs); }
 
 AllocatorCache *GetAllocatorCache(OdefThreadLocalMallocStorage *ms) {
   return reinterpret_cast<AllocatorCache *>(ms->allocator_cache);
@@ -55,8 +50,12 @@ void OdefThreadLocalMallocStorage::CommitBack() {
 }
 
 static void *OdefAllocate(uptr size, uptr alignment) {
-  // FIXME: CHECK size is larger than max_malloc_size.
-  // FIXME: CHECK if RSS limit is exceeded.
+  if (size > kMaxAllowedMallocSize) {
+    Report(" ERROR: odef_malloc(%zu) exceeds the maximum supported size "
+           "of %zu\n",
+           size, kMaxAllowedMallocSize);
+    Die();
+  }
 
   OdefThread *t = GetCurrentThread();
   void *allocated;

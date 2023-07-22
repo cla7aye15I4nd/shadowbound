@@ -6,6 +6,7 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/JSON.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Transforms/Utils/Identification.h"
 
 #include <algorithm>
 #include <map>
@@ -15,8 +16,10 @@
 using namespace std;
 using namespace llvm;
 
+static set<pair<string, int>> SafeStructMembers;
+
 static vector<pair<StoreInst *, int64_t>>
-findStorePlace(Function *F, Instruction *I, DataLayout *DL) {
+findPointerStorePlace(Function *F, Instruction *I, DataLayout *DL) {
   vector<pair<StoreInst *, int64_t>> result;
 
   SmallVector<Value *, 16> Worklist;
@@ -61,57 +64,37 @@ findStorePlace(Function *F, Instruction *I, DataLayout *DL) {
   return result;
 }
 
-static StructMemberIdent *findStructMember(Function *F, Value *V) {
-  Type *Ty = V->getType();
-  if (auto *STy = dyn_cast<StructType>(Ty)) {
-    if (STy->hasName()) {
-      StructMemberIdent *SMI = new StructMemberIdent(STy->getName().str(), 0);
-      return SMI;
+static LoadInst *findLengthLoadPlace(Function *F, Value *Val) {
+  LoadInst *result = nullptr;
+
+  SmallVector<Value *, 16> Worklist;
+  SmallPtrSet<Value *, 16> Visited;
+
+  Worklist.push_back(Val);
+
+  while (!Worklist.empty()) {
+    Value *V = Worklist.pop_back_val();
+
+    if (Visited.find(V) != Visited.end())
+      continue;
+
+    Visited.insert(V);
+
+    if (auto *I = dyn_cast<Instruction>(V)) {
+      for (auto &U : I->operands()) {
+        if (auto *LI = dyn_cast<LoadInst>(U)) {
+          if (result == nullptr)
+            result = LI;
+          else
+            return nullptr;
+        } else {
+          Worklist.push_back(U);
+        }
+      }
     }
   }
 
-  if (auto *BC = dyn_cast<BitCastInst>(V))
-    return findStructMember(F, BC->getOperand(0));
-
-  if (auto *GEP = dyn_cast<GetElementPtrInst>(V)) {
-    bool isFirstField = true;
-    int index = -1;
-    Type *LastTy = nullptr;
-    Type *Ty = GEP->getPointerOperandType()->getPointerElementType();
-
-    if (!Ty->isStructTy())
-      return nullptr;
-
-    for (auto &Op : GEP->indices()) {
-      if (isFirstField) {
-        isFirstField = false;
-        continue;
-      }
-
-      auto value = Op.get();
-      if (value->getType()->isIntegerTy(32)) {
-        StructType *STy = cast<StructType>(Ty);
-        LastTy = Ty;
-        index = cast<ConstantInt>(value)->getZExtValue();
-        Ty = STy->getElementType(index);
-      } else {
-        auto Aty = cast<ArrayType>(Ty);
-        LastTy = Ty;
-        index = -1;
-        Ty = Aty->getArrayElementType();
-      }
-    }
-
-    if (auto *STy = dyn_cast<StructType>(LastTy)) {
-      assert(index != -1);
-      if (STy->hasName())
-        return new StructMemberIdent(STy->getName().str(), index);
-    }
-
-    return nullptr;
-  }
-
-  return nullptr;
+  return result;
 }
 
 static void findSafeStructMembersInCall(Function *F, CallBase *CI,
@@ -121,19 +104,29 @@ static void findSafeStructMembersInCall(Function *F, CallBase *CI,
   if (!CalledFn)
     return;
 
-  if (CalledFn->getName() != "_Znam")
+  if (CalledFn->getName() != "_Znam" && CalledFn->getName() != "malloc")
     return;
 
-  DataLayout *DL = getDataLayout(F->getParent());
-  vector<pair<StoreInst *, int64_t>> StorePlaces = findStorePlace(F, CI, DL);
+  assert(CI->arg_size() == 1);
 
-  for (auto &SP : StorePlaces) {
+  DataLayout *DL = getDataLayout(F->getParent());
+  for (auto &SP : findPointerStorePlace(F, CI, DL)) {
     StoreInst *ST = SP.first;
     int64_t Offset = SP.second;
 
-    StructMemberIdent *SMI = findStructMember(F, ST->getPointerOperand());
-    if (SMI) {
-      dbgs() << "Found safe struct member: " << *SMI << "\n";
+    StructMemberIdent *PtrSM = findStructMember(F, ST->getPointerOperand());
+    if (PtrSM) {
+      if (SafeStructMembers.find(make_pair(
+              PtrSM->getName(), PtrSM->getIndex())) != SafeStructMembers.end())
+        continue;
+
+      Value *Size = CI->getArgOperand(0);
+      LoadInst *LI = findLengthLoadPlace(F, Size);
+      if (LI)
+        Patterns.push_back(new ValuePattern(PtrSM));
+      else {
+        // Store Pattern (not implemented yet)
+      }
     }
   }
 }

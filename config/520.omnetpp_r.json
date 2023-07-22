@@ -4810,5 +4810,349 @@
       "type": "funarg"
     },
     "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "class.NEDFileBuffer",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.NEDFileBuffer",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "class.NEDFileBuffer",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "class.cDensityEstBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "class.cDensityEstBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "class.cDensityEstBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cKSplit",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cKSplit",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cKSplit",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cKSplit",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cKSplit",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 28,
+      "name": "class.EnvirBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.cModule.1527",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "class.cModule.1527",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "struct.DisplayString::Tag.1698",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "class.DisplayString.1699",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.DisplayString.1699",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.cDynamicExpression.2406",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "struct.cDisplayString::Tag.3418",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "class.cDisplayString.3444",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cDisplayString.3444",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "class.MACRelayUnitNP",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.cPSquare.4805",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "class.cPSquare.4805",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "class.cTopology::Node",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.cArray.6519",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.cArray.6519",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.cMessageHeap.7650",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.cMessageHeap.7650",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "class.Expression.8177",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.cVarHistogram",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.cVarHistogram",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase.8700",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.cVarHistogram",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase.8700",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.cVarHistogram",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase.8700",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "class.cHistogramBase.8700",
+      "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "class.cVarHistogram",
+      "type": "struct"
+    },
+    "type": "value"
   }
 ]
