@@ -65,7 +65,7 @@ static cl::opt<bool>
 
 static cl::opt<bool> ClKeepGoing("odef-keep-going",
                                  cl::desc("keep going after reporting a error"),
-                                 cl::Hidden, cl::init(false));
+                                 cl::Hidden, cl::init(true));
 
 static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
                                       cl::desc("skip instrumenting"),
