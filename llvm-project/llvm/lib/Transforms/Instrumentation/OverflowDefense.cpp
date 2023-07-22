@@ -542,7 +542,7 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
 
 OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover)
     : Kernel(getOptOrDefault(ClEnableKodef, Kernel)),
-      Recover(getOptOrDefault(ClKeepGoing, Kernel || Recover)) {}
+      Recover(getOptOrDefault(ClKeepGoing, true)) {}
 
 PreservedAnalyses OverflowDefensePass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
