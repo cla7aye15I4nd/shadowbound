@@ -357,7 +357,7 @@
   {
     "pattern": {
       "index": 16,
-      "name": "struct.ssifile_s.129",
+      "name": "struct.ssifile_s",
       "type": "struct"
     },
     "type": "value"
@@ -373,7 +373,7 @@
   {
     "pattern": {
       "index": 17,
-      "name": "struct.ssifile_s.129",
+      "name": "struct.ssifile_s",
       "type": "struct"
     },
     "type": "value"
@@ -381,7 +381,7 @@
   {
     "pattern": {
       "index": 18,
-      "name": "struct.ssifile_s.129",
+      "name": "struct.ssifile_s",
       "type": "struct"
     },
     "type": "value"
@@ -389,7 +389,7 @@
   {
     "pattern": {
       "index": 19,
-      "name": "struct.ssifile_s.129",
+      "name": "struct.ssifile_s",
       "type": "struct"
     },
     "type": "value"
@@ -536,7 +536,7 @@
   {
     "pattern": {
       "index": 20,
-      "name": "struct.ssifile_s.129",
+      "name": "struct.ssifile_s",
       "type": "struct"
     },
     "type": "value"

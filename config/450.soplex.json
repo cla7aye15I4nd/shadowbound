@@ -437,7 +437,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.soplex::Array.2017",
+      "name": "class.soplex::Array",
       "type": "struct"
     },
     "type": "value"
@@ -445,7 +445,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.soplex::DSVector.409",
+      "name": "class.soplex::DSVector",
       "type": "struct"
     },
     "type": "value"
@@ -453,23 +453,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.soplex::DSVector.409",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.soplex::DSVector.409",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.soplex::NameSet.984",
+      "name": "class.soplex::NameSet",
       "type": "struct"
     },
     "type": "value"
@@ -606,15 +590,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "class.soplex::IdxSet.1655",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.soplex::IdxSet.1655",
+      "name": "class.soplex::IdxSet",
       "type": "struct"
     },
     "type": "value"
@@ -831,7 +807,7 @@
   {
     "pattern": {
       "index": 6,
-      "name": "struct.soplex::CLUFactor::U::Col.1447",
+      "name": "struct.soplex::CLUFactor::U::Col",
       "type": "struct"
     },
     "type": "value"
@@ -863,7 +839,7 @@
   {
     "pattern": {
       "index": 7,
-      "name": "struct.soplex::CLUFactor::U::Col.1447",
+      "name": "struct.soplex::CLUFactor::U::Col",
       "type": "struct"
     },
     "type": "value"
@@ -887,7 +863,7 @@
   {
     "pattern": {
       "index": 8,
-      "name": "struct.soplex::CLUFactor::U::Col.1447",
+      "name": "struct.soplex::CLUFactor::U::Col",
       "type": "struct"
     },
     "type": "value"

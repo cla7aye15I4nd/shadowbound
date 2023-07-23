@@ -689,30 +689,6 @@
   },
   {
     "pattern": {
-      "index": 13,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 14,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 14,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 14,
       "name": "struct.TargaImage",
       "type": "struct"
@@ -722,7 +698,7 @@
   {
     "pattern": {
       "index": 155,
-      "name": "struct.video_par.133",
+      "name": "struct.video_par",
       "type": "struct"
     },
     "type": "value"
@@ -776,15 +752,6 @@
       "index": 2,
       "module": "ratecontrol.c",
       "name": "find_underflow",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "module": "set.c",
-      "name": "x264_cqm_parse_jmlist",
       "type": "funarg"
     },
     "type": "value"
@@ -1029,15 +996,6 @@
   {
     "pattern": {
       "index": 4,
-      "module": "set.c",
-      "name": "x264_cqm_parse_jmlist",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
       "name": "ercPixConcealIMB",
       "type": "funarg"
     },
@@ -1137,15 +1095,7 @@
   {
     "pattern": {
       "index": 63,
-      "name": "struct.storable_picture.1792",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 63,
-      "name": "struct.storable_picture.1792",
+      "name": "struct.storable_picture",
       "type": "struct"
     },
     "type": "value"
@@ -1162,7 +1112,7 @@
   {
     "pattern": {
       "index": 8,
-      "name": "struct.annex_b_struct.257",
+      "name": "struct.annex_b_struct",
       "type": "struct"
     },
     "type": "value"

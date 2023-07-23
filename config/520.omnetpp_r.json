@@ -1740,7 +1740,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "class.DisplayString.1699",
+      "name": "class.DisplayString",
       "type": "struct"
     },
     "type": "value"
@@ -1756,7 +1756,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "class.cDisplayString.3444",
+      "name": "class.cDisplayString",
       "type": "struct"
     },
     "type": "value"
@@ -1764,7 +1764,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "struct.DisplayString::Tag.1698",
+      "name": "struct.DisplayString::Tag",
       "type": "struct"
     },
     "type": "value"
@@ -1772,7 +1772,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "struct.cDisplayString::Tag.3418",
+      "name": "struct.cDisplayString::Tag",
       "type": "struct"
     },
     "type": "value"
@@ -2897,7 +2897,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.Expression.8177",
+      "name": "class.Expression",
       "type": "struct"
     },
     "type": "value"
@@ -2905,7 +2905,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.cArray.6519",
+      "name": "class.cArray",
       "type": "struct"
     },
     "type": "value"
@@ -2913,7 +2913,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.cArray.6519",
+      "name": "class.cDynamicExpression",
       "type": "struct"
     },
     "type": "value"
@@ -2921,7 +2921,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.cDynamicExpression.2406",
+      "name": "class.cMessageHeap",
       "type": "struct"
     },
     "type": "value"
@@ -2929,23 +2929,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.cMessageHeap.7650",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.cMessageHeap.7650",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.cModule.1527",
+      "name": "class.cModule",
       "type": "struct"
     },
     "type": "value"
@@ -3900,7 +3884,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "class.DisplayString.1699",
+      "name": "class.DisplayString",
       "type": "struct"
     },
     "type": "value"
@@ -3908,15 +3892,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "class.cDisplayString.3444",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase",
+      "name": "class.cDisplayString",
       "type": "struct"
     },
     "type": "value"
@@ -3925,86 +3901,6 @@
     "pattern": {
       "index": 2,
       "name": "class.cHistogramBase",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase.8700",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase.8700",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase.8700",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cHistogramBase.8700",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cKSplit",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cKSplit",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cKSplit",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "class.cKSplit",
       "type": "struct"
     },
     "type": "value"
@@ -4414,39 +4310,7 @@
   {
     "pattern": {
       "index": 3,
-      "name": "class.cPSquare.4805",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "class.cVarHistogram",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "class.cVarHistogram",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "class.cVarHistogram",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "class.cVarHistogram",
+      "name": "class.cPSquare",
       "type": "struct"
     },
     "type": "value"
@@ -5046,7 +4910,7 @@
   {
     "pattern": {
       "index": 4,
-      "name": "class.cPSquare.4805",
+      "name": "class.cPSquare",
       "type": "struct"
     },
     "type": "value"
@@ -5118,7 +4982,7 @@
   {
     "pattern": {
       "index": 8,
-      "name": "class.cModule.1527",
+      "name": "class.cModule",
       "type": "struct"
     },
     "type": "value"
@@ -5127,22 +4991,6 @@
     "pattern": {
       "index": 9,
       "name": "class.MACRelayUnitNP",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 9,
-      "name": "class.cDensityEstBase",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 9,
-      "name": "class.cDensityEstBase",
       "type": "struct"
     },
     "type": "value"

@@ -326,7 +326,7 @@
   {
     "pattern": {
       "index": 15,
-      "name": "struct.re_guts.60",
+      "name": "struct.re_guts",
       "type": "struct"
     },
     "type": "value"
@@ -522,7 +522,7 @@
   {
     "pattern": {
       "index": 7,
-      "name": "struct.strand_t.79",
+      "name": "struct.strand_t",
       "type": "struct"
     },
     "type": "value"

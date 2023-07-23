@@ -782,39 +782,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "union.anon.1655",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "union.anon.1655",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "union.anon.1655",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "union.anon.1655",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "union.anon.1655",
+      "name": "union.anon",
       "type": "struct"
     },
     "type": "value"
@@ -1566,30 +1534,6 @@
   {
     "pattern": {
       "index": 13,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 13,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 14,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 14,
       "name": "struct.TargaImage",
       "type": "struct"
     },

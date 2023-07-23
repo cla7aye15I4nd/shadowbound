@@ -3050,7 +3050,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "class.xalanc_1_8::XalanArrayAutoPtr.848",
+      "name": "class.xalanc_1_8::XalanArrayAutoPtr",
       "type": "struct"
     },
     "type": "value"

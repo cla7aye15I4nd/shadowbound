@@ -186,7 +186,7 @@
   {
     "pattern": {
       "index": 1,
-      "name": "class.Molecule.29",
+      "name": "class.Molecule",
       "type": "struct"
     },
     "type": "value"
@@ -218,7 +218,7 @@
   {
     "pattern": {
       "index": 2,
-      "name": "class.Patch.2",
+      "name": "class.Patch",
       "type": "struct"
     },
     "type": "value"
@@ -234,7 +234,7 @@
   {
     "pattern": {
       "index": 3,
-      "name": "class.ObjectArena.27",
+      "name": "class.ObjectArena",
       "type": "struct"
     },
     "type": "value"
@@ -242,7 +242,7 @@
   {
     "pattern": {
       "index": 4,
-      "name": "class.Molecule.29",
+      "name": "class.Molecule",
       "type": "struct"
     },
     "type": "value"
@@ -250,7 +250,7 @@
   {
     "pattern": {
       "index": 4,
-      "name": "class.Patch.2",
+      "name": "class.Patch",
       "type": "struct"
     },
     "type": "value"
@@ -258,7 +258,7 @@
   {
     "pattern": {
       "index": 5,
-      "name": "class.Patch.2",
+      "name": "class.Patch",
       "type": "struct"
     },
     "type": "value"
@@ -266,7 +266,7 @@
   {
     "pattern": {
       "index": 6,
-      "name": "class.Patch.2",
+      "name": "class.Patch",
       "type": "struct"
     },
     "type": "value"

@@ -3382,7 +3382,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "class.STR_String.18803",
+      "name": "class.STR_String",
       "type": "struct"
     },
     "type": "value"
@@ -10942,14 +10942,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "struct.DynStrElem",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "summary_to_keylist",
       "type": "funarg"
     },
@@ -11610,14 +11602,6 @@
   {
     "pattern": {
       "index": 13,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 13,
       "name": "uiDefButF",
       "type": "funarg"
     },
@@ -11682,22 +11666,6 @@
   {
     "pattern": {
       "index": 14,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 14,
-      "name": "struct.TargaImage",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 14,
       "name": "uiDefButBitS",
       "type": "funarg"
     },
@@ -11746,7 +11714,7 @@
   {
     "pattern": {
       "index": 18,
-      "name": "struct.gz_state.45700",
+      "name": "struct.gz_state",
       "type": "struct"
     },
     "type": "value"
@@ -24779,14 +24747,6 @@
   {
     "pattern": {
       "index": 6,
-      "name": "struct.gz_state.98716",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 6,
       "name": "subdivideArcBy",
       "type": "funarg"
     },
@@ -25378,14 +25338,6 @@
     "pattern": {
       "index": 7,
       "name": "struct.gz_state",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 7,
-      "name": "struct.gz_state.98716",
       "type": "struct"
     },
     "type": "value"
