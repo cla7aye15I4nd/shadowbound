@@ -4,7 +4,7 @@
 function run_analyzer {
     echo "Running analyzer on ${1}..."
     ./build/harness/analyzer `find ../bitcodes/${1} -name *bc | xargs` -pattern-opt-file ../config/${1}.json
-    ../llvm-project/build/bin/clang-format -i ../config/${1}.json
+    python3 fmt-json.py ../config/${1}.json
 }
 
 if [ $# -ne 1 ]; then
