@@ -188,6 +188,7 @@ public:
   }
 };
 
+std::string getOriginName(std::string Name);
 StructMemberIdent *findStructMember(llvm::Function *F, llvm::Value *V);
 std::vector<PatternBase *> parsePatternFile(std::string Filename);
 

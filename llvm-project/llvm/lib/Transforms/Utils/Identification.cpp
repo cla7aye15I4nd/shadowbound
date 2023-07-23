@@ -10,11 +10,31 @@ using namespace std;
 
 namespace llvm {
 
+string getOriginName(string Name) {
+  do {
+    bool hasNonDigit = false;
+    for (auto c : Name.substr(Name.find_last_of('.') + 1)) {
+      if (!isdigit(c)) {
+        hasNonDigit = true;
+        break;
+      }
+    }
+
+    if (!hasNonDigit)
+      Name = Name.substr(0, Name.find_last_of('.'));
+    else
+      break;
+  } while (true);
+
+  return Name;
+}
+
 StructMemberIdent *findStructMember(Function *F, Value *V) {
   Type *Ty = V->getType();
   if (auto *STy = dyn_cast<StructType>(Ty)) {
     if (STy->hasName()) {
-      StructMemberIdent *SMI = new StructMemberIdent(STy->getName().str(), 0);
+      StructMemberIdent *SMI =
+          new StructMemberIdent(getOriginName(STy->getName().str()), 0);
       return SMI;
     }
   }
@@ -56,7 +76,8 @@ StructMemberIdent *findStructMember(Function *F, Value *V) {
     if (auto *STy = dyn_cast<StructType>(LastTy)) {
       assert(index != -1);
       if (STy->hasName())
-        return new StructMemberIdent(STy->getName().str(), index);
+        return new StructMemberIdent(getOriginName(STy->getName().str()),
+                                     index);
     }
 
     return nullptr;
@@ -64,7 +85,6 @@ StructMemberIdent *findStructMember(Function *F, Value *V) {
 
   return nullptr;
 }
-
 
 vector<PatternBase *> parsePatternFile(string Filename) {
 #define ERROR_HANDLER(X)                                                       \
