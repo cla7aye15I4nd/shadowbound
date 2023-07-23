@@ -7,6 +7,11 @@ function run_analyzer {
     python3 fmt-json.py ../config/${1}.json
 }
 
+DIR=$(cd "$(dirname "$0")"; pwd)
+
+cd $DIR/../llvm-project/build && make -j
+cd $DIR && make -j
+
 if [ $# -ne 1 ]; then
     run_analyzer "500.perlbench_r"
     run_analyzer "502.gcc_r"
