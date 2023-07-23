@@ -1,286 +1,6 @@
 [
   {
     "pattern": {
-      "index": 3,
-      "name": "ResizePlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "ResizePlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "ResizePlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 6,
-      "name": "ResizePlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "AllocPlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "AllocPlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "AllocPlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "AllocPlan7Matrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "AllocShadowMatrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "AllocShadowMatrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "AllocShadowMatrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "AllocShadowMatrix",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "P7Forward",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "P7ViterbiTrace",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "P7SmallViterbi",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "P7ParsingViterbi",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 6,
-      "name": "PostprocessSignificantHit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 12,
-      "name": "PostprocessSignificantHit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "Linefit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "Linefit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "Linefit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "StateOccupancy",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "StateOccupancy",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "StateOccupancy",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "seqencode",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "Cluster",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "MakeDiffMx",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "SingleLinkCluster",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "SingleLinkCluster",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "MSAGetGC",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "MSAFromAINFO",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "GSIGetRecord",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "GSIGetRecord",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "Plan7SetAccession",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "Plan7SetDescription",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
       "name": "DegenerateSymbolScore",
       "type": "funarg"
@@ -289,176 +9,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "Plan9toPlan7",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "EVDCensoredFit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 6,
-      "name": "EVDCensoredFit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "EVDMaxLikelyFit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "EVDMaxLikelyFit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "Lawless416",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "Lawless416",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 6,
-      "name": "Lawless422",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 7,
-      "name": "Lawless422",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
-      "name": "sre_malloc",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "sre_realloc",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "RandomSequence",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "RandomSequence",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "sre_strtok",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "sre_strtok",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "sre_strtok",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "Getopt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "Getopt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "Getopt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 6,
-      "name": "Getopt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 7,
-      "name": "Getopt",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "PopIntStack",
+      "name": "Die",
       "type": "funarg"
     },
     "type": "value"
@@ -489,64 +41,251 @@
   },
   {
     "pattern": {
-      "index": 2,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "InitAinfo",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "LogNorm",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 4,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "Panic",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 5,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "RandomSequence",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 6,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "SetAutocuts",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 7,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "Strparse",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 8,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "Warn",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 9,
-      "name": "GetRankedHit",
+      "index": 0,
+      "name": "seqencode",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sre_malloc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sre_realloc",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "sre_strtok",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "hsregex.c",
+      "name": "regbranch",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "sqio.c",
+      "name": "readLoop",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "module": "ssi.c",
+      "name": "parse_skey_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "FreeAlignment",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "FreeSequence",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "HMMERBanner",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "HMMFileOpen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "HMMFileRead",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "MSAFromAINFO",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "MSAGetGC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "ParsePAMFile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Plan7SetAccession",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Plan7SetDescription",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "Plan9toPlan7",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "PopIntStack",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "RandomSequence",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "StateOccupancy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "TraceDecompose",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "TraceSimpleBounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
+      "name": "sre_strtok",
       "type": "funarg"
     },
     "type": "value"
@@ -571,6 +310,14 @@
     "pattern": {
       "index": 12,
       "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 12,
+      "name": "PostprocessSignificantHit",
       "type": "funarg"
     },
     "type": "value"
@@ -609,322 +356,17 @@
   },
   {
     "pattern": {
-      "index": 17,
-      "name": "GetRankedHit",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "DisplayPlan7PostAlign",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "SSIGetOffsetByNumber",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "SSIGetOffsetByNumber",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "module": "ssi.c",
-      "name": "parse_pkey_info",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "module": "ssi.c",
-      "name": "parse_skey_info",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "name": "P7PriorifyEmissionVector",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "TraceDecompose",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "TraceDecompose",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "TraceSimpleBounds",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "TraceSimpleBounds",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "TraceSimpleBounds",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "TraceSimpleBounds",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "P7Backward",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "P7OptimalAccuracyTrace",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "module": "aligneval.c",
-      "name": "make_alilist",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "module": "aligneval.c",
-      "name": "make_alilist",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "module": "aligneval.c",
-      "name": "make_ref_alilist",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 5,
-      "module": "aligneval.c",
-      "name": "make_ref_alilist",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "HMMFileOpen",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "HMMFileRead",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "SeqfileOpen",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "FreeSequence",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "module": "sqio.c",
-      "name": "readLoop",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "ParsePAMFile",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "ParsePAMFile",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "LogNorm",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "HMMERBanner",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "SetAutocuts",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "Die",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "Warn",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "Panic",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "Strparse",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "module": "hsregex.c",
-      "name": "reg",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "module": "hsregex.c",
-      "name": "regbranch",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 2,
-      "name": "EnvFileOpen",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "InitAinfo",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "FreeAlignment",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 16,
       "name": "struct.ssifile_s.129",
       "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 17,
+      "name": "GetRankedHit",
+      "type": "funarg"
     },
     "type": "value"
   },
@@ -954,9 +396,567 @@
   },
   {
     "pattern": {
+      "index": 2,
+      "module": "aligneval.c",
+      "name": "make_alilist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "module": "hsregex.c",
+      "name": "reg",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "module": "ssi.c",
+      "name": "parse_pkey_info",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "AllocPlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "AllocShadowMatrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "EnvFileOpen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "GSIGetRecord",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "Getopt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "MakeDiffMx",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "ParsePAMFile",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "SSIGetOffsetByNumber",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "SeqfileOpen",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "StateOccupancy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "TraceDecompose",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "TraceSimpleBounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
+      "name": "sre_strtok",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
       "index": 20,
       "name": "struct.ssifile_s.129",
       "type": "struct"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "module": "aligneval.c",
+      "name": "make_alilist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "AllocPlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "AllocShadowMatrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "Cluster",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "EVDMaxLikelyFit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "GSIGetRecord",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "Linefit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "P7Backward",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "P7Forward",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "P7ParsingViterbi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "ResizePlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "SSIGetOffsetByNumber",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "StateOccupancy",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 3,
+      "name": "TraceSimpleBounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "module": "aligneval.c",
+      "name": "make_ref_alilist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "AllocPlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "AllocShadowMatrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "DisplayPlan7PostAlign",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "EVDMaxLikelyFit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "Getopt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "Lawless416",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "Linefit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "P7OptimalAccuracyTrace",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "P7SmallViterbi",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "P7ViterbiTrace",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "ResizePlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "SingleLinkCluster",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "name": "TraceSimpleBounds",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "module": "aligneval.c",
+      "name": "make_ref_alilist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "AllocPlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "AllocShadowMatrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "EVDCensoredFit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "Getopt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "Lawless416",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "Linefit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "P7PriorifyEmissionVector",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "ResizePlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 5,
+      "name": "SingleLinkCluster",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "EVDCensoredFit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "Getopt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "Lawless422",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "PostprocessSignificantHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 6,
+      "name": "ResizePlan7Matrix",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "Getopt",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 7,
+      "name": "Lawless422",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 8,
+      "name": "GetRankedHit",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 9,
+      "name": "GetRankedHit",
+      "type": "funarg"
     },
     "type": "value"
   }
