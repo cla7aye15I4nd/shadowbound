@@ -5417,38 +5417,6 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "class.TableBase.1",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.TableBase.111",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.TableBase.138",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
-      "name": "class.TableBase.2",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 10,
       "name": "_ZN19KellyErrorEstimatorILi3EE27integrate_over_regular_faceI11BlockVectorIdEEEvRK10DoFHandlerILi3EERK10QuadratureILi2EERKSt3mapIhPK8FunctionILi3EESt4lessIhESaISt4pairIKhSG_EEERKSt6vectorIPKT_SaIST_EERKSQ_IbSaIbEESG_RSC_I12TriaIteratorILi3E17DoFObjectAccessorILi2ELi3EEESQ_IdSaIdEESH_IS15_ESaISJ_IKS15_S17_EEERNS0_13PerThreadDataERK18TriaActiveIteratorILi3E15DoFCellAccessorILi3EEEjR12FEFaceValuesILi3EES1O_",
       "type": "funarg"
@@ -8035,14 +8003,6 @@
     "pattern": {
       "index": 3,
       "name": "class.Vector",
-      "type": "struct"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 3,
-      "name": "class.Vector.0",
       "type": "struct"
     },
     "type": "value"
