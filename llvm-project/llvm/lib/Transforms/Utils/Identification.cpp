@@ -10,6 +10,39 @@ using namespace std;
 
 namespace llvm {
 
+bool isStdFunction(StringRef name) {
+  std::string cmd = "c++filt " + name.str();
+  FILE *pipe = popen(cmd.c_str(), "r");
+
+  std::string result;
+  char buffer[0x1000];
+  while (fgets(buffer, sizeof buffer, pipe) != NULL)
+    result += buffer;
+
+  pclose(pipe);
+
+  std::string fname;
+  size_t start_pos = 0, end_pos = 0, count = 0;
+
+  while (end_pos < result.size()) {
+    if (result[end_pos] == '(') {
+      fname = result.substr(start_pos, end_pos - start_pos);
+      break;
+    }
+
+    if (result[end_pos] == '<' && result[end_pos + 1] != '(')
+      count++;
+    else if (result[end_pos] == '>')
+      count--;
+    else if (result[end_pos] == ' ' && count == 0)
+      start_pos = end_pos + 1;
+
+    end_pos++;
+  }
+
+  return StringRef(fname).startswith("std::");
+}
+
 string getOriginName(string Name) {
   do {
     bool hasNonDigit = false;
