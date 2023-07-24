@@ -1509,6 +1509,16 @@ static void init_tcache(struct threadcache_t *tcache, struct arena_t *arena) {
   assign_pages_to_tcache(tcache);
 }
 
+static void init_shadow_memory() {
+  uptr start = 0x200000000000ULL;
+  uptr end = 0x400000000000ULL;
+  uptr size = end - start;
+
+  int prot = PROT_READ | PROT_WRITE;
+  int flag = MAP_PRIVATE | MAP_FIXED | MAP_NORESERVE | MAP_ANON;
+  mmap((void *)start, size, prot, flag, -1, 0);
+}
+
 // Performs one-time setup of metadata structures
 static void initialize() {
   isInit = 2;
@@ -1529,7 +1539,7 @@ static void initialize() {
 #ifndef _WIN64
   // Find the top of the heap on Linux then add 1GB so that there is
   // no contention with small mallocs from libc when used side-by-side
-  poolHighWater = (byte *) 0x602000000000;
+  poolHighWater = (byte *)0x602000000000;
 
   // Create a large contiguous range of virtual address space but don't
   // actually map the addresses to pages just yet
@@ -1572,6 +1582,8 @@ static void initialize() {
   ffprint_usage_on_interval(stderr, FF_INTERVAL);
 #endif
 #endif
+
+  init_shadow_memory();
 
   isInit = 1;
 }
@@ -3486,6 +3498,11 @@ void SetShadow(const void *ptr, uptr size) {
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 
+#ifdef PERF
+  memset(shadow_beg, -1, size);
+  return;
+#endif
+
 #ifndef USE_LARGE_CHUNK
   if (size > (u32)(-1)) {
     printf("ERROR: small chunk optimization is enabled, but the size "
@@ -3501,8 +3518,10 @@ void SetShadow(const void *ptr, uptr size) {
 #pragma unroll
 #endif
   while (shadow_beg < shadow_end) {
-    *(shadow_beg + 0) = b -= sizeof(u64);
-    *(shadow_beg + 1) = a += sizeof(u64);
+    *(shadow_beg + 0) = b;
+    *(shadow_beg + 1) = a;
+    b -= sizeof(u64);
+    a += sizeof(u64);
     shadow_beg += 2;
   }
 #else
