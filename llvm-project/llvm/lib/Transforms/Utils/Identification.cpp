@@ -10,11 +10,64 @@ using namespace std;
 
 namespace llvm {
 
+bool isStdFunction(StringRef name) {
+  std::string cmd = "c++filt " + name.str();
+  FILE *pipe = popen(cmd.c_str(), "r");
+
+  std::string result;
+  char buffer[0x1000];
+  while (fgets(buffer, sizeof buffer, pipe) != NULL)
+    result += buffer;
+
+  pclose(pipe);
+
+  std::string fname;
+  size_t start_pos = 0, end_pos = 0, count = 0;
+
+  while (end_pos < result.size()) {
+    if (result[end_pos] == '(') {
+      fname = result.substr(start_pos, end_pos - start_pos);
+      break;
+    }
+
+    if (result[end_pos] == '<' && result[end_pos + 1] != '(')
+      count++;
+    else if (result[end_pos] == '>')
+      count--;
+    else if (result[end_pos] == ' ' && count == 0)
+      start_pos = end_pos + 1;
+
+    end_pos++;
+  }
+
+  return StringRef(fname).startswith("std::");
+}
+
+string getOriginName(string Name) {
+  do {
+    bool hasNonDigit = false;
+    for (auto c : Name.substr(Name.find_last_of('.') + 1)) {
+      if (!isdigit(c)) {
+        hasNonDigit = true;
+        break;
+      }
+    }
+
+    if (!hasNonDigit)
+      Name = Name.substr(0, Name.find_last_of('.'));
+    else
+      break;
+  } while (true);
+
+  return Name;
+}
+
 StructMemberIdent *findStructMember(Function *F, Value *V) {
   Type *Ty = V->getType();
   if (auto *STy = dyn_cast<StructType>(Ty)) {
     if (STy->hasName()) {
-      StructMemberIdent *SMI = new StructMemberIdent(STy->getName().str(), 0);
+      StructMemberIdent *SMI =
+          new StructMemberIdent(getOriginName(STy->getName().str()), 0);
       return SMI;
     }
   }
@@ -56,7 +109,8 @@ StructMemberIdent *findStructMember(Function *F, Value *V) {
     if (auto *STy = dyn_cast<StructType>(LastTy)) {
       assert(index != -1);
       if (STy->hasName())
-        return new StructMemberIdent(STy->getName().str(), index);
+        return new StructMemberIdent(getOriginName(STy->getName().str()),
+                                     index);
     }
 
     return nullptr;
@@ -64,7 +118,6 @@ StructMemberIdent *findStructMember(Function *F, Value *V) {
 
   return nullptr;
 }
-
 
 vector<PatternBase *> parsePatternFile(string Filename) {
 #define ERROR_HANDLER(X)                                                       \

@@ -2,6 +2,22 @@
   {
     "pattern": {
       "index": 0,
+      "name": "flow_cost",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "price_out_impl",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "primal_iminus",
       "type": "funarg"
     },
@@ -9,16 +25,8 @@
   },
   {
     "pattern": {
-      "index": 1,
-      "name": "primal_iminus",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "primal_iminus",
+      "index": 0,
+      "name": "primal_net_simplex",
       "type": "funarg"
     },
     "type": "value"
@@ -33,16 +41,8 @@
   },
   {
     "pattern": {
-      "index": 3,
-      "name": "primal_bea_mpp",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
       "index": 0,
-      "name": "price_out_impl",
+      "name": "read_min",
       "type": "funarg"
     },
     "type": "value"
@@ -66,6 +66,14 @@
   {
     "pattern": {
       "index": 1,
+      "name": "primal_iminus",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 1,
       "name": "write_circulations",
       "type": "funarg"
     },
@@ -73,24 +81,16 @@
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "primal_net_simplex",
+      "index": 3,
+      "name": "primal_bea_mpp",
       "type": "funarg"
     },
     "type": "value"
   },
   {
     "pattern": {
-      "index": 0,
-      "name": "read_min",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "flow_cost",
+      "index": 4,
+      "name": "primal_iminus",
       "type": "funarg"
     },
     "type": "value"

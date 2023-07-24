@@ -122,6 +122,8 @@ void findSafeFunctionArguments(vector<Module *> Modules,
           /* it is possibile because of inline */
           CallSites.count(makeFnHash(&F)) == 0)
         continue;
+      if (isStdFunction(F.getName()))
+        continue;
       for (unsigned int i = 0; i < F.arg_size(); i++) {
         if (F.getArg(i)->getType()->isPointerTy()) {
           if (alwaysSafe(F, i, Modules))
