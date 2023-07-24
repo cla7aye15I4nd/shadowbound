@@ -217,6 +217,8 @@ FFMALLOC_API size_t ffget_pool_count();
 FFMALLOC_API void ffdump_pool_details();
 // #endif // DEBUG
 
+void SetShadow(const void *ptr, size_t size);
+
 #ifdef __cplusplus
 }
 #endif
@@ -226,3 +228,4 @@ typedef unsigned long long u64;
 typedef size_t uptr;
 
 #define MEM_TO_SHADOW(mem) (((uptr)(mem)) & ~0x400000000007ULL)
+#define kReservedBytes (0x20)
