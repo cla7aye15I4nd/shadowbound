@@ -11,6 +11,7 @@
 #include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/Instructions.h"
+#include "llvm/IR/MDBuilder.h"
 #include "llvm/IR/Operator.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/FileSystem.h"
@@ -71,9 +72,8 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
                                       cl::desc("skip instrumenting"),
                                       cl::Hidden, cl::init(false));
 
-static cl::opt<bool> ClPerfTest("odef-perf-test",
-                                cl::desc("performance test"), cl::Hidden,
-                                cl::init(false));
+static cl::opt<bool> ClPerfTest("odef-perf-test", cl::desc("performance test"),
+                                cl::Hidden, cl::init(false));
 // Please note that due to limitations in the current implementation, we cannot
 // guarantee that all corresponding checks will be disabled when the
 // odef-check-[heap|stack|global] option is set to false. However, in most
@@ -499,7 +499,6 @@ void insertGlobalVariable(Module &M) {
         ConstantInt::get(Type::getInt32Ty(C), ClPerfTest ? 1 : 0),
         "__odef_perf_test");
   });
-
 }
 
 template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
@@ -1684,8 +1683,12 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   if (Abort && !Recover) {
-    IRB.SetInsertPoint(
-        SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(), true));
+    MDBuilder MDB(IRB.getContext());
+    MDNode *BranchWeights = MDB.createBranchWeights(1, 0);
+    // Set the branch weight to 1:0 to tell the compiler
+    // that the abort branch is unlikely to be taken.
+    IRB.SetInsertPoint(SplitBlockAndInsertIfThen(Cond, &*IRB.GetInsertPoint(),
+                                                 true, BranchWeights));
 
     IRB.CreateCall(AbortFn);
   } else {
