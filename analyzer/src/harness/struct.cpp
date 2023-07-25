@@ -122,9 +122,10 @@ static void findSafeStructMembersInCall(Function *F, CallBase *CI,
 
       Value *Size = CI->getArgOperand(0);
       LoadInst *LI = findLengthLoadPlace(F, Size);
-      if (LI)
+      if (LI) {
         Patterns.push_back(new ValuePattern(PtrSM));
-      else {
+        SafeStructMembers.insert(make_pair(PtrSM->getName(), PtrSM->getIndex()));
+      } else {
         // Store Pattern (not implemented yet)
       }
     }

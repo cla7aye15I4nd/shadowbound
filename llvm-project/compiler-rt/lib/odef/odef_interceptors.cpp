@@ -12,6 +12,7 @@
 using namespace __odef;
 
 DECLARE_REAL(void *, memset, void *dest, int c, uptr n)
+DECLARE_REAL(void *, memcpy, void *src, const void* dst, uptr n)
 
 static THREADLOCAL int in_interceptor_scope;
 
@@ -175,6 +176,32 @@ void check_range(uptr ptr, uptr size) {
   }
 }
 
+#define ODEF_CHECK_RANGE(ptr, size) check_range((uptr)(ptr), (uptr)(size))
+
+INTERCEPTOR(char *, strdup, const char *s) {
+  if (UNLIKELY(!odef_inited))
+    return internal_strdup(s);
+
+  uptr length = internal_strlen(s);
+  ODEF_CHECK_RANGE(s, length + 1);
+
+  void *new_mem = odef_malloc(length + 1);
+  REAL(memcpy)(new_mem, s, length + 1);
+  return reinterpret_cast<char *>(new_mem);
+}
+
+INTERCEPTOR(char *, __strdup, const char *s) {
+  if (UNLIKELY(!odef_inited))
+    return internal_strdup(s);
+
+  uptr length = internal_strlen(s);
+  ODEF_CHECK_RANGE(s, length + 1);
+
+  void *new_mem = odef_malloc(length + 1);
+  REAL(memcpy)(new_mem, s, length + 1);
+  return reinterpret_cast<char *>(new_mem);
+}
+
 #define ODEF_INTERCEPT_FUNC(name)                                              \
   do {                                                                         \
     if (!INTERCEPT_FUNCTION(name))                                             \
@@ -204,14 +231,14 @@ void check_range(uptr ptr, uptr size) {
   } while (0)
 #define COMMON_INTERCEPTOR_WRITE_RANGE(ctx, ptr, size)                         \
   do {                                                                         \
-    check_range((uptr)ptr, (uptr)size);                                        \
+    ODEF_CHECK_RANGE(ptr, size);                                               \
   } while (0)
 #define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size)                         \
   do {                                                                         \
   } while (0)
 #define COMMON_INTERCEPTOR_READ_RANGE(ctx, ptr, size)                          \
   do {                                                                         \
-    check_range((uptr)ptr, (uptr)size);                                        \
+    ODEF_CHECK_RANGE(ptr, size);                                               \
   } while (0)
 #define COMMON_INTERCEPTOR_INITIALIZE_RANGE(ptr, size)                         \
   do {                                                                         \
@@ -292,6 +319,9 @@ void InitializeInterceptors() {
   INTERCEPT_FUNCTION(malloc_stats);
   INTERCEPT_FUNCTION(mallinfo);
   INTERCEPT_FUNCTION(malloc_usable_size);
+
+  INTERCEPT_FUNCTION(strdup);
+  INTERCEPT_FUNCTION(__strdup);
 
   INTERCEPT_FUNCTION(pthread_create);
   INTERCEPT_FUNCTION(pthread_join);

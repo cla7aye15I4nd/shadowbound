@@ -56,7 +56,8 @@ parser.add_argument('--spec2017dir', type=str,
                     default=os.path.join(os.getenv('HOME'), 'cpu2017'))
 parser.add_argument('--spec2006dir', type=str,
                     default=os.path.join(os.getenv('HOME'), 'cpu2006'))
-
+parser.add_argument('--chakra_dir', type=str,
+                    default=os.path.join(os.getenv('HOME'), 'oob-bench', 'ChakraCore', 'ChakraCore'))
 
 args = parser.parse_args()
 
@@ -88,6 +89,18 @@ for bench in all_c + all_cpp:
   print('Copying bitcode files for ' + bench)
   for root, dirs, files in os.walk(buildpath):
     for file in files:
+      if file.endswith('.bc'):
+        bcfile = os.path.join(root, file)
+        assert bcfile not in fileset
+        fileset.add(bcfile)
+        os.system('cp ' + bcfile + ' ' + bitcodepath)
+
+fileset = set()
+bitcodepath = os.path.join(basedir, 'bitcodes', 'chakra')
+if not os.path.exists(bitcodepath):
+  os.makedirs(bitcodepath)
+for root, dirs, files in os.walk(args.chakra_dir):
+  for file in files:
       if file.endswith('.bc'):
         bcfile = os.path.join(root, file)
         assert bcfile not in fileset

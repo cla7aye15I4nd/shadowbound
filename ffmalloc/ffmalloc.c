@@ -1509,6 +1509,16 @@ static void init_tcache(struct threadcache_t *tcache, struct arena_t *arena) {
   assign_pages_to_tcache(tcache);
 }
 
+static void init_shadow_memory() {
+  uptr start = 0x200000000000ULL;
+  uptr end = 0x400000000000ULL;
+  uptr size = end - start;
+
+  int prot = PROT_READ | PROT_WRITE;
+  int flag = MAP_PRIVATE | MAP_FIXED | MAP_NORESERVE | MAP_ANON;
+  mmap((void *)start, size, prot, flag, -1, 0);
+}
+
 // Performs one-time setup of metadata structures
 static void initialize() {
   isInit = 2;
@@ -1529,7 +1539,7 @@ static void initialize() {
 #ifndef _WIN64
   // Find the top of the heap on Linux then add 1GB so that there is
   // no contention with small mallocs from libc when used side-by-side
-  poolHighWater = (byte *)sbrk(0) + 0x40000000;
+  poolHighWater = (byte *)0x602000000000;
 
   // Create a large contiguous range of virtual address space but don't
   // actually map the addresses to pages just yet
@@ -1572,6 +1582,8 @@ static void initialize() {
   ffprint_usage_on_interval(stderr, FF_INTERVAL);
 #endif
 #endif
+
+  init_shadow_memory();
 
   isInit = 1;
 }
@@ -1794,6 +1806,8 @@ static void *ffmalloc_small(size_t size, struct arena_t *arena) {
   bin->nextAlloc += bin->allocSize;
   bin->allocCount++;
 
+  SetShadow((const void *)thisAlloc, bin->allocSize);
+
   // Mark the page as full if so
   if (bin->allocCount == bin->maxAlloc) {
     bin->page->allocSize |= 4UL;
@@ -1864,6 +1878,7 @@ static inline void *ffmalloc_large_from_pool(size_t size, size_t alignment,
     pool->nextFreePage = pool->end;
   }
 
+  SetShadow((const void *)alignedNext, size);
   // Return the allocation
   return (void *)alignedNext;
 }
@@ -2061,6 +2076,8 @@ static void *ffmalloc_jumbo(size_t size, struct arena_t *arena) {
   } while (
       !FFAtomicCompareExchangePtr(&arena->jumboPoolList, newNode, currenthead));
 #endif
+
+  SetShadow((const void *)jumboPool->start, size);
 
   // Return the start of the pool as the new allocation
   return jumboPool->start;
@@ -2418,7 +2435,7 @@ static inline void free_jumbo(struct pagepool_t *pool) {
 
 // Replacement for malloc. Returns a pointer to an available
 // memory region >= size or NULL upon failure
-void *ffmalloc(size_t size) {
+static void *ffmalloc_internal(size_t size) {
   void *allocation;
 #if defined(FFSINGLE_THREADED) || !defined(_WIN64)
   if (isInit == 2) {
@@ -2474,16 +2491,21 @@ void *ffmalloc(size_t size) {
   return allocation;
 }
 
+void *ffmalloc(size_t size) {
+  size += kReservedBytes;
+  return ffmalloc_internal(size);
+}
+
 // Replacement for realloc. Returns a pointer to a memory region
 // that is >= size and also contains the contents pointed to by ptr
 // if ptr is not NULL. The return value may be equal to ptr and will
 // be NULL on error.
-void *ffrealloc(void *ptr, size_t size) {
+static void *ffrealloc_internal(void *ptr, size_t size) {
   // Per the man page for realloc, calling with ptr == NULL is
   // equal to malloc(size). When ptr isn't NULL, calling
   // realloc with size == 0 is the same as free(ptr)
   if (ptr == NULL) {
-    return ffmalloc(size);
+    return ffmalloc_internal(size);
   } else if (size == 0) {
     fffree(ptr);
     return NULL;
@@ -2556,7 +2578,7 @@ void *ffrealloc(void *ptr, size_t size) {
 
     // A bigger reallocation size requires copying the old data to
     // the new location and then freeing the old allocation
-    void *temp = ffmalloc(size);
+    void *temp = ffmalloc_internal(size);
     memcpy(temp, ptr, oldSize);
     free_large_pointer(pool, index, oldSize);
     return temp;
@@ -2575,7 +2597,7 @@ void *ffrealloc(void *ptr, size_t size) {
     }
 
     // Not big enough so we'll have to create a new allocation
-    void *newJumbo = ffmalloc(size);
+    void *newJumbo = ffmalloc_internal(size);
     if (newJumbo == NULL) {
       errno = ENOMEM;
       return NULL;
@@ -2611,11 +2633,16 @@ void *ffrealloc(void *ptr, size_t size) {
       return ptr;
     }
 
-    void *temp = ffmalloc(size);
+    void *temp = ffmalloc_internal(size);
     memcpy(temp, ptr, (pageMap->allocSize & ~SEVEN64));
     free_small_ptr(pool, pageMap, index);
     return temp;
   }
+}
+
+void *ffrealloc(void *ptr, size_t size) {
+  size += kReservedBytes;
+  return ffrealloc_internal(ptr, size);
 }
 
 // Replacement for reallocarray. Equivalent to realloc(ptr, nmemb * size)
@@ -2631,7 +2658,7 @@ void *ffreallocarray(void *ptr, size_t nmemb, size_t size) {
   FFAtomicIncrement(arenas[0]->profile.reallocarrayCount);
 #endif
 
-  return ffrealloc(ptr, nmemb * size);
+  return ffrealloc_internal(ptr, nmemb * size);
 }
 
 // Replacement for calloc. Returns a pointer to a memory region
@@ -2663,7 +2690,9 @@ void *ffcalloc(size_t nmemb, size_t size) {
   // we don't use mremap there is no chance of recycling a dirty
   // page and therefore no need to explicitly zero out the allocation
   // return ffmalloc(nmemb?nmemb * size:size);
-  return ffmalloc(nmemb * size);
+
+  nmemb += (kReservedBytes + size - 1) / size;
+  return ffmalloc_internal(nmemb * size);
 }
 
 // Replacment for free. Marks an allocation previously returned by
@@ -2787,6 +2816,8 @@ int ffposix_memalign(void **ptr, size_t alignment, size_t size) {
     return EINVAL;
   }
 
+  size += kReservedBytes;
+
   // Current jumbo allocation code is missing alignment support but all
   // jumbo allocations will be at least page aligned. For now it is an
   // error to request more than page alignment for a jumbo allocation
@@ -2824,8 +2855,10 @@ void *ffmemalign(size_t alignment, size_t size) {
   // allow all values but anything less than pointer size will just be
   // handled as a regular malloc
   if (alignment <= sizeof(void *)) {
-    return ffmalloc(size);
+    return ffmalloc_internal(size);
   }
+
+  size += kReservedBytes;
 
   // The jumbo allocation code doesn't support custom alignment right now
   // but any jumbo alignment will be page aligned. So, error out if the
@@ -2861,6 +2894,8 @@ void *ffaligned_alloc(size_t alignment, size_t size) {
     errno = EINVAL;
     return NULL;
   }
+
+  size += kReservedBytes;
 
   // Missing alignment support in jumbo code so forbid greater than page
   // alignment for jumbo allocations until that's fixed. All jumbo
@@ -2915,7 +2950,7 @@ size_t ffmalloc_usable_size(const void *ptr) {
     return find_large_ptr((const byte *)ptr, pool, &index);
   } else if (pool->nextFreeIndex == SIZE_MAX - 1) {
     // Jumbo allocation
-    return pool->end - pool->start;
+    return pool->end - pool->start - kReservedBytes;
   } else {
     // Small allocation
     struct pagemap_t *pageMap = NULL;
@@ -2929,7 +2964,7 @@ size_t ffmalloc_usable_size(const void *ptr) {
     }
 
     // Mask out the low order status bits before returning size
-    return (pageMap->allocSize & ~SEVEN64);
+    return (pageMap->allocSize & ~SEVEN64) - kReservedBytes;
   }
 }
 
@@ -3463,6 +3498,11 @@ void SetShadow(const void *ptr, uptr size) {
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 
+#ifdef PERF
+  memset(shadow_beg, -1, size);
+  return;
+#endif
+
 #ifndef USE_LARGE_CHUNK
   if (size > (u32)(-1)) {
     printf("ERROR: small chunk optimization is enabled, but the size "
@@ -3478,8 +3518,10 @@ void SetShadow(const void *ptr, uptr size) {
 #pragma unroll
 #endif
   while (shadow_beg < shadow_end) {
-    *(shadow_beg + 0) = b -= sizeof(u64);
-    *(shadow_beg + 1) = a += sizeof(u64);
+    *(shadow_beg + 0) = b;
+    *(shadow_beg + 1) = a;
+    b -= sizeof(u64);
+    a += sizeof(u64);
     shadow_beg += 2;
   }
 #else
