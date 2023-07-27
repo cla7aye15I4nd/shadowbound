@@ -702,8 +702,8 @@ static inline void *os_alloc_highwater(size_t size) {
         localHigh = FFAtomicExchangeAdvancePtr(poolHighWater, POOL_SIZE);
         result = NULL;
       } else {
-        perror("[os_alloc_highwater] mmap: ");
-        abort();
+        perror("[os_alloc_highwater] mmap");
+        exit(0);
       }
     }
   }
@@ -716,7 +716,7 @@ static inline int os_decommit(void *startAddress, size_t size) {
   // Surprisingly, benchmarking seems to suggest that unmapping is actually
   // faster than madvise. Revisit in the future
   if (MEM_IS_APP(startAddress))
-    munmap((void *)MEM_TO_SHADOW(startAddress), size);
+    munmap((void*) MEM_TO_SHADOW(startAddress), size);
   return munmap(startAddress, size);
   // return madvise(startAddress, size, MADV_FREE);
 }
@@ -728,7 +728,7 @@ static inline int os_free(void *startAddress) {
   struct pagepool_t *pool = find_pool_for_ptr((const byte *)startAddress);
   if (pool != NULL) {
     if (MEM_IS_APP(pool->start))
-      munmap((void *)MEM_TO_SHADOW(pool->start), pool->end - pool->start);
+      munmap((void*) MEM_TO_SHADOW(pool->start), pool->end - pool->start);
     return munmap(pool->start, pool->end - pool->start);
   } else {
     // Wasn't a pool - that shouldn't happen
