@@ -1,5 +1,4 @@
 #include "odef.h"
-#include "odef_thread.h"
 
 #include "interception/interception.h"
 #include "sanitizer_common/sanitizer_allocator.h"
@@ -92,17 +91,9 @@ void __odef_init() {
 
   InitializeInterceptors();
 
-  InitTlsSize();
-
   InitShadow(); 
 
-  OdefTSDInit(OdefTSDDtor);
-
   OdefAllocatorInit();
-
-  OdefThread *main_thread = OdefThread::Create(nullptr, nullptr);
-  SetCurrentThread(main_thread);
-  main_thread->Init();
 
   odef_init_is_running = false;
   odef_inited = true;

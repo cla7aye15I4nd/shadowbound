@@ -2,14 +2,12 @@ include_directories(..)
 
 set(ODEF_RTL_SOURCES
   odef.cpp
-  odef_linux.cpp
   )
 
 set(ODEF_RTL_CXX_SOURCES
   )
 
 set(ODEF_RTL_HEADERS
-  odef.h
   odef_interface_internal.h
   )
 

@@ -1,7 +1,6 @@
 #include "odef_allocator.h"
 #include "odef.h"
 #include "odef_interceptors.h"
-#include "odef_thread.h"
 #include "sanitizer_common/sanitizer_allocator.h"
 #include "sanitizer_common/sanitizer_allocator_checks.h"
 #include "sanitizer_common/sanitizer_errno.h"
@@ -39,7 +38,14 @@ static Allocator allocator;
 static AllocatorCache fallback_allocator_cache;
 static StaticSpinMutex fallback_mutex;
 
-void OdefAllocatorInit() { allocator.Init(kAllocatorReleaseToOsIntervalMs); }
+OdefThreadLocalMallocStorage *malloc_storage;
+
+void OdefAllocatorInit() { 
+  uptr PageSize = GetPageSizeCached();
+  uptr size = RoundUpTo(sizeof(OdefThreadLocalMallocStorage), PageSize);
+  malloc_storage = (OdefThreadLocalMallocStorage *) MmapOrDie(size, __func__);
+  allocator.Init(kAllocatorReleaseToOsIntervalMs); 
+}
 
 AllocatorCache *GetAllocatorCache(OdefThreadLocalMallocStorage *ms) {
   return reinterpret_cast<AllocatorCache *>(ms->allocator_cache);
@@ -57,32 +63,18 @@ static void *OdefAllocate(uptr size, uptr alignment) {
     Die();
   }
 
-  OdefThread *t = GetCurrentThread();
   void *allocated;
-  if (t) {
-    AllocatorCache *cache = GetAllocatorCache(&t->malloc_storage());
-    allocated = allocator.Allocate(cache, size, alignment);
-  } else {
-    SpinMutexLock l(&fallback_mutex);
-    AllocatorCache *cache = &fallback_allocator_cache;
-    allocated = allocator.Allocate(cache, size, alignment);
-  }
+  AllocatorCache *cache = GetAllocatorCache(malloc_storage);
+  allocated = allocator.Allocate(cache, size, alignment);
+  
   // FIXME: CHECK if out of memory.
   SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
   return allocated;
 }
 
 void OdefDeallocate(void *p) {
-
-  OdefThread *t = GetCurrentThread();
-  if (t) {
-    AllocatorCache *cache = GetAllocatorCache(&t->malloc_storage());
-    allocator.Deallocate(cache, p);
-  } else {
-    SpinMutexLock l(&fallback_mutex);
-    AllocatorCache *cache = &fallback_allocator_cache;
-    allocator.Deallocate(cache, p);
-  }
+  AllocatorCache *cache = GetAllocatorCache(malloc_storage);
+  allocator.Deallocate(cache, p);
 }
 
 static void *OdefReallocate(void *old_p, uptr new_size, uptr alignment) {
