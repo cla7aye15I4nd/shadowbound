@@ -1,6 +1,5 @@
 #include "interception/interception.h"
 #include "odef.h"
-#include "odef_thread.h"
 
 #include "sanitizer_common/sanitizer_allocator_dlsym.h"
 #include "sanitizer_common/sanitizer_common.h"
@@ -14,26 +13,12 @@ using namespace __odef;
 DECLARE_REAL(void *, memset, void *dest, int c, uptr n)
 DECLARE_REAL(void *, memcpy, void *src, const void* dst, uptr n)
 
-static THREADLOCAL int in_interceptor_scope;
-
-struct InterceptorScope {
-  InterceptorScope() { ++in_interceptor_scope; }
-  ~InterceptorScope() { --in_interceptor_scope; }
-};
-
-bool IsInInterceptorScope() { return in_interceptor_scope; }
-
 struct DlsymAlloc : public DlSymAllocator<DlsymAlloc> {
   static bool UseImpl() { return !odef_inited; }
 };
 
-struct OdefInterceptorContext {
-  bool in_interceptor_scope;
-};
-
 #define ENSURE_ODEF_INITED()                                                   \
   do {                                                                         \
-    CHECK(!odef_init_is_running);                                              \
     if (!odef_inited) {                                                        \
       __odef_init();                                                           \
     }                                                                          \
@@ -114,45 +99,6 @@ INTERCEPTOR(void, malloc_stats, void) {
 INTERCEPTOR(uptr, malloc_usable_size, void *ptr) {
   return odef_allocated_size(ptr);
 }
-
-extern "C" int pthread_attr_init(void *attr);
-extern "C" int pthread_attr_destroy(void *attr);
-
-static void *OdefThreadStartFunc(void *arg) {
-  OdefThread *t = (OdefThread *)arg;
-  SetCurrentThread(t);
-  t->Init();
-  SetSigProcMask(&t->starting_sigset_, nullptr);
-  return t->ThreadStart();
-}
-
-INTERCEPTOR(int, pthread_create, void *th, void *attr,
-            void *(*callback)(void *), void *param) {
-  ENSURE_ODEF_INITED(); // for GetTlsSize()
-  __sanitizer_pthread_attr_t myattr;
-  if (!attr) {
-    pthread_attr_init(&myattr);
-    attr = &myattr;
-  }
-
-  AdjustStackSize(attr);
-
-  OdefThread *t = OdefThread::Create(callback, param);
-  ScopedBlockSignals block(&t->starting_sigset_);
-  int res = REAL(pthread_create)(th, attr, OdefThreadStartFunc, t);
-
-  if (attr == &myattr)
-    pthread_attr_destroy(&myattr);
-  return res;
-}
-
-INTERCEPTOR(int, pthread_join, void *th, void **retval) {
-  ENSURE_ODEF_INITED();
-  int res = REAL(pthread_join)(th, retval);
-  return res;
-}
-
-DEFINE_REAL_PTHREAD_FUNCTIONS
 
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_keep_going;
@@ -246,11 +192,7 @@ INTERCEPTOR(char *, __strdup, const char *s) {
 #define COMMON_INTERCEPTOR_ENTER(ctx, func, ...)                               \
   if (odef_init_is_running)                                                    \
     return REAL(func)(__VA_ARGS__);                                            \
-  ENSURE_ODEF_INITED();                                                        \
-  OdefInterceptorContext odef_ctx = {IsInInterceptorScope()};                  \
-  ctx = (void *)&odef_ctx;                                                     \
-  (void)ctx;                                                                   \
-  InterceptorScope interceptor_scope;
+  ENSURE_ODEF_INITED();
 #define COMMON_INTERCEPTOR_DIR_ACQUIRE(ctx, path)                              \
   do {                                                                         \
   } while (0)
@@ -281,24 +223,10 @@ struct OdefAtExitRecord {
   void *arg;
 };
 
-struct InterceptorContext {
-  Mutex atexit_mu;
-  Vector<struct OdefAtExitRecord *> AtExitStack;
-
-  InterceptorContext() : AtExitStack() {}
-};
-
-static ALIGNED(64) char interceptor_placeholder[sizeof(InterceptorContext)];
-InterceptorContext *interceptor_ctx() {
-  return reinterpret_cast<InterceptorContext *>(&interceptor_placeholder[0]);
-}
 namespace __odef {
 
 void InitializeInterceptors() {
   static int inited = 0;
-  CHECK_EQ(inited, 0);
-
-  new (interceptor_ctx()) InterceptorContext();
 
   InitializeCommonInterceptors();
   InitializeSignalInterceptors();
@@ -322,10 +250,6 @@ void InitializeInterceptors() {
 
   INTERCEPT_FUNCTION(strdup);
   INTERCEPT_FUNCTION(__strdup);
-
-  INTERCEPT_FUNCTION(pthread_create);
-  INTERCEPT_FUNCTION(pthread_join);
-  // INTERCEPT_FUNCTION(__cxa_atexit);
 
   inited = 1;
 }

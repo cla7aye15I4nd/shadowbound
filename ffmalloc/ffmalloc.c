@@ -702,8 +702,8 @@ static inline void *os_alloc_highwater(size_t size) {
         localHigh = FFAtomicExchangeAdvancePtr(poolHighWater, POOL_SIZE);
         result = NULL;
       } else {
-        fprintf(stderr, "[ffmalloc] Warning: os_alloc_highwater failed\n");
-        return MAP_FAILED;
+        perror("[os_alloc_highwater] mmap");
+        exit(0);
       }
     }
   }
@@ -715,6 +715,8 @@ static inline void *os_alloc_highwater(size_t size) {
 static inline int os_decommit(void *startAddress, size_t size) {
   // Surprisingly, benchmarking seems to suggest that unmapping is actually
   // faster than madvise. Revisit in the future
+  if (MEM_IS_APP(startAddress))
+    munmap((void*) MEM_TO_SHADOW(startAddress), size);
   return munmap(startAddress, size);
   // return madvise(startAddress, size, MADV_FREE);
 }
@@ -725,6 +727,8 @@ static inline int os_free(void *startAddress) {
   // the pool getting the axe and figure out the size
   struct pagepool_t *pool = find_pool_for_ptr((const byte *)startAddress);
   if (pool != NULL) {
+    if (MEM_IS_APP(pool->start))
+      munmap((void*) MEM_TO_SHADOW(pool->start), pool->end - pool->start);
     return munmap(pool->start, pool->end - pool->start);
   } else {
     // Wasn't a pool - that shouldn't happen
@@ -1511,12 +1515,13 @@ static void init_tcache(struct threadcache_t *tcache, struct arena_t *arena) {
 
 static void init_shadow_memory() {
   uptr start = 0x200000000000ULL;
-  uptr end = 0x400000000000ULL;
+  uptr end = 0x300000000000ULL;
   uptr size = end - start;
 
   int prot = PROT_READ | PROT_WRITE;
   int flag = MAP_PRIVATE | MAP_FIXED | MAP_NORESERVE | MAP_ANON;
   mmap((void *)start, size, prot, flag, -1, 0);
+  madvise((void *)start, size, MADV_NOHUGEPAGE);
 }
 
 // Performs one-time setup of metadata structures
@@ -1539,7 +1544,7 @@ static void initialize() {
 #ifndef _WIN64
   // Find the top of the heap on Linux then add 1GB so that there is
   // no contention with small mallocs from libc when used side-by-side
-  poolHighWater = (byte *)0x602000000000;
+  poolHighWater = (byte *)0x600000000000;
 
   // Create a large contiguous range of virtual address space but don't
   // actually map the addresses to pages just yet

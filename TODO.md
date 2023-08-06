@@ -16,7 +16,7 @@
 
 ## Bugs
 
-- [ ] Investigate the cause of the 70% time consumption in ReleaseMemoryToOS of `502.gcc_r`.
-- [ ] Investigate why parameter `kSpaceSize` in `AP64` not work.
-- [ ] There are some unknown false positive in `gcc_r` and `parest_r`.
+- [x] Investigate the cause of the 70% time consumption in ReleaseMemoryToOS of `502.gcc_r`.
+- [x] Investigate why parameter `kSpaceSize` in `AP64` not work.
+- [x] There are some unknown false positive in `gcc_r` and `parest_r`.
 - [ ] The `-fsanitize-recover=overflow-defense` not work, use `-mllvm -odef-keep-going=1` instead temporarily.
