@@ -16,6 +16,7 @@
 
 #include "private/gc_priv.h"
 #include "gc_inline.h" /* for GC_malloc_kind */
+#include "shadow.h"
 
 /*
  * These are extra allocation routines which are likely to be less
@@ -167,6 +168,7 @@ GC_API void * GC_CALL GC_realloc(void * p, size_t lb)
       /* In case of shrink, it could also return original object.       */
       /* But this gives the client warning of imminent disaster.        */
       BCOPY(p, result, sz);
+      GC_set_shadow(result, lb);
 #     ifndef IGNORE_FREE
         GC_free(p);
 #     endif
@@ -187,6 +189,13 @@ GC_API void * GC_CALL GC_realloc(void * p, size_t lb)
 # if !defined(REDIRECT_MALLOC_IN_HEADER)
  GC_API   void * realloc(void * p, size_t lb)
     {
+      if (lb == 0) {
+#ifndef IGNORE_FREE
+        GC_free(p);
+#endif
+        return NULL;
+      }
+      lb += kReservedBytes;
       return(REDIRECT_REALLOC(p, lb));
     }
 # endif

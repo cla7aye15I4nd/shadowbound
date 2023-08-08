@@ -15,6 +15,7 @@
 
 #include "private/gc_priv.h"
 #include "gc_inline.h" /* for GC_malloc_kind */
+#include "shadow.h"
 
 #include "private/freeing_list.h"
 #include <stdio.h>
@@ -351,8 +352,10 @@ GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc_atomic(size_t lb)
 
 /* Allocate lb bytes of composite (pointerful) data.    */
 GC_API GC_ATTR_MALLOC void * GC_CALL GC_malloc(size_t lb)
-{
-    return GC_malloc_kind(lb, NORMAL);
+{   
+    void *p = GC_malloc_kind(lb, NORMAL);
+    GC_set_shadow(p, lb);
+    return p;
 }
 
 GC_API GC_ATTR_MALLOC void * GC_CALL GC_generic_malloc_uncollectable(
@@ -465,7 +468,7 @@ GC_API size_t malloc_usable_size(void* p) {
     if(!hhdr) hhdr = GC_find_header((ptr_t)GC_base(p));
     if(!hhdr) return 0;
     
-    return hhdr->hb_sz;
+    return hhdr->hb_sz - kReservedBytes;
 
 }
 
@@ -477,12 +480,12 @@ GC_API size_t musable(void* p) {
 
     if (p == 0) return 0;
 
-    h = HBLKPTR(p);
+    h = HBLKPTR(p); 
     hhdr = HDR(h);
     if(!hhdr) hhdr = GC_find_header((ptr_t)GC_base(p));
     if(!hhdr) return 0;
     
-    return hhdr->hb_sz;
+    return hhdr->hb_sz - kReservedBytes;
 
 }
 
@@ -498,6 +501,7 @@ GC_API size_t musable(void* p) {
       /* inopportune times.                                             */
       if (!EXPECT(GC_is_initialized, TRUE)) return sbrk(lb);
 #   endif
+    lb += kReservedBytes;
     return (void *)REDIRECT_MALLOC_F(lb);
   }
 
@@ -531,6 +535,7 @@ GC_API size_t musable(void* p) {
 
   GC_API void * calloc(size_t n, size_t lb)
   {
+    n += (kReservedBytes + lb - 1) / lb;
     if ((lb | n) > GC_SQRT_SIZE_MAX /* fast initial test */
         && lb && n > GC_SIZE_MAX / lb)
       return (*GC_get_oom_fn())(GC_SIZE_MAX); /* n*lb overflow */
@@ -562,6 +567,7 @@ GC_API size_t musable(void* p) {
     char *strdup(const char *s)
     {
       size_t lb = strlen(s) + 1;
+      lb += kReservedBytes;
       char *result = (char *)REDIRECT_MALLOC_F(lb);
       if (result == 0) {
         errno = ENOMEM;
@@ -583,6 +589,7 @@ GC_API size_t musable(void* p) {
       size_t len = strlen(str);
       if (len > size)
         len = size;
+      len += kReservedBytes;
       copy = (char *)REDIRECT_MALLOC_F(len + 1);
       if (copy == NULL) {
         errno = ENOMEM;

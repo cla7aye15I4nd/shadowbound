@@ -2218,25 +2218,22 @@ void GC_register_data_segments(void)
 STATIC ptr_t GC_unix_sbrk_get_mem(size_t bytes)
 {
   ptr_t result;
+  static ptr_t cur_brk = (ptr_t) 0x600000000000ULL;
 # ifdef IRIX5
     /* Bare sbrk isn't thread safe.  Play by malloc rules.      */
     /* The equivalent may be needed on other systems as well.   */
     __LOCK_MALLOC();
 # endif
   {
-    ptr_t cur_brk = (ptr_t)sbrk(0);
     SBRK_ARG_T lsbs = (word)cur_brk & (GC_page_size-1);
 
     if ((SBRK_ARG_T)bytes < 0) {
         result = 0; /* too big */
         goto out;
     }
-    if (lsbs != 0) {
-        if((ptr_t)sbrk((SBRK_ARG_T)GC_page_size - lsbs) == (ptr_t)(-1)) {
-            result = 0;
-            goto out;
-        }
-    }
+
+    cur_brk += GC_page_size - lsbs;
+
 #   ifdef ADD_HEAP_GUARD_PAGES
       /* This is useful for catching severe memory overwrite problems that */
       /* span heap sections.  It shouldn't otherwise be turned on.         */
@@ -2246,8 +2243,11 @@ STATIC ptr_t GC_unix_sbrk_get_mem(size_t bytes)
             ABORT("ADD_HEAP_GUARD_PAGES: mprotect failed");
       }
 #   endif /* ADD_HEAP_GUARD_PAGES */
-    result = (ptr_t)sbrk((SBRK_ARG_T)bytes);
+    result = mmap(cur_brk, bytes, 
+      PROT_READ | PROT_WRITE,
+      MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED_NOREPLACE, -1, 0);
     if (result == (ptr_t)(-1)) result = 0;
+    else cur_brk += bytes;
   }
  out:
 # ifdef IRIX5

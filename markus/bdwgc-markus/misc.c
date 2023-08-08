@@ -13,6 +13,7 @@
  * modified is included with the above copyright notice.
  */
 
+#include "shadow.h"
 #include "private/gc_pmark.h"
 
 #include <stdio.h>
@@ -1307,6 +1308,7 @@ GC_API void GC_CALL GC_init(void)
     } else {
         GC_requested_heapsize += initial_heap_sz;
     }
+    GC_shadow_init();
     if (GC_all_interior_pointers)
       GC_initialize_offsets();
     GC_register_displacement_inner(0L);
