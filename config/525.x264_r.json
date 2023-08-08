@@ -759,6 +759,15 @@
   {
     "pattern": {
       "index": 2,
+      "module": "set.c",
+      "name": "x264_cqm_parse_jmlist",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 2,
       "name": "GetBits",
       "type": "funarg"
     },
@@ -989,6 +998,15 @@
       "index": 4,
       "module": "macroblock.c",
       "name": "readCoeff4x4_CAVLC",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 4,
+      "module": "set.c",
+      "name": "x264_cqm_parse_jmlist",
       "type": "funarg"
     },
     "type": "value"
