@@ -37,3 +37,6 @@ tools/result.txt
 
 # Bitcode
 *.bc
+
+# binutils
+binutils
