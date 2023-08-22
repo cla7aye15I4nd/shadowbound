@@ -3906,23 +3906,7 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEE5solveIN12METomography11BlockSolver15TransposeMatrixINS_12SparseMatrixIdEEEENS_16PreconditionSSORIS9_EEEEvRKT_RS2_RKS2_RKT0_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEE5solveIN9libparest6Master6Master21SchurComplementMatrixENS_20PreconditionIdentityEEEvRKT_RS2_RKS2_RKT0_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEE5solveINS_12SparseMatrixIdEENS_16PreconditionSSORIS6_EEEEvRKT_RS2_RKS2_RKT0_",
       "type": "funarg"
     },
     "type": "value"
@@ -3939,14 +3923,6 @@
     "pattern": {
       "index": 0,
       "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEEC2ERNS_13SolverControlERKNS3_14AdditionalDataE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEEC2ERNS_13SolverControlERNS_12VectorMemoryIS2_EERKNS3_14AdditionalDataE",
       "type": "funarg"
     },
     "type": "value"
@@ -5122,22 +5098,6 @@
   {
     "pattern": {
       "index": 0,
-      "name": "_ZN6dealii16PreconditionSSORINS_12SparseMatrixIdEEE10initializeERKS2_NS_22PreconditionRelaxationIS2_E14AdditionalDataE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
-      "name": "_ZN6dealii16PreconditionSSORINS_12SparseMatrixIdEEED2Ev",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 0,
       "name": "_ZN6dealii16PreconditionSSORINS_12SparseMatrixIdEEED2Ev",
       "type": "funarg"
     },
@@ -5466,7 +5426,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN6dealii19GrowingVectorMemoryINS_11BlockVectorIdEEE4Pool10initializeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN6dealii19GrowingVectorMemoryINS_11BlockVectorIeEEE4Pool10initializeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6dealii19GrowingVectorMemoryINS_11BlockVectorIfEEE4Pool10initializeEj",
       "type": "funarg"
     },
     "type": "value"
@@ -5530,7 +5506,23 @@
   {
     "pattern": {
       "index": 0,
+      "name": "_ZN6dealii19GrowingVectorMemoryINS_6VectorIdEEE4Pool10initializeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
       "name": "_ZN6dealii19GrowingVectorMemoryINS_6VectorIeEEE4Pool10initializeEj",
+      "type": "funarg"
+    },
+    "type": "value"
+  },
+  {
+    "pattern": {
+      "index": 0,
+      "name": "_ZN6dealii19GrowingVectorMemoryINS_6VectorIfEEE4Pool10initializeEj",
       "type": "funarg"
     },
     "type": "value"
@@ -14529,14 +14521,6 @@
   {
     "pattern": {
       "index": 1,
-      "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEE5solveIN12METomography11BlockSolver15TransposeMatrixINS_12SparseMatrixIdEEEENS_16PreconditionSSORIS9_EEEEvRKT_RS2_RKS2_RKT0_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 1,
       "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEEC2ERNS_13SolverControlERKNS3_14AdditionalDataE",
       "type": "funarg"
     },
@@ -22271,22 +22255,6 @@
     "pattern": {
       "index": 4,
       "name": "_ZN6dealii10QProjectorILi3EE18project_to_subfaceERKNS_10QuadratureILi2EEEjjRKNS_14RefinementCaseILi2EEE",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEE5solveIN12METomography11BlockSolver15TransposeMatrixINS_12SparseMatrixIdEEEENS_16PreconditionSSORIS9_EEEEvRKT_RS2_RKS2_RKT0_",
-      "type": "funarg"
-    },
-    "type": "value"
-  },
-  {
-    "pattern": {
-      "index": 4,
-      "name": "_ZN6dealii11SolverGMRESINS_6VectorIdEEE5solveINS_12SparseMatrixIdEENS_16PreconditionSSORIS6_EEEEvRKT_RS2_RKS2_RKT0_",
       "type": "funarg"
     },
     "type": "value"
