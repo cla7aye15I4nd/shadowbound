@@ -815,6 +815,9 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
 }
 
 void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
+  if (!ClCheckInField)
+    return;
+
   for (auto *Gep : SubFieldToInstrument) {
     Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
 
