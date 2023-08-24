@@ -122,6 +122,10 @@ static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
                                              cl::desc("pattern opt file"),
                                              cl::Hidden, cl::init(""));
 
+static cl::opt<std::string> ClRuntimeName("odef-runtime-name",
+                                          cl::desc("runtime name"), cl::Hidden,
+                                          cl::init("default"));
+
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
@@ -291,6 +295,12 @@ private:
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
+
+  void getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
+                          BuilderTy &IRB);
+  void getPointerBegin(Value *Ptr, Value *&Begin, BuilderTy &IRB);
+  void getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB);
+  Value *getPointerIsApp(Value *Ptr, BuilderTy &IRB);
 
   Value *getSource(Value *I);
   Value *getSourceImpl(Value *V);
@@ -1575,28 +1585,19 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
 
   {
     // FIXME: This block can be removed?
-    Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
-        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
+    Value *IsApp = getPointerIsApp(Ptr, IRB);
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
-  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-
-  Value *BackSizeRaw = IRB.CreateZExt(
-      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
-      int64Type);
-  Value *BackSize =
-      ClOnlySmallAllocOpt ? BackSizeRaw : IRB.CreateShl(BackSizeRaw, 3);
+  Value *End = nullptr;
+  getPointerEnd(Ptr, End, IRB);
 
   uint64_t NeededSize =
       DL->getTypeStoreSize(BC->getType()->getPointerElementType());
   ASSERT(NeededSize > kReservedBytes);
   Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
-  Value *Cmp = IRB.CreateICmpUGT(
-      CmpPtr, IRB.CreateSub(IRB.CreateAdd(Base, BackSize), NeededSizeVal));
+  Value *Cmp = IRB.CreateICmpUGT(CmpPtr, IRB.CreateSub(End, NeededSizeVal));
   CreateTrapBB(IRB, Cmp, true);
 }
 
@@ -1623,26 +1624,16 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
 
   {
     // FIXME: This block can be removed?
-    Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
-        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
+    Value *IsApp = getPointerIsApp(Ptr, IRB);
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
-  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-
+  Value *Begin = nullptr;
+  Value *End = nullptr;
   Value *Cmp = nullptr;
+
   if (getOffsetDir(GEP) == kOffsetBoth) {
-    Value *Packed =
-        IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *BackRaw =
-        IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-    Value *FrontRaw = IRB.CreateLShr(Packed, 32);
-    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
-    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
-    Value *Begin = IRB.CreateSub(Base, Front);
-    Value *End = IRB.CreateAdd(Base, Back);
+    getPointerBeginEnd(Ptr, Begin, End, IRB);
     Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
 
     uint64_t NeededSize =
@@ -1654,31 +1645,86 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
             : IRB.CreateICmpUGT(CmpPtr, End);
     Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   } else if (getOffsetDir(GEP) == kOffsetPositive) {
-    Value *BackRaw = IRB.CreateZExt(
-        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
-        int64Type);
-    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+    getPointerEnd(Ptr, End, IRB);
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
     Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-    Value *End = IRB.CreateAdd(Base, Back);
 
     Cmp = ClTailCheck
               ? IRB.CreateICmpUGT(IRB.CreateAdd(CmpPtr, NeededSizeVal), End)
               : IRB.CreateICmpUGT(CmpPtr, End);
   } else if (getOffsetDir(GEP) == kOffsetNegative) {
+    getPointerBegin(Ptr, Begin, IRB);
+
+    Cmp = IRB.CreateICmpULT(CmpPtr, Begin);
+  }
+
+  ASSERT(Cmp != nullptr);
+  CreateTrapBB(IRB, Cmp, true);
+}
+
+void OverflowDefense::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
+                                         BuilderTy &IRB) {
+  if (ClRuntimeName == "default") {
+    Value *Shadow =
+        IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+    Value *Packed =
+        IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+    Value *BackRaw =
+        IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+    Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+
+    Begin = IRB.CreateSub(Base, Front);
+    End = IRB.CreateAdd(Base, Back);
+  } else {
+    __builtin_unreachable();
+  }
+}
+
+void OverflowDefense::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
+  if (ClRuntimeName == "default") {
+    Value *Shadow =
+        IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+    Value *BackRaw = IRB.CreateZExt(
+        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+        int64Type);
+    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+    End = IRB.CreateAdd(Base, Back);
+  } else {
+    __builtin_unreachable();
+  }
+}
+
+void OverflowDefense::getPointerBegin(Value *Ptr, Value *&Begin,
+                                      BuilderTy &IRB) {
+  if (ClRuntimeName == "default") {
+    Value *Shadow =
+        IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
     Value *ShadowP = IRB.CreateAdd(Shadow, ConstantInt::get(int64Type, 4));
     Value *FrontRaw = IRB.CreateZExt(
         IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(ShadowP, int32PtrType)),
         int64Type);
     Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
-
-    Cmp = IRB.CreateICmpULT(CmpPtr, IRB.CreateSub(Base, Front));
+    Begin = IRB.CreateSub(Base, Front);
+  } else {
+    __builtin_unreachable();
   }
+}
 
-  ASSERT(Cmp != nullptr);
-  CreateTrapBB(IRB, Cmp, true);
+Value *OverflowDefense::getPointerIsApp(Value *Ptr, BuilderTy &IRB) {
+  if (ClRuntimeName == "default") {
+    return IRB.CreateAnd(
+        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
+  } else {
+    __builtin_unreachable();
+  }
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
@@ -1809,25 +1855,15 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   {
     // FIXME: This block can be removed?
-    Value *IsApp = IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
-        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
+    Value *IsApp = getPointerIsApp(Ptr, IRB);
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
   BasicBlock *Then = IRB.GetInsertBlock();
 
-  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-  Value *Packed =
-      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-  Value *BackRaw =
-      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
-  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
-  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
-  Value *ThenBegin = IRB.CreateSub(Base, Front);
-  Value *ThenEnd = IRB.CreateAdd(Base, Back);
+  Value *ThenBegin = nullptr;
+  Value *ThenEnd = nullptr;
+  getPointerBeginEnd(Ptr, ThenBegin, ThenEnd, IRB);
 
   IRB.SetInsertPoint(InsertPt);
   PHINode *Begin = IRB.CreatePHI(int64Type, 2);
@@ -1880,8 +1916,8 @@ void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
   }
 }
 
-Value *OverflowDefense::readRegister(Function &F, BuilderTy &IRB,
-                                     StringRef Reg) {
+[[maybe_unused]] Value *
+OverflowDefense::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
   Module *M = F.getParent();
   Function *readReg = Intrinsic::getDeclaration(M, Intrinsic::read_register,
                                                 IRB.getIntPtrTy(*DL));

@@ -29,6 +29,7 @@ built-in "new" and "delete".
 
 #define GC_DONT_INCL_WINDOWS_H
 #include "gc.h"
+#include "shadow.h"
 
 #include <cstdio>
 #include <new> // for bad_alloc, precedes include of gc_cpp.h
@@ -60,6 +61,7 @@ GC_API void GC_CALL GC_throw_bad_alloc() {
 # endif
 
   void* operator new(size_t size) GC_DECL_NEW_THROW {
+    size += kReservedBytes;
     void* obj = GC_MALLOC(size);
     if (0 == obj)
       GC_ALLOCATOR_THROW_OR_ABORT();
@@ -72,6 +74,7 @@ GC_API void GC_CALL GC_throw_bad_alloc() {
 
 # if defined(GC_OPERATOR_NEW_ARRAY) && !defined(CPPCHECK)
     void* operator new[](size_t size) GC_DECL_NEW_THROW {
+      size += kReservedBytes;
       void* obj = GC_MALLOC(size);
       if (0 == obj)
         GC_ALLOCATOR_THROW_OR_ABORT();
