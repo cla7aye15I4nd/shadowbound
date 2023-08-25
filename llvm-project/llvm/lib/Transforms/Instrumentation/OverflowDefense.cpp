@@ -1882,20 +1882,36 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
+  OffsetDir DirOr = kOffsetUnknown;
+  for (auto *I : CC.Insts) 
+    DirOr |= getOffsetDir(I);
+
   BasicBlock *Then = IRB.GetInsertBlock();
 
   Value *ThenBegin = nullptr;
   Value *ThenEnd = nullptr;
-  getPointerBeginEnd(Ptr, ThenBegin, ThenEnd, IRB);
+  PHINode *Begin = nullptr;
+  PHINode *End = nullptr;
+
+  if (DirOr == kOffsetBoth)
+    getPointerBeginEnd(Ptr, ThenBegin, ThenEnd, IRB);
+  else if (DirOr == kOffsetPositive)
+    getPointerEnd(Ptr, ThenEnd, IRB);
+  else if (DirOr == kOffsetNegative)
+    getPointerBegin(Ptr, ThenBegin, IRB);
 
   IRB.SetInsertPoint(InsertPt);
-  PHINode *Begin = IRB.CreatePHI(int64Type, 2);
-  Begin->addIncoming(ThenBegin, Then);
-  Begin->addIncoming(ConstantInt::get(int64Type, 0), Head);
+  if (ThenBegin != nullptr) {
+    Begin = IRB.CreatePHI(int64Type, 2);
+    Begin->addIncoming(ThenBegin, Then);
+    Begin->addIncoming(ConstantInt::get(int64Type, 0), Head);
+  }
 
-  PHINode *End = IRB.CreatePHI(int64Type, 2);
-  End->addIncoming(ThenEnd, Then);
-  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
+  if (ThenEnd != nullptr) {
+    End = IRB.CreatePHI(int64Type, 2);
+    End->addIncoming(ThenEnd, Then);
+    End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
+  }
 
   // TODO: Move tail check to here
   // Check if Ptr is in [Begin, End).
