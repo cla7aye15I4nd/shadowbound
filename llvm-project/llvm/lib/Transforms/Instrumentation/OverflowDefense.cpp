@@ -1253,6 +1253,9 @@ StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
 }
 
 void OverflowDefense::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
+  if (!ClDirectionOpt)
+    OffsetDirCache[Addr] = kOffsetBoth;
+
   if (OffsetDirCache.count(Addr))
     return;
 
@@ -1390,10 +1393,8 @@ void OverflowDefense::collectChunkCheckImpl(
       weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
   }
 
-  if (ClDirectionOpt) {
-    for (auto *I : Insts)
-      setOffsetDir(I, SE);
-  }
+  for (auto *I : Insts)
+    setOffsetDir(I, SE);
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
