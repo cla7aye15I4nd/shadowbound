@@ -97,30 +97,41 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::Hidden, cl::init(false));
 
 // ==== Optimization Option ==== //
-static cl::opt<bool>
-    ClStructPointerOpt("odef-struct-pointer-opt",
-                       cl::desc("optimize struct pointer checks"), cl::Hidden,
-                       cl::init(true));
-
 static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
                                          cl::Hidden, cl::init(true));
-
-static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
-                                     cl::desc("optimize dependence checks"),
-                                     cl::Hidden, cl::init(true));
 
 static cl::opt<bool> ClLoopOpt("odef-loop-opt",
                                cl::desc("optimize loop checks"), cl::Hidden,
                                cl::init(false));
 
-static cl::opt<bool> ClTailCheck("odef-tail-check",
-                                 cl::desc("check tail of array"), cl::Hidden,
-                                 cl::init(false));
+static cl::opt<bool> ClReserveOpt("odef-reserve-opt",
+                                  cl::desc("optimize reserved pointer checks"),
+                                  cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClDirectionOpt("odef-direction-opt",
+                                    cl::desc("optimize direction checks"),
+                                    cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClPatternOpt("odef-pattern-opt",
+                                  cl::desc("optimize pattern checks"),
+                                  cl::Hidden, cl::init(true));
 
 static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
                                              cl::desc("pattern opt file"),
                                              cl::Hidden, cl::init(""));
+
+static cl::opt<bool> ClMergeOpt("odef-merge-opt",
+                                cl::desc("optimize merge checks"), cl::Hidden,
+                                cl::init(true));
+
+static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
+                                     cl::desc("optimize dependence checks"),
+                                     cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClTailCheck("odef-tail-check",
+                                 cl::desc("check tail of array"), cl::Hidden,
+                                 cl::init(false));
 
 static cl::opt<std::string> ClRuntimeName("odef-runtime-name",
                                           cl::desc("runtime name"), cl::Hidden,
@@ -738,6 +749,9 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
 }
 
 bool OverflowDefense::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
+  if (!ClReserveOpt)
+    return false;
+
   auto *Gep = dyn_cast<GetElementPtrInst>(I);
 
   // It is not a GEP
@@ -932,7 +946,7 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
 }
 
 void OverflowDefense::patternOptimize(Function &F) {
-  if (ClPatternOptFile == "")
+  if (ClPatternOptFile == "" || !ClPatternOpt)
     return;
 
   auto Patterns = parsePatternFile(ClPatternOptFile);
@@ -961,7 +975,7 @@ void OverflowDefense::patternOptimize(Function &F) {
 }
 
 void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
-  if (!ClStructPointerOpt)
+  if (!ClReserveOpt)
     return;
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
@@ -1370,11 +1384,16 @@ void OverflowDefense::collectChunkCheckImpl(
   }
 
   int weight = 0;
-  for (auto *I : Insts)
-    weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
 
-  for (auto *I : Insts)
-    setOffsetDir(I, SE);
+  if (ClMergeOpt) {
+    for (auto *I : Insts)
+      weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+  }
+
+  if (ClDirectionOpt) {
+    for (auto *I : Insts)
+      setOffsetDir(I, SE);
+  }
 
   StructType *STy = sourceAnalysis(F, Src);
   if (weight <= 2) {
