@@ -97,30 +97,41 @@ static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::Hidden, cl::init(false));
 
 // ==== Optimization Option ==== //
-static cl::opt<bool>
-    ClStructPointerOpt("odef-struct-pointer-opt",
-                       cl::desc("optimize struct pointer checks"), cl::Hidden,
-                       cl::init(true));
-
 static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
                                          cl::Hidden, cl::init(true));
-
-static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
-                                     cl::desc("optimize dependence checks"),
-                                     cl::Hidden, cl::init(true));
 
 static cl::opt<bool> ClLoopOpt("odef-loop-opt",
                                cl::desc("optimize loop checks"), cl::Hidden,
                                cl::init(false));
 
-static cl::opt<bool> ClTailCheck("odef-tail-check",
-                                 cl::desc("check tail of array"), cl::Hidden,
-                                 cl::init(false));
+static cl::opt<bool> ClReserveOpt("odef-reserve-opt",
+                                  cl::desc("optimize reserved pointer checks"),
+                                  cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClDirectionOpt("odef-direction-opt",
+                                    cl::desc("optimize direction checks"),
+                                    cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClPatternOpt("odef-pattern-opt",
+                                  cl::desc("optimize pattern checks"),
+                                  cl::Hidden, cl::init(true));
 
 static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
                                              cl::desc("pattern opt file"),
                                              cl::Hidden, cl::init(""));
+
+static cl::opt<bool> ClMergeOpt("odef-merge-opt",
+                                cl::desc("optimize merge checks"), cl::Hidden,
+                                cl::init(true));
+
+static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
+                                     cl::desc("optimize dependence checks"),
+                                     cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClTailCheck("odef-tail-check",
+                                 cl::desc("check tail of array"), cl::Hidden,
+                                 cl::init(false));
 
 static cl::opt<std::string> ClRuntimeName("odef-runtime-name",
                                           cl::desc("runtime name"), cl::Hidden,
@@ -738,6 +749,9 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
 }
 
 bool OverflowDefense::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
+  if (!ClReserveOpt)
+    return false;
+
   auto *Gep = dyn_cast<GetElementPtrInst>(I);
 
   // It is not a GEP
@@ -932,7 +946,7 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
 }
 
 void OverflowDefense::patternOptimize(Function &F) {
-  if (ClPatternOptFile == "")
+  if (ClPatternOptFile == "" || !ClPatternOpt)
     return;
 
   auto Patterns = parsePatternFile(ClPatternOptFile);
@@ -961,7 +975,7 @@ void OverflowDefense::patternOptimize(Function &F) {
 }
 
 void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
-  if (!ClStructPointerOpt)
+  if (!ClReserveOpt)
     return;
 
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument;
@@ -1239,6 +1253,9 @@ StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
 }
 
 void OverflowDefense::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
+  if (!ClDirectionOpt)
+    OffsetDirCache[Addr] = kOffsetBoth;
+
   if (OffsetDirCache.count(Addr))
     return;
 
@@ -1370,8 +1387,11 @@ void OverflowDefense::collectChunkCheckImpl(
   }
 
   int weight = 0;
-  for (auto *I : Insts)
-    weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+
+  if (ClMergeOpt) {
+    for (auto *I : Insts)
+      weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+  }
 
   for (auto *I : Insts)
     setOffsetDir(I, SE);
@@ -1862,20 +1882,36 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
     IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, InsertPt, false));
   }
 
+  OffsetDir DirOr = kOffsetUnknown;
+  for (auto *I : CC.Insts) 
+    DirOr |= getOffsetDir(I);
+
   BasicBlock *Then = IRB.GetInsertBlock();
 
   Value *ThenBegin = nullptr;
   Value *ThenEnd = nullptr;
-  getPointerBeginEnd(Ptr, ThenBegin, ThenEnd, IRB);
+  PHINode *Begin = nullptr;
+  PHINode *End = nullptr;
+
+  if (DirOr == kOffsetBoth)
+    getPointerBeginEnd(Ptr, ThenBegin, ThenEnd, IRB);
+  else if (DirOr == kOffsetPositive)
+    getPointerEnd(Ptr, ThenEnd, IRB);
+  else if (DirOr == kOffsetNegative)
+    getPointerBegin(Ptr, ThenBegin, IRB);
 
   IRB.SetInsertPoint(InsertPt);
-  PHINode *Begin = IRB.CreatePHI(int64Type, 2);
-  Begin->addIncoming(ThenBegin, Then);
-  Begin->addIncoming(ConstantInt::get(int64Type, 0), Head);
+  if (ThenBegin != nullptr) {
+    Begin = IRB.CreatePHI(int64Type, 2);
+    Begin->addIncoming(ThenBegin, Then);
+    Begin->addIncoming(ConstantInt::get(int64Type, 0), Head);
+  }
 
-  PHINode *End = IRB.CreatePHI(int64Type, 2);
-  End->addIncoming(ThenEnd, Then);
-  End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
+  if (ThenEnd != nullptr) {
+    End = IRB.CreatePHI(int64Type, 2);
+    End->addIncoming(ThenEnd, Then);
+    End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
+  }
 
   // TODO: Move tail check to here
   // Check if Ptr is in [Begin, End).
