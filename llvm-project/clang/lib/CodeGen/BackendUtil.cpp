@@ -665,7 +665,7 @@ static void addSanitizers(const Triple &TargetTriple,
     auto ODefPass = [&](SanitizerMask Mask, bool CompileKernel) {
       if (LangOpts.Sanitize.has(Mask)) {
         bool Recover = CodeGenOpts.SanitizeRecover.has(Mask);
-        OverflowDefenseOptions Opts(Recover, CompileKernel);
+        OverflowDefenseOptions Opts(CompileKernel, Recover);
 
         MPM.addPass(ModuleOverflowDefensePass(Opts));
         FunctionPassManager FPM;
