@@ -3,6 +3,7 @@
 
 #include "llvm/Transforms/Instrumentation/OverflowDefense.h"
 #include "llvm/ADT/StringSet.h"
+#include "llvm/Analysis/CFG.h"
 #include "llvm/Analysis/LoopInfo.h"
 #include "llvm/Analysis/MemoryBuiltins.h"
 #include "llvm/Analysis/PostDominators.h"
@@ -21,6 +22,7 @@
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include <algorithm>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <numeric>
 
@@ -185,10 +187,12 @@ struct FieldCheck : public BaseCheck {
 
 struct ClusterCheck : public BaseCheck {
   Value *Src;
+  Instruction *InsertPt;
   SmallVector<Instruction *, 16> Insts;
 
-  ClusterCheck(Value *Src, SmallVector<Instruction *, 16> Insts)
-      : BaseCheck(kClusterCheck), Src(Src), Insts(Insts) {}
+  ClusterCheck(Value *Src, Instruction *InsertPt,
+               SmallVector<Instruction *, 16> Insts)
+      : BaseCheck(kClusterCheck), Src(Src), InsertPt(InsertPt), Insts(Insts) {}
 };
 
 struct RuntimeCheck : public BaseCheck {
@@ -288,12 +292,12 @@ private:
   void collectSubFieldCheck(Function &F, ScalarEvolution &SE);
   void collectChunkCheck(Function &F, LoopInfo &LI,
                          ObjectSizeOffsetEvaluator &ObjSizeEval,
-                         ScalarEvolution &SE);
+                         ScalarEvolution &SE, DominatorTree &DT);
   void collectChunkCheckImpl(Function &F, Value *Src,
                              SmallVector<Instruction *, 16> &Insts,
                              LoopInfo &LI,
                              ObjectSizeOffsetEvaluator &ObjSizeEval,
-                             ScalarEvolution &SE);
+                             ScalarEvolution &SE, DominatorTree &DT);
   bool tryRuntimeFreeCheck(Function &F, Value *Src,
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
@@ -643,7 +647,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   collectSubFieldCheck(F, SE);
 
   // Instrument GEP and BC
-  collectChunkCheck(F, LI, ObjSizeEval, SE);
+  collectChunkCheck(F, LI, ObjSizeEval, SE, DT);
 
   commitInstrument(F);
 
@@ -1189,7 +1193,8 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
 
 void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
                                         ObjectSizeOffsetEvaluator &ObjSizeEval,
-                                        ScalarEvolution &SE) {
+                                        ScalarEvolution &SE,
+                                        DominatorTree &DT) {
   DenseMap<Value *, SmallVector<Instruction *, 16>> SourceMap;
 
   for (auto &I : GepToInstrument) {
@@ -1204,11 +1209,12 @@ void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
 
   for (auto &[Src, Insts] : SourceMap) {
     ASSERT(Src != nullptr);
-    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval, SE);
+    collectChunkCheckImpl(F, Src, Insts, LI, ObjSizeEval, SE, DT);
   }
 }
 
-StructType *OverflowDefense::sourceAnalysis(Function &F, Value *Src) {
+[[maybe_unused]] StructType *OverflowDefense::sourceAnalysis(Function &F,
+                                                             Value *Src) {
   if (auto *LI = dyn_cast<LoadInst>(Src)) {
     if (auto *Gep = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
       bool isFirstField = true;
@@ -1381,27 +1387,128 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
 
 void OverflowDefense::collectChunkCheckImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
-    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
+    LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE,
+    DominatorTree &DT) {
   if (tryRuntimeFreeCheck(F, Src, Insts, ObjSizeEval)) {
     return;
-  }
-
-  int weight = 0;
-
-  if (ClMergeOpt) {
-    for (auto *I : Insts)
-      weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
   }
 
   for (auto *I : Insts)
     setOffsetDir(I, SE);
 
-  StructType *STy = sourceAnalysis(F, Src);
+  if (!ClMergeOpt) {
+    Checks.push_back(new RuntimeCheck(Src, Insts));
+    return;
+  }
+
+#if 1
+  int weight = 0;
+
+  for (auto *I : Insts)
+    weight += LI.getLoopFor(I->getParent()) != nullptr ? 5 : 1;
+
   if (weight <= 2) {
     Checks.push_back(new RuntimeCheck(Src, Insts));
   } else {
-    Checks.push_back(new ClusterCheck(Src, Insts));
+    Instruction *InsertPt =
+        isa<Instruction>(Src)
+            ? cast<Instruction>(Src)->getInsertionPointAfterDef()
+            : &*F.getEntryBlock().getFirstInsertionPt();
+    Checks.push_back(new ClusterCheck(Src, InsertPt, Insts));
   }
+#else
+  DenseMap<Instruction *, Instruction *> Parent;
+  DenseMap<Instruction *, Instruction *> CheckPt;
+  std::function<Instruction *(Instruction *)> find;
+  find = [&](Instruction *V) {
+    return Parent[V] == V ? V : Parent[V] = find(Parent[V]);
+  };
+  auto merge = [&](Instruction *U, Instruction *V) {
+    CheckPt[find(V)] =
+        DT.findNearestCommonDominator(CheckPt[find(U)], CheckPt[find(V)]);
+    return Parent[find(U)] = find(V);
+  };
+
+  for (auto *I : Insts) {
+    Parent[I] = I;
+    CheckPt[I] = I;
+  }
+
+  // We first split the instructions into different groups
+  // If two instructions are in the different group, then
+  // they are not reachable from each other.
+  // For each group, we will insert bound-fetch code at the
+  // Dominator LCA of all instructions in the group.
+  for (auto *X : Insts)
+    for (auto *Y : Insts)
+      if (find(X) != find(Y) && isPotentiallyReachable(X, Y))
+        merge(X, Y);
+
+  BasicBlock *SrcBlock = isa<Argument>(Src)
+                             ? &F.getEntryBlock()
+                             : cast<Instruction>(Src)->getParent();
+
+  bool flag;
+  do {
+    flag = false;
+    for (auto *X : Insts) {
+      for (auto *Y : Insts) {
+        auto XB = CheckPt[find(X)]->getParent();
+        auto YB = CheckPt[find(Y)]->getParent();
+
+        // Two groups' checkpoint has dominated relationship,
+        // We better merge them into same group. (not sure if it is correct)
+        if (find(X) != find(Y) &&
+            (DT.dominates(XB, YB) || DT.dominates(YB, XB))) {
+          flag = true;
+          merge(X, Y);
+        }
+      }
+
+      // If the checkpoint of X is in the loop, then we try
+      // move the checkpoint to the outside of the loop.
+      if (LI.getLoopFor(CheckPt[find(X)]->getParent()) != nullptr) {
+        if (auto *IDom = DT.getNode(CheckPt[find(X)]->getParent())->getIDom()) {
+          auto *BB = IDom->getBlock();
+          if (BB != nullptr && DT.dominates(SrcBlock, BB)) {
+            flag = true;
+            CheckPt[find(X)] = BB->getTerminator();
+          }
+        }
+      }
+    }
+  } while (flag);
+
+  // =============== Debug Section ===============
+  for (auto *I : Insts)
+    ASSERT(DT.dominates(SrcBlock, CheckPt[find(I)]->getParent()));
+  // =============================================
+
+  SmallPtrSet<Instruction *, 16> Visited;
+  SmallVector<Instruction *, 16> GroupInsts;
+
+  for (auto *X : Insts) {
+    if (Visited.count(X))
+      continue;
+
+    GroupInsts.clear();
+
+    int weight = 0;
+    for (auto *Y : Insts) {
+      if (find(X) == find(Y)) {
+        Visited.insert(Y);
+        GroupInsts.push_back(Y);
+        weight += LI.getLoopFor(Y->getParent()) != nullptr ? 5 : 1;
+      }
+    }
+
+    if (weight <= 2) {
+      Checks.push_back(new RuntimeCheck(Src, GroupInsts));
+    } else {
+      Checks.push_back(new ClusterCheck(Src, CheckPt[find(X)], GroupInsts));
+    }
+  }
+#endif
 }
 
 bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
@@ -1857,10 +1964,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   Counter[kClusterCheck]++;
 
   Value *Src = CC.Src;
-  Instruction *InsertPt =
-      isa<Instruction>(Src)
-          ? cast<Instruction>(Src)->getInsertionPointAfterDef()
-          : &*F.getEntryBlock().getFirstInsertionPt();
+  Instruction *InsertPt = CC.InsertPt;
 
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
@@ -1883,7 +1987,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   }
 
   OffsetDir DirOr = kOffsetUnknown;
-  for (auto *I : CC.Insts) 
+  for (auto *I : CC.Insts)
     DirOr |= getOffsetDir(I);
 
   BasicBlock *Then = IRB.GetInsertBlock();
