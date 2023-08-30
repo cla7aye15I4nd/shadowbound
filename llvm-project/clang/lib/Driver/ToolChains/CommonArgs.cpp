@@ -954,6 +954,9 @@ collectSanitizerRuntimes(const ToolChain &TC, const ArgList &Args,
   if (SanArgs.needsMempRt() && SanArgs.linkRuntimes()) {
     StaticRuntimes.push_back("memp");
   }
+  if (SanArgs.needsTagOdefRt() && SanArgs.linkRuntimes()) {
+    StaticRuntimes.push_back("tag_odef");
+  }
   if (!SanArgs.needsSharedRt() && SanArgs.needsTsanRt() &&
       SanArgs.linkRuntimes()) {
     StaticRuntimes.push_back("tsan");

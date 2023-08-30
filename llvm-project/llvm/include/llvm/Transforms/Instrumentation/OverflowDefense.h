@@ -4,14 +4,16 @@
 #define LLVM_TRANSFORMS_INSTRUMENTATION_OVERFLOWDEFENSE_H
 
 #include "llvm/IR/PassManager.h"
+#include <string>
 
 namespace llvm {
 
 struct OverflowDefenseOptions {
-  OverflowDefenseOptions() : OverflowDefenseOptions(false, false){};
-  OverflowDefenseOptions(bool Kernel, bool Recover);
+  OverflowDefenseOptions() : OverflowDefenseOptions(false, false, "default"){};
+  OverflowDefenseOptions(bool Kernel, bool Recover, std::string Runtime);
   bool Kernel;
   bool Recover;
+  std::string Runtime;
 };
 
 struct OverflowDefensePass : public PassInfoMixin<OverflowDefensePass> {

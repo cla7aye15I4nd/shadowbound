@@ -90,6 +90,7 @@
 #include "llvm/Transforms/Utils/NameAnonGlobals.h"
 #include "llvm/Transforms/Utils/SymbolRewriter.h"
 #include <memory>
+#include <string>
 using namespace clang;
 using namespace llvm;
 
@@ -662,10 +663,10 @@ static void addSanitizers(const Triple &TargetTriple,
     MSanPass(SanitizerKind::Memory, false);
     MSanPass(SanitizerKind::KernelMemory, true);
 
-    auto ODefPass = [&](SanitizerMask Mask, bool CompileKernel) {
+    auto ODefPass = [&](SanitizerMask Mask, bool CompileKernel, std::string Runtime) {
       if (LangOpts.Sanitize.has(Mask)) {
         bool Recover = CodeGenOpts.SanitizeRecover.has(Mask);
-        OverflowDefenseOptions Opts(CompileKernel, Recover);
+        OverflowDefenseOptions Opts(CompileKernel, Recover, Runtime);
 
         MPM.addPass(ModuleOverflowDefensePass(Opts));
         FunctionPassManager FPM;
@@ -679,9 +680,10 @@ static void addSanitizers(const Triple &TargetTriple,
         MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
       }
     };
-    ODefPass(SanitizerKind::OverflowDefense, false);
-    ODefPass(SanitizerKind::KernelOverflowDefense, true);
-    ODefPass(SanitizerKind::MemProtect, false);
+    ODefPass(SanitizerKind::OverflowDefense, false, "default");
+    ODefPass(SanitizerKind::KernelOverflowDefense, true, "default");
+    ODefPass(SanitizerKind::MemProtect, false, "default");
+    ODefPass(SanitizerKind::TagOverflowDefense, false, "tag");
 
     if (LangOpts.Sanitize.has(SanitizerKind::Thread)) {
       MPM.addPass(ModuleThreadSanitizerPass());
