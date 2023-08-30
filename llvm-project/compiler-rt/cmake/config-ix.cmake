@@ -694,7 +694,7 @@ if(COMPILER_RT_SUPPORTED_ARCH)
 endif()
 message(STATUS "Compiler-RT supported architectures: ${COMPILER_RT_SUPPORTED_ARCH}")
 
-set(ALL_SANITIZERS asan;dfsan;msan;hwasan;tsan;safestack;cfi;scudo;ubsan_minimal;gwp_asan;odef;memp)
+set(ALL_SANITIZERS asan;dfsan;msan;hwasan;tsan;safestack;cfi;scudo;ubsan_minimal;gwp_asan;odef;memp;tag_odef)
 set(COMPILER_RT_SANITIZERS_TO_BUILD all CACHE STRING
     "sanitizers to build if supported on the target (all;${ALL_SANITIZERS})")
 list_replace(COMPILER_RT_SANITIZERS_TO_BUILD all "${ALL_SANITIZERS}")
@@ -761,6 +761,13 @@ if (COMPILER_RT_HAS_SANITIZER_COMMON AND MEMP_SUPPORTED_ARCH AND
   set(COMPILER_RT_HAS_MEMP TRUE)
 else()
   set(COMPILER_RT_HAS_MEMP FALSE)
+endif()
+
+if (COMPILER_RT_HAS_SANITIZER_COMMON AND MEMP_SUPPORTED_ARCH AND
+    OS_NAME MATCHES "Linux")
+  set(COMPILER_RT_HAS_TAG_ODEF TRUE)
+else()
+  set(COMPILER_RT_HAS_TAG_ODEF FALSE)
 endif()
 
 if (COMPILER_RT_HAS_SANITIZER_COMMON AND HWASAN_SUPPORTED_ARCH AND
