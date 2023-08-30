@@ -355,7 +355,6 @@ private:
 };
 
 bool isEscapeInstruction(Instruction *I, Value *V) {
-  // TODO: Add uncommon escape instructions
   if (auto *RI = dyn_cast<ReturnInst>(I)) {
     ASSERT(RI->getReturnValue() == V);
     return true;
@@ -433,7 +432,7 @@ bool isFlexibleStructure(StructType *STy) {
 }
 
 bool isVirtualTableGep(Instruction *I) {
-  // TODO: check the condition of virtual table access is correct
+  // FIXME: the pattern of virtual table maybe wrong
   if (auto *Gep = dyn_cast<GetElementPtrInst>(I)) {
     if (auto *pty = dyn_cast<PointerType>(
             Gep->getPointerOperand()->getType()->getPointerElementType())) {
@@ -639,9 +638,6 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   structPointerOptimizae(F, SE);
   patternOptimize(F);
 
-  // Instrument subfield access
-  // TODO: instrument subfield access do not require *any* runtime support, but
-  // we still need to know how much they cost
   collectSubFieldCheck(F, SE);
 
   // Instrument GEP and BC
@@ -661,7 +657,6 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
 void OverflowDefense::collectToInstrument(
     Function &F, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
-  // TODO: collect glibc function call
   for (auto &BB : F) {
     for (auto &I : BB) {
       if (auto *Gep = dyn_cast<GetElementPtrInst>(&I)) {
@@ -838,7 +833,6 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
     Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
 
     if (isa<GlobalVariable>(Gep->getPointerOperand())) {
-      // TODO: how to handle global variable's size?
       continue;
     }
 
@@ -904,7 +898,6 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   SmallVector<GetElementPtrInst *, 16> NewGepToInstrument =
       dependencyOptimizeForGep(F, DT, PDT, SE);
 
-  // TODO: optimize for subfield access
   BcToInstrument.swap(NewBcToInstrument);
   GepToInstrument.swap(NewGepToInstrument);
 }
@@ -940,8 +933,6 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
         }
       }
     }
-  } else if (P->getType() == PT_ARRAY) {
-    // TODO: support array pattern
   }
 
   return false;
@@ -1101,7 +1092,6 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
           }
 
           if (J->getPointerOperand() == I) {
-            // TODO: Determine the direction of I is positive or negative
             bool Greater = true;
             for (size_t k = 0; k < J->getNumIndices(); ++k) {
               auto JOffset = J->getOperand(k + 1);
@@ -1180,7 +1170,6 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   if (GEPOperator *GEPO = dyn_cast<GEPOperator>(V)) {
     return getPhiSource(GEPO->getPointerOperand(), Src, Visited);
   }
-  // TODO: Maybe we need to handle the Constant NULL Pointer.
 
   if (Src == nullptr) {
     Src = V;
@@ -1561,7 +1550,6 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
 
 void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
                                       ScalarEvolution &SE) {
-  // TODO: This part is very complex and needs to be clarified
   for (auto *Loop : LI) {
     if (!Loop->isRotatedForm())
       continue;
@@ -2015,8 +2003,6 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
     End->addIncoming(ConstantInt::get(int64Type, kMaxAddress), Head);
   }
 
-  // TODO: Move tail check to here
-  // Check if Ptr is in [Begin, End).
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
