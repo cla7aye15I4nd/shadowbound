@@ -99,6 +99,7 @@ FEATURE(memory_sanitizer,
 FEATURE(overflow_defense,
         LangOpts.Sanitize.hasOneOf(SanitizerKind::OverflowDefense |
                                    SanitizerKind::KernelOverflowDefense | 
+                                   SanitizerKind::TagOverflowDefense |
                                    SanitizerKind::MemProtect))
 FEATURE(thread_sanitizer, LangOpts.Sanitize.has(SanitizerKind::Thread))
 FEATURE(dataflow_sanitizer, LangOpts.Sanitize.has(SanitizerKind::DataFlow))

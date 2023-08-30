@@ -76,6 +76,9 @@ SANITIZER("kernel-overflow-defense", KernelOverflowDefense)
 // Full Memory Protection
 SANITIZER("memprotect", MemProtect)
 
+// SGX OverflowDefense
+SANITIZER("tag-overflow-defense", TagOverflowDefense)
+
 // libFuzzer
 SANITIZER("fuzzer", Fuzzer)
 

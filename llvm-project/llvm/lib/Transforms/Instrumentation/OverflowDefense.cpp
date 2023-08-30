@@ -25,6 +25,7 @@
 #include <functional>
 #include <iostream>
 #include <numeric>
+#include <string>
 
 using namespace llvm;
 using BuilderTy = IRBuilder<TargetFolder>;
@@ -135,10 +136,6 @@ static cl::opt<bool> ClTailCheck("odef-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
-static cl::opt<std::string> ClRuntimeName("odef-runtime-name",
-                                          cl::desc("runtime name"), cl::Hidden,
-                                          cl::init("default"));
-
 // ==== Debug Option ==== //
 static cl::opt<std::string> ClWhiteList("odef-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
@@ -243,7 +240,7 @@ enum PtrUsage {
 class OverflowDefense {
 public:
   OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
-      : Kernel(Options.Kernel), Recover(Options.Recover) {
+      : Options(Options) {
     initializeModule(M);
   }
 
@@ -328,9 +325,6 @@ private:
 
   StructType *sourceAnalysis(Function &F, Value *Src);
 
-  bool Kernel;
-  bool Recover;
-
   SmallVector<GetElementPtrInst *, 16> GepToInstrument;
   SmallVector<BitCastInst *, 16> BcToInstrument;
 
@@ -356,6 +350,8 @@ private:
   Function *ReportFn;
   Function *AbortFn;
   Function *SetShadowFn;
+
+  OverflowDefenseOptions Options;
 };
 
 bool isEscapeInstruction(Instruction *I, Value *V) {
@@ -531,9 +527,11 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
 }
 } // end anonymous namespace
 
-OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover)
+OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover,
+                                               std::string Runtime)
     : Kernel(getOptOrDefault(ClEnableKodef, Kernel)),
-      Recover(getOptOrDefault(ClKeepGoing, Kernel || Recover)) {}
+      Recover(getOptOrDefault(ClKeepGoing, Kernel || Recover)),
+      Runtime(Runtime) {}
 
 PreservedAnalyses OverflowDefensePass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
@@ -1796,7 +1794,7 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
 
 void OverflowDefense::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                                          BuilderTy &IRB) {
-  if (ClRuntimeName == "default") {
+  if (Options.Runtime == "runtime") {
     Value *Shadow =
         IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
     Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
@@ -1816,7 +1814,7 @@ void OverflowDefense::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
 }
 
 void OverflowDefense::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
-  if (ClRuntimeName == "default") {
+  if (Options.Runtime == "default") {
     Value *Shadow =
         IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
     Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
@@ -1832,7 +1830,7 @@ void OverflowDefense::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
 
 void OverflowDefense::getPointerBegin(Value *Ptr, Value *&Begin,
                                       BuilderTy &IRB) {
-  if (ClRuntimeName == "default") {
+  if (Options.Runtime == "default") {
     Value *Shadow =
         IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
     Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
@@ -1848,7 +1846,7 @@ void OverflowDefense::getPointerBegin(Value *Ptr, Value *&Begin,
 }
 
 Value *OverflowDefense::getPointerIsApp(Value *Ptr, BuilderTy &IRB) {
-  if (ClRuntimeName == "default") {
+  if (Options.Runtime == "default") {
     return IRB.CreateAnd(
         IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
         IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
@@ -1858,7 +1856,7 @@ Value *OverflowDefense::getPointerIsApp(Value *Ptr, BuilderTy &IRB) {
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
-  if (Abort && !Recover) {
+  if (Abort && !Options.Recover) {
     MDBuilder MDB(IRB.getContext());
     MDNode *BranchWeights = MDB.createBranchWeights(1, 0);
     // Set the branch weight to 1:0 to tell the compiler
