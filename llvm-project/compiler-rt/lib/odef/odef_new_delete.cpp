@@ -16,13 +16,15 @@ void ReportOutOfMemory() {
 }
 
 #define OPERATOR_NEW_BODY(nothrow)                                             \
-  void *res = odef_malloc(size);                                               \
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));   \
+  void *res = odef_malloc(size, caller);                                       \
   if (!nothrow && UNLIKELY(!res))                                              \
     ReportOutOfMemory();                                                       \
   return res
 
 #define OPERATOR_NEW_BODY_ALIGN(nothrow)                                       \
-  void *res = odef_memalign((uptr)align, size);                                \
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));   \
+  void *res = odef_memalign((uptr)align, size, caller);                        \
   if (!nothrow && UNLIKELY(!res))                                              \
     ReportOutOfMemory();                                                       \
   return res;
@@ -60,7 +62,7 @@ void *operator new[](size_t size, std::align_val_t align,
 
 #define OPERATOR_DELETE_BODY                                                   \
   if (ptr)                                                                     \
-  OdefDeallocate(ptr)
+  queue_free(ptr)
 
 INTERCEPTOR_ATTRIBUTE
 void operator delete(void *ptr) NOEXCEPT { OPERATOR_DELETE_BODY; }

@@ -104,6 +104,8 @@ void __odef_init() {
   SetCurrentThread(main_thread);
   main_thread->Init();
 
+  InitPUMM();
+
   odef_init_is_running = false;
   odef_inited = true;
 }

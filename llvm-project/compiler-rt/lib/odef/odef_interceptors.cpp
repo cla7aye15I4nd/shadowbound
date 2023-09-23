@@ -40,65 +40,81 @@ struct OdefInterceptorContext {
   } while (0)
 
 INTERCEPTOR(int, posix_memalign, void **memptr, SIZE_T alignment, SIZE_T size) {
-  int res = odef_posix_memalign(memptr, alignment, size);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  int res = odef_posix_memalign(memptr, alignment, size, caller);
   return res;
 }
 
 INTERCEPTOR(void *, memalign, SIZE_T alignment, SIZE_T size) {
-  return odef_memalign(alignment, size);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  return odef_memalign(alignment, size, caller);
 }
 
 INTERCEPTOR(void *, aligned_alloc, SIZE_T alignment, SIZE_T size) {
-  return odef_aligned_alloc(alignment, size);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  return odef_aligned_alloc(alignment, size, caller);
 }
 
 INTERCEPTOR(void *, __libc_memalign, SIZE_T alignment, SIZE_T size) {
-  void *ptr = odef_memalign(alignment, size);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  void *ptr = odef_memalign(alignment, size, caller);
   if (ptr)
     DTLS_on_libc_memalign(ptr, size);
   return ptr;
 }
 
-INTERCEPTOR(void *, valloc, SIZE_T size) { return odef_valloc(size); }
+INTERCEPTOR(void *, valloc, SIZE_T size) { 
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  return odef_valloc(size, caller); 
+}
 
-INTERCEPTOR(void *, pvalloc, SIZE_T size) { return odef_pvalloc(size); }
+INTERCEPTOR(void *, pvalloc, SIZE_T size) { 
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  return odef_pvalloc(size, caller); 
+}
 
 INTERCEPTOR(void, free, void *ptr) {
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
   if (UNLIKELY(!ptr))
     return;
   if (DlsymAlloc::PointerIsMine(ptr))
     return DlsymAlloc::Free(ptr);
-  OdefDeallocate(ptr);
+  queue_free(ptr);
 }
 
 INTERCEPTOR(void, cfree, void *ptr) {
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
   if (UNLIKELY(!ptr))
     return;
   if (DlsymAlloc::PointerIsMine(ptr))
     return DlsymAlloc::Free(ptr);
-  OdefDeallocate(ptr);
+  queue_free(ptr);
 }
 
 INTERCEPTOR(void *, calloc, SIZE_T nmemb, SIZE_T size) {
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
   if (DlsymAlloc::Use())
     return DlsymAlloc::Callocate(nmemb, size);
-  return odef_calloc(nmemb, size);
+  return odef_calloc(nmemb, size, caller);
 }
 
 INTERCEPTOR(void *, realloc, void *ptr, SIZE_T size) {
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
   if (DlsymAlloc::Use() || DlsymAlloc::PointerIsMine(ptr))
     return DlsymAlloc::Realloc(ptr, size);
-  return odef_realloc(ptr, size);
+  return odef_realloc(ptr, size, caller);
 }
 
 INTERCEPTOR(void *, reallocarray, void *ptr, SIZE_T nmemb, SIZE_T size) {
-  return odef_reallocarray(ptr, nmemb, size);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  return odef_reallocarray(ptr, nmemb, size, caller);
 }
 
 INTERCEPTOR(void *, malloc, SIZE_T size) {
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
   if (DlsymAlloc::Use())
     return DlsymAlloc::Allocate(size);
-  return odef_malloc(size);
+  return odef_malloc(size, caller);
 }
 
 INTERCEPTOR(void, mallinfo, __sanitizer_struct_mallinfo *sret) {
@@ -185,7 +201,8 @@ INTERCEPTOR(char *, strdup, const char *s) {
   uptr length = internal_strlen(s);
   ODEF_CHECK_RANGE(s, length + 1);
 
-  void *new_mem = odef_malloc(length + 1);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  void *new_mem = odef_malloc(length + 1, caller);
   REAL(memcpy)(new_mem, s, length + 1);
   return reinterpret_cast<char *>(new_mem);
 }
@@ -197,7 +214,8 @@ INTERCEPTOR(char *, __strdup, const char *s) {
   uptr length = internal_strlen(s);
   ODEF_CHECK_RANGE(s, length + 1);
 
-  void *new_mem = odef_malloc(length + 1);
+  void *caller = __builtin_extract_return_addr(__builtin_return_address(0));
+  void *new_mem = odef_malloc(length + 1, caller);
   REAL(memcpy)(new_mem, s, length + 1);
   return reinterpret_cast<char *>(new_mem);
 }

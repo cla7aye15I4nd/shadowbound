@@ -54,20 +54,25 @@ extern bool odef_init_is_running;
 void InitializeInterceptors();
 void OdefAllocatorInit();
 bool InitShadow();
+void InitPUMM();
 
 void SetShadow(const void* ptr, uptr size);
 void OdefDeallocate(void *ptr);
 
-void *odef_malloc(uptr size);
-void *odef_calloc(uptr nmemb, uptr size);
-void *odef_realloc(void *ptr, uptr size);
-void *odef_reallocarray(void *ptr, uptr nmemb, uptr size);
-void *odef_valloc(uptr size);
-void *odef_pvalloc(uptr size);
-void *odef_aligned_alloc(uptr alignment, uptr size);
-void *odef_memalign(uptr alignment, uptr size);
+void *odef_malloc(uptr size, void *caller);
+void *odef_calloc(uptr nmemb, uptr size, void *caller);
+void *odef_realloc(void *ptr, uptr size, void *caller);
+void *odef_reallocarray(void *ptr, uptr nmemb, uptr size, void *caller);
+void *odef_valloc(uptr size, void *caller);
+void *odef_pvalloc(uptr size, void *caller);
+void *odef_aligned_alloc(uptr alignment, uptr size, void *caller);
+void *odef_memalign(uptr alignment, uptr size, void *caller);
 uptr odef_allocated_size(void *ptr);
-int odef_posix_memalign(void **memptr, uptr alignment, uptr size);
+int odef_posix_memalign(void **memptr, uptr alignment, uptr size, void *caller);
+
+int should_flush(void *caller);
+void flush_frees();
+void queue_free(void *ptr);
 
 void OdefTSDInit(void (*destructor)(void *tsd));
 void OdefTSDDtor(void *tsd);

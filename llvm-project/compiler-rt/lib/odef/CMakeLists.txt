@@ -3,6 +3,7 @@ include_directories(..)
 set(ODEF_RTL_SOURCES
   odef.cpp
   odef_allocator.cpp
+  odef_pumm.cpp
   odef_thread.cpp
   odef_interceptors.cpp
   odef_linux.cpp
@@ -13,6 +14,7 @@ set(ODEF_RTL_CXX_SOURCES
   )
 
 set(ODEF_RTL_HEADERS
+  base64.h
   odef.h
   odef_allocator.h
   odef_interceptors.h
