@@ -20,7 +20,7 @@
   } while (0)
 #endif
 
-#define CONFIG_DIR "/.config/uaf-defense"
+#define CONFIG_DIR "/.config/uaf-defense/"
 #define MAX_POLICY_SIZE 1024
 
 namespace __odef {
@@ -247,7 +247,6 @@ static void load_profile() {
 
     // insert caller into policy
     DEBUG_PRINT("Policy: %p\n", ava);
-    abort();
     safe_callers[num_safe_callers] = ava;
     num_safe_callers++;
 
