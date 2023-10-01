@@ -73,7 +73,7 @@ static cl::opt<bool> ClKeepGoing("odef-keep-going",
 
 static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
                                       cl::desc("skip instrumenting"),
-                                      cl::Hidden, cl::init(false));
+                                      cl::Hidden, cl::init(true));
 
 static cl::opt<bool> ClPerfTest("odef-perf-test", cl::desc("performance test"),
                                 cl::Hidden, cl::init(false));
