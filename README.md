@@ -1,6 +1,9 @@
-# Efficient Memory Protection through Whole-Program Optimization and Advanced Metadata Management
+# ShadowBound: Efficient Memory Protection through Advanced Metadata Management and Customized Compiler Optimization
 
-**Laid** is a defense mechanism that can be used in user-space programs. It utilizes LLVM instrumentation and shadow memory to offer memory protection, effectively preventing heap-based memory corruption, including heap out-of-bounds access and use-after-free vulnerabilities. The detail of design can see [here](doc/README.md).
+## Abstract
+
+In software development, the prevalence of unsafe languages such as C and C++ introduces potential vulnerabilities, especially within the heap, a pivotal component for dynamic memory allocation. Despite its significance, heap management complexities have made heap corruption pervasive, posing severe threats to system security. While prior solutions aiming for temporal and spatial memory safety exhibit overheads deemed impractical, we present ShadowBound, a unique heap memory protection design. At its core, ShadowBound is an efficient out-of-bounds defense that integrates with various Use-After-Free (UAF) defenses without compatibility constraints. We harness a shadow memory-based metadata management mechanism to store heap chunk boundaries and apply customized compiler optimizations tailored for boundary checking. Built atop LLVM 15, ShadowBound incorporates three state-of-the-art UAF defenses. Our evaluations show that ShadowBound provides robust protection against exploitable out-of-bound bugs with minimal time and memory overhead, suggesting its applicability and effectiveness in safeguarding real-world programs against prevalent heap vulnerabilities.
+
 ## Installation
 ### Build `ld-gold`
 ```bash
