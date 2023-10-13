@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "chokidar": "3.5.2",
-    "vscode-languageclient": "^8.0.2-next.5"
+    "vscode-languageclient": "^8.1.0"
   },
   "devDependencies": {
     "@types/mocha": "^7.0.2",
