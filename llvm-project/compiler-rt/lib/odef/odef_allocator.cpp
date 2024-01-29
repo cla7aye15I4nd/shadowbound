@@ -52,7 +52,7 @@ void OdefThreadLocalMallocStorage::CommitBack() {
 }
 
 void ShowAllocatorStats() {
-  Printf("[odef] alloc: %lu\n", allocated_count);
+  Printf("\n[odef] alloc: %lu\n", allocated_count);
   Printf("[odef] free: %lu\n", freed_count);
 }
 
