@@ -14,7 +14,12 @@ void __odef_report();
 
 SANITIZER_INTERFACE_ATTRIBUTE __attribute__((noreturn))
 void __odef_abort();
-void __odef_set_shadow(uptr addr, uptr num, uptr size);
+
+SANITIZER_INTERFACE_ATTRIBUTE
+void __odef_read(uptr addr);
+
+SANITIZER_INTERFACE_ATTRIBUTE
+void __odef_write(uptr addr);
 
 }
 

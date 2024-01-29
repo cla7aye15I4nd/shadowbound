@@ -39,6 +39,8 @@ static Allocator allocator;
 static AllocatorCache fallback_allocator_cache;
 static StaticSpinMutex fallback_mutex;
 
+u64 allocated_count;
+u64 freed_count;
 void OdefAllocatorInit() { allocator.Init(kAllocatorReleaseToOsIntervalMs); }
 
 AllocatorCache *GetAllocatorCache(OdefThreadLocalMallocStorage *ms) {
@@ -57,6 +59,7 @@ static void *OdefAllocate(uptr size, uptr alignment) {
     Die();
   }
 
+  allocated_count++;
   OdefThread *t = GetCurrentThread();
   void *allocated;
   if (t) {
@@ -74,6 +77,7 @@ static void *OdefAllocate(uptr size, uptr alignment) {
 
 void OdefDeallocate(void *p) {
 
+  freed_count++;
   OdefThread *t = GetCurrentThread();
   if (t) {
     AllocatorCache *cache = GetAllocatorCache(&t->malloc_storage());

@@ -10,6 +10,8 @@
 #include "sanitizer_common/sanitizer_libc.h"
 #include "sanitizer_common/sanitizer_linux.h"
 
+#include <stdlib.h>
+
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_skip_instrument;
 extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_perf_test;
@@ -79,6 +81,18 @@ bool odef_init_is_running = false;
 
 using namespace __odef;
 
+u64 read_count;
+u64 write_count;
+extern u64 allocated_count;
+extern u64 freed_count;
+
+void __odef_exit() {
+  Printf("allocated_count: %lu\n", allocated_count);
+  Printf("freed_count: %lu\n", freed_count);
+  Printf("read_count: %lu\n", read_count);
+  Printf("write_count: %lu\n", write_count);
+}
+
 void __odef_init() {
   if (odef_inited)
     return;
@@ -104,6 +118,8 @@ void __odef_init() {
   SetCurrentThread(main_thread);
   main_thread->Init();
 
+  atexit(__odef_exit);
+
   odef_init_is_running = false;
   odef_inited = true;
 }
@@ -118,4 +134,14 @@ void __odef_abort() {
 void __odef_set_shadow(uptr addr, uptr num, uptr size) {
   uptr real_size = (num * size + (sizeof(uptr) - 1)) & ~(sizeof(uptr) - 1);
   SetShadow((const void*) addr, real_size);
+}
+
+void __odef_read(uptr addr) {
+  if (MEM_IS_APP(addr))
+    read_count++;
+}
+
+void __odef_write(uptr addr) {
+  if (MEM_IS_APP(addr))
+    write_count++;
 }
