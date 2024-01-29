@@ -57,6 +57,7 @@ bool InitShadow();
 
 void SetShadow(const void* ptr, uptr size);
 void OdefDeallocate(void *ptr);
+void ShowAllocatorStats();
 
 void *odef_malloc(uptr size);
 void *odef_calloc(uptr nmemb, uptr size);

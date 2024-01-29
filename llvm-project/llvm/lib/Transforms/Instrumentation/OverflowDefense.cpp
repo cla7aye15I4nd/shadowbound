@@ -149,6 +149,7 @@ const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
 const char kOdefAbortName[] = "__odef_abort";
 const char kOdefSetShadowName[] = "__odef_set_shadow";
+const char kOdefDerefName[] = "__odef_deref";
 
 namespace {
 
@@ -310,6 +311,7 @@ private:
   void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
   void commitClusterCheck(Function &F, ClusterCheck &Check);
   void commitRuntimeCheck(Function &F, RuntimeCheck &Check);
+  void commitDerefCheck(Function &F, Instruction *I, Value *Addr);
 
   void instrumentBitCast(Function &F, Value *Src, BitCastInst *BC);
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
@@ -333,6 +335,8 @@ private:
 
   SmallVector<GetElementPtrInst *, 16> GepToInstrument;
   SmallVector<BitCastInst *, 16> BcToInstrument;
+  SmallVector<LoadInst *, 16> LoadToInstrument;
+  SmallVector<StoreInst *, 16> StoreToInstrument;
 
   SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
@@ -357,6 +361,7 @@ private:
   Function *ReportFn;
   Function *AbortFn;
   Function *SetShadowFn;
+  Function *DerefFn;
 
   OverflowDefenseOptions Options;
 };
@@ -498,6 +503,7 @@ void insertRuntimeFunction(Module &M) {
   M.getOrInsertFunction(kOdefSetShadowName, Type::getVoidTy(C),
                         Type::getInt64Ty(C), Type::getInt64Ty(C),
                         Type::getInt64Ty(C));
+  M.getOrInsertFunction(kOdefDerefName, Type::getVoidTy(C), Type::getInt64Ty(C));
 }
 
 void insertGlobalVariable(Module &M) {
@@ -574,6 +580,7 @@ void OverflowDefense::initializeModule(Module &M) {
   ReportFn = M.getFunction(kOdefReportName);
   AbortFn = M.getFunction(kOdefAbortName);
   SetShadowFn = M.getFunction(kOdefSetShadowName);
+  DerefFn = M.getFunction(kOdefDerefName);
 
   ASSERT(ReportFn != nullptr);
   ASSERT(AbortFn != nullptr);
@@ -680,6 +687,10 @@ void OverflowDefense::collectToInstrument(
       } else if (auto *Bc = dyn_cast<BitCastInst>(&I)) {
         if (!filterToInstrument(F, Bc, ObjSizeEval, SE))
           BcToInstrument.push_back(Bc);
+      } else if (auto *LI = dyn_cast<LoadInst>(&I)) {
+        LoadToInstrument.push_back(LI);
+      } else if (auto *SI = dyn_cast<StoreInst>(&I)) {
+        StoreToInstrument.push_back(SI);
       }
     }
   }
@@ -1890,6 +1901,22 @@ void OverflowDefense::commitInstrument(Function &F) {
       __builtin_unreachable();
     }
   }
+
+  for (LoadInst *LI : LoadToInstrument)
+    commitDerefCheck(F, LI, LI->getPointerOperand());
+  for (StoreInst *SI : StoreToInstrument)
+    commitDerefCheck(F, SI, SI->getPointerOperand());
+}
+
+void OverflowDefense::commitDerefCheck(Function &F, Instruction *I,
+                                       Value *Addr) {
+
+  Instruction *InsertPt = I->getInsertionPointAfterDef();
+  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
+                TargetFolder(*DL));
+
+  Value *Ptr = IRB.CreatePtrToInt(Addr, int64Type);
+  IRB.CreateCall(DerefFn, Ptr);
 }
 
 void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {

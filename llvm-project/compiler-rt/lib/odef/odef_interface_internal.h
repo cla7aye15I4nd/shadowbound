@@ -16,10 +16,7 @@ SANITIZER_INTERFACE_ATTRIBUTE __attribute__((noreturn))
 void __odef_abort();
 
 SANITIZER_INTERFACE_ATTRIBUTE
-void __odef_read(uptr addr);
-
-SANITIZER_INTERFACE_ATTRIBUTE
-void __odef_write(uptr addr);
+void __odef_deref(uptr addr);
 
 }
 

@@ -81,16 +81,11 @@ bool odef_init_is_running = false;
 
 using namespace __odef;
 
-u64 read_count;
-u64 write_count;
-extern u64 allocated_count;
-extern u64 freed_count;
+u64 deref_count;
 
-void __odef_exit() {
-  Printf("allocated_count: %lu\n", allocated_count);
-  Printf("freed_count: %lu\n", freed_count);
-  Printf("read_count: %lu\n", read_count);
-  Printf("write_count: %lu\n", write_count);
+static void __odef_exit() {
+  ShowAllocatorStats();
+  Printf("[odef] deref_count: %lu\n", deref_count);
 }
 
 void __odef_init() {
@@ -136,12 +131,7 @@ void __odef_set_shadow(uptr addr, uptr num, uptr size) {
   SetShadow((const void*) addr, real_size);
 }
 
-void __odef_read(uptr addr) {
+void __odef_deref(uptr addr) {
   if (MEM_IS_APP(addr))
-    read_count++;
-}
-
-void __odef_write(uptr addr) {
-  if (MEM_IS_APP(addr))
-    write_count++;
+    deref_count++;
 }

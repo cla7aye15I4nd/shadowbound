@@ -51,6 +51,11 @@ void OdefThreadLocalMallocStorage::CommitBack() {
   allocator.SwallowCache(GetAllocatorCache(this));
 }
 
+void ShowAllocatorStats() {
+  Printf("[odef] alloc: %lu\n", allocated_count);
+  Printf("[odef] free: %lu\n", freed_count);
+}
+
 static void *OdefAllocate(uptr size, uptr alignment) {
   if (size > kMaxAllowedMallocSize) {
     Report(" ERROR: odef_malloc(%zu) exceeds the maximum supported size "
