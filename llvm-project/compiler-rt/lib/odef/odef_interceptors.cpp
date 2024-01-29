@@ -176,7 +176,7 @@ void check_range(uptr ptr, uptr size) {
   }
 }
 
-#define ODEF_CHECK_RANGE(ptr, size) check_range((uptr)(ptr), (uptr)(size))
+#define ODEF_CHECK_RANGE(ptr, size)
 
 INTERCEPTOR(char *, strdup, const char *s) {
   if (UNLIKELY(!odef_inited))
