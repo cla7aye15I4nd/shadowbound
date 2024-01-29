@@ -76,7 +76,7 @@ static void *OdefAllocate(uptr size, uptr alignment) {
     allocated = allocator.Allocate(cache, size, alignment);
   }
   // FIXME: CHECK if out of memory.
-  SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
+  // SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
   return allocated;
 }
 

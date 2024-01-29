@@ -103,7 +103,7 @@ void __odef_init() {
 
   InitTlsSize();
 
-  InitShadow(); 
+  // InitShadow(); 
 
   OdefTSDInit(OdefTSDDtor);
 
