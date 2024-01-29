@@ -160,6 +160,12 @@ enum CheckType {
   kCheckTypeEnd
 };
 
+enum InstrumentType {
+  kInstrumentFetch = 0,
+  kInstrumentCheck = 1,
+  kInstrumentEnd
+};
+
 using OffsetDir = uint8_t;
 static constexpr OffsetDir kOffsetUnknown = 0b00;
 static constexpr OffsetDir kOffsetPositive = 0b01;
@@ -341,6 +347,7 @@ private:
   const DataLayout *DL;
 
   int Counter[kCheckTypeEnd];
+  int Statistic[kInstrumentEnd];
 
   Type *int32Type;
   Type *int64Type;
@@ -577,6 +584,7 @@ void OverflowDefense::initializeModule(Module &M) {
   int64PtrType = Type::getInt64PtrTy(C);
 
   memset(Counter, 0, sizeof(Counter));
+  memset(Statistic, 0, sizeof(Statistic));
 
   // Initialize the white list
   std::string WhiteListPath = ClWhiteList;
@@ -650,6 +658,11 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
     dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n";
     dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n";
+  }
+
+  if (std::accumulate(Statistic, Statistic + kInstrumentEnd, 0) > 0) {
+    dbgs() << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
+    dbgs() << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
   }
 
   return true;
@@ -1948,6 +1961,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   ASSERT(CC.Type == kClusterCheck);
   Counter[kClusterCheck]++;
+  Statistic[kInstrumentFetch] += 1;
+  Statistic[kInstrumentCheck] += CC.Insts.size();
 
   Value *Src = CC.Src;
   Instruction *InsertPt = CC.InsertPt;
@@ -2031,6 +2046,8 @@ void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
 
   ASSERT(RC.Type == kRuntimeCheck);
   Counter[kRuntimeCheck] += RC.Insts.size();
+  Statistic[kInstrumentFetch] += RC.Insts.size();
+  Statistic[kInstrumentCheck] += RC.Insts.size();
 
   Value *Src = RC.Src;
 
