@@ -144,6 +144,10 @@ static cl::opt<std::string> ClWhiteList("odef-whitelist",
 static cl::opt<bool> ClDumpIR("odef-dump-ir", cl::desc("dump IR"), cl::Hidden,
                               cl::init(false));
 
+static cl::opt<bool> ClDumpStaticFile("odef-dump-static-file",
+                                      cl::desc("dump static file"), cl::Hidden,
+                                      cl::init(true));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -661,8 +665,15 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   }
 
   if (std::accumulate(Statistic, Statistic + kInstrumentEnd, 0) > 0) {
-    dbgs() << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
-    dbgs() << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
+    if (ClDumpStaticFile) {
+      std::ofstream logFile(F.getName().str() + ".log");
+      logFile << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
+      logFile << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
+      logFile.close();
+    } else {
+      dbgs() << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
+      dbgs() << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
+    }
   }
 
   return true;
