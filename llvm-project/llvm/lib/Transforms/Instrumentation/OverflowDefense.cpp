@@ -666,7 +666,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
 
   if (std::accumulate(Statistic, Statistic + kInstrumentEnd, 0) > 0) {
     if (ClDumpStaticFile) {
-      std::ofstream logFile(F.getName().str() + ".log");
+      std::ofstream logFile(F.getParent()->getSourceFileName() + "." + F.getName().str() + ".odef.log");
       logFile << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
       logFile << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
       logFile.close();
