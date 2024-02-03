@@ -144,6 +144,10 @@ static cl::opt<std::string> ClWhiteList("odef-whitelist",
 static cl::opt<bool> ClDumpIR("odef-dump-ir", cl::desc("dump IR"), cl::Hidden,
                               cl::init(false));
 
+static cl::opt<bool> ClDumpStaticFile("odef-dump-static-file",
+                                      cl::desc("dump static file"), cl::Hidden,
+                                      cl::init(true));
+
 const char kOdefModuleCtorName[] = "odef.module_ctor";
 const char kOdefInitName[] = "__odef_init";
 const char kOdefReportName[] = "__odef_report";
@@ -158,6 +162,12 @@ enum CheckType {
   kBuiltInCheck = 2,
   kInFieldCheck = 3,
   kCheckTypeEnd
+};
+
+enum InstrumentType {
+  kInstrumentFetch = 0,
+  kInstrumentCheck = 1,
+  kInstrumentEnd
 };
 
 using OffsetDir = uint8_t;
@@ -341,6 +351,7 @@ private:
   const DataLayout *DL;
 
   int Counter[kCheckTypeEnd];
+  int Statistic[kInstrumentEnd];
 
   Type *int32Type;
   Type *int64Type;
@@ -577,6 +588,7 @@ void OverflowDefense::initializeModule(Module &M) {
   int64PtrType = Type::getInt64PtrTy(C);
 
   memset(Counter, 0, sizeof(Counter));
+  memset(Statistic, 0, sizeof(Statistic));
 
   // Initialize the white list
   std::string WhiteListPath = ClWhiteList;
@@ -650,6 +662,18 @@ bool OverflowDefense::sanitizeFunction(Function &F,
     dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n";
     dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n";
     dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n";
+  }
+
+  if (std::accumulate(Statistic, Statistic + kInstrumentEnd, 0) > 0) {
+    if (ClDumpStaticFile) {
+      std::ofstream logFile(F.getName().str() + ".log");
+      logFile << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
+      logFile << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
+      logFile.close();
+    } else {
+      dbgs() << "  Fetch Instrument: " << Statistic[kInstrumentFetch] << "\n";
+      dbgs() << "  Check Instrument: " << Statistic[kInstrumentCheck] << "\n";
+    }
   }
 
   return true;
@@ -1948,6 +1972,8 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   ASSERT(CC.Type == kClusterCheck);
   Counter[kClusterCheck]++;
+  Statistic[kInstrumentFetch] += 1;
+  Statistic[kInstrumentCheck] += CC.Insts.size();
 
   Value *Src = CC.Src;
   Instruction *InsertPt = CC.InsertPt;
@@ -2031,6 +2057,8 @@ void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
 
   ASSERT(RC.Type == kRuntimeCheck);
   Counter[kRuntimeCheck] += RC.Insts.size();
+  Statistic[kInstrumentFetch] += RC.Insts.size();
+  Statistic[kInstrumentCheck] += RC.Insts.size();
 
   Value *Src = RC.Src;
 

@@ -40,3 +40,6 @@ tools/result.txt
 
 # binutils
 binutils
+
+# log
+*.log
