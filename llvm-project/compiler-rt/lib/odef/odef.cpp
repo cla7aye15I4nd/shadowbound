@@ -85,7 +85,7 @@ u64 deref_count;
 
 static void __odef_exit() {
   ShowAllocatorStats();
-  Printf("[odef] deref_count: %lu\n", deref_count);
+  Printf("[odef] deref: %lu\n", deref_count);
 }
 
 void __odef_init() {
