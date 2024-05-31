@@ -12,3 +12,14 @@ mkdir build && cd build
 cmake -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" -DLLVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm
 make -j`nproc`
 ```
+
+## Bibtex
+
+```
+@inproceedings{zheng2024shadowbound,
+    title = {{ShadowBound}: Efficient Memory Protection through Advanced Metadata Management and Customized Compiler Optimization},
+    author={Yu, Zheng and Yang, Ganxiang and Xing, Xinyu},
+    booktitle = {33rd USENIX Security Symposium (USENIX Security 24)},
+    year = {2024},
+}
+```
