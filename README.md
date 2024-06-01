@@ -16,7 +16,7 @@ make -j`nproc`
 ## Bibtex
 
 ```
-@inproceedings{zheng2024shadowbound,
+@inproceedings{yu2024shadowbound,
     title = {{ShadowBound}: Efficient Memory Protection through Advanced Metadata Management and Customized Compiler Optimization},
     author={Yu, Zheng and Yang, Ganxiang and Xing, Xinyu},
     booktitle = {33rd USENIX Security Symposium (USENIX Security 24)},
