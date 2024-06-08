@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  shadowbound:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    image: shadowbound
+
+# docker compose up --build
