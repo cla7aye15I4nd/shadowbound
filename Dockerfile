@@ -42,3 +42,5 @@ RUN cd /shadowbound/ffmalloc && make -j`nproc`
 ## Install MarkUs
 COPY markus /shadowbound/markus
 RUN cd /shadowbound/markus && ./setup.sh
+
+ENV SHADOWBOUND=/shadowbound

@@ -7,5 +7,14 @@ services:
       dockerfile: Dockerfile
     privileged: true
     image: shadowbound
+  nginx-eval:
+    build:
+      context: .
+      dockerfile: eval/nginx/Dockerfile
+    volumes:
+      - ./eval/nginx/results:/results
+    environment:
+      - TARGET=${TARGET:-shadowbound}
+    privileged: true
 
-# docker compose up --build
+# docker compose up --build shadowbound

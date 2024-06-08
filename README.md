@@ -7,7 +7,7 @@
 We recommend using Docker to build and run ShadowBound. The Docker image contains all the dependencies and configurations required to build and run ShadowBound.
 
 ```bash
-docker compose up --build
+docker compose up --build shadowbound
 ```
 
 ### Manual Build
@@ -30,6 +30,20 @@ make -j`nproc`
 ```bash
 cd markus
 ./setup.sh
+```
+
+## Usage
+
+You can use `-fsanitize=overflow-defense` to enable ShadowBound. In this mode, ShadowBound will use the default allocator to manage metadata. The following example shows how to compile a simple program with ShadowBound.
+
+```bash
+clang -fsanitize=overflow-defense -O2 test/test.c
+```
+
+If you want to customize the allocator in ShadowBound, you can use `-fsanitize=memprotect` to disable the default allocator and use the customized allocator. The following example shows how to compile a simple program with ShadowBound and the FFMalloc allocator.
+
+```bash
+clang -fsanitize=memprotect -O2 test/test.c -L$PWD/ffmalloc -lffmalloc_st_perf -Wl,-rpath=$PWD/ffmalloc
 ```
 
 ## Bibtex
