@@ -46,6 +46,10 @@ If you want to customize the allocator in ShadowBound, you can use `-fsanitize=m
 clang -fsanitize=memprotect -O2 test/test.c -L$PWD/ffmalloc -lffmalloc_st_perf -Wl,-rpath=$PWD/ffmalloc
 ```
 
+## Evaluation
+
+To support the claims in the paper, you can follow the instructions in the [eval/README.md](eval/README.md) to reproduce the evaluation results.
+
 ## Bibtex
 
 ```
