@@ -36,5 +36,5 @@ RUN cd nginx-1.22.1 && \
         LDFLAGS="-L$SHADOWBOUND/markus-allocator/lib -lgc -lgccpp  -Wl,-rpath=$SHADOWBOUND/markus-allocator/lib" && \
     make install
 
-COPY eval/nginx/eval.sh /root/eval.sh
+COPY artifact/nginx/eval.sh /root/eval.sh
 CMD ["/root/eval.sh"]

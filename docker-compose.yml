@@ -10,11 +10,12 @@ services:
   nginx-eval:
     build:
       context: .
-      dockerfile: eval/nginx/Dockerfile
+      dockerfile: artifact/nginx/Dockerfile
     volumes:
-      - ./eval/nginx/results:/results
+      - ./artifact/nginx/results:/results
     environment:
       - TARGET=${TARGET:-shadowbound}
     privileged: true
 
 # docker compose up --build shadowbound
+# docker compose up --build nginx-eval

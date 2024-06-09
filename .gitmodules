@@ -1,0 +1,3 @@
+[submodule "artifact/security"]
+	path = artifact/security
+	url = git@github.com:cla7aye15I4nd/shadowbound-seceval.git
