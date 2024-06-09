@@ -35,3 +35,18 @@ Running 1m test @ http://localhost:80/index.html
 Requests/sec: 118955.36
 Transfer/sec:     96.77MB
 ```
+
+### Integration Test
+
+To show ShadowBound can cooperate with other UAF defenses, we show how we use ShadowBound+FFMalloc and ShadowBound+MarkUS to compile nginx and run it.
+
+add a warning box
+
+> [!WARNING]
+> You may encounter a `Segmentation fault` during the test due to UAF defense issues, not ShadowBound. If this occurs, try running the test again. In our experience, such issues are relatively rare.
+
+
+```bash
+TARGET=shadowbound-ffmalloc docker compose up --build nginx-eval
+TARGET=shadowbound-markus docker compose up --build nginx-eval
+```
