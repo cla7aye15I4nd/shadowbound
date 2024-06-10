@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    privileged: true
     image: shadowbound
   nginx-eval:
     build:
@@ -15,7 +14,12 @@ services:
       - ./artifact/nginx/results:/results
     environment:
       - TARGET=${TARGET:-shadowbound}
-    privileged: true
+  sec-eval:
+    build:
+      context: artifact/security
+      dockerfile: Dockerfile
+    image: sec-eval
 
 # docker compose up --build shadowbound
 # docker compose up --build nginx-eval
+# docker compose up --build sec-eval

@@ -3,7 +3,7 @@ FROM shadowbound
 COPY config /config
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y libpcre3-dev
+RUN apt-get update && apt-get install -y lsof libpcre3-dev
 
 RUN wget http://nginx.org/download/nginx-1.22.1.tar.gz && tar -xvf nginx-1.22.1.tar.gz
 
