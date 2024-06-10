@@ -54,3 +54,34 @@ After running the command, you can access the result at `eval/nginx/results/shad
 
 ### (Step 4) Security Test
 
+In the evaluation, we show how ShadowBound can prevent real world vulnerabilities. You can choose use our pre-built image to run the test or you can also build the image by yourself.
+
+#### Use Pre-built Image
+
+```bash
+docker pull dataisland/shadowbound-seceval:latest
+docker run -it dataisland/shadowbound-seceval /bin/bash
+/root/test.sh
+```
+
+#### Build Image by Yourself
+
+> [!WARNING]
+> Please ensure that your network and machine is stable, the building process may take a long time and download a lot of data. 
+> If you encounter any problems, please use our pre-built image as a safe choice.
+
+First you should build the image by this command:
+
+```bash
+docker compose up --build sec-eval
+```
+
+Then you can enter the container, build all the test cases and run them.
+
+```bash
+docker run -it sec-eval /bin/bash
+/root/build.sh && /root/test.sh
+```
+
+
+### (Step 5) Performance Test
