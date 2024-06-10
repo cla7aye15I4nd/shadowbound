@@ -51,7 +51,7 @@ clang -fsanitize=memprotect -O2 test/test.c -L$PWD/ffmalloc -lffmalloc_st_perf
 
 ## Evaluation
 
-To support the claims in our paper, you can follow the instructions in the [eval/README.md](eval/README.md) to reproduce the evaluation results.
+To support the claims in our paper, you can follow the instructions in the [artifact/README.md](artifact/README.md) to reproduce the evaluation results.
 
 ## Bibtex
 
