@@ -19,7 +19,13 @@ services:
       context: artifact/security
       dockerfile: Dockerfile
     image: sec-eval
+  spec2017-eval:
+    build:
+      context: .
+      dockerfile: artifact/spec2017/Dockerfile
+    image: spec2017-eval
 
 # docker compose up --build shadowbound
 # docker compose up --build nginx-eval
 # docker compose up --build sec-eval
+# docker compose up --build spec2017-eval

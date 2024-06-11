@@ -63,6 +63,23 @@ docker run -it dataisland/shadowbound-seceval /bin/bash
 /root/test.sh
 ```
 
+After running the command, you should see the following output:
+
+```shell
+[+] 2017-9164-9166
+[+] 2017-9167-9173
+[+] CVE-2006-6563
+[+] CVE-2009-2285
+[+] CVE-2013-4243
+[+] CVE-2013-7443
+[+] CVE-2014-1912
+[+] CVE-2015-8668
+[+] CVE-2015-9101
+[+] CVE-2016-10270
+[+] CVE-2016-10271
+...
+```
+
 #### 🔨 Build Image by Yourself
 
 > [!WARNING]
@@ -83,3 +100,23 @@ docker run -it sec-eval /bin/bash
 ```
 
 ### ⚡ (Step 5) Performance Test
+
+In this step, we demonstrate the performance of ShadowBound. You can use the following command to run the test:
+
+#### 🖼️ Use Pre-built Image
+
+```bash
+docker pull dataisland/shadowbound-perfeval:latest
+docker run -privileged -it dataisland/shadowbound-perfeval /bin/bash
+python3 /root/scripts/spectest.py | tee /root/spectest.log
+```
+
+After running the command, you can the result at `/root/spectest.log`.
+
+#### 🔨 Build Image by Yoursel
+
+If you want to build the image by yourself, you need to download the SPEC CPU 2017 benchmark suite (`cpu2017.iso`) from the official website. Then, use the following command to build the image:
+
+```bash
+CPU2017_PATH=/path/to/cpu2017.iso artifact/spec2017/build.sh
+```
