@@ -107,7 +107,7 @@ In this step, we demonstrate the performance of ShadowBound. You can use the fol
 
 ```bash
 docker pull dataisland/shadowbound-perfeval:latest
-docker run -privileged -it dataisland/shadowbound-perfeval /bin/bash
+docker run --privileged -it dataisland/shadowbound-perfeval /bin/bash
 python3 /root/scripts/spectest.py | tee /root/spectest.log
 ```
 
