@@ -1,29 +1,35 @@
-version: '3.8'
-
 services:
   shadowbound:
     build:
       context: .
       dockerfile: Dockerfile
-    image: shadowbound
+      labels:
+        - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
+    image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound:1.0.0
   nginx-eval:
     build:
       context: .
       dockerfile: artifact/nginx/Dockerfile
+      labels:
+        - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
     volumes:
       - ./artifact/nginx/results:/results
     environment:
       - TARGET=${TARGET:-shadowbound}
+    image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-nginx:1.0.0
   sec-eval:
     build:
       context: artifact/security
       dockerfile: Dockerfile
-    image: sec-eval
+      labels:
+        - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
+    image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0
   spec2017-eval:
     build:
       context: .
       dockerfile: artifact/spec2017/Dockerfile
-    image: spec2017-eval
+      labels:
+        - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
 
 # docker compose up --build shadowbound
 # docker compose up --build nginx-eval

@@ -1,4 +1,4 @@
-FROM shadowbound
+FROM ghcr.io/cla7aye15i4nd/shadowbound/shadowbound:1.0.0
 
 COPY config /config
 

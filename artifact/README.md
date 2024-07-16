@@ -58,8 +58,8 @@ In the evaluation, we demonstrate how ShadowBound can prevent real-world vulnera
 #### 🖼️ Use Pre-built Image
 
 ```bash
-docker pull dataisland/shadowbound-seceval:latest
-docker run -it dataisland/shadowbound-seceval /bin/bash
+docker pull ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0
+docker run -it ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0 /bin/bash
 /root/test.sh
 ```
 
@@ -106,8 +106,8 @@ In this step, we demonstrate the performance of ShadowBound. You can use the fol
 #### 🖼️ Use Pre-built Image
 
 ```bash
-docker pull dataisland/shadowbound-perfeval:latest
-docker run --privileged -it dataisland/shadowbound-perfeval /bin/bash
+docker pull ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-spec2017-eval:1.0.0
+docker run --privileged -it ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-spec2017-eval:1.0.0 /bin/bash
 python3 /root/scripts/spectest.py | tee /root/spectest.log
 ```
 
