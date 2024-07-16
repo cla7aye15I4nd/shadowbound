@@ -17,6 +17,8 @@ services:
     environment:
       - TARGET=${TARGET:-shadowbound}
     image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-nginx:1.0.0
+    depends_on:
+      - shadowbound
   sec-eval:
     build:
       context: artifact/security
@@ -24,12 +26,16 @@ services:
       labels:
         - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
     image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0
+    depends_on:
+      - shadowbound
   spec2017-eval:
     build:
       context: .
       dockerfile: artifact/spec2017/Dockerfile
       labels:
         - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
+    depends_on:
+      - shadowbound
 
 # docker compose up --build shadowbound
 # docker compose up --build nginx-eval
