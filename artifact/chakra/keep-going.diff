@@ -1,0 +1,22 @@
+diff --git a/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp b/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp
+index cc68f803f..ac12e23c0 100644
+--- a/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp
++++ b/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp
+@@ -76,7 +76,7 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
+                                       cl::Hidden, cl::init(false));
+ 
+ static cl::opt<bool> ClPerfTest("odef-perf-test", cl::desc("performance test"),
+-                                cl::Hidden, cl::init(false));
++                                cl::Hidden, cl::init(true));
+ // Please note that due to limitations in the current implementation, we cannot
+ // guarantee that all corresponding checks will be disabled when the
+ // odef-check-[heap|stack|global] option is set to false. However, in most
+@@ -529,7 +529,7 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
+ OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover,
+                                                std::string Runtime)
+     : Kernel(getOptOrDefault(ClEnableKodef, Kernel)),
+-      Recover(getOptOrDefault(ClKeepGoing, Kernel || Recover)),
++      Recover(getOptOrDefault(ClKeepGoing, Kernel || true)),
+       Runtime(Runtime) {}
+ 
+ PreservedAnalyses OverflowDefensePass::run(Function &F,

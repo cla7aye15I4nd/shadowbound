@@ -75,7 +75,7 @@ RUN cd ChakraCore && \
     --target-path=/ChakraCore/build/shadowbound \
     --cc=$SHADOWBOUND/llvm-project/build/bin/clang \
     --cxx=$SHADOWBOUND/llvm-project/build/bin/clang++ \
-    --sanitize=overflow-defense -j --static
+    --sanitize="overflow-defense" -j --static
 
 COPY artifact/chakra/test.sh /test.sh
 CMD ["/test.sh"]

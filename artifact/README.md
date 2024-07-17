@@ -131,3 +131,4 @@ You can compare the result at `artifact/nginx/results/native.txt` and `artifact/
 docker compose up --build chakra-eval
 ```
 
+You can check the result at `artifact/chakra/results/shadowbound.txt`.
