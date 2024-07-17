@@ -8,7 +8,7 @@
 You should use the following command to build the base image, all evaluation is based on the image.
 
 ```bash
-docker compose up --build shadowbound
+docker compose build shadowbound
 ```
 
 ## 🧪 (Step 2) Basic Test
@@ -16,10 +16,10 @@ docker compose up --build shadowbound
 Our basic test includes using ShadowBound to compile Nginx and run it. You can use the following command to achieve it:
 
 ```bash
-docker compose up --build nginx-eval
+docker compose up nginx-eval
 ```
 
-After running the command, you can access the result at `eval/nginx/results/shadowbound.txt`. The results should look like this:
+After running the command, you can access the result at `artifact/nginx/results/shadowbound.txt`. The results should look like this:
 
 ```
 Running 1m test @ http://localhost:80/index.html
@@ -45,11 +45,11 @@ To show ShadowBound can cooperate with other UAF defenses, we demonstrate how to
 > You may encounter a `Segmentation fault` during the test. This is due to UAF defense issues, not ShadowBound. If this occurs, try running the test again. In our experience, such issues are relatively rare.
 
 ```bash
-TARGET=shadowbound-ffmalloc docker compose up --build nginx-eval
-TARGET=shadowbound-markus docker compose up --build nginx-eval
+TARGET=shadowbound-ffmalloc docker compose up nginx-eval
+TARGET=shadowbound-markus docker compose up nginx-eval
 ```
 
-After running the command, you can access the result at `eval/nginx/results/shadowbound-ffmalloc.txt` and `eval/nginx/results/shadowbound-markus.txt`.
+After running the command, you can access the result at `artifact/nginx/results/shadowbound-ffmalloc.txt` and `artifact/nginx/results/shadowbound-markus.txt`.
 
 ### 🔐 (Step 4) Security Test
 
@@ -59,8 +59,7 @@ In the evaluation, we demonstrate how ShadowBound can prevent real-world vulnera
 
 ```bash
 docker pull ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0
-docker run -it ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0 /bin/bash
-/root/test.sh
+docker run -it ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-sec-eval:1.0.0 /root/test.sh
 ```
 
 After running the command, you should see the following output:
@@ -86,20 +85,13 @@ After running the command, you should see the following output:
 > Please ensure that your network and machine are stable. The building process may take a long time and download a lot of data. 
 > If you encounter any problems, please use our pre-built image as a safe choice.
 
-First, build the image with this command:
+First, build the image and run the test:
 
 ```bash
-docker compose up --build sec-eval
+docker compose run sec-eval /root/test.sh
 ```
 
-Then, enter the container, build all the test cases, and run them:
-
-```bash
-docker run -it sec-eval /bin/bash
-/root/build.sh && /root/test.sh
-```
-
-### ⚡ (Step 5) Performance Test
+### ⚡ (Step 5) SPEC CPU2017 Performance Test
 
 In this step, we demonstrate the performance of ShadowBound. You can use the following command to run the test:
 
@@ -120,3 +112,16 @@ If you want to build the image by yourself, you need to download the SPEC CPU 20
 ```bash
 CPU2017_PATH=/path/to/cpu2017.iso artifact/spec2017/build.sh
 ```
+
+### ⚡ (Step 6) Real World Performance Test
+
+In this step, we demonstrate the performance of ShadowBound in real-world application, include Nginx and ChakraCore. You can use the following command to run the test:
+
+#### Nginx
+
+```bash
+./artifact/nginx/test.sh 
+```
+
+#### ChakraCore
+

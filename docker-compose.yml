@@ -36,8 +36,3 @@ services:
         - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
     depends_on:
       - shadowbound
-
-# docker compose up --build shadowbound
-# docker compose up --build nginx-eval
-# docker compose up --build sec-eval
-# docker compose up --build spec2017-eval
