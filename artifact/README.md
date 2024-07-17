@@ -105,7 +105,7 @@ python3 /root/scripts/spectest.py | tee /root/spectest.log
 
 After running the command, you can the result at `/root/spectest.log`.
 
-#### 🔨 Build Image by Yoursel
+#### 🔨 Build Image by Yourself
 
 If you want to build the image by yourself, you need to download the SPEC CPU 2017 benchmark suite (`cpu2017.iso`) from the official website. Then, use the following command to build the image:
 
@@ -117,15 +117,39 @@ CPU2017_PATH=/path/to/cpu2017.iso artifact/spec2017/build.sh
 
 In this step, we demonstrate the performance of ShadowBound in real-world application, include Nginx and ChakraCore. You can use the following command to run the test:
 
-#### Nginx
+#### 🖼️ Use Pre-built Image
+
+##### Nginx
 
 ```bash
+docker pull ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-nginx:1.0.0
 ./artifact/nginx/test.sh 
 ```
 
 You can compare the result at `artifact/nginx/results/native.txt` and `artifact/nginx/results/shadowbound.txt` to see the performance overhead.
 
-#### ChakraCore
+##### ChakraCore
+
+```bash
+docker pull ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-chakra:1.0.0
+docker compose up chakra-eval
+```
+
+You can check the result at `artifact/chakra/results/shadowbound.txt`.
+
+
+#### 🔨 Build Image by Yourself
+
+##### Nginx
+
+```bash
+docker compose build nginx-eval
+./artifact/nginx/test.sh 
+```
+
+You can compare the result at `artifact/nginx/results/native.txt` and `artifact/nginx/results/shadowbound.txt` to see the performance overhead.
+
+##### ChakraCore
 
 ```bash
 docker compose up --build chakra-eval
