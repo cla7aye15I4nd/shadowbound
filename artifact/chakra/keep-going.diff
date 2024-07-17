@@ -1,5 +1,5 @@
 diff --git a/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp b/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp
-index cc68f803f..ac12e23c0 100644
+index cc68f803f..bd1864f18 100644
 --- a/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp
 +++ b/llvm/lib/Transforms/Instrumentation/OverflowDefense.cpp
 @@ -76,7 +76,7 @@ static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
@@ -11,6 +11,15 @@ index cc68f803f..ac12e23c0 100644
  // Please note that due to limitations in the current implementation, we cannot
  // guarantee that all corresponding checks will be disabled when the
  // odef-check-[heap|stack|global] option is set to false. However, in most
+@@ -122,7 +122,7 @@ static cl::opt<bool> ClPatternOpt("odef-pattern-opt",
+ 
+ static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
+                                              cl::desc("pattern opt file"),
+-                                             cl::Hidden, cl::init(""));
++                                             cl::Hidden, cl::init("/config/chakra.json"));
+ 
+ static cl::opt<bool> ClMergeOpt("odef-merge-opt",
+                                 cl::desc("optimize merge checks"), cl::Hidden,
 @@ -529,7 +529,7 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
  OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover,
                                                 std::string Runtime)
