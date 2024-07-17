@@ -19,6 +19,15 @@ services:
     image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-nginx:1.0.0
     depends_on:
       - shadowbound
+  chakra-eval:
+    build:
+      context: .
+      dockerfile: artifact/chakra/Dockerfile
+      labels:
+        - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
+    volumes:
+      - ./artifact/chakra/results:/results
+    image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-chakra:1.0.0
   sec-eval:
     build:
       context: artifact/security

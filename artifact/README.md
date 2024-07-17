@@ -16,7 +16,7 @@ docker compose build shadowbound
 Our basic test includes using ShadowBound to compile Nginx and run it. You can use the following command to achieve it:
 
 ```bash
-docker compose up nginx-eval
+docker compose up --build nginx-eval
 ```
 
 After running the command, you can access the result at `artifact/nginx/results/shadowbound.txt`. The results should look like this:
@@ -45,8 +45,8 @@ To show ShadowBound can cooperate with other UAF defenses, we demonstrate how to
 > You may encounter a `Segmentation fault` during the test. This is due to UAF defense issues, not ShadowBound. If this occurs, try running the test again. In our experience, such issues are relatively rare.
 
 ```bash
-TARGET=shadowbound-ffmalloc docker compose up nginx-eval
-TARGET=shadowbound-markus docker compose up nginx-eval
+TARGET=shadowbound-ffmalloc docker compose up --build nginx-eval
+TARGET=shadowbound-markus docker compose up --build nginx-eval
 ```
 
 After running the command, you can access the result at `artifact/nginx/results/shadowbound-ffmalloc.txt` and `artifact/nginx/results/shadowbound-markus.txt`.
@@ -123,5 +123,11 @@ In this step, we demonstrate the performance of ShadowBound in real-world applic
 ./artifact/nginx/test.sh 
 ```
 
+You can compare the result at `artifact/nginx/results/native.txt` and `artifact/nginx/results/shadowbound.txt` to see the performance overhead.
+
 #### ChakraCore
+
+```bash
+docker compose up --build chakra-eval
+```
 
