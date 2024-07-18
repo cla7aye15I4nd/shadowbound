@@ -16,6 +16,7 @@ services:
       - ./artifact/nginx/results:/results
     environment:
       - TARGET=${TARGET:-shadowbound}
+    privileged: true
     image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-nginx:1.0.0
     depends_on:
       - shadowbound
@@ -27,6 +28,7 @@ services:
         - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
     volumes:
       - ./artifact/chakra/results:/results
+    privileged: true
     image: ghcr.io/cla7aye15i4nd/shadowbound/shadowbound-chakra:1.0.0
   sec-eval:
     build:
@@ -43,5 +45,6 @@ services:
       dockerfile: artifact/spec2017/Dockerfile
       labels:
         - "org.opencontainers.image.source=https://github.com/cla7aye15I4nd/shadowbound"
+    privileged: true
     depends_on:
       - shadowbound
