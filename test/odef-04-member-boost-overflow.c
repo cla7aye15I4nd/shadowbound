@@ -19,11 +19,11 @@ struct S {
 };
 
 // CHECK-LABEL: @write_at(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 void write_at(struct S *s, long n) { ((char *)s)[n] = 1; }
 
 // CHECK-LABEL: @read_scaled(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 long read_scaled(struct S *s) { return ((long *)s)[50]; }
 
 // CHECK-LABEL: @odef.module_ctor(

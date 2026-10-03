@@ -46,7 +46,7 @@ addr_is_type(uptr addr, MappingDesc::Type mapping_type) {
 #define MEM_IS_APP(mem) addr_is_type((uptr)(mem), MappingDesc::APP)
 #define MEM_IS_SHADOW(mem) addr_is_type((uptr)(mem), MappingDesc::SHADOW)
 
-namespace __odef {
+namespace __shadowbound {
 
 extern bool odef_inited;
 extern bool odef_init_is_running;
@@ -72,6 +72,6 @@ int odef_posix_memalign(void **memptr, uptr alignment, uptr size);
 void OdefTSDInit(void (*destructor)(void *tsd));
 void OdefTSDDtor(void *tsd);
 
-} // namespace __odef
+} // namespace __shadowbound
 
 #endif // ODEF_H

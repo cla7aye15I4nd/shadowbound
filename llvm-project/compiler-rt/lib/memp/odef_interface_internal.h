@@ -7,13 +7,13 @@ using __sanitizer::uptr;
 
 extern "C" {
 SANITIZER_INTERFACE_ATTRIBUTE
-void __odef_init();
+void __shadowbound_init();
 
 SANITIZER_INTERFACE_ATTRIBUTE
-void __odef_report();
+void __shadowbound_report();
 
 SANITIZER_INTERFACE_ATTRIBUTE __attribute__((noreturn))
-void __odef_abort();
+void __shadowbound_abort();
 
 }
 

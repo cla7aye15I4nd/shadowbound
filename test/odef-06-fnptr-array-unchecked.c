@@ -19,7 +19,7 @@ struct ctx {
 typedef void (*handler_t)(struct ctx *);
 
 // CHECK-LABEL: @dispatch(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 void dispatch(handler_t *tbl, long i, struct ctx *c) { tbl[i](c); }
 
 // CHECK-LABEL: @odef.module_ctor(

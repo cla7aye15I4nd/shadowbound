@@ -6,7 +6,7 @@
 //   * shadowbound with address / memory / thread / hwaddress links two
 //     malloc interposers and two conflicting shadow layouts;
 //   * shadowbound with shadowbound-instrument-only links clang_rt.odef and
-//     clang_rt.memp, which both define __odef_init / __odef_abort, and runs
+//     clang_rt.memp, which both define __shadowbound_init / __shadowbound_abort, and runs
 //     the instrumentation pass twice.
 // These fail late (duplicate symbols, crashes at startup) instead of being
 // rejected by the driver.

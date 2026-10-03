@@ -22,7 +22,7 @@ int use_a(struct A *a);
 int use_b(struct B *b);
 
 // CHECK-LABEL: @both(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 int both(void *p) { return use_a((struct A *)p) + use_b((struct B *)p); }
 
 // CHECK-LABEL: @odef.module_ctor(

@@ -9,7 +9,7 @@
 #include "sanitizer_common/sanitizer_tls_get_addr.h"
 #include "sanitizer_common/sanitizer_vector.h"
 
-using namespace __odef;
+using namespace __shadowbound;
 
 DECLARE_REAL(void *, memset, void *dest, int c, uptr n)
 DECLARE_REAL(void *, memcpy, void *src, const void* dst, uptr n)
@@ -35,7 +35,7 @@ struct OdefInterceptorContext {
   do {                                                                         \
     CHECK(!odef_init_is_running);                                              \
     if (!odef_inited) {                                                        \
-      __odef_init();                                                           \
+      __shadowbound_init();                                                           \
     }                                                                          \
   } while (0)
 
@@ -154,25 +154,36 @@ INTERCEPTOR(int, pthread_join, void *th, void **retval) {
 
 DEFINE_REAL_PTHREAD_FUNCTIONS
 
-extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_only_small_alloc_opt;
-extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_keep_going;
-extern "C" SANITIZER_WEAK_ATTRIBUTE const int __odef_skip_instrument;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __shadowbound_only_small_alloc_opt;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __shadowbound_keep_going;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __shadowbound_skip_instrument;
+extern "C" SANITIZER_WEAK_ATTRIBUTE const int __shadowbound_perf_test;
 
 void check_range(uptr ptr, uptr size) {
-  if (__odef_skip_instrument || !MEM_IS_APP(ptr))
+  // Skip when instrumentation is off, in perf-test mode (checks disabled, like
+  // SetShadow), or for non-heap pointers.
+  if (__shadowbound_skip_instrument || __shadowbound_perf_test || !MEM_IS_APP(ptr))
     return;
-  if (__builtin_expect(__odef_only_small_alloc_opt, 1)) {
-    if (((uptr)(*((u32 *)MEM_TO_SHADOW(ptr)))) < size) {
-      Report(" Overflow detected (check_range)\n");
-      if (!__odef_keep_going)
-        Die();
-    }
-  } else {
-    if (((uptr)(*((u32 *)MEM_TO_SHADOW(ptr)))) * sizeof(u32) < size) {
-      Report(" Overflow detected (check_range)\n");
-      if (!__odef_keep_going)
-        Die();
-    }
+
+  // MEM_TO_SHADOW masks ptr down to its 8-byte granule, so the stored BACK
+  // distance is measured from the granule base, not from ptr. Account for the
+  // sub-granule offset (ptr & 7); otherwise up to 7 bytes of overflow are
+  // missed. BACK is in bytes with the small-alloc optimization, else in 8-byte
+  // units (matching the compiler's `<< 3`).
+  uptr off = ptr & 7;
+  uptr back = (uptr)(*((u32 *)MEM_TO_SHADOW(ptr)));
+  // A zero granule means the pointer is not a tracked allocation (e.g. memory
+  // in the app range whose shadow was never written, which reads back as the
+  // demand-zero page). Don't report it: the compiler-inserted checks cover
+  // tracked objects, and reporting here gives false positives on untracked
+  // memory.
+  if (back == 0)
+    return;
+  uptr avail = __shadowbound_only_small_alloc_opt ? back : back * sizeof(u64);
+  if (avail < off + size) {
+    Report(" Overflow detected (check_range)\n");
+    if (!__shadowbound_keep_going)
+      Die();
   }
 }
 
@@ -292,7 +303,7 @@ static ALIGNED(64) char interceptor_placeholder[sizeof(InterceptorContext)];
 InterceptorContext *interceptor_ctx() {
   return reinterpret_cast<InterceptorContext *>(&interceptor_placeholder[0]);
 }
-namespace __odef {
+namespace __shadowbound {
 
 void InitializeInterceptors() {
   static int inited = 0;
@@ -330,4 +341,4 @@ void InitializeInterceptors() {
   inited = 1;
 }
 
-} // namespace __odef
+} // namespace __shadowbound

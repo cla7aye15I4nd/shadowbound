@@ -21,7 +21,7 @@
 void sink(char *);
 
 // CHECK-LABEL: @local(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: store i8 1
 void local(long n, long i) {
   char *p = malloc(n);

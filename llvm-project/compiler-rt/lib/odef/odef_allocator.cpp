@@ -6,7 +6,7 @@
 #include "sanitizer_common/sanitizer_allocator_checks.h"
 #include "sanitizer_common/sanitizer_errno.h"
 #include "sanitizer_common/sanitizer_libc.h"
-namespace __odef {
+namespace __shadowbound {
 
 struct OdefMapUnmapCallback {
   void OnMap(uptr p, uptr size) const {}
@@ -49,12 +49,21 @@ void OdefThreadLocalMallocStorage::CommitBack() {
   allocator.SwallowCache(GetAllocatorCache(this));
 }
 
+// Add the reserved bytes without wrapping: a request that would overflow is
+// clamped to a value above the max so OdefAllocate rejects it (and returns
+// NULL) rather than silently allocating a tiny buffer.
+static uptr AddReserve(uptr size) {
+  if (size > (uptr)-1 - kReservedBytes)
+    return (uptr)-1;
+  return size + kReservedBytes;
+}
+
 static void *OdefAllocate(uptr size, uptr alignment) {
   if (size > kMaxAllowedMallocSize) {
-    Report(" ERROR: odef_malloc(%zu) exceeds the maximum supported size "
-           "of %zu\n",
-           size, kMaxAllowedMallocSize);
-    Die();
+    // Too large: return NULL (ENOMEM) instead of aborting, so callers that
+    // probe large sizes behave normally.
+    errno = errno_ENOMEM;
+    return nullptr;
   }
 
   OdefThread *t = GetCurrentThread();
@@ -67,7 +76,10 @@ static void *OdefAllocate(uptr size, uptr alignment) {
     AllocatorCache *cache = &fallback_allocator_cache;
     allocated = allocator.Allocate(cache, size, alignment);
   }
-  // FIXME: CHECK if out of memory.
+  if (!allocated) {
+    errno = errno_ENOMEM;
+    return nullptr;
+  }
   SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
   return allocated;
 }
@@ -99,23 +111,22 @@ static void *OdefReallocate(void *old_p, uptr new_size, uptr alignment) {
   return new_p;
 }
 
-static void *OdefCalloc(uptr nmemb, uptr size) {
+void *odef_malloc(uptr size) {
+  return OdefAllocate(AddReserve(size), sizeof(u64));
+}
+
+void *odef_calloc(uptr nmemb, uptr size) {
+  // calloc(n, 0) and 0*size are legal; guard the multiplication against
+  // overflow (a wrapped product would under-allocate).
+  if (size != 0 && nmemb > ((uptr)-1 - kReservedBytes) / size) {
+    errno = errno_ENOMEM;
+    return nullptr;
+  }
   uptr bytes = nmemb * size;
-  void *p = OdefAllocate(bytes, sizeof(u64));
+  void *p = OdefAllocate(bytes + kReservedBytes, sizeof(u64));
   if (p)
     internal_memset(p, 0, bytes);
   return p;
-}
-
-void *odef_malloc(uptr size) {
-  size += kReservedBytes;
-  return OdefAllocate(size, sizeof(u64));
-}
-
-// TODO: Increasing the `nmemb` amy should be moved to the Instrumentation.
-void *odef_calloc(uptr nmemb, uptr size) {
-  nmemb += (kReservedBytes + size - 1) / size;
-  return OdefCalloc(nmemb, size);
 }
 
 void *odef_realloc(void *p, uptr size) {
@@ -124,7 +135,7 @@ void *odef_realloc(void *p, uptr size) {
     return nullptr;
   }
 
-  size += kReservedBytes;
+  size = AddReserve(size);
   if (!p)
     return OdefAllocate(size, sizeof(u64));
   else
@@ -132,47 +143,48 @@ void *odef_realloc(void *p, uptr size) {
 }
 
 void *odef_reallocarray(void *p, uptr nmemb, uptr size) {
+  if (size != 0 && nmemb > (uptr)-1 / size) {
+    errno = errno_ENOMEM;
+    return nullptr;
+  }
   return odef_realloc(p, nmemb * size);
 }
 
 void *odef_valloc(uptr size) {
-  size += kReservedBytes;
-  return OdefAllocate(size, GetPageSizeCached());
+  return OdefAllocate(AddReserve(size), GetPageSizeCached());
 }
 
 void *odef_pvalloc(uptr size) {
   uptr PageSize = GetPageSizeCached();
-
-  size = RoundUpTo(size + kReservedBytes, PageSize);
-  return OdefAllocate(size, PageSize);
+  return OdefAllocate(RoundUpTo(AddReserve(size), PageSize), PageSize);
 }
 
 void *odef_aligned_alloc(uptr alignment, uptr size) {
-  size += kReservedBytes;
-  return OdefAllocate(size, alignment);
+  return OdefAllocate(AddReserve(size), alignment);
 }
 
 void *odef_memalign(uptr alignment, uptr size) {
-  size += kReservedBytes;
-  return OdefAllocate(size, alignment);
+  return OdefAllocate(AddReserve(size), alignment);
 }
 
 uptr odef_allocated_size(void *p) {
-  return allocator.GetActuallyAllocatedSize(p) - kReservedBytes;
+  if (!p)
+    return 0;
+  uptr n = allocator.GetActuallyAllocatedSize(p);
+  return n > kReservedBytes ? n - kReservedBytes : 0;
 }
 
 int odef_posix_memalign(void **memptr, uptr alignment, uptr size) {
   if (UNLIKELY(!CheckPosixMemalignAlignment(alignment))) {
     return errno_EINVAL;
   }
-  size += kReservedBytes;
-  void *p = OdefAllocate(size, alignment);
+  void *p = OdefAllocate(AddReserve(size), alignment);
   if (!p)
     return errno_ENOMEM;
   *memptr = p;
   return 0;
 }
 
-} // namespace __odef
+} // namespace __shadowbound
 
-using namespace __odef;
+using namespace __shadowbound;

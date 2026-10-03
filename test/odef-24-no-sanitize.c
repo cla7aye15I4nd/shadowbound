@@ -12,13 +12,13 @@
 // RUN: %odef_ir %s 2>/dev/null | FileCheck %s
 
 // CHECK-LABEL: @skipped(
-// CHECK-NOT: call void @__odef_abort()
+// CHECK-NOT: call void @__shadowbound_abort()
 __attribute__((no_sanitize("shadowbound"))) char skipped(char *p, long i) {
   return p[i];
 }
 
 // CHECK-LABEL: @checked(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 char checked(char *p, long i) { return p[i]; }
 
 // CHECK-LABEL: @odef.module_ctor(

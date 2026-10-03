@@ -21,7 +21,7 @@
 // so a pointer at the end of the chunk (and the reserve) is rejected.
 // CHECK: add i64 %{{[0-9]+}}, 32
 // CHECK: icmp ugt i64
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 long get(long *p, long i) { return p[i]; }
 
 // CHECK-LABEL: @odef.module_ctor(

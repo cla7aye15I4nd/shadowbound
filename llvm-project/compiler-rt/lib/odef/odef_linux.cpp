@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <unwind.h>
 
-namespace __odef {
+namespace __shadowbound {
 
 static bool CheckMemoryRangeAvailability(uptr beg, uptr size) {
   if (size > 0) {
@@ -159,4 +159,4 @@ void OdefTSDDtor(void *tsd) {
   OdefThread::TSDDtor(tsd);
 }
 
-} // namespace __odef
+} // namespace __shadowbound

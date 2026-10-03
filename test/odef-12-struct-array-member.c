@@ -18,11 +18,11 @@ struct S {
 };
 
 // CHECK-LABEL: @set(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 void set(struct S *s, long i) { s->arr[i] = 1; }
 
 // CHECK-LABEL: @get_n(
-// CHECK-NOT: call void @__odef_abort()
+// CHECK-NOT: call void @__shadowbound_abort()
 int get_n(struct S *s) { return s->n; }
 
 // CHECK-LABEL: @odef.module_ctor(
