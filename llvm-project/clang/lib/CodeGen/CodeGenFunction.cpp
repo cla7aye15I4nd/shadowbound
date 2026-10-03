@@ -768,10 +768,10 @@ void CodeGenFunction::StartFunction(GlobalDecl GD, QualType RetTy,
   // ShadowBound instruments every function of an instrumented module, so
   // tell it about functions that opted out with no_sanitize.
   const SanitizerMask OdefKinds =
-      SanitizerKind::ShadowBound | SanitizerKind::MemProtect;
+      SanitizerKind::ShadowBound | SanitizerKind::ShadowBoundInstrumentOnly;
   if (getLangOpts().Sanitize.hasOneOf(OdefKinds) &&
       (ShouldSkipSanitizerInstrumentation() || !SanOpts.hasOneOf(OdefKinds)))
-    Fn->addFnAttr("no_overflow_defense");
+    Fn->addFnAttr("no_shadowbound");
   if (SanOpts.has(SanitizerKind::SafeStack))
     Fn->addFnAttr(llvm::Attribute::SafeStack);
   if (SanOpts.has(SanitizerKind::ShadowCallStack))

@@ -84,10 +84,6 @@ static cl::opt<bool> ClCheckHeap("odef-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
                                  cl::init(true));
 
-static cl::opt<bool> ClCheckInField("odef-check-in-field",
-                                    cl::desc("check in-field memory"),
-                                    cl::Hidden, cl::init(false));
-
 // ==== Optimization Option ==== //
 static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
@@ -145,7 +141,6 @@ enum CheckType {
   kRuntimeCheck = 0,
   kClusterCheck = 1,
   kBuiltInCheck = 2,
-  kInFieldCheck = 3,
   kCheckTypeEnd
 };
 
@@ -160,15 +155,6 @@ struct BaseCheck {
 
   BaseCheck() = delete;
   BaseCheck(enum CheckType Type) : Type(Type) {}
-};
-
-struct FieldCheck : public BaseCheck {
-  GetElementPtrInst *Gep;
-  SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
-
-  FieldCheck(GetElementPtrInst *Gep,
-             SmallVector<std::pair<Value *, uint64_t>, 16> SubFields)
-      : BaseCheck(kInFieldCheck), Gep(Gep), SubFields(SubFields) {}
 };
 
 struct ClusterCheck : public BaseCheck {
@@ -275,7 +261,6 @@ private:
   SmallVector<GetElementPtrInst *, 16>
   dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                            PostDominatorTree &PDT, ScalarEvolution &SE);
-  void collectSubFieldCheck(Function &F, ScalarEvolution &SE);
   void collectChunkCheck(Function &F, LoopInfo &LI,
                          ObjectSizeOffsetEvaluator &ObjSizeEval,
                          ScalarEvolution &SE, DominatorTree &DT);
@@ -289,7 +274,6 @@ private:
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
   void commitInstrument(Function &F);
-  void commitFieldCheck(Function &F, FieldCheck &Check);
   void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
   void commitClusterCheck(Function &F, ClusterCheck &Check);
   void commitRuntimeCheck(Function &F, RuntimeCheck &Check);
@@ -318,8 +302,6 @@ private:
 
   SmallVector<GetElementPtrInst *, 16> GepToInstrument;
   SmallVector<BitCastInst *, 16> BcToInstrument;
-
-  SmallVector<GetElementPtrInst *, 16> SubFieldToInstrument;
 
   DenseMap<Value *, OffsetDir> OffsetDirCache;
   // Directions whose check can be dropped because a dominating check on the
@@ -637,7 +619,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
     return false;
 
   // no_sanitize("shadowbound") / disable_sanitizer_instrumentation.
-  if (F.hasFnAttribute("no_overflow_defense") ||
+  if (F.hasFnAttribute("no_shadowbound") ||
       F.hasFnAttribute(Attribute::DisableSanitizerInstrumentation))
     return false;
 
@@ -674,8 +656,6 @@ bool ShadowBound::sanitizeFunction(Function &F,
   structPointerOptimizae(F, SE);
   patternOptimize(F);
 
-  collectSubFieldCheck(F, SE);
-
   // Instrument GEP and BC
   collectChunkCheck(F, LI, ObjSizeEval, SE, DT);
 
@@ -685,7 +665,6 @@ bool ShadowBound::sanitizeFunction(Function &F,
     LLVM_DEBUG(dbgs() << "  Builtin Check: " << Counter[kBuiltInCheck] << "\n");
     LLVM_DEBUG(dbgs() << "  Cluster Check: " << Counter[kClusterCheck] << "\n");
     LLVM_DEBUG(dbgs() << "  Runtime Check: " << Counter[kRuntimeCheck] << "\n");
-    LLVM_DEBUG(dbgs() << "  InField Check: " << Counter[kInFieldCheck] << "\n");
   }
 
   return true;
@@ -696,10 +675,8 @@ void ShadowBound::collectToInstrument(
   for (auto &BB : F) {
     for (auto &I : BB) {
       if (auto *Gep = dyn_cast<GetElementPtrInst>(&I)) {
-        if (!filterToInstrument(F, Gep, ObjSizeEval, SE)) {
+        if (!filterToInstrument(F, Gep, ObjSizeEval, SE))
           GepToInstrument.push_back(Gep);
-          SubFieldToInstrument.push_back(Gep);
-        }
       } else if (auto *Bc = dyn_cast<BitCastInst>(&I)) {
         if (!filterToInstrument(F, Bc, ObjSizeEval, SE))
           BcToInstrument.push_back(Bc);
@@ -905,68 +882,6 @@ bool ShadowBound::isShrinkBitCast(Instruction *I) {
   }
 
   return false;
-}
-
-void ShadowBound::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
-  if (!ClCheckInField)
-    return;
-
-  for (auto *Gep : SubFieldToInstrument) {
-    Type *Ty = Gep->getPointerOperandType()->getPointerElementType();
-
-    if (isa<GlobalVariable>(Gep->getPointerOperand())) {
-      continue;
-    }
-
-    if (isFixedSizeType(Ty)) {
-      bool skipOnce = false;
-      bool isFirstField = true;
-      SmallVector<std::pair<Value *, uint64_t>, 16> SubFields;
-
-      for (auto &Op : Gep->indices()) {
-        if (isFirstField) {
-          isFirstField = false;
-          continue;
-        }
-
-        auto value = Op.get();
-
-        // determine the type of value is int32 or int64
-        if (value->getType()->isIntegerTy(32)) {
-          ASSERT(Ty->isStructTy());
-          ASSERT(isa<ConstantInt>(value));
-          ASSERT(cast<ConstantInt>(value)->getZExtValue() <
-                 cast<StructType>(Ty)->getNumElements());
-          ASSERT(!skipOnce);
-
-          StructType *STy = cast<StructType>(Ty);
-          auto index = cast<ConstantInt>(value)->getZExtValue();
-          Ty = STy->getElementType(index);
-
-          if (isFlexibleStructure(STy) && index == STy->getNumElements() - 1)
-            skipOnce = true;
-        } else {
-          ASSERT(value->getType()->isIntegerTy(64));
-          ASSERT(Ty->isArrayTy());
-
-          auto Aty = cast<ArrayType>(Ty);
-
-          if (skipOnce) {
-            skipOnce = false;
-          } else if (SE.getUnsignedRangeMax(SE.getSCEV(value)).getZExtValue() >=
-                     Aty->getNumElements()) {
-            SubFields.push_back(std::make_pair(value, Aty->getNumElements()));
-          }
-
-          Ty = Aty->getArrayElementType();
-        }
-      }
-
-      if (SubFields.size() > 0) {
-        Checks.push_back(new FieldCheck(Gep, SubFields));
-      }
-    }
-  }
 }
 
 void ShadowBound::dependencyOptimize(Function &F, DominatorTree &DT,
@@ -1586,8 +1501,8 @@ bool ShadowBound::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
   ASSERT(ML != nullptr);
 
   if (auto *ARE = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
-    auto *Start = ARE->getStart();
-    auto *Step = ARE->getStepRecurrence(SE);
+    [[maybe_unused]] auto *Start = ARE->getStart();
+    [[maybe_unused]] auto *Step = ARE->getStepRecurrence(SE);
 
     LLVM_DEBUG(dbgs() << "[IndGep]\n");
     LLVM_DEBUG(dbgs() << "Addr: " << *Addr << "\n");
@@ -1939,34 +1854,11 @@ void ShadowBound::commitInstrument(Function &F) {
       commitClusterCheck(F, (ClusterCheck &)C);
     } else if (C.Type == kRuntimeCheck) {
       commitRuntimeCheck(F, (RuntimeCheck &)C);
-    } else if (C.Type == kInFieldCheck) {
-      commitFieldCheck(F, (FieldCheck &)C);
     } else {
       ASSERT(false);
       __builtin_unreachable();
     }
   }
-}
-
-void ShadowBound::commitFieldCheck(Function &F, FieldCheck &FC) {
-  if (!ClCheckInField)
-    return;
-
-  ASSERT(FC.Type == kInFieldCheck);
-  Counter[kInFieldCheck]++;
-
-  Instruction *InsertPt = FC.Gep;
-  BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
-                TargetFolder(*DL));
-
-  Value *Cond = nullptr;
-  for (auto &SF : FC.SubFields) {
-    Value *Cmp =
-        IRB.CreateICmpUGE(SF.first, ConstantInt::get(int64Type, SF.second));
-    Cond = Cond ? IRB.CreateOr(Cond, Cmp) : Cmp;
-  }
-
-  CreateTrapBB(IRB, Cond, true);
 }
 
 void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
