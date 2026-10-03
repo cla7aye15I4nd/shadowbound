@@ -1,0 +1,89 @@
+name: runtime-tests
+
+# Build the ShadowBound compiler AND its runtime (compiler-rt odef), then run
+# the runtime PoC suite in test/runtime/, which links and executes programs to
+# check the allocator/interceptor fixes.
+
+on:
+  push:
+    branches: [shadowbound-runtime-fixes, main]
+    paths:
+      - 'llvm-project/compiler-rt/lib/odef/**'
+      - 'llvm-project/compiler-rt/lib/memp/**'
+      - 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp'
+      - 'test/runtime/**'
+      - '.github/workflows/runtime-tests.yml'
+  pull_request:
+    paths:
+      - 'llvm-project/compiler-rt/lib/odef/**'
+      - 'llvm-project/compiler-rt/lib/memp/**'
+      - 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp'
+      - 'test/runtime/**'
+      - '.github/workflows/runtime-tests.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: runtime-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang lld python3 ccache
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc || true
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: ccache-rt-${{ hashFiles('llvm-project/compiler-rt/lib/odef/*.cpp', 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp') }}
+          restore-keys: |
+            ccache-rt-
+            ccache-llvm15-
+
+      - name: Configure
+        run: |
+          cmake -S llvm-project/llvm -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+            -DLLVM_USE_LINKER=lld \
+            -DLLVM_CCACHE_BUILD=ON \
+            -DLLVM_TARGETS_TO_BUILD=X86 \
+            -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" \
+            -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
+            -DLLVM_PARALLEL_LINK_JOBS=1 \
+            -DLLVM_INCLUDE_BENCHMARKS=OFF \
+            -DLLVM_INCLUDE_EXAMPLES=OFF \
+            -DLLVM_INCLUDE_TESTS=OFF \
+            -DCOMPILER_RT_SANITIZERS_TO_BUILD="odef;memp" \
+            -DCOMPILER_RT_INCLUDE_TESTS=OFF \
+            -DCOMPILER_RT_BUILD_XRAY=OFF \
+            -DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+            -DCOMPILER_RT_BUILD_PROFILE=OFF \
+            -DCOMPILER_RT_BUILD_MEMPROF=OFF \
+            -DCOMPILER_RT_BUILD_ORC=OFF
+
+      - name: Build clang, tools and runtime
+        run: ninja -C build clang opt FileCheck not count compiler-rt
+
+      - name: Disable ASLR (ShadowBound uses fixed shadow/allocator mappings)
+        run: sudo sysctl -w kernel.randomize_va_space=0
+
+      - name: Run ShadowBound runtime PoC suite
+        env:
+          SHADOWBOUND_BUILD: ${{ github.workspace }}/build
+        run: |
+          python3 llvm-project/llvm/utils/lit/lit.py -v test/runtime/
+
+      - name: Build FFmalloc (shadowbound-instrument-only allocator)
+        run: make -C ffmalloc -j"$(nproc)"

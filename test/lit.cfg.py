@@ -17,7 +17,7 @@ config.test_source_root = os.path.dirname(__file__)
 config.test_exec_root = os.path.join(config.test_source_root, 'Output')
 
 # Pre-existing ad-hoc sample programs, not lit tests.
-config.excludes = ['Inputs', 'Output', 'test.c', 'pgo.c', 'pattern.cpp']
+config.excludes = ['Inputs', 'Output', 'runtime', 'test.c', 'pgo.c', 'pattern.cpp']
 
 repo_root = os.path.dirname(config.test_source_root)
 build_dir = os.environ.get('SHADOWBOUND_BUILD',
