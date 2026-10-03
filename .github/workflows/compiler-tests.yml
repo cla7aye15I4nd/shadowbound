@@ -1,0 +1,89 @@
+name: compiler-tests
+
+# Build the ShadowBound compiler and run the PoC regression suite in test/,
+# which asserts that every fixed compiler-level bug stays fixed. The tests only
+# compile to LLVM IR / check driver diagnostics, so compiler-rt is not needed.
+
+on:
+  push:
+    branches: [shadowbound-compiler-fixes, main]
+    paths:
+      - 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp'
+      - 'llvm-project/llvm/lib/Transforms/Utils/Identification.cpp'
+      - 'llvm-project/llvm/include/llvm/Transforms/Instrumentation/ShadowBound.h'
+      - 'llvm-project/llvm/lib/Passes/**'
+      - 'llvm-project/clang/lib/CodeGen/**'
+      - 'llvm-project/clang/lib/Driver/**'
+      - 'llvm-project/clang/include/clang/Basic/Sanitizers.def'
+      - 'test/**'
+      - '.github/workflows/compiler-tests.yml'
+  pull_request:
+    paths:
+      - 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp'
+      - 'llvm-project/llvm/lib/Transforms/Utils/Identification.cpp'
+      - 'llvm-project/llvm/include/llvm/Transforms/Instrumentation/ShadowBound.h'
+      - 'llvm-project/llvm/lib/Passes/**'
+      - 'llvm-project/clang/lib/CodeGen/**'
+      - 'llvm-project/clang/lib/Driver/**'
+      - 'llvm-project/clang/include/clang/Basic/Sanitizers.def'
+      - 'test/**'
+      - '.github/workflows/compiler-tests.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: compiler-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 350
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build clang lld python3 ccache
+
+      - name: Free up disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc || true
+          df -h /
+
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          # Bust the cache when the pass/driver sources change; otherwise reuse.
+          key: ccache-llvm15-${{ hashFiles('llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp', 'llvm-project/clang/lib/Driver/SanitizerArgs.cpp', 'llvm-project/clang/lib/CodeGen/*.cpp') }}
+          restore-keys: |
+            ccache-llvm15-
+
+      - name: Configure
+        run: |
+          cmake -S llvm-project/llvm -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+            -DLLVM_USE_LINKER=lld \
+            -DLLVM_CCACHE_BUILD=ON \
+            -DLLVM_TARGETS_TO_BUILD=X86 \
+            -DLLVM_ENABLE_PROJECTS=clang \
+            -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
+            -DLLVM_PARALLEL_LINK_JOBS=1 \
+            -DLLVM_INCLUDE_BENCHMARKS=OFF \
+            -DLLVM_INCLUDE_EXAMPLES=OFF \
+            -DLLVM_INCLUDE_TESTS=OFF
+
+      - name: Build clang and test tools
+        run: |
+          ccache -z || true
+          ninja -C build clang opt FileCheck not count
+          ccache -s || true
+
+      - name: Run ShadowBound PoC regression suite
+        env:
+          SHADOWBOUND_BUILD: ${{ github.workspace }}/build
+        run: |
+          python3 llvm-project/llvm/utils/lit/lit.py -v test/
