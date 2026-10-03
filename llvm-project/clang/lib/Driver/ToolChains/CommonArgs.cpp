@@ -551,6 +551,14 @@ void tools::addLTOOptions(const ToolChain &ToolChain, const ArgList &Args,
   if (!CLANG_ENABLE_OPAQUE_POINTERS_INTERNAL)
     CmdArgs.push_back(Args.MakeArgString("-plugin-opt=no-opaque-pointers"));
 
+  // ShadowBound instruments at link time under LTO, so its -mllvm options
+  // (-shadowbound-*) must reach the LTO backend too.
+  for (const Arg *A : Args.filtered(options::OPT_mllvm)) {
+    StringRef Opt = A->getValue();
+    if (Opt.startswith("-shadowbound-"))
+      CmdArgs.push_back(Args.MakeArgString("-plugin-opt=" + Opt));
+  }
+
   // If an explicit debugger tuning argument appeared, pass it along.
   if (Arg *A = Args.getLastArg(options::OPT_gTune_Group,
                                options::OPT_ggdbN_Group)) {

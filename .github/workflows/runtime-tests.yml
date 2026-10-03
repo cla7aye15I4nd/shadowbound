@@ -59,7 +59,7 @@ jobs:
             -DLLVM_USE_LINKER=lld \
             -DLLVM_CCACHE_BUILD=ON \
             -DLLVM_TARGETS_TO_BUILD=X86 \
-            -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" \
+            -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt" \
             -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
             -DLLVM_PARALLEL_LINK_JOBS=1 \
             -DLLVM_INCLUDE_BENCHMARKS=OFF \
@@ -74,7 +74,7 @@ jobs:
             -DCOMPILER_RT_BUILD_ORC=OFF
 
       - name: Build clang, tools and runtime
-        run: ninja -C build clang opt FileCheck not count compiler-rt
+        run: ninja -C build clang lld opt FileCheck not count compiler-rt
 
       - name: Disable ASLR (ShadowBound uses fixed shadow/allocator mappings)
         run: sudo sysctl -w kernel.randomize_va_space=0

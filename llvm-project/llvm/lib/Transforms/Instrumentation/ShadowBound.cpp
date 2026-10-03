@@ -2,6 +2,8 @@
 //------------===//
 
 #include "llvm/Transforms/Instrumentation/ShadowBound.h"
+#include "llvm/ADT/SetVector.h"
+#include "llvm/ADT/Statistic.h"
 #include "llvm/ADT/StringSet.h"
 #include "llvm/Analysis/CFG.h"
 #include "llvm/Analysis/LoopInfo.h"
@@ -9,8 +11,10 @@
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm/Analysis/ValueTracking.h"
 #include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/Constant.h"
+#include "llvm/IR/InstIterator.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/MDBuilder.h"
 #include "llvm/IR/Operator.h"
@@ -34,6 +38,17 @@ using namespace llvm;
 using BuilderTy = IRBuilder<TargetFolder>;
 
 #define DEBUG_TYPE "shadowbound"
+
+STATISTIC(NumRuntimeChecks, "Number of shadow-memory bounds checks emitted");
+STATISTIC(NumClusterChecks, "Number of clustered shadow-memory bound loads");
+STATISTIC(NumBuiltinChecks, "Number of checks against a statically known size");
+STATISTIC(NumNonHeapElided,
+          "Number of checks dropped because the source is never a heap pointer");
+STATISTIC(NumStructHeuristicElided,
+          "Number of checks dropped by the struct-field heuristic");
+STATISTIC(NumIPONonHeapArgs, "Number of arguments proven never heap pointers");
+STATISTIC(NumIPONonHeapRets,
+          "Number of functions proven to never return a heap pointer");
 
 // Please use this macro instead of assert()
 #define ASSERT(X)                                                              \
@@ -127,6 +142,19 @@ static cl::opt<std::string> ClWhiteList("shadowbound-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
                                         cl::init(""));
 
+static cl::opt<bool> ClNonHeapOpt(
+    "shadowbound-nonheap-opt",
+    cl::desc("drop checks whose source is provably never a heap pointer, "
+             "using the interprocedural shadowbound-ipo analysis"),
+    cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClStructHeuristic(
+    "shadowbound-struct-heuristic",
+    cl::desc("UNSOUND: trust pointers loaded from a struct field that an "
+             "allocation sized by a loaded length is stored into (the "
+             "\"struct\" pattern of the old out-of-tree analyzer)"),
+    cl::Hidden, cl::init(false));
+
 static cl::opt<bool> ClDumpIR("shadowbound-dump-ir", cl::desc("dump IR"), cl::Hidden,
                               cl::init(false));
 
@@ -135,6 +163,12 @@ const char kShadowBoundInitName[] = "__shadowbound_init";
 const char kShadowBoundReportName[] = "__shadowbound_report";
 const char kShadowBoundAbortName[] = "__shadowbound_abort";
 const char kShadowBoundSetShadowName[] = "__shadowbound_set_shadow";
+
+// Module flag value bits written by the LTO pre-link step.
+static constexpr uint32_t kLTOFlagEnabled = 1;
+static constexpr uint32_t kLTOFlagRecover = 2;
+
+const char llvm::kShadowBoundLTOMarker[] = "shadowbound-lto";
 
 namespace {
 
@@ -215,8 +249,9 @@ enum PtrUsage {
 };
 class ShadowBound {
 public:
-  ShadowBound(Module &M, const ShadowBoundOptions &Options)
-      : Options(Options) {
+  ShadowBound(Module &M, const ShadowBoundOptions &Options,
+              const ShadowBoundIPOInfo *IPO)
+      : IPO(IPO), Options(Options) {
     initializeModule(M);
   }
 
@@ -244,6 +279,7 @@ private:
   bool isAccessMember(Instruction *I);
   bool isAccessMemberBoost(Instruction *I, ScalarEvolution &SE);
   void structPointerOptimizae(Function &F, ScalarEvolution &SE);
+  void ipoOptimize(Function &F);
   bool patternMatch(Function &F, Instruction *I, PatternBase *P);
   void patternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
@@ -327,6 +363,10 @@ private:
   Function *ReportFn;
   Function *AbortFn;
   Function *SetShadowFn;
+
+  // Interprocedural facts, when the shadowbound-ipo analysis was run on the
+  // module beforehand (it is not available from a lone function pass).
+  const ShadowBoundIPOInfo *IPO;
 
   ShadowBoundOptions Options;
 };
@@ -529,8 +569,8 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
 }
 } // end anonymous namespace
 
-ShadowBoundOptions::ShadowBoundOptions(bool Recover)
-    : Recover(getOptOrDefault(ClKeepGoing, Recover)) {}
+ShadowBoundOptions::ShadowBoundOptions(bool Recover, bool LTOPostLink)
+    : Recover(getOptOrDefault(ClKeepGoing, Recover)), LTOPostLink(LTOPostLink) {}
 
 // The pass reads pointee types (getPointerElementType) everywhere, so it only
 // works on typed pointers.
@@ -543,7 +583,15 @@ PreservedAnalyses ShadowBoundPass::run(Function &F,
   if (!hasTypedPointers(*F.getParent()))
     return PreservedAnalyses::all();
 
-  ShadowBound ShadowBound(*F.getParent(), Options);
+  // At link time only code that was compiled with ShadowBound is instrumented.
+  if (Options.LTOPostLink && !F.hasFnAttribute(kShadowBoundLTOMarker))
+    return PreservedAnalyses::all();
+
+  const ShadowBoundIPOInfo *IPO =
+      FAM.getResult<ModuleAnalysisManagerFunctionProxy>(F)
+          .getCachedResult<ShadowBoundIPOAnalysis>(*F.getParent());
+
+  ShadowBound ShadowBound(*F.getParent(), Options, IPO);
   if (ShadowBound.sanitizeFunction(F, FAM))
     return PreservedAnalyses::none();
   return PreservedAnalyses::all();
@@ -647,6 +695,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
 
   // Collect all instructions to instrument
   collectToInstrument(F, ObjSizeEval, SE);
+  ipoOptimize(F);
 
   dependencyOptimize(F, DT, PDT, SE);
   loopOptimize(F, LI, SE, DT, PDT);
@@ -972,6 +1021,30 @@ void ShadowBound::patternOptimize(Function &F) {
 
   GepToInstrument.swap(NewGepToInstrument);
   BcToInstrument.swap(NewBcToInstrument);
+}
+
+void ShadowBound::ipoOptimize(Function &F) {
+  // Bounds live only in the heap's shadow, and a check on a source outside the
+  // heap is skipped at run time (getPointerIsApp). Drop such checks statically
+  // when the source can be proven to never be a heap pointer: a stack or global
+  // object locally, or an argument / call result via the IPO facts.
+  const ShadowBoundIPOInfo NoIPO;
+  const ShadowBoundIPOInfo &Info = IPO ? *IPO : NoIPO;
+  auto Elide = [&](Instruction *I) {
+    Value *Src = getSource(I);
+    if (ClNonHeapOpt && Info.isNonHeap(Src)) {
+      ++NumNonHeapElided;
+      return true;
+    }
+    if (Info.isTrustedStructField(F, Src)) {
+      ++NumStructHeuristicElided;
+      return true;
+    }
+    return false;
+  };
+
+  llvm::erase_if(GepToInstrument, Elide);
+  llvm::erase_if(BcToInstrument, Elide);
 }
 
 void ShadowBound::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
@@ -1573,6 +1646,8 @@ bool ShadowBound::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
   CreateTrapBB(IRB, IRB.CreateOr(CmpLo, CmpHi), true);
 
   Counter[kClusterCheck]++;
+  ++NumClusterChecks;
+  ++NumRuntimeChecks;
   return true;
 }
 
@@ -1932,6 +2007,7 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
     return;
 
   Counter[kBuiltInCheck]++;
+  NumBuiltinChecks += BC.Insts.size();
 
   Value *Src = BC.Src;
   Instruction *InsertPt =
@@ -1975,6 +2051,8 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   ASSERT(CC.Type == kClusterCheck);
   Counter[kClusterCheck]++;
+  ++NumClusterChecks;
+  NumRuntimeChecks += CC.Insts.size();
 
   Value *Src = CC.Src;
   Instruction *InsertPt = CC.InsertPt;
@@ -2067,6 +2145,7 @@ void ShadowBound::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
 
   ASSERT(RC.Type == kRuntimeCheck);
   Counter[kRuntimeCheck] += RC.Insts.size();
+  NumRuntimeChecks += RC.Insts.size();
 
   Value *Src = RC.Src;
 
@@ -2088,4 +2167,289 @@ ShadowBound::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
   LLVMContext &C = M->getContext();
   MDNode *MD = MDNode::get(C, {MDString::get(C, Reg)});
   return IRB.CreateCall(readReg, {MetadataAsValue::get(C, MD)});
+}
+//===----------------------------------------------------------------------===//
+// LTO support
+//===----------------------------------------------------------------------===//
+
+PreservedAnalyses ShadowBoundLTOPrepPass::run(Module &M,
+                                              ModuleAnalysisManager &AM) {
+  if (!hasTypedPointers(M)) {
+    M.getContext().emitError(
+        "ShadowBound requires typed pointers; compile with "
+        "-Xclang -no-opaque-pointers");
+    return PreservedAnalyses::all();
+  }
+
+  // Max: if any input asks for recovery, the merged module recovers.
+  uint32_t Flag = kLTOFlagEnabled | (Options.Recover ? kLTOFlagRecover : 0);
+  M.addModuleFlag(Module::Max, kShadowBoundLTOMarker, Flag);
+
+  // Mark the functions of this translation unit, so that at link time code
+  // from inputs built without ShadowBound is left alone.
+  for (Function &F : M)
+    if (!F.isDeclaration())
+      F.addFnAttr(kShadowBoundLTOMarker);
+
+  PreservedAnalyses PA;
+  PA.preserveSet<CFGAnalyses>();
+  return PA;
+}
+
+//===----------------------------------------------------------------------===//
+// Interprocedural non-heap analysis
+//===----------------------------------------------------------------------===//
+
+AnalysisKey ShadowBoundIPOAnalysis::Key;
+
+bool ShadowBoundIPOInfo::invalidate(Module &, const PreservedAnalyses &PA,
+                                    ModuleAnalysisManager::Invalidator &) {
+  return !PA.getChecker<ShadowBoundIPOAnalysis>().preservedWhenStateless();
+}
+
+bool ShadowBoundIPOInfo::isNonHeap(const Value *V) const {
+  SmallPtrSet<const Value *, 16> Visited;
+  SmallVector<const Value *, 16> Worklist;
+
+  Worklist.push_back(V);
+  while (!Worklist.empty()) {
+    const Value *V = Worklist.pop_back_val();
+    if (!Visited.insert(V).second)
+      continue;
+
+    // Pointer arithmetic and casts keep the underlying object.
+    if (auto *GEP = dyn_cast<GEPOperator>(V)) {
+      Worklist.push_back(GEP->getPointerOperand());
+      continue;
+    }
+    if (auto *BC = dyn_cast<BitCastOperator>(V)) {
+      Worklist.push_back(BC->getOperand(0));
+      continue;
+    }
+    if (auto *Phi = dyn_cast<PHINode>(V)) {
+      for (const Value *In : Phi->incoming_values())
+        Worklist.push_back(In);
+      continue;
+    }
+    if (auto *Sel = dyn_cast<SelectInst>(V)) {
+      Worklist.push_back(Sel->getTrueValue());
+      Worklist.push_back(Sel->getFalseValue());
+      continue;
+    }
+
+    // Stack and global objects; null/undef point at no object.
+    if (isa<AllocaInst>(V) || isa<GlobalValue>(V) ||
+        isa<ConstantPointerNull>(V) || isa<UndefValue>(V))
+      continue;
+
+    if (auto *A = dyn_cast<Argument>(V)) {
+      if (NonHeapArgs.count(A))
+        continue;
+      return false;
+    }
+
+    if (auto *CB = dyn_cast<CallBase>(V)) {
+      // A call that returns one of its arguments (`returned`, launder, ...).
+      if (const Value *Ret = getArgumentAliasingToReturnedPointer(CB, false)) {
+        Worklist.push_back(Ret);
+        continue;
+      }
+      if (const Function *Callee = CB->getCalledFunction())
+        if (NonHeapReturns.count(Callee))
+          continue;
+      return false;
+    }
+
+    // Loads, inttoptr, unknown constants, ...: may be a heap pointer.
+    return false;
+  }
+
+  return true;
+}
+
+// Every caller of F is a direct call in this module, so the arguments F
+// receives are exactly the ones its call sites pass.
+static bool hasOnlyKnownCallers(const Function &F) {
+  if (F.isDeclaration() || !F.hasLocalLinkage())
+    return false;
+  for (const Use &U : F.uses()) {
+    auto *CB = dyn_cast<CallBase>(U.getUser());
+    if (!CB || !CB->isCallee(&U) ||
+        CB->getFunctionType() != F.getFunctionType())
+      return false;
+  }
+  return true;
+}
+
+bool ShadowBoundIPOInfo::isTrustedStructField(Function &F, Value *Src) const {
+  if (TrustedStructFields.empty())
+    return false;
+  auto *LI = dyn_cast<LoadInst>(Src);
+  if (!LI)
+    return false;
+  std::unique_ptr<StructMemberIdent> SMI(
+      findStructMember(&F, LI->getPointerOperand()));
+  return SMI && TrustedStructFields.count({SMI->getName(), SMI->getIndex()});
+}
+
+// The size is computed from exactly one loaded value (e.g. `s->len * 4`).
+static bool isSizedByOneLoad(Value *Size) {
+  SmallPtrSet<Value *, 16> Visited;
+  SmallVector<Value *, 16> Worklist{Size};
+  LoadInst *Found = nullptr;
+  while (!Worklist.empty()) {
+    Value *V = Worklist.pop_back_val();
+    if (!Visited.insert(V).second)
+      continue;
+    if (auto *LI = dyn_cast<LoadInst>(V)) {
+      if (Found && Found != LI)
+        return false;
+      Found = LI;
+      continue;
+    }
+    if (auto *I = dyn_cast<Instruction>(V))
+      for (Value *Op : I->operands())
+        Worklist.push_back(Op);
+  }
+  return Found != nullptr;
+}
+
+// Port of analyzer/src/harness/struct.cpp: a field is trusted if the result of
+// malloc / new[] whose size comes from one loaded length is stored into it, on
+// every path after the allocation.
+static void collectTrustedStructFields(Module &M, ModuleAnalysisManager &AM,
+                                       ShadowBoundIPOInfo &Info) {
+  auto &FAM = AM.getResult<FunctionAnalysisManagerModuleProxy>(M).getManager();
+  const DataLayout &DL = M.getDataLayout();
+
+  for (Function &F : M) {
+    if (F.isDeclaration())
+      continue;
+    DominatorTree *DT = nullptr;
+    PostDominatorTree *PDT = nullptr;
+
+    for (Instruction &I : instructions(F)) {
+      auto *CB = dyn_cast<CallBase>(&I);
+      Function *Callee = CB ? CB->getCalledFunction() : nullptr;
+      if (!Callee || CB->arg_size() != 1 ||
+          (Callee->getName() != "malloc" && Callee->getName() != "_Znam"))
+        continue;
+      if (!isSizedByOneLoad(CB->getArgOperand(0)))
+        continue;
+      if (!DT) {
+        DT = &FAM.getResult<DominatorTreeAnalysis>(F);
+        PDT = &FAM.getResult<PostDominatorTreeAnalysis>(F);
+      }
+
+      // Follow the allocation through casts and constant-offset GEPs to the
+      // stores that save it.
+      SmallPtrSet<Value *, 16> Visited;
+      SmallVector<Value *, 16> Worklist{CB};
+      while (!Worklist.empty()) {
+        Value *V = Worklist.pop_back_val();
+        if (!Visited.insert(V).second)
+          continue;
+        for (User *U : V->users()) {
+          if (isa<BitCastInst>(U)) {
+            Worklist.push_back(U);
+          } else if (auto *GEP = dyn_cast<GetElementPtrInst>(U)) {
+            APInt Off(DL.getIndexTypeSizeInBits(GEP->getType()), 0);
+            if (GEP->accumulateConstantOffset(DL, Off))
+              Worklist.push_back(GEP);
+          } else if (auto *ST = dyn_cast<StoreInst>(U)) {
+            if (ST->getValueOperand() != V || !DT->dominates(CB, ST) ||
+                !PDT->dominates(ST, CB))
+              continue;
+            std::unique_ptr<StructMemberIdent> SMI(
+                findStructMember(&F, ST->getPointerOperand()));
+            if (SMI)
+              Info.TrustedStructFields.insert(
+                  {SMI->getName(), SMI->getIndex()});
+          }
+        }
+      }
+    }
+  }
+}
+
+ShadowBoundIPOInfo ShadowBoundIPOAnalysis::run(Module &M,
+                                               ModuleAnalysisManager &AM) {
+  ShadowBoundIPOInfo Info;
+  if (ClStructHeuristic)
+    collectTrustedStructFields(M, AM, Info);
+  if (!ClNonHeapOpt)
+    return Info;
+
+  // The functions that directly call each function.
+  DenseMap<const Function *, SmallSetVector<Function *, 4>> Callers;
+  for (Function &F : M)
+    for (Instruction &I : instructions(F))
+      if (auto *CB = dyn_cast<CallBase>(&I))
+        if (Function *Callee = CB->getCalledFunction())
+          Callers[Callee].insert(&F);
+
+  // Optimistic start: assume every candidate fact holds, then remove the ones
+  // a call site or return contradicts until nothing changes (greatest
+  // fixpoint). Removing a fact can only turn more values into "maybe heap", so
+  // this terminates, and what survives is consistent with every call edge.
+  for (Function &F : M) {
+    if (hasOnlyKnownCallers(F))
+      for (Argument &A : F.args())
+        if (A.getType()->isPointerTy())
+          Info.NonHeapArgs.insert(&A);
+    if (!F.isDeclaration() && F.hasExactDefinition() &&
+        F.getReturnType()->isPointerTy())
+      Info.NonHeapReturns.insert(&F);
+  }
+
+  // Facts about a value in function D depend on D's argument facts and on the
+  // return facts of D's callees. So when a fact of F is removed, the functions
+  // to re-examine are F itself (argument removed) or F's callers (return
+  // removed).
+  SetVector<Function *> Dirty;
+  for (Function &F : M)
+    if (!F.isDeclaration())
+      Dirty.insert(&F);
+
+  while (!Dirty.empty()) {
+    Function *D = Dirty.pop_back_val();
+
+    // Re-check D's return.
+    if (Info.NonHeapReturns.count(D)) {
+      for (BasicBlock &BB : *D)
+        if (auto *RI = dyn_cast<ReturnInst>(BB.getTerminator()))
+          if (!Info.isNonHeap(RI->getReturnValue())) {
+            Info.NonHeapReturns.erase(D);
+            for (Function *Caller : Callers.lookup(D))
+              Dirty.insert(Caller);
+            break;
+          }
+    }
+
+    // Re-check the arguments D passes to its callees.
+    for (Instruction &I : instructions(*D)) {
+      auto *CB = dyn_cast<CallBase>(&I);
+      if (!CB)
+        continue;
+      Function *Callee = CB->getCalledFunction();
+      if (!Callee || Callee->isDeclaration())
+        continue;
+      for (Argument &A : Callee->args()) {
+        if (!Info.NonHeapArgs.count(&A))
+          continue;
+        if (!Info.isNonHeap(CB->getArgOperand(A.getArgNo()))) {
+          Info.NonHeapArgs.erase(&A);
+          Dirty.insert(Callee);
+        }
+      }
+    }
+  }
+
+  NumIPONonHeapArgs += Info.NonHeapArgs.size();
+  NumIPONonHeapRets += Info.NonHeapReturns.size();
+  LLVM_DEBUG(dbgs() << "[shadowbound-ipo] non-heap args: "
+                    << Info.NonHeapArgs.size()
+                    << ", non-heap returns: " << Info.NonHeapReturns.size()
+                    << "\n");
+  return Info;
 }
