@@ -1,32 +1,40 @@
 ARG BASE_IMAGE=ghcr.io/cla7aye15i4nd/shadowbound:latest
 FROM ${BASE_IMAGE}
 
-COPY config /config
-
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y lsof libpcre3-dev curl
+RUN apt-get update && apt-get install -y lsof libpcre2-dev zlib1g-dev libssl-dev unzip curl
 
-RUN wget http://nginx.org/download/nginx-1.22.1.tar.gz && tar -xvf nginx-1.22.1.tar.gz
+# Latest nginx mainline release. Extracted to a version-independent directory
+# so eval.sh / smoke.sh do not need to change with it.
+ARG NGINX_VERSION=1.31.6
+RUN mkdir nginx && curl -fsSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz \
+      | tar xz --strip-components=1 -C nginx
 
-RUN git clone https://github.com/wg/wrk.git --branch 4.2.0 && cd wrk && make -j`nproc`
+# wrk 4.2.0 is the latest wrk release; build it against the system OpenSSL
+# instead of its bundled 1.1.1 tarball.
+RUN git clone https://github.com/wg/wrk.git --branch 4.2.0 && cd wrk && make -j`nproc` WITH_OPENSSL=/usr
 
 ARG SCC=$SHADOWBOUND/llvm-project/build/bin/clang
 
-RUN cd nginx-1.22.1 && \
+RUN cd nginx && \
     ./configure --prefix=native && \
     make CC="$SCC -fsanitize=shadowbound-instrument-only -mllvm -shadowbound-skip-instrument=1" -j`nproc` && \
     make install
 
 
-RUN cd nginx-1.22.1 && \
-    ./configure --prefix=shadowbound && \
-    make CC="$SCC -fsanitize=shadowbound -mllvm -shadowbound-pattern-opt-file=/config/nginx.json" -j`nproc` && \
+# Whole-program instrumentation at link time (-flto). This replaces the
+# pattern file config/nginx.json, which was generated for nginx 1.22.1.
+RUN cd nginx && \
+    ./configure --prefix=shadowbound \
+        --with-cc="$SCC -fsanitize=shadowbound -flto -fuse-ld=lld" \
+        --with-cc-opt="-Wno-unused-command-line-argument" && \
+    make -j`nproc` && \
     make install
 
 # The allocator must be on nginx's LINK line. nginx links with $(CC) plus the
 # configure-time --with-ld-opt; it ignores a make-time LDFLAGS and -l in CFLAGS
 # only reaches compile steps. So pass the allocator via --with-ld-opt.
-RUN cd nginx-1.22.1 && \
+RUN cd nginx && \
     ./configure --prefix=shadowbound-ffmalloc \
         --with-cc="$SCC -fsanitize=shadowbound-instrument-only" \
         --with-ld-opt="-L$SHADOWBOUND/ffmalloc -lffmalloc_st_perf -Wl,-rpath=$SHADOWBOUND/ffmalloc" && \
@@ -34,7 +42,7 @@ RUN cd nginx-1.22.1 && \
     make install
 
 # setup.sh installs MarkUs under $SHADOWBOUND/markus/markus-allocator.
-RUN cd nginx-1.22.1 && \
+RUN cd nginx && \
     ./configure --prefix=shadowbound-markus \
         --with-cc="$SCC -fsanitize=shadowbound-instrument-only" \
         --with-ld-opt="-L$SHADOWBOUND/markus/markus-allocator/lib -lgc -lgccpp -Wl,-rpath=$SHADOWBOUND/markus/markus-allocator/lib" && \

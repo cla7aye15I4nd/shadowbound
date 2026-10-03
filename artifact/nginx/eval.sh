@@ -4,7 +4,7 @@ set -euo pipefail
 : "${TARGET:?set TARGET to one of native|shadowbound|shadowbound-ffmalloc|shadowbound-markus}"
 : "${DURATION:=60s}"
 
-pushd nginx-1.22.1 >/dev/null
+pushd nginx >/dev/null
 
 # Start nginx and wait (bounded) until it is listening, instead of a busy loop
 # that spins forever if the binary crashes on startup.

@@ -162,11 +162,15 @@ You can check the result at `artifact/chakra/results/shadowbound.txt`.
 The main experiments are kept runnable by GitHub CI rather than by hand:
 
 - **`artifact-availability.yml`** builds the toolchain base image, then builds
-  and smoke-tests the **Nginx** and **Chakra** images (each build is started and
-  must serve a request / evaluate a script). This guarantees both main
-  experiments stay *available*.
+  and smoke-tests the **Nginx** image (each build is started and must serve a
+  request). ChakraCore is no longer tested in CI; its artifact is kept for
+  reference.
 - **`compiler-tests.yml`** / **`runtime-tests.yml`** run the compiler PoC suite
-  (`test/`) and the runtime suite (`test/runtime/`).
+  (`test/`) and the runtime suite (`test/runtime/`). `runtime-tests.yml` also
+  builds the latest nginx natively and with ShadowBound (`test/nginx/run.sh`),
+  runs the official [nginx-tests](https://github.com/nginx/nginx-tests) suite
+  on both (any test that fails only under ShadowBound fails CI), and reports a
+  short wrk comparison in the job summary.
 - **`release.yml`** builds the toolchain image, pushes it to **GHCR**
   (`ghcr.io/<owner>/shadowbound:<tag>`), and cuts a **GitHub Release** with the
   FFmalloc artifacts — triggered by a `v*` tag.
