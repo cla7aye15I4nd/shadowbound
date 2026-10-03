@@ -694,6 +694,8 @@ parseOdefPassOptions(StringRef Params) {
   OverflowDefenseOptions Result;
   while (!Params.empty()) {
     StringRef ParamName;
+    std::tie(ParamName, Params) = Params.split(';');
+
     if (ParamName == "recover") {
       Result.Recover = true;
     } else if (ParamName == "kernel") {

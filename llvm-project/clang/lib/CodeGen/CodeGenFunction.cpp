@@ -765,6 +765,14 @@ void CodeGenFunction::StartFunction(GlobalDecl GD, QualType RetTy,
     if (SanOpts.hasOneOf(SanitizerKind::Memory | SanitizerKind::KernelMemory))
       Fn->addFnAttr(llvm::Attribute::SanitizeMemory);
   }
+  // OverflowDefense instruments every function of an instrumented module, so
+  // tell it about functions that opted out with no_sanitize.
+  const SanitizerMask OdefKinds =
+      SanitizerKind::OverflowDefense | SanitizerKind::KernelOverflowDefense |
+      SanitizerKind::MemProtect | SanitizerKind::TagOverflowDefense;
+  if (getLangOpts().Sanitize.hasOneOf(OdefKinds) &&
+      (ShouldSkipSanitizerInstrumentation() || !SanOpts.hasOneOf(OdefKinds)))
+    Fn->addFnAttr("no_overflow_defense");
   if (SanOpts.has(SanitizerKind::SafeStack))
     Fn->addFnAttr(llvm::Attribute::SafeStack);
   if (SanOpts.has(SanitizerKind::ShadowCallStack))
