@@ -5,7 +5,7 @@
 //
 //   * shadowbound with address / memory / thread / hwaddress links two
 //     malloc interposers and two conflicting shadow layouts;
-//   * shadowbound with memprotect links clang_rt.odef and
+//   * shadowbound with shadowbound-instrument-only links clang_rt.odef and
 //     clang_rt.memp, which both define __odef_init / __odef_abort, and runs
 //     the instrumentation pass twice.
 // These fail late (duplicate symbols, crashes at startup) instead of being
@@ -15,8 +15,8 @@
 //
 // RUN: not %clang -fsanitize=shadowbound,address -c %s -o /dev/null 2>&1 | FileCheck %s
 // RUN: not %clang -fsanitize=shadowbound,memory -c %s -o /dev/null 2>&1 | FileCheck %s
-// RUN: not %clang -fsanitize=shadowbound,memprotect -c %s -o /dev/null 2>&1 | FileCheck %s
-// RUN: not %clang -fsanitize=memprotect,thread -c %s -o /dev/null 2>&1 | FileCheck %s
+// RUN: not %clang -fsanitize=shadowbound,shadowbound-instrument-only -c %s -o /dev/null 2>&1 | FileCheck %s
+// RUN: not %clang -fsanitize=shadowbound-instrument-only,thread -c %s -o /dev/null 2>&1 | FileCheck %s
 //
 // CHECK: error: invalid argument '-fsanitize={{.*}}' not allowed with '-fsanitize={{.*}}'
 

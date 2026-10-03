@@ -11,7 +11,7 @@
 // Expected: the driver rejects -no-pie together with these sanitizers.
 //
 // RUN: not %clang -fsanitize=shadowbound -no-pie %s -o /dev/null 2>&1 | FileCheck %s
-// RUN: not %clang -fsanitize=memprotect -no-pie %s -o /dev/null 2>&1 | FileCheck %s
+// RUN: not %clang -fsanitize=shadowbound-instrument-only -no-pie %s -o /dev/null 2>&1 | FileCheck %s
 //
 // CHECK: error: invalid argument '-fsanitize={{.*}}' not allowed with '-no-pie'
 

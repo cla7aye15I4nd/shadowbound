@@ -98,7 +98,7 @@ FEATURE(memory_sanitizer,
                                    SanitizerKind::KernelMemory))
 FEATURE(shadowbound,
         LangOpts.Sanitize.hasOneOf(SanitizerKind::ShadowBound |
-                                   SanitizerKind::MemProtect))
+                                   SanitizerKind::ShadowBoundInstrumentOnly))
 FEATURE(thread_sanitizer, LangOpts.Sanitize.has(SanitizerKind::Thread))
 FEATURE(dataflow_sanitizer, LangOpts.Sanitize.has(SanitizerKind::DataFlow))
 FEATURE(scudo, LangOpts.Sanitize.hasOneOf(SanitizerKind::Scudo))

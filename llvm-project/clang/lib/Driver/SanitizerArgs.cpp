@@ -38,7 +38,7 @@ static const SanitizerMask NotAllowedWithMinimalRuntime =
     SanitizerKind::Function | SanitizerKind::Vptr;
 // ShadowBound runtimes (one malloc interposer and one shadow layout each).
 static const SanitizerMask ShadowBoundRuntimes =
-    SanitizerKind::ShadowBound | SanitizerKind::MemProtect;
+    SanitizerKind::ShadowBound | SanitizerKind::ShadowBoundInstrumentOnly;
 static const SanitizerMask RequiresPIE =
     SanitizerKind::DataFlow | SanitizerKind::HWAddress | SanitizerKind::Scudo |
     ShadowBoundRuntimes;
@@ -508,7 +508,7 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
                          SanitizerKind::HWAddress |
                          SanitizerKind::KernelHWAddress),
       std::make_pair(SanitizerKind::ShadowBound,
-                     SanitizerKind::MemProtect),
+                     SanitizerKind::ShadowBoundInstrumentOnly),
       std::make_pair(ShadowBoundRuntimes,
                      SanitizerKind::Address | SanitizerKind::HWAddress |
                          SanitizerKind::Leak | SanitizerKind::Thread |

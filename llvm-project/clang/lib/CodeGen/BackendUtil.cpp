@@ -681,7 +681,7 @@ static void addSanitizers(const Triple &TargetTriple,
       }
     };
     ODefPass(SanitizerKind::ShadowBound);
-    ODefPass(SanitizerKind::MemProtect);
+    ODefPass(SanitizerKind::ShadowBoundInstrumentOnly);
 
     if (LangOpts.Sanitize.has(SanitizerKind::Thread)) {
       MPM.addPass(ModuleThreadSanitizerPass());
