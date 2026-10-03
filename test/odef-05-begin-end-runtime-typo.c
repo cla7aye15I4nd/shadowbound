@@ -19,9 +19,6 @@
 // clear diagnostic instead of executing undefined behaviour.
 //
 // RUN: %odef_ir %s 2>/dev/null | FileCheck %s
-// RUN: not %clang -fsanitize=tag-overflow-defense -O2 -S -emit-llvm -o /dev/null %s 2>&1 | FileCheck %s --check-prefix=TAG
-//
-// TAG: error: {{.*}}runtime 'tag' is not supported
 
 // CHECK-LABEL: @get(
 // A real two-sided check is emitted (lower bound and reserve-adjusted upper

@@ -663,10 +663,10 @@ static void addSanitizers(const Triple &TargetTriple,
     MSanPass(SanitizerKind::Memory, false);
     MSanPass(SanitizerKind::KernelMemory, true);
 
-    auto ODefPass = [&](SanitizerMask Mask, bool CompileKernel, std::string Runtime) {
+    auto ODefPass = [&](SanitizerMask Mask) {
       if (LangOpts.Sanitize.has(Mask)) {
         bool Recover = CodeGenOpts.SanitizeRecover.has(Mask);
-        OverflowDefenseOptions Opts(CompileKernel, Recover, Runtime);
+        OverflowDefenseOptions Opts(Recover);
 
         MPM.addPass(ModuleOverflowDefensePass(Opts));
         FunctionPassManager FPM;
@@ -680,10 +680,8 @@ static void addSanitizers(const Triple &TargetTriple,
         MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
       }
     };
-    ODefPass(SanitizerKind::OverflowDefense, false, "default");
-    ODefPass(SanitizerKind::KernelOverflowDefense, true, "default");
-    ODefPass(SanitizerKind::MemProtect, false, "default");
-    ODefPass(SanitizerKind::TagOverflowDefense, false, "tag");
+    ODefPass(SanitizerKind::OverflowDefense);
+    ODefPass(SanitizerKind::MemProtect);
 
     if (LangOpts.Sanitize.has(SanitizerKind::Thread)) {
       MPM.addPass(ModuleThreadSanitizerPass());

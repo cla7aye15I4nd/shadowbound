@@ -38,8 +38,7 @@ static const SanitizerMask NotAllowedWithMinimalRuntime =
     SanitizerKind::Function | SanitizerKind::Vptr;
 // ShadowBound runtimes (one malloc interposer and one shadow layout each).
 static const SanitizerMask OverflowDefenseRuntimes =
-    SanitizerKind::OverflowDefense | SanitizerKind::MemProtect |
-    SanitizerKind::TagOverflowDefense;
+    SanitizerKind::OverflowDefense | SanitizerKind::MemProtect;
 static const SanitizerMask RequiresPIE =
     SanitizerKind::DataFlow | SanitizerKind::HWAddress | SanitizerKind::Scudo |
     OverflowDefenseRuntimes;
@@ -509,18 +508,14 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
                          SanitizerKind::HWAddress |
                          SanitizerKind::KernelHWAddress),
       std::make_pair(SanitizerKind::OverflowDefense,
-                     SanitizerKind::MemProtect |
-                         SanitizerKind::TagOverflowDefense),
-      std::make_pair(SanitizerKind::MemProtect,
-                     SanitizerKind::TagOverflowDefense),
+                     SanitizerKind::MemProtect),
       std::make_pair(OverflowDefenseRuntimes,
                      SanitizerKind::Address | SanitizerKind::HWAddress |
                          SanitizerKind::Leak | SanitizerKind::Thread |
                          SanitizerKind::Memory | SanitizerKind::KernelAddress |
                          SanitizerKind::KernelHWAddress |
                          SanitizerKind::KernelMemory | SanitizerKind::Scudo |
-                         SanitizerKind::DataFlow |
-                         SanitizerKind::KernelOverflowDefense)};
+                         SanitizerKind::DataFlow)};
   // Enable toolchain specific default sanitizers if not explicitly disabled.
   SanitizerMask Default = TC.getDefaultSanitizers() & ~AllRemove;
 

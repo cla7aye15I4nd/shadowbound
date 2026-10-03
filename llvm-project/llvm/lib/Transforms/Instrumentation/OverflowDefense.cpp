@@ -51,11 +51,6 @@ static const uint64_t kHeapSpaceBeg = 0x600000000000ULL;
 static const uint64_t kHeapSpaceEnd = 0x700000000000ULL;
 static const uint64_t kMaxAddress = 0x1000000000000ULL;
 
-static cl::opt<bool>
-    ClEnableKodef("odef-kernel",
-                  cl::desc("Enable KernelOverflowDefense instrumentation"),
-                  cl::Hidden, cl::init(false));
-
 // ===== Modification in Different Mode =====
 // +-----------------+--------------+-----------------------+
 // | Name            | Instrument   | Runtime Check         |
@@ -88,14 +83,6 @@ static cl::opt<bool> ClPerfTest("odef-perf-test", cl::desc("performance test"),
 static cl::opt<bool> ClCheckHeap("odef-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
                                  cl::init(true));
-
-static cl::opt<bool> ClCheckStack("odef-check-stack",
-                                  cl::desc("check stack memory"), cl::Hidden,
-                                  cl::init(false));
-
-static cl::opt<bool> ClCheckGlobal("odef-check-global",
-                                   cl::desc("check global memory"), cl::Hidden,
-                                   cl::init(false));
 
 static cl::opt<bool> ClCheckInField("odef-check-in-field",
                                     cl::desc("check in-field memory"),
@@ -202,23 +189,16 @@ struct RuntimeCheck : public BaseCheck {
       : BaseCheck(kRuntimeCheck), Src(Src), Insts(Insts) {}
 };
 
-enum MemClass {
-  kMemHeap,
-  kMemStack,
-  kMemGlobal,
-};
-
 struct BuiltinCheck : public BaseCheck {
   Value *Src;
   Value *Size;
   Value *Offset;
-  MemClass Class;
   SmallVector<Instruction *, 16> Insts;
 
-  BuiltinCheck(Value *Src, Value *Size, Value *Offset, MemClass Class,
+  BuiltinCheck(Value *Src, Value *Size, Value *Offset,
                SmallVector<Instruction *, 16> Insts)
       : BaseCheck(kBuiltInCheck), Src(Src), Size(Size), Offset(Offset),
-        Class(Class), Insts(Insts) {}
+        Insts(Insts) {}
 };
 
 struct MonoLoop {
@@ -566,17 +546,8 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
 }
 } // end anonymous namespace
 
-OverflowDefenseOptions::OverflowDefenseOptions(bool Kernel, bool Recover,
-                                               std::string Runtime)
-    : Kernel(getOptOrDefault(ClEnableKodef, Kernel)),
-      Recover(getOptOrDefault(ClKeepGoing, Kernel || Recover)),
-      Runtime(Runtime) {}
-
-// Only the shadow-memory runtime ("default") is implemented. The module pass
-// reports any other runtime as an error; the function pass skips it.
-static bool isSupportedRuntime(const OverflowDefenseOptions &Options) {
-  return Options.Runtime == "default";
-}
+OverflowDefenseOptions::OverflowDefenseOptions(bool Recover)
+    : Recover(getOptOrDefault(ClKeepGoing, Recover)) {}
 
 // The pass reads pointee types (getPointerElementType) everywhere, so it only
 // works on typed pointers.
@@ -586,7 +557,7 @@ static bool hasTypedPointers(const Module &M) {
 
 PreservedAnalyses OverflowDefensePass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
-  if (!isSupportedRuntime(Options) || !hasTypedPointers(*F.getParent()))
+  if (!hasTypedPointers(*F.getParent()))
     return PreservedAnalyses::all();
 
   OverflowDefense Odef(*F.getParent(), Options);
@@ -603,12 +574,6 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
     WriteBitcodeToFile(M, OS);
   }
 
-  if (!isSupportedRuntime(Options)) {
-    M.getContext().emitError("OverflowDefense: runtime '" + Options.Runtime +
-                             "' is not supported");
-    return PreservedAnalyses::all();
-  }
-
   if (!hasTypedPointers(M)) {
     M.getContext().emitError(
         "OverflowDefense requires typed pointers; compile with "
@@ -616,8 +581,6 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
     return PreservedAnalyses::all();
   }
 
-  if (Options.Kernel)
-    return PreservedAnalyses::all();
   insertModuleCtor(M);
   insertRuntimeFunction(M);
   insertGlobalVariable(M);
@@ -1786,15 +1749,14 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
 
   if (ObjSizeEval.bothKnown(SizeOffsetEval)) {
-    // A source with a statically known size (malloc/calloc/realloc/new, an
-    // alloca, or a global) is checked against that size instead of the shadow.
-    // Heap allocations must still be checked (gated by -odef-check-heap, on by
-    // default); stack/global use their own flags.
-    MemClass Class = isa<AllocaInst>(Src)
-                         ? kMemStack
-                         : isa<GlobalValue>(Src) ? kMemGlobal : kMemHeap;
+    // ShadowBound only protects heap objects. A stack (alloca) or global source
+    // has a statically known size but is deliberately left unchecked; a heap
+    // allocation (malloc/calloc/realloc/new) is checked against its known size
+    // instead of the shadow.
+    if (isa<AllocaInst>(Src) || isa<GlobalValue>(Src))
+      return true;
     Checks.push_back(new BuiltinCheck(Src, SizeOffsetEval.first,
-                                      SizeOffsetEval.second, Class, Insts));
+                                      SizeOffsetEval.second, Insts));
     return true;
   }
 
@@ -1908,69 +1870,46 @@ Value *OverflowDefense::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
 
 void OverflowDefense::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                                          BuilderTy &IRB) {
-  if (Options.Runtime == "default") {
-    Value *Shadow =
-        IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-    Value *Packed =
-        IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
-    Value *BackRaw =
-        IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
-    Value *FrontRaw = IRB.CreateLShr(Packed, 32);
-    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
-    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *Packed =
+      IRB.CreateLoad(int64Type, IRB.CreateIntToPtr(Shadow, int64PtrType));
+  Value *BackRaw =
+      IRB.CreateAnd(Packed, ConstantInt::get(int64Type, 0xffffffff));
+  Value *FrontRaw = IRB.CreateLShr(Packed, 32);
+  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
 
-    Begin = IRB.CreateSub(Base, Front);
-    End = IRB.CreateAdd(Base, Back);
-  } else {
-    report_fatal_error(Twine("OverflowDefense: unsupported runtime '") +
-                       Options.Runtime + "'");
-  }
+  Begin = IRB.CreateSub(Base, Front);
+  End = IRB.CreateAdd(Base, Back);
 }
 
 void OverflowDefense::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
-  if (Options.Runtime == "default") {
-    Value *Shadow =
-        IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-    Value *BackRaw = IRB.CreateZExt(
-        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
-        int64Type);
-    Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
-    End = IRB.CreateAdd(Base, Back);
-  } else {
-    report_fatal_error(Twine("OverflowDefense: unsupported runtime '") +
-                       Options.Runtime + "'");
-  }
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *BackRaw = IRB.CreateZExt(
+      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(Shadow, int32PtrType)),
+      int64Type);
+  Value *Back = ClOnlySmallAllocOpt ? BackRaw : IRB.CreateShl(BackRaw, 3);
+  End = IRB.CreateAdd(Base, Back);
 }
 
 void OverflowDefense::getPointerBegin(Value *Ptr, Value *&Begin,
                                       BuilderTy &IRB) {
-  if (Options.Runtime == "default") {
-    Value *Shadow =
-        IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
-    Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
-    Value *ShadowP = IRB.CreateAdd(Shadow, ConstantInt::get(int64Type, 4));
-    Value *FrontRaw = IRB.CreateZExt(
-        IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(ShadowP, int32PtrType)),
-        int64Type);
-    Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
-    Begin = IRB.CreateSub(Base, Front);
-  } else {
-    report_fatal_error(Twine("OverflowDefense: unsupported runtime '") +
-                       Options.Runtime + "'");
-  }
+  Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
+  Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
+  Value *ShadowP = IRB.CreateAdd(Shadow, ConstantInt::get(int64Type, 4));
+  Value *FrontRaw = IRB.CreateZExt(
+      IRB.CreateLoad(int32Type, IRB.CreateIntToPtr(ShadowP, int32PtrType)),
+      int64Type);
+  Value *Front = ClOnlySmallAllocOpt ? FrontRaw : IRB.CreateShl(FrontRaw, 3);
+  Begin = IRB.CreateSub(Base, Front);
 }
 
 Value *OverflowDefense::getPointerIsApp(Value *Ptr, BuilderTy &IRB) {
-  if (Options.Runtime == "default") {
-    return IRB.CreateAnd(
-        IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
-        IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
-  } else {
-    report_fatal_error(Twine("OverflowDefense: unsupported runtime '") +
-                       Options.Runtime + "'");
-  }
+  return IRB.CreateAnd(
+      IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
+      IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
 }
 
 void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
@@ -2033,11 +1972,8 @@ void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
 void OverflowDefense::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   ASSERT(BC.Type == kBuiltInCheck);
 
-  // Heap objects are checked by default; stack/global objects use their flags.
-  bool Enabled = BC.Class == kMemHeap
-                     ? ClCheckHeap
-                     : BC.Class == kMemStack ? ClCheckStack : ClCheckGlobal;
-  if (!Enabled)
+  // Only heap objects are checked (stack/global sources never reach here).
+  if (!ClCheckHeap)
     return;
 
   Counter[kBuiltInCheck]++;

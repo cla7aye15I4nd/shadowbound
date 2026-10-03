@@ -9,11 +9,9 @@
 namespace llvm {
 
 struct OverflowDefenseOptions {
-  OverflowDefenseOptions() : OverflowDefenseOptions(false, false, "default"){};
-  OverflowDefenseOptions(bool Kernel, bool Recover, std::string Runtime);
-  bool Kernel;
+  OverflowDefenseOptions() : OverflowDefenseOptions(false){};
+  explicit OverflowDefenseOptions(bool Recover);
   bool Recover;
-  std::string Runtime;
 };
 
 struct OverflowDefensePass : public PassInfoMixin<OverflowDefensePass> {

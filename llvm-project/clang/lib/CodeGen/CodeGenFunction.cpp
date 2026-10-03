@@ -768,8 +768,7 @@ void CodeGenFunction::StartFunction(GlobalDecl GD, QualType RetTy,
   // OverflowDefense instruments every function of an instrumented module, so
   // tell it about functions that opted out with no_sanitize.
   const SanitizerMask OdefKinds =
-      SanitizerKind::OverflowDefense | SanitizerKind::KernelOverflowDefense |
-      SanitizerKind::MemProtect | SanitizerKind::TagOverflowDefense;
+      SanitizerKind::OverflowDefense | SanitizerKind::MemProtect;
   if (getLangOpts().Sanitize.hasOneOf(OdefKinds) &&
       (ShouldSkipSanitizerInstrumentation() || !SanOpts.hasOneOf(OdefKinds)))
     Fn->addFnAttr("no_overflow_defense");

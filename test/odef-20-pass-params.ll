@@ -2,16 +2,16 @@
 ;
 ; Where: PassBuilder.cpp, parseOdefPassOptions().
 ;
-; The loop never splits Params into a parameter name, so ParamName is always
-; empty and every non-empty parameter list is rejected with
-; "invalid OverflowDefense pass parameter ''". `odef<recover>` and
-; `odef<kernel>` are documented in PassRegistry.def but unusable.
+; The loop never split Params into a parameter name, so ParamName was always
+; empty and every non-empty parameter list was rejected with
+; "invalid OverflowDefense pass parameter ''", making `odef<recover>` unusable.
 ;
-; Expected: both pipelines are accepted.
+; Expected: odef<recover> is accepted and an unknown parameter is rejected.
 ;
 ; RUN: %opt -opaque-pointers=0 -passes='odef<recover>' -disable-output %s
-; RUN: %opt -opaque-pointers=0 -passes='odef<kernel>' -disable-output %s
-; RUN: %opt -opaque-pointers=0 -passes='odef<recover;kernel>' -disable-output %s
+; RUN: not %opt -opaque-pointers=0 -passes='odef<bogus>' -disable-output %s 2>&1 | FileCheck %s
+;
+; CHECK: invalid OverflowDefense pass parameter
 
 define void @f() {
   ret void

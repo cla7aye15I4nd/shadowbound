@@ -698,8 +698,6 @@ parseOdefPassOptions(StringRef Params) {
 
     if (ParamName == "recover") {
       Result.Recover = true;
-    } else if (ParamName == "kernel") {
-      Result.Kernel = true;
     } else {
       return make_error<StringError>(
           formatv("invalid OverflowDefense pass parameter '{0}' ", ParamName)
