@@ -19,9 +19,9 @@ long sum(int *p, int n) {
 // bound check + abort is emitted before the loop, and the loop latch that
 // follows has NO further check (the per-iteration check is gone).
 // OPT-LABEL: @sum(
-// OPT: add nsw i64 %{{[0-9]+}}, -1
+// OPT: add nsw i64 %{{[0-9a-z.]+}}, -1
 // OPT: call void @__shadowbound_abort()
-// OPT: br i1 %{{[0-9]+}}, label %{{[0-9]+}}, label %{{[0-9]+}}, !llvm.loop
+// OPT: br i1 %{{.+}}, label %{{.+}}, label %{{.+}}, !llvm.loop
 // OPT-NOT: call void @__shadowbound_abort()
 
 // Without it: a per-iteration check remains (baseline behaviour).
