@@ -65,7 +65,7 @@ jobs:
             -DLLVM_INCLUDE_BENCHMARKS=OFF \
             -DLLVM_INCLUDE_EXAMPLES=OFF \
             -DLLVM_INCLUDE_TESTS=OFF \
-            -DCOMPILER_RT_SANITIZERS_TO_BUILD="odef;memp" \
+            -DCOMPILER_RT_SANITIZERS_TO_BUILD="shadowbound;memp" \
             -DCOMPILER_RT_INCLUDE_TESTS=OFF \
             -DCOMPILER_RT_BUILD_XRAY=OFF \
             -DCOMPILER_RT_BUILD_LIBFUZZER=OFF \

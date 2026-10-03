@@ -690,7 +690,7 @@ Expected<MemorySanitizerOptions> parseMSanPassOptions(StringRef Params) {
 }
 
 Expected<ShadowBoundOptions>
-parseOdefPassOptions(StringRef Params) {
+parseShadowBoundPassOptions(StringRef Params) {
   ShadowBoundOptions Result;
   while (!Params.empty()) {
     StringRef ParamName;

@@ -433,7 +433,7 @@ FUNCTION_PASS_WITH_PARAMS("shadowbound",
                            [](ShadowBoundOptions Opts) {
                              return ShadowBoundPass(Opts);
                            },
-                          parseOdefPassOptions,
+                          parseShadowBoundPassOptions,
                           "recover")
 FUNCTION_PASS_WITH_PARAMS("simplifycfg",
                           "SimplifyCFGPass",

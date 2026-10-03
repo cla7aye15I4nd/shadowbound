@@ -946,10 +946,10 @@ collectSanitizerRuntimes(const ToolChain &TC, const ArgList &Args,
     if (SanArgs.linkCXXRuntimes())
       StaticRuntimes.push_back("msan_cxx");
   }
-  if (SanArgs.needsOdefRt() && SanArgs.linkRuntimes()) {
-    StaticRuntimes.push_back("odef");
+  if (SanArgs.needsShadowBoundRt() && SanArgs.linkRuntimes()) {
+    StaticRuntimes.push_back("shadowbound");
     if (SanArgs.linkCXXRuntimes())
-      StaticRuntimes.push_back("odef_cxx");
+      StaticRuntimes.push_back("shadowbound_cxx");
   }
   if (SanArgs.needsMempRt() && SanArgs.linkRuntimes()) {
     StaticRuntimes.push_back("memp");

@@ -33,7 +33,7 @@ These are NOT regressions from the fixes. Verified against the baseline
   of the instrumentation pass).
 - **541.leela_r and 511.povray_r do not even build on the baseline** compiler;
   they build and link cleanly with the fixed compiler.
-- 508.namd_r is run with `-mllvm -odef-perf-test=1` (checks disabled) in the
+- 508.namd_r is run with `-mllvm -shadowbound-perf-test=1` (checks disabled) in the
   original artifact config, i.e. the authors did not run it with real checks.
 
 Disabling the fixes' most-invasive changes one at a time (broadened pointer-use
