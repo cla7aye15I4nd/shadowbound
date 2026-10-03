@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     nasm \
     openssh-client \
     pkg-config \
-    python \
+    python-is-python3 \
     python3 \
     python3-pip \
     sudo \
@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir /shadowbound
 
 RUN cd /shadowbound && \
-    git clone --depth 1 git://sourceware.org/git/binutils-gdb.git binutils -b binutils-2_41-release && \
+    git clone --depth 1 https://sourceware.org/git/binutils-gdb.git binutils -b binutils-2_41-release && \
     cd binutils && mkdir build && cd build && \
     ../configure --enable-gold --enable-plugins --disable-werror && \
     make -j`nproc`

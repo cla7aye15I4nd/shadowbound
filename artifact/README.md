@@ -156,3 +156,37 @@ docker compose up --build chakra-eval
 ```
 
 You can check the result at `artifact/chakra/results/shadowbound.txt`.
+
+## 🤖 Continuous availability (CI)
+
+The main experiments are kept runnable by GitHub CI rather than by hand:
+
+- **`artifact-availability.yml`** builds the toolchain base image, then builds
+  and smoke-tests the **Nginx** and **Chakra** images (each build is started and
+  must serve a request / evaluate a script). This guarantees both main
+  experiments stay *available*.
+- **`compiler-tests.yml`** / **`runtime-tests.yml`** run the compiler PoC suite
+  (`test/`) and the runtime suite (`test/runtime/`).
+- **`release.yml`** builds the toolchain image, pushes it to **GHCR**
+  (`ghcr.io/<owner>/shadowbound:<tag>`), and cuts a **GitHub Release** with the
+  FFmalloc artifacts — triggered by a `v*` tag.
+- **`pages.yml`** publishes the paper and project page to GitHub Pages.
+
+The artifact images build on a parameterizable base
+(`--build-arg BASE_IMAGE=...`), defaulting to the published GHCR image.
+
+## 🖥️ Local CPU2017
+
+SPEC CPU2017 cannot be redistributed, so test it locally first with your own ISO
+(no Docker required):
+
+```bash
+CPU2017_ISO=/path/to/cpu2017.iso \
+SHADOWBOUND_BUILD=$PWD/llvm-project/build \
+artifact/spec2017/local-run.sh 505.mcf_r 519.lbm_r
+```
+
+This builds native and ShadowBound configs, runs the ref workload, and prints
+the per-benchmark and geomean overhead (geomean of shadowbound/native ratios).
+ShadowBound uses fixed shadow/allocator mappings, so disable ASLR
+(`sysctl -w kernel.randomize_va_space=0` or `setarch -R`) if runs crash.

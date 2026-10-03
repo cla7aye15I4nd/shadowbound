@@ -83,8 +83,8 @@ native_command_mapper = get_command_mapper('native')
 shadowbound_command_mapper = get_command_mapper('shadowbound')
 
 table.field_names = ['Benchmark', 'Time', 'Memory']
-time_overheads = []
-memory_overheads = []
+time_ratios = []
+memory_ratios = []
 
 for bench in get_command_mapper('').keys():
     print(f'Testing {bench}')
@@ -118,12 +118,18 @@ for bench in get_command_mapper('').keys():
     time_overhead = shadowbound_time / native_time
     memory_overhead = shadowbound_memory / native_memory
     table.add_row([bench, f"{time_overhead:.2f}x", f"{memory_overhead:.2f}x"])
-    
-    time_overheads.append(max(time_overhead - 1, 1000 / native_time))
-    memory_overheads.append(max(memory_overhead - 1, 1024 / native_memory))
 
-geometric_mean_time_overhead = np.prod(time_overheads) ** (1 / len(time_overheads)) * 100
-geometric_mean_memory_overhead = np.prod(memory_overheads) ** (1 / len(memory_overheads)) * 100
+    # Collect the RATIOS (shadowbound/native). The geometric mean of the ratios
+    # minus 1 is the correct geomean overhead. The previous code took the geomean
+    # of (ratio-1) and clamped near-zero/negative values to a tiny positive
+    # number, both of which systematically understated the overhead.
+    time_ratios.append(time_overhead)
+    memory_ratios.append(memory_overhead)
+
+geometric_mean_time_overhead = (
+    np.prod(time_ratios) ** (1 / len(time_ratios)) - 1) * 100
+geometric_mean_memory_overhead = (
+    np.prod(memory_ratios) ** (1 / len(memory_ratios)) - 1) * 100
 table.add_row(['Geometric Mean', f"{geometric_mean_time_overhead:.2f}%", f"{geometric_mean_memory_overhead:.2f}%"])
 
 print(table)
