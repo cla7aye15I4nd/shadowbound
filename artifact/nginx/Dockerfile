@@ -14,13 +14,13 @@ ARG SCC=$SHADOWBOUND/llvm-project/build/bin/clang
 
 RUN cd nginx-1.22.1 && \
     ./configure --prefix=native && \
-    make CC="$SCC -fsanitize=shadowbound-instrument-only -mllvm -odef-skip-instrument=1" -j`nproc` && \
+    make CC="$SCC -fsanitize=shadowbound-instrument-only -mllvm -shadowbound-skip-instrument=1" -j`nproc` && \
     make install
 
 
 RUN cd nginx-1.22.1 && \
     ./configure --prefix=shadowbound && \
-    make CC="$SCC -fsanitize=shadowbound -mllvm -odef-pattern-opt-file=/config/nginx.json" -j`nproc` && \
+    make CC="$SCC -fsanitize=shadowbound -mllvm -shadowbound-pattern-opt-file=/config/nginx.json" -j`nproc` && \
     make install
 
 # The allocator must be on nginx's LINK line. nginx links with $(CC) plus the

@@ -32,7 +32,7 @@
 using namespace llvm;
 using BuilderTy = IRBuilder<TargetFolder>;
 
-#define DEBUG_TYPE "odef"
+#define DEBUG_TYPE "shadowbound"
 
 // Please use this macro instead of assert()
 #define ASSERT(X)                                                              \
@@ -64,76 +64,76 @@ static const uint64_t kMaxAddress = 0x1000000000000ULL;
 // | Perf Test       | N/A          | SetShadow             |
 // +-----------------+--------------+-----------------------+
 
-static cl::opt<bool> ClKeepGoing("odef-keep-going",
+static cl::opt<bool> ClKeepGoing("shadowbound-keep-going",
                                  cl::desc("keep going after reporting a error"),
                                  cl::Hidden, cl::init(false));
 
-static cl::opt<bool> ClSkipInstrument("odef-skip-instrument",
+static cl::opt<bool> ClSkipInstrument("shadowbound-skip-instrument",
                                       cl::desc("skip instrumenting"),
                                       cl::Hidden, cl::init(false));
 
-static cl::opt<bool> ClPerfTest("odef-perf-test", cl::desc("performance test"),
+static cl::opt<bool> ClPerfTest("shadowbound-perf-test", cl::desc("performance test"),
                                 cl::Hidden, cl::init(false));
 // Please note that due to limitations in the current implementation, we cannot
 // guarantee that all corresponding checks will be disabled when the
-// odef-check-[heap|stack|global] option is set to false. However, in most
+// shadowbound-check-[heap|stack|global] option is set to false. However, in most
 // cases, the majority of these checks will be skipped.
 
 // ==== Check Type Option ==== //
-static cl::opt<bool> ClCheckHeap("odef-check-heap",
+static cl::opt<bool> ClCheckHeap("shadowbound-check-heap",
                                  cl::desc("check heap memory"), cl::Hidden,
                                  cl::init(true));
 
 // ==== Optimization Option ==== //
-static cl::opt<bool> ClOnlySmallAllocOpt("odef-only-small-alloc-opt",
+static cl::opt<bool> ClOnlySmallAllocOpt("shadowbound-only-small-alloc-opt",
                                          cl::desc("optimize only small alloc"),
                                          cl::Hidden, cl::init(true));
 
-static cl::opt<bool> ClLoopOpt("odef-loop-opt",
+static cl::opt<bool> ClLoopOpt("shadowbound-loop-opt",
                                cl::desc("optimize loop checks"), cl::Hidden,
                                cl::init(false));
 
-static cl::opt<bool> ClReserveOpt("odef-reserve-opt",
+static cl::opt<bool> ClReserveOpt("shadowbound-reserve-opt",
                                   cl::desc("optimize reserved pointer checks"),
                                   cl::Hidden, cl::init(true));
 
-static cl::opt<bool> ClDirectionOpt("odef-direction-opt",
+static cl::opt<bool> ClDirectionOpt("shadowbound-direction-opt",
                                     cl::desc("optimize direction checks"),
                                     cl::Hidden, cl::init(true));
 
-static cl::opt<bool> ClPatternOpt("odef-pattern-opt",
+static cl::opt<bool> ClPatternOpt("shadowbound-pattern-opt",
                                   cl::desc("optimize pattern checks"),
                                   cl::Hidden, cl::init(true));
 
-static cl::opt<std::string> ClPatternOptFile("odef-pattern-opt-file",
+static cl::opt<std::string> ClPatternOptFile("shadowbound-pattern-opt-file",
                                              cl::desc("pattern opt file"),
                                              cl::Hidden, cl::init(""));
 
-static cl::opt<bool> ClMergeOpt("odef-merge-opt",
+static cl::opt<bool> ClMergeOpt("shadowbound-merge-opt",
                                 cl::desc("optimize merge checks"), cl::Hidden,
                                 cl::init(true));
 
-static cl::opt<bool> ClDependenceOpt("odef-dependence-opt",
+static cl::opt<bool> ClDependenceOpt("shadowbound-dependence-opt",
                                      cl::desc("optimize dependence checks"),
                                      cl::Hidden, cl::init(true));
 
-static cl::opt<bool> ClTailCheck("odef-tail-check",
+static cl::opt<bool> ClTailCheck("shadowbound-tail-check",
                                  cl::desc("check tail of array"), cl::Hidden,
                                  cl::init(false));
 
 // ==== Debug Option ==== //
-static cl::opt<std::string> ClWhiteList("odef-whitelist",
+static cl::opt<std::string> ClWhiteList("shadowbound-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
                                         cl::init(""));
 
-static cl::opt<bool> ClDumpIR("odef-dump-ir", cl::desc("dump IR"), cl::Hidden,
+static cl::opt<bool> ClDumpIR("shadowbound-dump-ir", cl::desc("dump IR"), cl::Hidden,
                               cl::init(false));
 
-const char kOdefModuleCtorName[] = "odef.module_ctor";
-const char kOdefInitName[] = "__shadowbound_init";
-const char kOdefReportName[] = "__shadowbound_report";
-const char kOdefAbortName[] = "__shadowbound_abort";
-const char kOdefSetShadowName[] = "__shadowbound_set_shadow";
+const char kShadowBoundModuleCtorName[] = "shadowbound.module_ctor";
+const char kShadowBoundInitName[] = "__shadowbound_init";
+const char kShadowBoundReportName[] = "__shadowbound_report";
+const char kShadowBoundAbortName[] = "__shadowbound_abort";
+const char kShadowBoundSetShadowName[] = "__shadowbound_set_shadow";
 
 namespace {
 
@@ -476,7 +476,7 @@ Instruction *entryInsertPtAfterAllocas(Function &F) {
 
 void insertModuleCtor(Module &M) {
   getOrCreateSanitizerCtorAndInitFunctions(
-      M, kOdefModuleCtorName, kOdefInitName,
+      M, kShadowBoundModuleCtorName, kShadowBoundInitName,
       /*InitArgTypes=*/{},
       /*InitArgs=*/{},
       // This callback is invoked when the functions are created the first
@@ -488,9 +488,9 @@ void insertModuleCtor(Module &M) {
 
 void insertRuntimeFunction(Module &M) {
   LLVMContext &C = M.getContext();
-  M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
-  M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
-  M.getOrInsertFunction(kOdefSetShadowName, Type::getVoidTy(C),
+  M.getOrInsertFunction(kShadowBoundReportName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kShadowBoundAbortName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kShadowBoundSetShadowName, Type::getVoidTy(C),
                         Type::getInt64Ty(C), Type::getInt64Ty(C),
                         Type::getInt64Ty(C));
 }
@@ -542,8 +542,8 @@ PreservedAnalyses ShadowBoundPass::run(Function &F,
   if (!hasTypedPointers(*F.getParent()))
     return PreservedAnalyses::all();
 
-  ShadowBound Odef(*F.getParent(), Options);
-  if (Odef.sanitizeFunction(F, FAM))
+  ShadowBound ShadowBound(*F.getParent(), Options);
+  if (ShadowBound.sanitizeFunction(F, FAM))
     return PreservedAnalyses::none();
   return PreservedAnalyses::all();
 }
@@ -574,12 +574,12 @@ void ShadowBound::initializeModule(Module &M) {
 
   DL = &M.getDataLayout();
 
-  M.getOrInsertFunction(kOdefReportName, Type::getVoidTy(C));
-  M.getOrInsertFunction(kOdefAbortName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kShadowBoundReportName, Type::getVoidTy(C));
+  M.getOrInsertFunction(kShadowBoundAbortName, Type::getVoidTy(C));
 
-  ReportFn = M.getFunction(kOdefReportName);
-  AbortFn = M.getFunction(kOdefAbortName);
-  SetShadowFn = M.getFunction(kOdefSetShadowName);
+  ReportFn = M.getFunction(kShadowBoundReportName);
+  AbortFn = M.getFunction(kShadowBoundAbortName);
+  SetShadowFn = M.getFunction(kShadowBoundSetShadowName);
 
   ASSERT(ReportFn != nullptr);
   ASSERT(AbortFn != nullptr);
@@ -615,7 +615,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
   if (F.getInstructionCount() == 0)
     return false;
 
-  if (F.getName() == kOdefInitName || F.getName() == kOdefModuleCtorName)
+  if (F.getName() == kShadowBoundInitName || F.getName() == kShadowBoundModuleCtorName)
     return false;
 
   // no_sanitize("shadowbound") / disable_sanitizer_instrumentation.
