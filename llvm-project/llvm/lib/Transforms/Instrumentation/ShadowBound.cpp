@@ -1547,7 +1547,7 @@ bool ShadowBound::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
   }
 
   Instruction *IP = PH->getTerminator();
-  SCEVExpander Exp(SE, *DL, "odefbound");
+  SCEVExpander Exp(SE, *DL, "shadowboundbound");
   if (!Exp.isSafeToExpandAt(MinS, IP) || !Exp.isSafeToExpandAt(MaxS, IP))
     return false;
 

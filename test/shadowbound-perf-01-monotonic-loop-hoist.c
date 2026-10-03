@@ -1,11 +1,11 @@
-// PERF: monotonic-loop check hoisting (-odef-loop-opt).
+// PERF: monotonic-loop check hoisting (-shadowbound-loop-opt).
 //
 // For an affine induction pointer in a counted loop, monotonicLoopOptimize
 // replaces the per-iteration bounds check with a single pre-loop check of the
 // first and last accessed addresses. This is sound: the accessed addresses are
 // monotonic, so bounding the extremes bounds every iteration.
 //
-// RUN: %clang -fsanitize=shadowbound -O1 -fno-vectorize -S -emit-llvm -o - -mllvm -odef-loop-opt %s 2>/dev/null | FileCheck %s --check-prefix=OPT
+// RUN: %clang -fsanitize=shadowbound -O1 -fno-vectorize -S -emit-llvm -o - -mllvm -shadowbound-loop-opt %s 2>/dev/null | FileCheck %s --check-prefix=OPT
 // RUN: %clang -fsanitize=shadowbound -O1 -fno-vectorize -S -emit-llvm -o - %s 2>/dev/null | FileCheck %s --check-prefix=NOOPT
 
 long sum(int *p, int n) {

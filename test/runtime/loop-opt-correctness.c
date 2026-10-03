@@ -2,7 +2,7 @@
 // check to a single pre-loop bound check must NOT create a false negative — an
 // out-of-bounds monotonic loop still has to be caught.
 //
-// RUN: %clang_sb -mllvm -odef-loop-opt %s -o %t
+// RUN: %clang_sb -mllvm -shadowbound-loop-opt %s -o %t
 // RUN: %t inbounds 2>&1 | FileCheck %s --check-prefix=INB
 // RUN: not %t overflow 2>&1 | FileCheck %s --check-prefix=OOB
 
