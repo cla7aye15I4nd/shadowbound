@@ -1,4 +1,5 @@
 #include "llvm/Transforms/Utils/Identification.h"
+#include "llvm/Demangle/Demangle.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/Support/JSON.h"
@@ -11,15 +12,9 @@ using namespace std;
 namespace llvm {
 
 bool isStdFunction(StringRef name) {
-  std::string cmd = "c++filt " + name.str();
-  FILE *pipe = popen(cmd.c_str(), "r");
-
-  std::string result;
-  char buffer[0x1000];
-  while (fgets(buffer, sizeof buffer, pipe) != NULL)
-    result += buffer;
-
-  pclose(pipe);
+  // Demangle in-process. Never hand symbol names to a shell: they can come
+  // from `__asm__("...")` labels and contain arbitrary characters.
+  std::string result = llvm::demangle(name.str());
 
   std::string fname;
   size_t start_pos = 0, end_pos = 0, count = 0;

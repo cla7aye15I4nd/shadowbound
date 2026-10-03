@@ -67,17 +67,12 @@ SANITIZER("memory", Memory)
 // Kernel MemorySanitizer (KMSAN)
 SANITIZER("kernel-memory", KernelMemory)
 
-// OverflowDefense
-SANITIZER("overflow-defense", OverflowDefense)
+// ShadowBound
+SANITIZER("shadowbound", ShadowBound)
 
-// Kernel OverflowDefense (KOD)
-SANITIZER("kernel-overflow-defense", KernelOverflowDefense)
-
-// Full Memory Protection
-SANITIZER("memprotect", MemProtect)
-
-// SGX OverflowDefense
-SANITIZER("tag-overflow-defense", TagOverflowDefense)
+// ShadowBound, instrumentation only (bounds metadata supplied by a
+// custom allocator such as FFmalloc/MarkUs instead of the default runtime).
+SANITIZER("shadowbound-instrument-only", ShadowBoundInstrumentOnly)
 
 // libFuzzer
 SANITIZER("fuzzer", Fuzzer)

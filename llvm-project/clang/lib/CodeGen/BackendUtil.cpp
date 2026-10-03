@@ -72,7 +72,7 @@
 #include "llvm/Transforms/Instrumentation/InstrProfiling.h"
 #include "llvm/Transforms/Instrumentation/MemProfiler.h"
 #include "llvm/Transforms/Instrumentation/MemorySanitizer.h"
-#include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/Transforms/Instrumentation/ShadowBound.h"
 #include "llvm/Transforms/Instrumentation/SanitizerCoverage.h"
 #include "llvm/Transforms/Instrumentation/ThreadSanitizer.h"
 #include "llvm/Transforms/ObjCARC.h"
@@ -663,14 +663,14 @@ static void addSanitizers(const Triple &TargetTriple,
     MSanPass(SanitizerKind::Memory, false);
     MSanPass(SanitizerKind::KernelMemory, true);
 
-    auto ODefPass = [&](SanitizerMask Mask, bool CompileKernel, std::string Runtime) {
+    auto ODefPass = [&](SanitizerMask Mask) {
       if (LangOpts.Sanitize.has(Mask)) {
         bool Recover = CodeGenOpts.SanitizeRecover.has(Mask);
-        OverflowDefenseOptions Opts(CompileKernel, Recover, Runtime);
+        ShadowBoundOptions Opts(Recover);
 
-        MPM.addPass(ModuleOverflowDefensePass(Opts));
+        MPM.addPass(ModuleShadowBoundPass(Opts));
         FunctionPassManager FPM;
-        FPM.addPass(OverflowDefensePass(Opts));
+        FPM.addPass(ShadowBoundPass(Opts));
         if (Level != OptimizationLevel::O0) {
           FPM.addPass(DCEPass());
           FPM.addPass(EarlyCSEPass());
@@ -680,10 +680,8 @@ static void addSanitizers(const Triple &TargetTriple,
         MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
       }
     };
-    ODefPass(SanitizerKind::OverflowDefense, false, "default");
-    ODefPass(SanitizerKind::KernelOverflowDefense, true, "default");
-    ODefPass(SanitizerKind::MemProtect, false, "default");
-    ODefPass(SanitizerKind::TagOverflowDefense, false, "tag");
+    ODefPass(SanitizerKind::ShadowBound);
+    ODefPass(SanitizerKind::ShadowBoundInstrumentOnly);
 
     if (LangOpts.Sanitize.has(SanitizerKind::Thread)) {
       MPM.addPass(ModuleThreadSanitizerPass());

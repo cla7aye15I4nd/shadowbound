@@ -36,8 +36,12 @@ static const SanitizerMask NeedsUbsanCxxRt =
 static const SanitizerMask NotAllowedWithTrap = SanitizerKind::Vptr;
 static const SanitizerMask NotAllowedWithMinimalRuntime =
     SanitizerKind::Function | SanitizerKind::Vptr;
+// ShadowBound runtimes (one malloc interposer and one shadow layout each).
+static const SanitizerMask ShadowBoundRuntimes =
+    SanitizerKind::ShadowBound | SanitizerKind::ShadowBoundInstrumentOnly;
 static const SanitizerMask RequiresPIE =
-    SanitizerKind::DataFlow | SanitizerKind::HWAddress | SanitizerKind::Scudo;
+    SanitizerKind::DataFlow | SanitizerKind::HWAddress | SanitizerKind::Scudo |
+    ShadowBoundRuntimes;
 static const SanitizerMask NeedsUnwindTables =
     SanitizerKind::Address | SanitizerKind::HWAddress | SanitizerKind::Thread |
     SanitizerKind::Memory | SanitizerKind::DataFlow;
@@ -502,7 +506,16 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
       std::make_pair(SanitizerKind::MemTag,
                      SanitizerKind::Address | SanitizerKind::KernelAddress |
                          SanitizerKind::HWAddress |
-                         SanitizerKind::KernelHWAddress)};
+                         SanitizerKind::KernelHWAddress),
+      std::make_pair(SanitizerKind::ShadowBound,
+                     SanitizerKind::ShadowBoundInstrumentOnly),
+      std::make_pair(ShadowBoundRuntimes,
+                     SanitizerKind::Address | SanitizerKind::HWAddress |
+                         SanitizerKind::Leak | SanitizerKind::Thread |
+                         SanitizerKind::Memory | SanitizerKind::KernelAddress |
+                         SanitizerKind::KernelHWAddress |
+                         SanitizerKind::KernelMemory | SanitizerKind::Scudo |
+                         SanitizerKind::DataFlow)};
   // Enable toolchain specific default sanitizers if not explicitly disabled.
   SanitizerMask Default = TC.getDefaultSanitizers() & ~AllRemove;
 
@@ -571,6 +584,14 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
       }
     }
   }
+  // The ShadowBound runtime maps its shadow below the heap and needs the
+  // address range below it to be empty, which a non-PIE executable violates.
+  if (DiagnoseErrors && (Kinds & ShadowBoundRuntimes) &&
+      Args.hasArg(options::OPT_nopie))
+    D.Diag(clang::diag::err_drv_argument_not_allowed_with)
+        << lastArgumentForMask(D, Args, Kinds & ShadowBoundRuntimes)
+        << "-no-pie";
+
   // FIXME: Currently -fsanitize=leak is silently ignored in the presence of
   // -fsanitize=address. Perhaps it should print an error, or perhaps
   // -f(-no)sanitize=leak should change whether leak detection is enabled by

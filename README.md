@@ -41,16 +41,16 @@ cd markus
 
 ## Usage
 
-You can use `-fsanitize=overflow-defense` to enable ShadowBound. In this mode, ShadowBound will use the default allocator to manage metadata. The following example shows how to compile a simple program with ShadowBound.
+You can use `-fsanitize=shadowbound` to enable ShadowBound. In this mode, ShadowBound will use the default allocator to manage metadata. The following example shows how to compile a simple program with ShadowBound.
 
 ```bash
-clang -fsanitize=overflow-defense -O2 test/test.c
+clang -fsanitize=shadowbound -O2 test/test.c
 ```
 
-If you want to customize the allocator in ShadowBound, you can use `-fsanitize=memprotect` to disable the default allocator and use the customized allocator. The following example shows how to compile a simple program with ShadowBound and the FFMalloc allocator.
+If you want to customize the allocator in ShadowBound, you can use `-fsanitize=shadowbound-instrument-only` to disable the default allocator and use the customized allocator. The following example shows how to compile a simple program with ShadowBound and the FFMalloc allocator.
 
 ```bash
-clang -fsanitize=memprotect -O2 test/test.c -L$PWD/ffmalloc -lffmalloc_st_perf
+clang -fsanitize=shadowbound-instrument-only -O2 test/test.c -L$PWD/ffmalloc -lffmalloc_st_perf
 ```
 
 ## Evaluation

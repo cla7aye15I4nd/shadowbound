@@ -40,3 +40,4 @@ tools/result.txt
 
 # binutils
 binutils
+test/Output/
