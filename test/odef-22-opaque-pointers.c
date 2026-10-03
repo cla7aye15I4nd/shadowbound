@@ -10,7 +10,7 @@
 //
 // Expected: a clear error, not a compiler crash.
 //
-// RUN: not %clang -fsanitize=overflow-defense -Xclang -opaque-pointers -O2 -c %s -o /dev/null 2>&1 | FileCheck %s
+// RUN: not %clang -fsanitize=shadowbound -Xclang -opaque-pointers -O2 -c %s -o /dev/null 2>&1 | FileCheck %s
 //
 // CHECK: error: {{.*}}requires typed pointers
 // CHECK-NOT: PLEASE submit a bug report

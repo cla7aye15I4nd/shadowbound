@@ -33,16 +33,16 @@ clangxx = os.path.join(bin_dir, 'clang++')
 # %clang_odef compiles and links a program with ShadowBound instrumentation
 # in its default configuration (-O2, as recommended by the README).
 config.substitutions.append(
-    ('%clang_odef', clang + ' -fsanitize=overflow-defense -O2 -g'))
+    ('%clang_odef', clang + ' -fsanitize=shadowbound -O2 -g'))
 config.substitutions.append(
-    ('%clangxx_odef', clangxx + ' -fsanitize=overflow-defense -O2 -g'))
+    ('%clangxx_odef', clangxx + ' -fsanitize=shadowbound -O2 -g'))
 # %odef_ir / %odefxx_ir print the instrumented IR of a C / C++ file, so a
 # test can FileCheck which bounds checks the pass emitted.
 config.substitutions.append(
-    ('%odef_ir', clang + ' -fsanitize=overflow-defense -O2 -S -emit-llvm -o -'))
+    ('%odef_ir', clang + ' -fsanitize=shadowbound -O2 -S -emit-llvm -o -'))
 config.substitutions.append(
     ('%odefxx_ir',
-     clangxx + ' -fsanitize=overflow-defense -O2 -S -emit-llvm -o -'))
+     clangxx + ' -fsanitize=shadowbound -O2 -S -emit-llvm -o -'))
 config.substitutions.append(('%clangxx', clangxx))
 config.substitutions.append(('%clang', clang))
 config.substitutions.append(('%opt', os.path.join(bin_dir, 'opt')))

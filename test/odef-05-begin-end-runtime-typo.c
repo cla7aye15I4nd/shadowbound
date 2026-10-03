@@ -15,8 +15,8 @@
 // helpers.
 //
 // Expected: a two-sided check (lower and upper bound) is emitted with
-// -fsanitize=overflow-defense. -fsanitize=tag-overflow-defense fails with a
-// clear diagnostic instead of executing undefined behaviour.
+// -fsanitize=shadowbound. 
+
 //
 // RUN: %odef_ir %s 2>/dev/null | FileCheck %s
 

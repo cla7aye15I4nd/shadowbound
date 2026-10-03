@@ -10,6 +10,6 @@
 //
 // Expected: a clean compile prints nothing.
 //
-// RUN: %clang -fsanitize=overflow-defense -O2 -c %s -o %t.o 2>&1 | count 0
+// RUN: %clang -fsanitize=shadowbound -O2 -c %s -o %t.o 2>&1 | count 0
 
 char get(char *p, long i) { return p[i]; }

@@ -1,4 +1,4 @@
-// BUG 24: __attribute__((no_sanitize("overflow-defense"))) is ignored.
+// BUG 24: __attribute__((no_sanitize("shadowbound"))) is ignored.
 //
 // Where: clang CodeGen (no function attribute is attached) and
 //        OverflowDefense::sanitizeFunction() (no attribute is checked).
@@ -13,7 +13,7 @@
 
 // CHECK-LABEL: @skipped(
 // CHECK-NOT: call void @__odef_abort()
-__attribute__((no_sanitize("overflow-defense"))) char skipped(char *p, long i) {
+__attribute__((no_sanitize("shadowbound"))) char skipped(char *p, long i) {
   return p[i];
 }
 

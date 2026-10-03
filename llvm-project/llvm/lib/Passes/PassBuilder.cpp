@@ -136,7 +136,7 @@
 #include "llvm/Transforms/Instrumentation/InstrProfiling.h"
 #include "llvm/Transforms/Instrumentation/MemProfiler.h"
 #include "llvm/Transforms/Instrumentation/MemorySanitizer.h"
-#include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/Transforms/Instrumentation/ShadowBound.h"
 #include "llvm/Transforms/Instrumentation/PGOInstrumentation.h"
 #include "llvm/Transforms/Instrumentation/PoisonChecking.h"
 #include "llvm/Transforms/Instrumentation/SanitizerCoverage.h"
@@ -689,9 +689,9 @@ Expected<MemorySanitizerOptions> parseMSanPassOptions(StringRef Params) {
   return Result;
 }
 
-Expected<OverflowDefenseOptions>
+Expected<ShadowBoundOptions>
 parseOdefPassOptions(StringRef Params) {
-  OverflowDefenseOptions Result;
+  ShadowBoundOptions Result;
   while (!Params.empty()) {
     StringRef ParamName;
     std::tie(ParamName, Params) = Params.split(';');
@@ -700,7 +700,7 @@ parseOdefPassOptions(StringRef Params) {
       Result.Recover = true;
     } else {
       return make_error<StringError>(
-          formatv("invalid OverflowDefense pass parameter '{0}' ", ParamName)
+          formatv("invalid ShadowBound pass parameter '{0}' ", ParamName)
               .str(),
           inconvertibleErrorCode());
     }

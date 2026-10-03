@@ -67,8 +67,8 @@ SANITIZER("memory", Memory)
 // Kernel MemorySanitizer (KMSAN)
 SANITIZER("kernel-memory", KernelMemory)
 
-// OverflowDefense
-SANITIZER("overflow-defense", OverflowDefense)
+// ShadowBound
+SANITIZER("shadowbound", ShadowBound)
 
 // Full Memory Protection
 SANITIZER("memprotect", MemProtect)

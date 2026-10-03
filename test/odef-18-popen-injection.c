@@ -11,7 +11,7 @@
 // Expected: compiling this file does not create the marker file.
 //
 // RUN: rm -f %t.marker
-// RUN: %clang -fsanitize=overflow-defense -O2 -S -emit-llvm -o /dev/null -DMARKER=%t.marker %s 2>/dev/null
+// RUN: %clang -fsanitize=shadowbound -O2 -S -emit-llvm -o /dev/null -DMARKER=%t.marker %s 2>/dev/null
 // RUN: test ! -e %t.marker
 
 #define STR2(x) #x

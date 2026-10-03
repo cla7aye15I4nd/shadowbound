@@ -96,8 +96,8 @@ FEATURE(nullability_nullable_result, true)
 FEATURE(memory_sanitizer,
         LangOpts.Sanitize.hasOneOf(SanitizerKind::Memory |
                                    SanitizerKind::KernelMemory))
-FEATURE(overflow_defense,
-        LangOpts.Sanitize.hasOneOf(SanitizerKind::OverflowDefense |
+FEATURE(shadowbound,
+        LangOpts.Sanitize.hasOneOf(SanitizerKind::ShadowBound |
                                    SanitizerKind::MemProtect))
 FEATURE(thread_sanitizer, LangOpts.Sanitize.has(SanitizerKind::Thread))
 FEATURE(dataflow_sanitizer, LangOpts.Sanitize.has(SanitizerKind::DataFlow))

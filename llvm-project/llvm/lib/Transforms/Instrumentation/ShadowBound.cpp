@@ -1,7 +1,7 @@
-//===- OverflowDefense.cpp - Instrumentation for overflow defense
+//===- ShadowBound.cpp - Instrumentation for overflow defense
 //------------===//
 
-#include "llvm/Transforms/Instrumentation/OverflowDefense.h"
+#include "llvm/Transforms/Instrumentation/ShadowBound.h"
 #include "llvm/ADT/StringSet.h"
 #include "llvm/Analysis/CFG.h"
 #include "llvm/Analysis/LoopInfo.h"
@@ -226,17 +226,17 @@ enum PtrUsage {
   kPtrDeref,
   kPtrEscape,
 };
-class OverflowDefense {
+class ShadowBound {
 public:
-  OverflowDefense(Module &M, const OverflowDefenseOptions &Options)
+  ShadowBound(Module &M, const ShadowBoundOptions &Options)
       : Options(Options) {
     initializeModule(M);
   }
 
-  OverflowDefense(const OverflowDefense &&) = delete;
-  OverflowDefense &operator=(const OverflowDefense &&) = delete;
-  OverflowDefense(const OverflowDefense &) = delete;
-  OverflowDefense &operator=(const OverflowDefense &) = delete;
+  ShadowBound(const ShadowBound &&) = delete;
+  ShadowBound &operator=(const ShadowBound &&) = delete;
+  ShadowBound(const ShadowBound &) = delete;
+  ShadowBound &operator=(const ShadowBound &) = delete;
 
   bool sanitizeFunction(Function &F, FunctionAnalysisManager &FAM);
 
@@ -345,7 +345,7 @@ private:
   Function *AbortFn;
   Function *SetShadowFn;
 
-  OverflowDefenseOptions Options;
+  ShadowBoundOptions Options;
 };
 
 bool isEscapeInstruction(Instruction *I, Value *V) {
@@ -546,7 +546,7 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
 }
 } // end anonymous namespace
 
-OverflowDefenseOptions::OverflowDefenseOptions(bool Recover)
+ShadowBoundOptions::ShadowBoundOptions(bool Recover)
     : Recover(getOptOrDefault(ClKeepGoing, Recover)) {}
 
 // The pass reads pointee types (getPointerElementType) everywhere, so it only
@@ -555,18 +555,18 @@ static bool hasTypedPointers(const Module &M) {
   return M.getContext().supportsTypedPointers();
 }
 
-PreservedAnalyses OverflowDefensePass::run(Function &F,
+PreservedAnalyses ShadowBoundPass::run(Function &F,
                                            FunctionAnalysisManager &FAM) {
   if (!hasTypedPointers(*F.getParent()))
     return PreservedAnalyses::all();
 
-  OverflowDefense Odef(*F.getParent(), Options);
+  ShadowBound Odef(*F.getParent(), Options);
   if (Odef.sanitizeFunction(F, FAM))
     return PreservedAnalyses::none();
   return PreservedAnalyses::all();
 }
 
-PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
+PreservedAnalyses ModuleShadowBoundPass::run(Module &M,
                                                  ModuleAnalysisManager &AM) {
   if (ClDumpIR) {
     std::error_code EC;
@@ -576,7 +576,7 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
 
   if (!hasTypedPointers(M)) {
     M.getContext().emitError(
-        "OverflowDefense requires typed pointers; compile with "
+        "ShadowBound requires typed pointers; compile with "
         "-Xclang -no-opaque-pointers");
     return PreservedAnalyses::all();
   }
@@ -587,7 +587,7 @@ PreservedAnalyses ModuleOverflowDefensePass::run(Module &M,
   return PreservedAnalyses::none();
 }
 
-void OverflowDefense::initializeModule(Module &M) {
+void ShadowBound::initializeModule(Module &M) {
   LLVMContext &C = M.getContext();
 
   DL = &M.getDataLayout();
@@ -625,7 +625,7 @@ void OverflowDefense::initializeModule(Module &M) {
   }
 }
 
-bool OverflowDefense::sanitizeFunction(Function &F,
+bool ShadowBound::sanitizeFunction(Function &F,
                                        FunctionAnalysisManager &AM) {
   if (F.isIntrinsic())
     return false;
@@ -636,7 +636,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   if (F.getName() == kOdefInitName || F.getName() == kOdefModuleCtorName)
     return false;
 
-  // no_sanitize("overflow-defense") / disable_sanitizer_instrumentation.
+  // no_sanitize("shadowbound") / disable_sanitizer_instrumentation.
   if (F.hasFnAttribute("no_overflow_defense") ||
       F.hasFnAttribute(Attribute::DisableSanitizerInstrumentation))
     return false;
@@ -691,7 +691,7 @@ bool OverflowDefense::sanitizeFunction(Function &F,
   return true;
 }
 
-void OverflowDefense::collectToInstrument(
+void ShadowBound::collectToInstrument(
     Function &F, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE) {
   for (auto &BB : F) {
     for (auto &I : BB) {
@@ -708,7 +708,7 @@ void OverflowDefense::collectToInstrument(
   }
 }
 
-bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
+bool ShadowBound::filterToInstrument(Function &F, Instruction *I,
                                          ObjectSizeOffsetEvaluator &ObjSizeEval,
                                          ScalarEvolution &SE) {
   if (!I->getType()->isPointerTy())
@@ -732,7 +732,7 @@ bool OverflowDefense::filterToInstrument(Function &F, Instruction *I,
   return false;
 }
 
-bool OverflowDefense::isSafePointer(Instruction *Ptr,
+bool ShadowBound::isSafePointer(Instruction *Ptr,
                                     ObjectSizeOffsetEvaluator &ObjSizeEval,
                                     ScalarEvolution &SE) {
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Ptr);
@@ -781,7 +781,7 @@ bool OverflowDefense::isSafePointer(Instruction *Ptr,
   return C && !C->getZExtValue();
 }
 
-bool OverflowDefense::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
+bool ShadowBound::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
   if (!ClReserveOpt)
     return false;
 
@@ -808,7 +808,7 @@ bool OverflowDefense::isZeroAccessGep(const DataLayout *DL, Instruction *I) {
   return Offset.getZExtValue() + NeededSize <= Tolerance;
 }
 
-PtrUsage OverflowDefense::GetPtrUsage(Instruction *I) {
+PtrUsage ShadowBound::GetPtrUsage(Instruction *I) {
   SmallVector<Instruction *, 16> WorkList;
   SmallPtrSet<Instruction *, 16> Visited;
 
@@ -875,7 +875,7 @@ PtrUsage OverflowDefense::GetPtrUsage(Instruction *I) {
   return PtrUsageCache[I] = Result;
 }
 
-bool OverflowDefense::isShrinkBitCast(Instruction *I) {
+bool ShadowBound::isShrinkBitCast(Instruction *I) {
   if (auto *BC = dyn_cast<BitCastInst>(I)) {
     if (!BC->getSrcTy()->isPointerTy() || !BC->getDestTy()->isPointerTy())
       return false;
@@ -907,7 +907,7 @@ bool OverflowDefense::isShrinkBitCast(Instruction *I) {
   return false;
 }
 
-void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
+void ShadowBound::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
   if (!ClCheckInField)
     return;
 
@@ -969,7 +969,7 @@ void OverflowDefense::collectSubFieldCheck(Function &F, ScalarEvolution &SE) {
   }
 }
 
-void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
+void ShadowBound::dependencyOptimize(Function &F, DominatorTree &DT,
                                          PostDominatorTree &PDT,
                                          ScalarEvolution &SE) {
 
@@ -984,7 +984,7 @@ void OverflowDefense::dependencyOptimize(Function &F, DominatorTree &DT,
   GepToInstrument.swap(NewGepToInstrument);
 }
 
-bool OverflowDefense::patternMatch(Function &F, Instruction *I,
+bool ShadowBound::patternMatch(Function &F, Instruction *I,
                                    PatternBase *P) {
 
   if (P->getType() == PT_VALUE) {
@@ -1029,7 +1029,7 @@ bool OverflowDefense::patternMatch(Function &F, Instruction *I,
   return false;
 }
 
-void OverflowDefense::patternOptimize(Function &F) {
+void ShadowBound::patternOptimize(Function &F) {
   if (ClPatternOptFile == "" || !ClPatternOpt)
     return;
 
@@ -1058,7 +1058,7 @@ void OverflowDefense::patternOptimize(Function &F) {
   BcToInstrument.swap(NewBcToInstrument);
 }
 
-void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
+void ShadowBound::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
   if (!ClReserveOpt)
     return;
 
@@ -1075,7 +1075,7 @@ void OverflowDefense::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
 }
 
 SmallVector<BitCastInst *, 16>
-OverflowDefense::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
+ShadowBound::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
                                          PostDominatorTree &PDT,
                                          ScalarEvolution &SE) {
   SmallVector<BitCastInst *, 16> NewBcToInstrument;
@@ -1115,7 +1115,7 @@ OverflowDefense::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
 }
 
 SmallVector<GetElementPtrInst *, 16>
-OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
+ShadowBound::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
                                           PostDominatorTree &PDT,
                                           ScalarEvolution &SE) {
   // Redundant-check elimination. For each GEP I, find GEPs J on the same base
@@ -1168,14 +1168,14 @@ OverflowDefense::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
   return GepToInstrument;
 }
 
-Value *OverflowDefense::getSource(Value *I) {
+Value *ShadowBound::getSource(Value *I) {
   if (SourceCache.count(I))
     return SourceCache[I];
 
   return SourceCache[I] = getSourceImpl(I);
 }
 
-Value *OverflowDefense::getSourceImpl(Value *V) {
+Value *ShadowBound::getSourceImpl(Value *V) {
   if (auto *BC = dyn_cast<BitCastInst>(V))
     return getSourceImpl(BC->getOperand(0));
 
@@ -1199,7 +1199,7 @@ Value *OverflowDefense::getSourceImpl(Value *V) {
   return V;
 }
 
-bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
+bool ShadowBound::getPhiSource(Value *V, Value *&Src,
                                    SmallPtrSet<Value *, 16> &Visited) {
   if (Visited.count(V))
     return true;
@@ -1228,7 +1228,7 @@ bool OverflowDefense::getPhiSource(Value *V, Value *&Src,
   return Src == V;
 }
 
-void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
+void ShadowBound::collectChunkCheck(Function &F, LoopInfo &LI,
                                         ObjectSizeOffsetEvaluator &ObjSizeEval,
                                         ScalarEvolution &SE,
                                         DominatorTree &DT) {
@@ -1250,7 +1250,7 @@ void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
   }
 }
 
-[[maybe_unused]] StructType *OverflowDefense::sourceAnalysis(Function &F,
+[[maybe_unused]] StructType *ShadowBound::sourceAnalysis(Function &F,
                                                              Value *Src) {
   if (auto *LI = dyn_cast<LoadInst>(Src)) {
     if (auto *Gep = dyn_cast<GetElementPtrInst>(LI->getPointerOperand())) {
@@ -1295,7 +1295,7 @@ void OverflowDefense::collectChunkCheck(Function &F, LoopInfo &LI,
   return nullptr;
 }
 
-void OverflowDefense::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
+void ShadowBound::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
   if (!ClDirectionOpt)
     OffsetDirCache[Addr] = kOffsetBoth;
 
@@ -1355,13 +1355,13 @@ void OverflowDefense::setOffsetDir(Value *Addr, ScalarEvolution &SE) {
   OffsetDirCache[Addr] = Dir;
 }
 
-OffsetDir OverflowDefense::getOffsetDir(Value *Addr) {
+OffsetDir ShadowBound::getOffsetDir(Value *Addr) {
   ASSERT(OffsetDirCache.count(Addr));
 
   return OffsetDirCache[Addr];
 }
 
-bool OverflowDefense::isAccessMember(Instruction *I) {
+bool ShadowBound::isAccessMember(Instruction *I) {
   ASSERT(isa<GetElementPtrInst>(I));
   auto *GEP = cast<GetElementPtrInst>(I);
   Type *SrcTy = GEP->getSourceElementType();
@@ -1387,7 +1387,7 @@ bool OverflowDefense::isAccessMember(Instruction *I) {
   return Offset.getZExtValue() + Need <= DL->getTypeStoreSize(SrcTy);
 }
 
-bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
+bool ShadowBound::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
   // Optimize the following case:
   //  Obj* obj = ...
   //  u8* buf = (u8*) obj;
@@ -1434,7 +1434,7 @@ bool OverflowDefense::isAccessMemberBoost(Instruction *I, ScalarEvolution &SE) {
   return Offset.getZExtValue() + Need <= size;
 }
 
-void OverflowDefense::collectChunkCheckImpl(
+void ShadowBound::collectChunkCheckImpl(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
     LoopInfo &LI, ObjectSizeOffsetEvaluator &ObjSizeEval, ScalarEvolution &SE,
     DominatorTree &DT) {
@@ -1579,7 +1579,7 @@ void OverflowDefense::collectChunkCheckImpl(
 #endif
 }
 
-bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
+bool ShadowBound::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
                                             ScalarEvolution &SE) {
   auto *SCEVPtr = SE.getSCEV(Addr);
   auto *ML = MonoLoopMap[Lop];
@@ -1598,7 +1598,7 @@ bool OverflowDefense::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
   return false;
 }
 
-void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
+void ShadowBound::loopOptimize(Function &F, LoopInfo &LI,
                                    ScalarEvolution &SE, DominatorTree &DT,
                                    PostDominatorTree &PDT) {
   if (!ClLoopOpt)
@@ -1627,7 +1627,7 @@ void OverflowDefense::loopOptimize(Function &F, LoopInfo &LI,
   GepToInstrument.swap(NewGepToInstrument);
 }
 
-void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
+void ShadowBound::collectMonoLoop(Function &F, LoopInfo &LI,
                                       ScalarEvolution &SE) {
   for (auto *Loop : LI) {
     if (!Loop->isRotatedForm())
@@ -1743,7 +1743,7 @@ void OverflowDefense::collectMonoLoop(Function &F, LoopInfo &LI,
   }
 }
 
-bool OverflowDefense::tryRuntimeFreeCheck(
+bool ShadowBound::tryRuntimeFreeCheck(
     Function &F, Value *Src, SmallVector<Instruction *, 16> &Insts,
     ObjectSizeOffsetEvaluator &ObjSizeEval) {
   SizeOffsetEvalType SizeOffsetEval = ObjSizeEval.compute(Src);
@@ -1763,7 +1763,7 @@ bool OverflowDefense::tryRuntimeFreeCheck(
   return false;
 }
 
-void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
+void ShadowBound::instrumentBitCast(Function &F, Value *Src,
                                         BitCastInst *BC) {
   // ShadowAddr = BC & kShadowMask;
   // Base = BC & kShadowBase;
@@ -1798,7 +1798,7 @@ void OverflowDefense::instrumentBitCast(Function &F, Value *Src,
   CreateTrapBB(IRB, Cmp, true);
 }
 
-void OverflowDefense::instrumentGep(Function &F, Value *Src,
+void ShadowBound::instrumentGep(Function &F, Value *Src,
                                     GetElementPtrInst *GEP) {
   // ShadowAddr = GEP & kShadowMask;
   // Base = GEP & kShadowBase;
@@ -1853,7 +1853,7 @@ void OverflowDefense::instrumentGep(Function &F, Value *Src,
   CreateTrapBB(IRB, Cmp, true);
 }
 
-Value *OverflowDefense::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
+Value *ShadowBound::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
                                         Value *End, uint64_t NeededSize) {
   // An N-byte access at CmpPtr is in bounds only if CmpPtr + N <= End, so the
   // violation condition is CmpPtr + N > End. (The old code used CmpPtr > End,
@@ -1868,7 +1868,7 @@ Value *OverflowDefense::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
   return IRB.CreateICmpUGT(AdjPtr, End);
 }
 
-void OverflowDefense::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
+void ShadowBound::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                                          BuilderTy &IRB) {
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
@@ -1884,7 +1884,7 @@ void OverflowDefense::getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
   End = IRB.CreateAdd(Base, Back);
 }
 
-void OverflowDefense::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
+void ShadowBound::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
   Value *BackRaw = IRB.CreateZExt(
@@ -1894,7 +1894,7 @@ void OverflowDefense::getPointerEnd(Value *Ptr, Value *&End, BuilderTy &IRB) {
   End = IRB.CreateAdd(Base, Back);
 }
 
-void OverflowDefense::getPointerBegin(Value *Ptr, Value *&Begin,
+void ShadowBound::getPointerBegin(Value *Ptr, Value *&Begin,
                                       BuilderTy &IRB) {
   Value *Shadow = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowMask));
   Value *Base = IRB.CreateAnd(Ptr, ConstantInt::get(int64Type, kShadowBase));
@@ -1906,13 +1906,13 @@ void OverflowDefense::getPointerBegin(Value *Ptr, Value *&Begin,
   Begin = IRB.CreateSub(Base, Front);
 }
 
-Value *OverflowDefense::getPointerIsApp(Value *Ptr, BuilderTy &IRB) {
+Value *ShadowBound::getPointerIsApp(Value *Ptr, BuilderTy &IRB) {
   return IRB.CreateAnd(
       IRB.CreateICmpUGE(Ptr, ConstantInt::get(int64Type, kHeapSpaceBeg)),
       IRB.CreateICmpULT(Ptr, ConstantInt::get(int64Type, kHeapSpaceEnd)));
 }
 
-void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
+void ShadowBound::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   if (Abort && !Options.Recover) {
     MDBuilder MDB(IRB.getContext());
     MDNode *BranchWeights = MDB.createBranchWeights(1, 0);
@@ -1930,7 +1930,7 @@ void OverflowDefense::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   }
 }
 
-void OverflowDefense::commitInstrument(Function &F) {
+void ShadowBound::commitInstrument(Function &F) {
   for (auto *C_ : Checks) {
     BaseCheck &C = *C_;
     if (C.Type == kBuiltInCheck) {
@@ -1948,7 +1948,7 @@ void OverflowDefense::commitInstrument(Function &F) {
   }
 }
 
-void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
+void ShadowBound::commitFieldCheck(Function &F, FieldCheck &FC) {
   if (!ClCheckInField)
     return;
 
@@ -1969,7 +1969,7 @@ void OverflowDefense::commitFieldCheck(Function &F, FieldCheck &FC) {
   CreateTrapBB(IRB, Cond, true);
 }
 
-void OverflowDefense::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
+void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   ASSERT(BC.Type == kBuiltInCheck);
 
   // Only heap objects are checked (stack/global sources never reach here).
@@ -2014,7 +2014,7 @@ void OverflowDefense::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   }
 }
 
-void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
+void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
   if (!ClCheckHeap)
     return;
 
@@ -2106,7 +2106,7 @@ void OverflowDefense::commitClusterCheck(Function &F, ClusterCheck &CC) {
   }
 }
 
-void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
+void ShadowBound::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
   if (!ClCheckHeap)
     return;
 
@@ -2125,7 +2125,7 @@ void OverflowDefense::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
 }
 
 [[maybe_unused]] Value *
-OverflowDefense::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
+ShadowBound::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
   Module *M = F.getParent();
   Function *readReg = Intrinsic::getDeclaration(M, Intrinsic::read_register,
                                                 IRB.getIntPtrTy(*DL));

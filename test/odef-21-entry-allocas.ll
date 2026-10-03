@@ -11,7 +11,7 @@
 ;
 ; Expected: the alloca stays in the entry block.
 ;
-; RUN: %opt -opaque-pointers=0 -passes=odef -S %s | FileCheck %s
+; RUN: %opt -opaque-pointers=0 -passes=shadowbound -S %s | FileCheck %s
 
 declare void @use(i8*)
 

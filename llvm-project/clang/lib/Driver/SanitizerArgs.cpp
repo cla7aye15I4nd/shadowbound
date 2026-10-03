@@ -37,11 +37,11 @@ static const SanitizerMask NotAllowedWithTrap = SanitizerKind::Vptr;
 static const SanitizerMask NotAllowedWithMinimalRuntime =
     SanitizerKind::Function | SanitizerKind::Vptr;
 // ShadowBound runtimes (one malloc interposer and one shadow layout each).
-static const SanitizerMask OverflowDefenseRuntimes =
-    SanitizerKind::OverflowDefense | SanitizerKind::MemProtect;
+static const SanitizerMask ShadowBoundRuntimes =
+    SanitizerKind::ShadowBound | SanitizerKind::MemProtect;
 static const SanitizerMask RequiresPIE =
     SanitizerKind::DataFlow | SanitizerKind::HWAddress | SanitizerKind::Scudo |
-    OverflowDefenseRuntimes;
+    ShadowBoundRuntimes;
 static const SanitizerMask NeedsUnwindTables =
     SanitizerKind::Address | SanitizerKind::HWAddress | SanitizerKind::Thread |
     SanitizerKind::Memory | SanitizerKind::DataFlow;
@@ -507,9 +507,9 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
                      SanitizerKind::Address | SanitizerKind::KernelAddress |
                          SanitizerKind::HWAddress |
                          SanitizerKind::KernelHWAddress),
-      std::make_pair(SanitizerKind::OverflowDefense,
+      std::make_pair(SanitizerKind::ShadowBound,
                      SanitizerKind::MemProtect),
-      std::make_pair(OverflowDefenseRuntimes,
+      std::make_pair(ShadowBoundRuntimes,
                      SanitizerKind::Address | SanitizerKind::HWAddress |
                          SanitizerKind::Leak | SanitizerKind::Thread |
                          SanitizerKind::Memory | SanitizerKind::KernelAddress |
@@ -586,10 +586,10 @@ SanitizerArgs::SanitizerArgs(const ToolChain &TC,
   }
   // The ShadowBound runtime maps its shadow below the heap and needs the
   // address range below it to be empty, which a non-PIE executable violates.
-  if (DiagnoseErrors && (Kinds & OverflowDefenseRuntimes) &&
+  if (DiagnoseErrors && (Kinds & ShadowBoundRuntimes) &&
       Args.hasArg(options::OPT_nopie))
     D.Diag(clang::diag::err_drv_argument_not_allowed_with)
-        << lastArgumentForMask(D, Args, Kinds & OverflowDefenseRuntimes)
+        << lastArgumentForMask(D, Args, Kinds & ShadowBoundRuntimes)
         << "-no-pie";
 
   // FIXME: Currently -fsanitize=leak is silently ignored in the presence of

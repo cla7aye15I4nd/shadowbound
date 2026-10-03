@@ -19,7 +19,7 @@ RUN cd nginx-1.22.1 && \
 
 RUN cd nginx-1.22.1 && \
     ./configure --prefix=shadowbound && \
-    make CC="$SCC -fsanitize=overflow-defense -mllvm -odef-pattern-opt-file=/config/nginx.json" -j`nproc` && \
+    make CC="$SCC -fsanitize=shadowbound -mllvm -odef-pattern-opt-file=/config/nginx.json" -j`nproc` && \
     make install
 
 RUN cd nginx-1.22.1 && \

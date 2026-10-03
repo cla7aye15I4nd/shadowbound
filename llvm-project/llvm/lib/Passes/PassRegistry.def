@@ -120,7 +120,7 @@ MODULE_PASS("view-callgraph", CallGraphViewerPass())
 MODULE_PASS("wholeprogramdevirt", WholeProgramDevirtPass())
 MODULE_PASS("dfsan", DataFlowSanitizerPass())
 MODULE_PASS("msan-module", ModuleMemorySanitizerPass({}))
-MODULE_PASS("odef-module", ModuleOverflowDefensePass({}))
+MODULE_PASS("shadowbound-module", ModuleShadowBoundPass({}))
 MODULE_PASS("module-inline", ModuleInlinerPass())
 MODULE_PASS("tsan-module", ModuleThreadSanitizerPass())
 MODULE_PASS("sancov-module", ModuleSanitizerCoveragePass())
@@ -428,13 +428,13 @@ FUNCTION_PASS_WITH_PARAMS("msan",
                            },
                           parseMSanPassOptions,
                           "recover;kernel;eager-checks;track-origins=N")
-FUNCTION_PASS_WITH_PARAMS("odef",
-                          "OverflowDefensePass",
-                           [](OverflowDefenseOptions Opts) {
-                             return OverflowDefensePass(Opts);
+FUNCTION_PASS_WITH_PARAMS("shadowbound",
+                          "ShadowBoundPass",
+                           [](ShadowBoundOptions Opts) {
+                             return ShadowBoundPass(Opts);
                            },
                           parseOdefPassOptions,
-                          "recover;kernel")
+                          "recover")
 FUNCTION_PASS_WITH_PARAMS("simplifycfg",
                           "SimplifyCFGPass",
                            [](SimplifyCFGOptions Opts) {
