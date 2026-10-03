@@ -1,18 +1,24 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+# Build LLVM 15 with clang/lld rather than the distro gcc: recent Ubuntu ships
+# gcc versions too new to compile LLVM 15, so pinning to clang keeps the build
+# working across 24.04/26.04/future releases.
 RUN apt-get update && apt-get install -y \
     autoconf \
     autogen \
     automake \
     bison \
     build-essential \
+    clang \
+    lld \
     cmake \
     curl \
     flex \
     g++ \
     gcc \
     git \
+    ninja-build \
     jq \
     less \
     libgmp-dev \
@@ -48,8 +54,15 @@ COPY llvm-project /shadowbound/llvm-project
 RUN cd /shadowbound/llvm-project && \
     mkdir build && \
     cd build && \
-    cmake -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" -DLLVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm && \
-    make -j`nproc`
+    cmake -G Ninja \
+      -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+      -DLLVM_USE_LINKER=lld \
+      -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include \
+      -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" \
+      -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
+      -DCOMPILER_RT_SANITIZERS_TO_BUILD="shadowbound;memp" \
+      ../llvm && \
+    ninja clang clang_rt.shadowbound-x86_64 clang_rt.shadowbound_cxx-x86_64 clang_rt.memp-x86_64
 
 ## Install FFmalloc
 COPY ffmalloc /shadowbound/ffmalloc
