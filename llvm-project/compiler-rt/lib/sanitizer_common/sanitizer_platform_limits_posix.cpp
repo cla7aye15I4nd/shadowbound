@@ -467,7 +467,11 @@ unsigned struct_ElfW_Phdr_sz = sizeof(Elf_Phdr);
   unsigned struct_input_id_sz = sizeof(struct input_id);
   unsigned struct_mtpos_sz = sizeof(struct mtpos);
   unsigned struct_rtentry_sz = sizeof(struct rtentry);
-#if SANITIZER_GLIBC || SANITIZER_ANDROID
+#if SANITIZER_GLIBC && __GLIBC_PREREQ(2, 42)
+  // glibc 2.42 removed `struct termio`; keep the symbol defined (the ioctl
+  // tables reference it) but with size 0.
+  unsigned struct_termio_sz = 0;
+#elif SANITIZER_GLIBC || SANITIZER_ANDROID
   unsigned struct_termio_sz = sizeof(struct termio);
 #endif
   unsigned struct_vt_consize_sz = sizeof(struct vt_consize);

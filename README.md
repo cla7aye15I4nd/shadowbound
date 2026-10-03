@@ -18,7 +18,7 @@ docker compose up --build shadowbound
 
 ```bash
 ## Build Binutils
-git clone --depth 1 git://sourceware.org/git/binutils-gdb.git binutils -b binutils-2_41-release
+git clone --depth 1 https://sourceware.org/git/binutils-gdb.git binutils -b binutils-2_41-release
 cd binutils
 mkdir build && cd build
 ../configure --enable-gold --enable-plugins --disable-werror
