@@ -22,6 +22,7 @@
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/Identification.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm/Transforms/Utils/ScalarEvolutionExpander.h"
 #include <algorithm>
 #include <fstream>
 #include <functional>
@@ -251,7 +252,7 @@ private:
                     DominatorTree &DT, PostDominatorTree &PDT);
   void collectMonoLoop(Function &F, LoopInfo &LI, ScalarEvolution &SE);
   bool monotonicLoopOptimize(Function &F, Value *Addr, Loop *L,
-                             ScalarEvolution &SE);
+                             ScalarEvolution &SE, DominatorTree &DT);
 
   SmallVector<BitCastInst *, 16> dependencyOptimizeForBc(Function &F,
                                                          DominatorTree &DT,
@@ -1494,23 +1495,85 @@ void ShadowBound::collectChunkCheckImpl(
 #endif
 }
 
+// Replace the per-iteration check of a monotonic induction pointer with a single
+// bound check before the loop. Sound because the accessed addresses of an affine
+// add-recurrence are monotonic, so they all lie in [min, max] of the first and
+// last iteration's addresses; bounding those two covers every iteration. Returns
+// true (and drops the per-iteration check) only when SCEV can prove the range.
 bool ShadowBound::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
-                                            ScalarEvolution &SE) {
-  auto *SCEVPtr = SE.getSCEV(Addr);
-  auto *ML = MonoLoopMap[Lop];
-  ASSERT(ML != nullptr);
+                                        ScalarEvolution &SE, DominatorTree &DT) {
+  auto *GEP = dyn_cast<GetElementPtrInst>(Addr);
+  if (!GEP)
+    return false;
 
-  if (auto *ARE = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
-    [[maybe_unused]] auto *Start = ARE->getStart();
-    [[maybe_unused]] auto *Step = ARE->getStepRecurrence(SE);
+  // Only the one-directional case fits a single monotonic range cleanly.
+  // (Directions are not computed until collectChunkCheck, so compute it here.)
+  setOffsetDir(GEP, SE);
+  OffsetDir Dir = getOffsetDir(GEP);
+  if (Dir != kOffsetPositive && Dir != kOffsetNegative)
+    return false;
 
-    LLVM_DEBUG(dbgs() << "[IndGep]\n");
-    LLVM_DEBUG(dbgs() << "Addr: " << *Addr << "\n");
-    LLVM_DEBUG(dbgs() << "Start: " << *Start << "\n");
-    LLVM_DEBUG(dbgs() << "Step: " << *Step << "\n");
+  auto *ARE = dyn_cast<SCEVAddRecExpr>(SE.getSCEV(Addr));
+  if (!ARE || ARE->getLoop() != Lop || !ARE->isAffine())
+    return false;
+
+  const SCEV *BTC = SE.getBackedgeTakenCount(Lop);
+  if (isa<SCEVCouldNotCompute>(BTC))
+    return false;
+  BasicBlock *PH = Lop->getLoopPreheader();
+  if (!PH)
+    return false;
+
+  // Shadow bounds come from the (loop-invariant) source pointer; it must be
+  // available in the preheader.
+  Value *Src = getSource(Addr);
+  if (auto *SrcI = dyn_cast<Instruction>(Src))
+    if (!DT.dominates(SrcI, PH->getTerminator()))
+      return false;
+
+  const SCEV *Start = ARE->getStart();
+  const SCEV *Last = ARE->evaluateAtIteration(BTC, SE);
+  ConstantRange StepR = SE.getSignedRange(ARE->getStepRecurrence(SE));
+
+  const SCEV *MinS, *MaxS;
+  if (StepR.getSignedMin().isNonNegative()) {
+    MinS = Start;
+    MaxS = Last;
+  } else if (StepR.getSignedMax().isNegative()) {
+    MinS = Last;
+    MaxS = Start;
+  } else {
+    return false; // step sign not provable
   }
 
-  return false;
+  Instruction *IP = PH->getTerminator();
+  SCEVExpander Exp(SE, *DL, "odefbound");
+  if (!Exp.isSafeToExpandAt(MinS, IP) || !Exp.isSafeToExpandAt(MaxS, IP))
+    return false;
+
+  Value *MinP = Exp.expandCodeFor(MinS, Addr->getType(), IP);
+  Value *MaxP = Exp.expandCodeFor(MaxS, Addr->getType(), IP);
+
+  BuilderTy IRB(IP->getParent(), IP->getIterator(), TargetFolder(*DL));
+  Value *SrcInt = IRB.CreatePtrToInt(Src, int64Type);
+  Value *MinInt = IRB.CreatePtrToInt(MinP, int64Type);
+  Value *MaxInt = IRB.CreatePtrToInt(MaxP, int64Type);
+
+  // Guard on the source being a heap pointer, then fetch its bounds once and
+  // bound both extremes of the accessed range.
+  Value *IsApp = getPointerIsApp(SrcInt, IRB);
+  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, IP, false));
+
+  uint64_t NeededSize =
+      DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+  Value *Begin = nullptr, *End = nullptr;
+  getPointerBeginEnd(SrcInt, Begin, End, IRB);
+  Value *CmpLo = IRB.CreateICmpULT(MinInt, Begin);
+  Value *CmpHi = makeOverflowCmp(IRB, MaxInt, End, NeededSize);
+  CreateTrapBB(IRB, IRB.CreateOr(CmpLo, CmpHi), true);
+
+  Counter[kClusterCheck]++;
+  return true;
 }
 
 void ShadowBound::loopOptimize(Function &F, LoopInfo &LI,
@@ -1532,7 +1595,7 @@ void ShadowBound::loopOptimize(Function &F, LoopInfo &LI,
       // optimized it. The previous code unconditionally dropped the induction
       // step GEP whenever the loop bound was not itself a GEP, leaving the
       // loop body with no bounds check at all.
-      if (monotonicLoopOptimize(F, GEP, Loop, SE))
+      if (monotonicLoopOptimize(F, GEP, Loop, SE, DT))
         continue;
     }
 
