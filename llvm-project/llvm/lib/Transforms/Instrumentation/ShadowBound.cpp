@@ -44,6 +44,9 @@ STATISTIC(NumClusterChecks, "Number of clustered shadow-memory bound loads");
 STATISTIC(NumBuiltinChecks, "Number of checks against a statically known size");
 STATISTIC(NumNonHeapElided,
           "Number of checks dropped because the source is never a heap pointer");
+STATISTIC(NumIntermediateElided,
+          "Number of checks dropped on pointers only used to derive checked "
+          "pointers");
 STATISTIC(NumStructHeuristicElided,
           "Number of checks dropped by the struct-field heuristic");
 STATISTIC(NumIPONonHeapArgs, "Number of arguments proven never heap pointers");
@@ -146,6 +149,12 @@ static cl::opt<bool> ClNonHeapOpt(
     "shadowbound-nonheap-opt",
     cl::desc("drop checks whose source is provably never a heap pointer, "
              "using the interprocedural shadowbound-ipo analysis"),
+    cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClIntermediateOpt(
+    "shadowbound-intermediate-opt",
+    cl::desc("do not check pointers that are only used to derive other "
+             "checked pointers"),
     cl::Hidden, cl::init(true));
 
 static cl::opt<bool> ClStructHeuristic(
@@ -310,6 +319,7 @@ private:
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
+  void dropIntermediateChecks();
   void commitInstrument(Function &F);
   void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
   void commitClusterCheck(Function &F, ClusterCheck &Check);
@@ -344,6 +354,9 @@ private:
   // Directions whose check can be dropped because a dominating check on the
   // same base already covers them (redundant-check elimination).
   DenseMap<Value *, OffsetDir> DroppedDir;
+  // Checks that another check was dropped (fully or one direction) in favour
+  // of; they must stay even if they look redundant otherwise.
+  SmallPtrSet<Instruction *, 16> ReliedUpon;
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Value *, PtrUsage> PtrUsageCache;
   DenseMap<Loop *, MonoLoop *> MonoLoopMap;
@@ -709,6 +722,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
   // Instrument GEP and BC
   collectChunkCheck(F, LI, ObjSizeEval, SE, DT);
 
+  dropIntermediateChecks();
   commitInstrument(F);
 
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
@@ -1088,6 +1102,7 @@ ShadowBound::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
                 DL->getTypeStoreSize(J->getType()->getPointerElementType());
             if (ISize <= JSize) {
               optimized = true;
+              ReliedUpon.insert(J);
               break;
             }
           }
@@ -1140,13 +1155,17 @@ ShadowBound::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
 
       // OffI <= OffJ always  &&  J checks the upper bound.
       if ((JDir & kOffsetPositive) &&
-          SE.getSignedRangeMax(OffI).sle(SE.getSignedRangeMin(OffJ)))
+          SE.getSignedRangeMax(OffI).sle(SE.getSignedRangeMin(OffJ))) {
         Drop |= kOffsetPositive;
+        ReliedUpon.insert(J);
+      }
 
       // OffI >= OffJ always  &&  J checks the lower bound.
       if ((JDir & kOffsetNegative) &&
-          SE.getSignedRangeMin(OffI).sge(SE.getSignedRangeMax(OffJ)))
+          SE.getSignedRangeMin(OffI).sge(SE.getSignedRangeMax(OffJ))) {
         Drop |= kOffsetNegative;
+        ReliedUpon.insert(J);
+      }
     }
 
     DroppedDir[I] = Drop;
@@ -1983,13 +2002,69 @@ void ShadowBound::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   }
 }
 
+// Drop the check on a pointer whose only users are GEPs that are checked
+// themselves. Its value is never dereferenced or escapes, and every
+// pointer derived from it is checked against the same source object (with the
+// directions of all steps on the way, this one included), so its own check
+// adds nothing. It is also the one that misfires: optimizations reassociate
+// `xff + len - 1` into `(xff - 1) + len`, and the intermediate `xff - 1` (a GEP
+// without `inbounds`, legally out of bounds) sits before the object when `xff`
+// is its first byte. nginx's X-Forwarded-For parser aborted on exactly this.
+//
+// A pointer stays checked if any user is not in the final checked set: the
+// other filters drop a derived pointer's check precisely because its operand
+// is checked. Checks other checks were dropped in favour of stay too.
+void ShadowBound::dropIntermediateChecks() {
+  if (!ClIntermediateOpt)
+    return;
+
+  SmallPtrSet<Instruction *, 32> Checked;
+  for (auto *C : Checks) {
+    if (C->Type == kClusterCheck)
+      Checked.insert(((ClusterCheck *)C)->Insts.begin(),
+                     ((ClusterCheck *)C)->Insts.end());
+    else if (C->Type == kRuntimeCheck)
+      Checked.insert(((RuntimeCheck *)C)->Insts.begin(),
+                     ((RuntimeCheck *)C)->Insts.end());
+    else
+      Checked.insert(((BuiltinCheck *)C)->Insts.begin(),
+                     ((BuiltinCheck *)C)->Insts.end());
+  }
+
+  auto IsIntermediate = [&](Instruction *I) {
+    if (I->use_empty() || ReliedUpon.count(I))
+      return false;
+    // Only GEP users: a GEP's check covers every direction its offset path
+    // from the source can take (this step's included), whereas a bitcast's
+    // check is an access-size check on the upper bound only.
+    for (User *U : I->users()) {
+      auto *UI = dyn_cast<GetElementPtrInst>(U);
+      if (!UI || !Checked.count(UI))
+        return false;
+    }
+    ++NumIntermediateElided;
+    return true;
+  };
+
+  for (auto *C : Checks) {
+    if (C->Type == kClusterCheck)
+      llvm::erase_if(((ClusterCheck *)C)->Insts, IsIntermediate);
+    else if (C->Type == kRuntimeCheck)
+      llvm::erase_if(((RuntimeCheck *)C)->Insts, IsIntermediate);
+    else
+      llvm::erase_if(((BuiltinCheck *)C)->Insts, IsIntermediate);
+  }
+}
+
 void ShadowBound::commitInstrument(Function &F) {
   for (auto *C_ : Checks) {
     BaseCheck &C = *C_;
     if (C.Type == kBuiltInCheck) {
-      commitBuiltInCheck(F, (BuiltinCheck &)C);
+      if (!((BuiltinCheck &)C).Insts.empty())
+        commitBuiltInCheck(F, (BuiltinCheck &)C);
     } else if (C.Type == kClusterCheck) {
-      commitClusterCheck(F, (ClusterCheck &)C);
+      if (!((ClusterCheck &)C).Insts.empty())
+        commitClusterCheck(F, (ClusterCheck &)C);
     } else if (C.Type == kRuntimeCheck) {
       commitRuntimeCheck(F, (RuntimeCheck &)C);
     } else {
@@ -2022,23 +2097,27 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   Value *Offset = BC.Offset;
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-  // Object base = Src - Offset; object end = base + Size.
+  // Object base = Src - Offset; object end = base + Size. The allocator places
+  // kReservedBytes after every heap object, which the shadow bounds include,
+  // so the end used here includes them too. Checks run when a pointer is
+  // created, not when it is dereferenced: comparing against the exact end
+  // rejected the legal one-past-the-end pointer of a loop like
+  // `p = malloc(n); for (...) p += len;` once LTO inlined the allocation next
+  // to it (nginx's ngx_init_setproctitle). This matches the shadow check.
   Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
-  Value *PtrEnd = IRB.CreateAdd(PtrBegin, Size);
+  Value *PtrEnd = IRB.CreateAdd(IRB.CreateAdd(PtrBegin, Size),
+                                ConstantInt::get(int64Type, kReservedBytes));
 
   for (auto &I : BC.Insts) {
     IRB.SetInsertPoint(I->getInsertionPointAfterDef());
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
-    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
 
     Value *Addr = IRB.CreatePtrToInt(I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    // Always account for the access width: an N-byte access at Addr is in
-    // bounds only if Addr + N <= PtrEnd.
-    Value *CmpEnd =
-        IRB.CreateICmpUGT(IRB.CreateAdd(Addr, NeededSizeVal), PtrEnd);
+    // Same upper-bound rule as the shadow check, access width included.
+    Value *CmpEnd = makeOverflowCmp(IRB, Addr, PtrEnd, NeededSize);
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
     CreateTrapBB(IRB, Cmp, true);
