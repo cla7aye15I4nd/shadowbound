@@ -25,7 +25,7 @@
 // bound), not undefined behaviour.
 // CHECK-DAG: icmp ugt i64 %{{[0-9]+}}, %{{[0-9]+}}
 // CHECK-DAG: add i64 %{{[0-9]+}}, 32
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 char get(char *p, long i) { return p[i]; }
 
 // CHECK-LABEL: @odef.module_ctor(

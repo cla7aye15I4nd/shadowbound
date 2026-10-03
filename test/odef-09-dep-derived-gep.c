@@ -14,7 +14,7 @@
 void log_progress(void);
 
 // CHECK-LABEL: @f(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: store i8 1
 void f(char *p, long i) {
   char *q = p + i;

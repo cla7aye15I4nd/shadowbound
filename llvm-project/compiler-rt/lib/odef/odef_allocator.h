@@ -5,7 +5,7 @@
 
 #include "sanitizer_common/sanitizer_common.h"
 
-namespace __odef {
+namespace __shadowbound {
 
 struct OdefThreadLocalMallocStorage {
   // Allocator cache contains atomic_uint64_t which must be 8-byte aligned.
@@ -17,6 +17,6 @@ private:
   OdefThreadLocalMallocStorage() {}
 };
 
-} // namespace __odef
+} // namespace __shadowbound
 
 #endif // ODEF_ALLOCATOR_H

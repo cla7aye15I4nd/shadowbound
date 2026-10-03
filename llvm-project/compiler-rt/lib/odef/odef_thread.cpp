@@ -3,7 +3,7 @@
 
 #include "sanitizer_common/sanitizer_tls_get_addr.h"
 
-namespace __odef {
+namespace __shadowbound {
 
 OdefThread *OdefThread::Create(thread_callback_t start_routine, void *arg) {
   uptr PageSize = GetPageSizeCached();
@@ -105,4 +105,4 @@ void OdefThread::FinishSwitchFiber(uptr *bottom_old, uptr *size_old) {
   next_stack_.bottom = 0;
 }
 
-} // namespace __odef
+} // namespace __shadowbound

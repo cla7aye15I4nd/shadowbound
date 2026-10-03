@@ -17,15 +17,15 @@
 // RUN: %odef_ir %s 2>/dev/null | FileCheck %s
 
 // CHECK-LABEL: @read_int(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 int read_int(char *buf, long i) { return *(int *)(buf + i); }
 
 // CHECK-LABEL: @read_select(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 int read_select(int *a, int *b, long i, int c) { return *(c ? a + i : b); }
 
 // CHECK-LABEL: @atomic_inc(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 void atomic_inc(long *p, long i) {
   __atomic_fetch_add(&p[i], 1, __ATOMIC_RELAXED);
 }

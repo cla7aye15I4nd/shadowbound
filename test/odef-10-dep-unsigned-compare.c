@@ -14,9 +14,9 @@
 // RUN: %odef_ir %s 2>/dev/null | FileCheck %s
 
 // CHECK-LABEL: @g(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: load i8
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: load i8
 char g(char *p, unsigned x) {
   char a = p[-1];

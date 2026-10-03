@@ -2440,6 +2440,15 @@ static inline void free_jumbo(struct pagepool_t *pool) {
 
 // Replacement for malloc. Returns a pointer to an available
 // memory region >= size or NULL upon failure
+// Add the reserved bytes without wrapping. A request that would overflow is
+// clamped to SIZE_MAX, which ffmalloc_internal rejects (returns NULL), instead
+// of wrapping to a tiny allocation.
+static inline size_t ff_add_reserve(size_t size) {
+  if (size > SIZE_MAX - kReservedBytes)
+    return SIZE_MAX;
+  return size + kReservedBytes;
+}
+
 static void *ffmalloc_internal(size_t size) {
   void *allocation;
 #if defined(FFSINGLE_THREADED) || !defined(_WIN64)
@@ -2497,8 +2506,7 @@ static void *ffmalloc_internal(size_t size) {
 }
 
 void *ffmalloc(size_t size) {
-  size += kReservedBytes;
-  return ffmalloc_internal(size);
+  return ffmalloc_internal(ff_add_reserve(size));
 }
 
 // Replacement for realloc. Returns a pointer to a memory region
@@ -2646,8 +2654,8 @@ static void *ffrealloc_internal(void *ptr, size_t size) {
 }
 
 void *ffrealloc(void *ptr, size_t size) {
-  size += kReservedBytes;
-  return ffrealloc_internal(ptr, size);
+  // size == 0 means free(ptr); keep that semantic (don't bump to reserve).
+  return ffrealloc_internal(ptr, size ? ff_add_reserve(size) : 0);
 }
 
 // Replacement for reallocarray. Equivalent to realloc(ptr, nmemb * size)
@@ -2663,7 +2671,8 @@ void *ffreallocarray(void *ptr, size_t nmemb, size_t size) {
   FFAtomicIncrement(arenas[0]->profile.reallocarrayCount);
 #endif
 
-  return ffrealloc_internal(ptr, nmemb * size);
+  size_t bytes = nmemb * size;
+  return ffrealloc_internal(ptr, bytes != 0 ? ff_add_reserve(bytes) : 0);
 }
 
 // Replacement for calloc. Returns a pointer to a memory region
@@ -2696,8 +2705,10 @@ void *ffcalloc(size_t nmemb, size_t size) {
   // page and therefore no need to explicitly zero out the allocation
   // return ffmalloc(nmemb?nmemb * size:size);
 
-  nmemb += (kReservedBytes + size - 1) / size;
-  return ffmalloc_internal(nmemb * size);
+  // nmemb * size is known not to overflow (checked above). Add the reserve on
+  // the byte count with saturation; the previous code bumped nmemb and could
+  // overflow the second multiplication, under-allocating.
+  return ffmalloc_internal(ff_add_reserve(nmemb * size));
 }
 
 // Replacment for free. Marks an allocation previously returned by
@@ -2860,7 +2871,7 @@ void *ffmemalign(size_t alignment, size_t size) {
   // allow all values but anything less than pointer size will just be
   // handled as a regular malloc
   if (alignment <= sizeof(void *)) {
-    return ffmalloc_internal(size);
+    return ffmalloc_internal(ff_add_reserve(size));
   }
 
   size += kReservedBytes;
@@ -3500,6 +3511,12 @@ static void print_current_usage() {
 #endif
 
 void SetShadow(const void *ptr, uptr size) {
+  // Only objects inside the app range have shadow memory mapped. Writing shadow
+  // for a pointer outside it (e.g. an allocation the OS placed elsewhere) would
+  // scribble over an unmapped or unrelated address.
+  if (!MEM_IS_APP(ptr))
+    return;
+
   u32 *shadow_beg = (u32 *)MEM_TO_SHADOW(ptr);
   u32 *shadow_end = shadow_beg + size / sizeof(u32);
 

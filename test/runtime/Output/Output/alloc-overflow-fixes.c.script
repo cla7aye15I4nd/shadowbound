@@ -1,0 +1,2 @@
+set -o pipefail;{ : 'RUN: at line 14';   /home/moe/shadowbound/llvm-project/build-docker/bin/clang -fsanitize=shadowbound -O1 -g /home/moe/shadowbound/test/runtime/alloc-overflow-fixes.c -o /home/moe/shadowbound/test/runtime/Output/Output/alloc-overflow-fixes.c.tmp; } &&
+{ : 'RUN: at line 15';   /home/moe/shadowbound/test/runtime/Output/Output/alloc-overflow-fixes.c.tmp 2>&1 | FileCheck /home/moe/shadowbound/test/runtime/alloc-overflow-fixes.c; }

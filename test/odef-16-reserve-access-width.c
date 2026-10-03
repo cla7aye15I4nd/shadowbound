@@ -20,8 +20,8 @@
 void sink(char *);
 
 // CHECK-LABEL: @tail_read(
-// CHECK: call void @__odef_abort()
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: load i64
 long tail_read(char *p, long n) {
   char *q = p + n;

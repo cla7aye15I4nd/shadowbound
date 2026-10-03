@@ -16,7 +16,7 @@
 // is "both", producing a lower-bound compare and a reserve-adjusted upper one.
 // CHECK-DAG: icmp ugt i64 %{{[0-9]+}}, %{{[0-9]+}}
 // CHECK-DAG: add i64 %{{[0-9]+}}, 32
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 long get(long *p, unsigned long x) {
   long n = (long)(x & 0x7fffffffffffffffUL);
   return p[n];

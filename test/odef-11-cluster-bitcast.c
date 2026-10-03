@@ -24,7 +24,7 @@ void use_big(struct Big *b);
 // The cast to a 256-byte struct must produce a real access-size compare
 // (ptr + 256 > end), not a dead `or(false, false)`.
 // CHECK: add i64 %{{[0-9]+}}, 256
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 void loop(char *base, long *offs, int n) {
   for (int i = 0; i < n; i++)
     use_big((struct Big *)(base + offs[i]));

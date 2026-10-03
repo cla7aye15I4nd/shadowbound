@@ -15,10 +15,10 @@
 void log_progress(void);
 
 // CHECK-LABEL: @two_writes(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: store i8 1
 // CHECK: call void @log_progress()
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: store i8 2
 void two_writes(char *p) {
   p[100] = 1;

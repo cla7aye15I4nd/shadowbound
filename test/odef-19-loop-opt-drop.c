@@ -13,7 +13,7 @@
 // RUN: %odef_ir -mllvm -odef-loop-opt %s 2>/dev/null | FileCheck %s
 
 // CHECK-LABEL: @fill(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 void fill(char *p, char *e) {
   for (char *q = p; q < e; q++)
     *(volatile char *)q = 0;

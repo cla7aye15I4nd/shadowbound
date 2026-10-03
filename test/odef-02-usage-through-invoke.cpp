@@ -17,7 +17,7 @@ struct Guard {
 void consume(int *p);
 
 // CHECK-LABEL: @_Z4testPil(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 // CHECK: invoke void @_Z7consumePi(
 void test(int *a, long i) {
   Guard g;

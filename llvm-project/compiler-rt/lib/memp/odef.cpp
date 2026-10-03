@@ -3,11 +3,11 @@
 
 using namespace __sanitizer;
 
-void __odef_init() {}
+void __shadowbound_init() {}
 
-void __odef_report() {}
+void __shadowbound_report() {}
 
-void __odef_abort() {
+void __shadowbound_abort() {
   Report(" Overflow detected\n");
   Die();
 }

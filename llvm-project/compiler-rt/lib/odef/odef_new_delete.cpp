@@ -4,7 +4,7 @@
 
 #include <stddef.h>
 
-using namespace __odef;
+using namespace __shadowbound;
 namespace std {
 struct nothrow_t {};
 enum class align_val_t : size_t {};

@@ -20,7 +20,7 @@
 // RUN: %odef_ir -mllvm -odef-pattern-opt-file=%inputs/odef-14-suffix-module.json %s 2>/dev/null | FileCheck %s
 
 // CHECK-LABEL: @store_at(
-// CHECK: call void @__odef_abort()
+// CHECK: call void @__shadowbound_abort()
 static __attribute__((noinline)) void store_at(char *p, long i) { p[i] = 1; }
 
 void entry(char *p, long i) { store_at(p, i); }

@@ -5,7 +5,7 @@
 #include "sanitizer_common/sanitizer_common.h"
 #include "sanitizer_common/sanitizer_posix.h"
 
-namespace __odef {
+namespace __shadowbound {
 
 class OdefThread {
 public:
@@ -58,6 +58,6 @@ private:
 OdefThread *GetCurrentThread();
 void SetCurrentThread(OdefThread *t);
 
-} // namespace __odef
+} // namespace __shadowbound
 
 #endif // ODEF_THREAD_H

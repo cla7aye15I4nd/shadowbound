@@ -130,10 +130,10 @@ static cl::opt<bool> ClDumpIR("odef-dump-ir", cl::desc("dump IR"), cl::Hidden,
                               cl::init(false));
 
 const char kOdefModuleCtorName[] = "odef.module_ctor";
-const char kOdefInitName[] = "__odef_init";
-const char kOdefReportName[] = "__odef_report";
-const char kOdefAbortName[] = "__odef_abort";
-const char kOdefSetShadowName[] = "__odef_set_shadow";
+const char kOdefInitName[] = "__shadowbound_init";
+const char kOdefReportName[] = "__shadowbound_report";
+const char kOdefAbortName[] = "__shadowbound_abort";
+const char kOdefSetShadowName[] = "__shadowbound_set_shadow";
 
 namespace {
 
@@ -497,29 +497,29 @@ void insertRuntimeFunction(Module &M) {
 
 void insertGlobalVariable(Module &M) {
   LLVMContext &C = M.getContext();
-  M.getOrInsertGlobal("__odef_only_small_alloc_opt", Type::getInt32Ty(C), [&] {
+  M.getOrInsertGlobal("__shadowbound_only_small_alloc_opt", Type::getInt32Ty(C), [&] {
     return new GlobalVariable(
         M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
         ConstantInt::get(Type::getInt32Ty(C), ClOnlySmallAllocOpt ? 1 : 0),
-        "__odef_only_small_alloc_opt");
+        "__shadowbound_only_small_alloc_opt");
   });
-  M.getOrInsertGlobal("__odef_keep_going", Type::getInt32Ty(C), [&] {
+  M.getOrInsertGlobal("__shadowbound_keep_going", Type::getInt32Ty(C), [&] {
     return new GlobalVariable(
         M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
         ConstantInt::get(Type::getInt32Ty(C), ClKeepGoing ? 1 : 0),
-        "__odef_keep_going");
+        "__shadowbound_keep_going");
   });
-  M.getOrInsertGlobal("__odef_skip_instrument", Type::getInt32Ty(C), [&] {
+  M.getOrInsertGlobal("__shadowbound_skip_instrument", Type::getInt32Ty(C), [&] {
     return new GlobalVariable(
         M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
         ConstantInt::get(Type::getInt32Ty(C), ClSkipInstrument ? 1 : 0),
-        "__odef_skip_instrument");
+        "__shadowbound_skip_instrument");
   });
-  M.getOrInsertGlobal("__odef_perf_test", Type::getInt32Ty(C), [&] {
+  M.getOrInsertGlobal("__shadowbound_perf_test", Type::getInt32Ty(C), [&] {
     return new GlobalVariable(
         M, Type::getInt32Ty(C), true, GlobalValue::WeakODRLinkage,
         ConstantInt::get(Type::getInt32Ty(C), ClPerfTest ? 1 : 0),
-        "__odef_perf_test");
+        "__shadowbound_perf_test");
   });
 }
 
