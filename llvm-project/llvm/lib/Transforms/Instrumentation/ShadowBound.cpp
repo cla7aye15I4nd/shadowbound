@@ -62,7 +62,10 @@ STATISTIC(NumIPONonHeapRets,
     }                                                                          \
   } while (0)
 
+// The runtime allocator keeps kReservedBytes after and kFrontReservedBytes
+// before every heap object, inside its shadow bounds.
 static const int kReservedBytes = 0x20;
+static const int kFrontReservedBytes = 0x20;
 
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
@@ -2104,12 +2107,16 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   // rejected the legal one-past-the-end pointer of a loop like
   // `p = malloc(n); for (...) p += len;` once LTO inlined the allocation next
   // to it (nginx's ngx_init_setproctitle). This matches the shadow check.
-  Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
-  Value *PtrEnd = IRB.CreateAdd(IRB.CreateAdd(PtrBegin, Size),
+  Value *ObjBegin = IRB.CreateSub(Ptr, Offset);
+  Value *PtrEnd = IRB.CreateAdd(IRB.CreateAdd(ObjBegin, Size),
                                 ConstantInt::get(int64Type, kReservedBytes));
+  // Likewise the front reserve, which the shadow's lower bound includes.
+  Value *PtrBegin = IRB.CreateSub(
+      ObjBegin, ConstantInt::get(int64Type, kFrontReservedBytes));
 
   for (auto &I : BC.Insts) {
-    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+    IRB.SetInsertPoint(getCheckInsertPt(I));
+    SelectInst *Sel = getOnlySelectUser(I);
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());

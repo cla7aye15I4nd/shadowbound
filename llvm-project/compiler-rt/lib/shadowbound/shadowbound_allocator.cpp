@@ -16,7 +16,15 @@ struct ShadowBoundMapUnmapCallback {
   }
 };
 
+// Every heap object gets kReservedBytes after it and kFrontReserveBytes before
+// it, both inside its chunk and so inside its shadow bounds. Checks run when a
+// pointer is created, not when it is dereferenced; the reserves let programs
+// form pointers just past the end (one-past-the-end, `p += len` loops) or just
+// before the start (`p - 1` scans, `new + (field - old)` rebasing in nginx) of
+// an object without a report, while such a pointer can never reach another
+// object.
 static const uptr kReservedBytes = 0x20;
+static const uptr kFrontReserveBytes = 0x20;
 static const uptr kAllocatorSpace = 0x600000000000ULL;
 static const uptr kMaxAllowedMallocSize = 8UL << 30;
 static const s32 kAllocatorReleaseToOsIntervalMs = 5000;
@@ -58,8 +66,28 @@ static uptr AddReserve(uptr size) {
   return size + kReservedBytes;
 }
 
+// The front reserve, rounded up so the returned pointer keeps the requested
+// alignment (alignments are powers of two).
+static uptr FrontPad(uptr alignment) {
+  return alignment > kFrontReserveBytes ? alignment : kFrontReserveBytes;
+}
+
+// The chunk an object pointer returned by ShadowBoundAllocate lives in.
+static void *ChunkOf(void *p) {
+  if (!p || !allocator.PointerIsMine(p))
+    return p;
+  return allocator.GetBlockBegin(p);
+}
+
+// Bytes from p to the end of its chunk.
+static uptr ChunkBytesFrom(void *p) {
+  void *chunk = ChunkOf(p);
+  return (uptr)chunk + allocator.GetActuallyAllocatedSize(chunk) - (uptr)p;
+}
+
 static void *ShadowBoundAllocate(uptr size, uptr alignment) {
-  if (size > kMaxAllowedMallocSize) {
+  uptr pad = FrontPad(alignment);
+  if (size > kMaxAllowedMallocSize || size + pad > kMaxAllowedMallocSize) {
     // Too large: return NULL (ENOMEM) instead of aborting, so callers that
     // probe large sizes behave normally.
     errno = errno_ENOMEM;
@@ -70,21 +98,25 @@ static void *ShadowBoundAllocate(uptr size, uptr alignment) {
   void *allocated;
   if (t) {
     AllocatorCache *cache = GetAllocatorCache(&t->malloc_storage());
-    allocated = allocator.Allocate(cache, size, alignment);
+    allocated = allocator.Allocate(cache, size + pad, alignment);
   } else {
     SpinMutexLock l(&fallback_mutex);
     AllocatorCache *cache = &fallback_allocator_cache;
-    allocated = allocator.Allocate(cache, size, alignment);
+    allocated = allocator.Allocate(cache, size + pad, alignment);
   }
   if (!allocated) {
     errno = errno_ENOMEM;
     return nullptr;
   }
+  // The shadow covers the whole chunk, front reserve included, so the
+  // object's lower bound is kFrontReserveBytes (or the alignment) before the
+  // pointer handed out.
   SetShadow(allocated, allocator.GetActuallyAllocatedSize(allocated));
-  return allocated;
+  return (char *)allocated + pad;
 }
 
 void ShadowBoundDeallocate(void *p) {
+  p = ChunkOf(p);
 
   ShadowBoundThread *t = GetCurrentThread();
   if (t) {
@@ -98,7 +130,7 @@ void ShadowBoundDeallocate(void *p) {
 }
 
 static void *ShadowBoundReallocate(void *old_p, uptr new_size, uptr alignment) {
-  uptr old_size = allocator.GetActuallyAllocatedSize(old_p);
+  uptr old_size = ChunkBytesFrom(old_p);
   if (new_size <= old_size) {
     return old_p;
   }
@@ -170,7 +202,7 @@ void *shadowbound_memalign(uptr alignment, uptr size) {
 uptr shadowbound_allocated_size(void *p) {
   if (!p)
     return 0;
-  uptr n = allocator.GetActuallyAllocatedSize(p);
+  uptr n = ChunkBytesFrom(p);
   return n > kReservedBytes ? n - kReservedBytes : 0;
 }
 
