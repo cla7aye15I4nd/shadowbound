@@ -35,16 +35,14 @@ jobs:
           cache-from: type=gha,scope=base
           cache-to: type=gha,scope=base,mode=max
 
+      # Plain `docker build`: the buildx builder above (docker-container
+      # driver) cannot see the base image that was loaded into the local
+      # daemon, and tries to pull shadowbound-base:ci from Docker Hub.
       - name: Build Nginx artifact image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: artifact/nginx/Dockerfile
-          load: true
-          build-args: BASE_IMAGE=shadowbound-base:ci
-          tags: shadowbound-nginx:ci
-          cache-from: type=gha,scope=nginx
-          cache-to: type=gha,scope=nginx,mode=max
+        run: |
+          docker build -f artifact/nginx/Dockerfile \
+            --build-arg BASE_IMAGE=shadowbound-base:ci \
+            -t shadowbound-nginx:ci .
 
       - name: Disable ASLR (fixed shadow/allocator mappings)
         run: sudo sysctl -w kernel.randomize_va_space=0
