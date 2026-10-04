@@ -12,8 +12,12 @@
 # Advance then clamp, e.g. ngx_http_proxy_v2_body_output_filter:
 #     pos += ngx_min(NGX_HTTP_V2_DEFAULT_FRAME_SIZE, limit);   // +16 KB
 #     if (pos >= in->buf->last) pos = in->buf->last;
-# (grpc: same; fastcgi: pos += 32 * 1024)
+# (grpc: same; fastcgi: pos += 32 * 1024. The fastcgi tests need the FCGI
+# Perl module, which the CI runner has; install libfcgi-perl locally.)
 fastcgi_body.t
+fastcgi_body2.t
+fastcgi_request_buffering.t
+fastcgi_request_buffering_chunked.t
 grpc_request_buffering.t
 proxy_h2_keepalive.t
 proxy_h2_next_upstream.t
