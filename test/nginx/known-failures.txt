@@ -2,39 +2,40 @@
 # 1.31.6 built with -flto. test/nginx/run.sh fails CI only on failures NOT
 # listed here, and reports listed files that now pass (delete those lines).
 #
-# Known cause: these files make nginx build a pointer a few bytes BEFORE the
-# start of a heap object (offsets -1..-16 observed). ShadowBound checks a
-# pointer when it is created, and while the allocator keeps 32 reserved bytes
-# after every object (so one-past-the-end pointers are fine), there is no such
-# reserve before an object, so the lower-bound check fires. Examples:
-#   ngx_http_alloc_large_header_buffer: `new + (r->field - old)` with a field
-#     2 bytes before `old`, stored into the request;
-#   ngx_resolve_name_locked / ngx_http_sub_body_filter: start-1 / start-8.
-# These are false positives (the pointer is never dereferenced out of bounds).
+# Each of these makes nginx itself form a pointer far outside its object
+# (undefined behavior in C, though nginx never dereferences it there).
+# ShadowBound checks pointers when they are created and tolerates only the
+# 32 bytes the allocator reserves before and after every object, so these
+# are reported. They are not instrumentation false positives; making them
+# pass needs a source change in nginx.
+#
+# Advance then clamp, e.g. ngx_http_proxy_v2_body_output_filter:
+#     pos += ngx_min(NGX_HTTP_V2_DEFAULT_FRAME_SIZE, limit);   // +16 KB
+#     if (pos >= in->buf->last) pos = in->buf->last;
+# (grpc: same; fastcgi: pos += 32 * 1024)
 fastcgi_body.t
 grpc_request_buffering.t
-h2_proxy_max_temp_file_size.t
-http_header_buffers.t
-http_resolver.t
-http_resolver_aaaa.t
-http_resolver_cname.t
-limit_rate.t
-proxy_h2_headers.t
 proxy_h2_keepalive.t
 proxy_h2_next_upstream.t
 proxy_h2_pass_request.t
 proxy_h2_request_buffering.t
 proxy_h2_set_body.t
+#
+# Evaluation order, ngx_event_pipe_write_to_downstream:
+#     if (bsize + cl->buf->end - cl->buf->start > p->busy_size)
+# computes `cl->buf->end + bsize` (4 KB past the buffer) before subtracting.
+h2_proxy_max_temp_file_size.t
+limit_rate.t
 proxy_limit_rate.t
 proxy_limit_rate2.t
 proxy_max_temp_file_size.t
 proxy_unfinished.t
+#
+# Rebasing a pointer into a reallocated array, ngx_http_rewrite_if:
+#     if_code = (u_char *) if_code + ((u_char *) lcf->codes->elts - elts);
+# derives a pointer into the new array from one into the old array.
 secure_link.t
-stream_upstream_resolve.t
-stream_upstream_service.t
-stream_upstream_service_reload.t
+#
+# Not yet analyzed (same reporting, cause not pinned down):
 sub_filter_multi.t
-upstream_resolve.t
-upstream_service.t
-upstream_service_reload.t
 upstream_sticky_learn.t
