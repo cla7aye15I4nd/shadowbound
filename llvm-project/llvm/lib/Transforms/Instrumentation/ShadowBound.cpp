@@ -323,6 +323,10 @@ private:
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
   void dropIntermediateChecks();
+  Instruction *getCheckInsertPt(Instruction *I);
+  SelectInst *getOnlySelectUser(Instruction *I);
+  Value *guardBySelect(SelectInst *S, Instruction *I, Value *Cmp,
+                       BuilderTy &IRB);
   void commitInstrument(Function &F);
   void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
   void commitClusterCheck(Function &F, ClusterCheck &Check);
@@ -383,6 +387,7 @@ private:
   // Interprocedural facts, when the shadowbound-ipo analysis was run on the
   // module beforehand (it is not available from a lone function pass).
   const ShadowBoundIPOInfo *IPO;
+  LoopInfo *LoopI = nullptr;
 
   ShadowBoundOptions Options;
 };
@@ -703,6 +708,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
   auto &DT = AM.getResult<DominatorTreeAnalysis>(F);
   auto &PDT = AM.getResult<PostDominatorTreeAnalysis>(F);
   auto &LI = AM.getResult<LoopAnalysis>(F);
+  LoopI = &LI;
   auto &TLI = AM.getResult<TargetLibraryAnalysis>(F);
 
   ObjectSizeOpts EvalOpts;
@@ -1846,9 +1852,8 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
   // if (BC > Base + BackSize - NeededSize)
   //   report_overflow();
 
-  Instruction *InsertPt = BC->hasOneUser() && !isa<PHINode>(BC->user_back())
-                              ? BC->user_back()
-                              : BC->getInsertionPointAfterDef();
+  Instruction *InsertPt = getCheckInsertPt(BC);
+  SelectInst *Sel = getOnlySelectUser(BC);
 
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
@@ -1870,7 +1875,7 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
   ASSERT(NeededSize > kReservedBytes);
 
   Value *Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
-  CreateTrapBB(IRB, Cmp, true);
+  CreateTrapBB(IRB, guardBySelect(Sel, BC, Cmp, IRB), true);
 }
 
 void ShadowBound::instrumentGep(Function &F, Value *Src,
@@ -1885,9 +1890,8 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   // if (GEP < Begin || GEP + NeededSize > End)
   //   report_overflow();
 
-  Instruction *InsertPt = GEP->hasOneUser() && !isa<PHINode>(GEP->user_back())
-                              ? GEP->user_back()
-                              : GEP->getInsertionPointAfterDef();
+  Instruction *InsertPt = getCheckInsertPt(GEP);
+  SelectInst *Sel = getOnlySelectUser(GEP);
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
@@ -1925,7 +1929,7 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   }
 
   ASSERT(Cmp != nullptr);
-  CreateTrapBB(IRB, Cmp, true);
+  CreateTrapBB(IRB, guardBySelect(Sel, GEP, Cmp, IRB), true);
 }
 
 Value *ShadowBound::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
@@ -2059,6 +2063,60 @@ void ShadowBound::dropIntermediateChecks() {
   }
 }
 
+// Where to check pointer I: where it is used, not where it is computed.
+// Optimizations hoist address computations above the condition guarding their
+// use; x264's `pl ? MbQ->qpc[pl-1] : MbQ->qp` computes &qpc[-1] (pl-1 zero-
+// extended, 16 GB past the object) before testing pl, and checking it there
+// aborted a program that never touches it. So the check goes before the first
+// user when all users are in one block, unless that block is in a deeper loop
+// (checking once outside the loop is cheaper; the definition is kept then).
+Instruction *ShadowBound::getCheckInsertPt(Instruction *I) {
+  // A pointer that only feeds a select is used where the select's result is
+  // (see guardBySelect).
+  if (SelectInst *S = getOnlySelectUser(I))
+    return getCheckInsertPt(S);
+
+  Instruction *Def = I->getInsertionPointAfterDef();
+  BasicBlock *UseBB = nullptr;
+  for (User *U : I->users()) {
+    auto *UI = dyn_cast<Instruction>(U);
+    if (!UI || isa<PHINode>(UI) || (UseBB && UI->getParent() != UseBB))
+      return Def;
+    UseBB = UI->getParent();
+  }
+  if (!UseBB || UseBB == I->getParent())
+    return I->hasOneUser() ? I->user_back() : Def;
+  if (LoopI && LoopI->getLoopDepth(UseBB) > LoopI->getLoopDepth(I->getParent()))
+    return Def;
+  for (Instruction &X : *UseBB)
+    if (X.getOperandList() && llvm::is_contained(X.operands(), I))
+      return &X;
+  return Def;
+}
+
+// The single user of I if it is a select choosing between I and another
+// pointer. Optimizations turn `c ? *a : *b` into `*(c ? a : b)` and compute
+// both addresses unconditionally (x264 again: `cmove` between &qp and the
+// out-of-object &qpc[pl-1]).
+SelectInst *ShadowBound::getOnlySelectUser(Instruction *I) {
+  if (!I->hasOneUser())
+    return nullptr;
+  auto *S = dyn_cast<SelectInst>(I->user_back());
+  if (!S || S->getCondition() == I)
+    return nullptr;
+  return S;
+}
+
+// Restrict a check on I to the case where the select it feeds picked it: the
+// other arm's address is never used, so it need not be in bounds. S is
+// getOnlySelectUser(I), taken before the check's own instructions add users.
+Value *ShadowBound::guardBySelect(SelectInst *S, Instruction *I, Value *Cmp,
+                                  BuilderTy &IRB) {
+  if (!S)
+    return Cmp;
+  return IRB.CreateAnd(Cmp, IRB.CreateICmpEQ(S, I));
+}
+
 void ShadowBound::commitInstrument(Function &F) {
   for (auto *C_ : Checks) {
     BaseCheck &C = *C_;
@@ -2127,7 +2185,7 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
     Value *CmpEnd = makeOverflowCmp(IRB, Addr, PtrEnd, NeededSize);
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
-    CreateTrapBB(IRB, Cmp, true);
+    CreateTrapBB(IRB, guardBySelect(Sel, I, Cmp, IRB), true);
   }
 }
 
@@ -2205,7 +2263,8 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
   }
 
   for (auto *I : CC.Insts) {
-    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+    IRB.SetInsertPoint(getCheckInsertPt(I));
+    SelectInst *Sel = getOnlySelectUser(I);
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
@@ -2221,7 +2280,7 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
     Value *LowerCmp = NeedLower ? IRB.CreateICmpULT(Ptr, Begin)
                                 : ConstantInt::getFalse(IRB.getContext());
     Value *NotIn = IRB.CreateOr(UpperCmp, LowerCmp);
-    CreateTrapBB(IRB, NotIn, true);
+    CreateTrapBB(IRB, guardBySelect(Sel, I, NotIn, IRB), true);
   }
 }
 

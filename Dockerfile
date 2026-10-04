@@ -57,6 +57,7 @@ RUN cd /shadowbound/llvm-project && \
       -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt" \
       -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
       -DCOMPILER_RT_SANITIZERS_TO_BUILD="shadowbound;memp" \
+      -DCOMPILER_RT_INCLUDE_TESTS=OFF \
       ../llvm && \
     ninja clang lld clang_rt.shadowbound-x86_64 clang_rt.shadowbound_cxx-x86_64 clang_rt.memp-x86_64
 
