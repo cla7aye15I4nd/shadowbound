@@ -326,6 +326,7 @@ private:
   void dropIntermediateChecks();
   Instruction *getCheckInsertPt(Instruction *I);
   SelectInst *getOnlySelectUser(Instruction *I);
+  PHINode *getLoopCarriedPhi(Instruction *I);
   Value *guardBySelect(SelectInst *S, Instruction *I, Value *Cmp,
                        BuilderTy &IRB);
   void commitInstrument(Function &F);
@@ -338,7 +339,7 @@ private:
 
   Value *makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr, Value *End,
                          uint64_t NeededSize, bool OnlyStored = false);
-  static bool isOnlyStored(Instruction *I);
+  static bool isOnlyStoredOrCompared(Instruction *I);
   void getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                           BuilderTy &IRB);
   void getPointerBegin(Value *Ptr, Value *&Begin, BuilderTy &IRB);
@@ -1866,7 +1867,7 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
 
   Instruction *InsertPt = getCheckInsertPt(BC);
   SelectInst *Sel = getOnlySelectUser(BC);
-  bool OnlyStored = isOnlyStored(BC);
+  bool OnlyStored = isOnlyStoredOrCompared(BC);
 
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
@@ -1905,12 +1906,14 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
 
   Instruction *InsertPt = getCheckInsertPt(GEP);
   SelectInst *Sel = getOnlySelectUser(GEP);
-  bool OnlyStored = isOnlyStored(GEP);
+  bool OnlyStored = isOnlyStoredOrCompared(GEP);
+  PHINode *Carried = getLoopCarriedPhi(GEP);
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-  Value *CmpPtr = IRB.CreatePtrToInt(GEP, int64Type);
+  Value *CmpPtr =
+      IRB.CreatePtrToInt(Carried ? (Value *)Carried : GEP, int64Type);
 
   {
     // FIXME: This block can be removed?
@@ -1947,17 +1950,29 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   CreateTrapBB(IRB, guardBySelect(Sel, GEP, Cmp, IRB), true);
 }
 
-// True if I's value is only written to memory or returned, never accessed or
-// used to derive another pointer here. Must be asked before the check adds
-// its own users of I.
-bool ShadowBound::isOnlyStored(Instruction *I) {
+// True if I's value is only written to memory, returned or compared, never
+// accessed or used to derive another pointer here. Such a pointer is still
+// checked, but only has to be at most one past the end:
+//  * stored/returned: where it is loaded and used later it is a new source,
+//    checked against its own bounds; an access at offset 0 without a GEP
+//    lands at worst in the 32-byte reserve;
+//  * compared: a loop bound (`last = first + n`) keeps every access of the
+//    loop below it, so bound <= end keeps them in the object. Its check must
+//    stay (unrolled loops rely on it, see shadowbound-19), but requiring room
+//    for a whole element at the bound itself rejected `first + n` for
+//    elements larger than the reserve.
+// Pointers passed to a call keep the full check: the cast to the callee's type
+// promises an access of that size (shadowbound-11). Must be asked before the
+// check adds its own users of I.
+bool ShadowBound::isOnlyStoredOrCompared(Instruction *I) {
   if (I->use_empty())
     return false;
-  for (User *U : I->users()) {
-    if (auto *SI = dyn_cast<StoreInst>(U)) {
+  for (const Use &U : I->uses()) {
+    User *Usr = U.getUser();
+    if (auto *SI = dyn_cast<StoreInst>(Usr)) {
       if (SI->getValueOperand() != I || SI->getPointerOperand() == I)
         return false;
-    } else if (!isa<ReturnInst>(U)) {
+    } else if (!isa<ReturnInst>(Usr) && !isa<ICmpInst>(Usr)) {
       return false;
     }
   }
@@ -1967,8 +1982,8 @@ bool ShadowBound::isOnlyStored(Instruction *I) {
 Value *ShadowBound::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
                                         Value *End, uint64_t NeededSize,
                                         bool OnlyStored) {
-  // A pointer that is only stored or returned is not accessed here: it only
-  // has to be at most one past the end. Requiring room for a whole element
+  // A pointer that is only stored, returned or compared is not accessed here:
+  // it only has to be at most one past the end (see isOnlyStoredOrCompared). Requiring room for a whole element
   // rejected std::vector's `++_M_finish` when the vector became full with
   // elements larger than kReservedBytes (SPEC 520.omnetpp_r, 96-byte
   // InifileReader::KeyValue1). Where it is loaded and used later, the loaded
@@ -2117,6 +2132,8 @@ Instruction *ShadowBound::getCheckInsertPt(Instruction *I) {
   // (see guardBySelect).
   if (SelectInst *S = getOnlySelectUser(I))
     return getCheckInsertPt(S);
+  if (PHINode *P = getLoopCarriedPhi(I))
+    return &*P->getParent()->getFirstInsertionPt();
 
   Instruction *Def = I->getInsertionPointAfterDef();
   BasicBlock *UseBB = nullptr;
@@ -2134,6 +2151,42 @@ Instruction *ShadowBound::getCheckInsertPt(Instruction *I) {
     if (X.getOperandList() && llvm::is_contained(X.operands(), I))
       return &X;
   return Def;
+}
+
+// The loop-header phi through which I reaches the next iteration, if I is a
+// loop's pointer increment that is otherwise only compared. Such a pointer is
+// only accessed in the next iteration, and only if the loop's exit test let it
+// in: `for (; first != last; ++first) first->~T();` ends with first == last,
+// one past the array, which the exit test keeps out of the body. Checked at
+// the increment, with room for a whole element, it aborted for elements
+// larger than kReservedBytes (SPEC 520.omnetpp_r, 72-byte
+// ValueIterator::Item). So the check goes on the phi, at the loop header:
+// every value the body uses is checked against the same object. Not done for a
+// check that another check was dropped in favour of, or if the phi's source
+// object differs.
+PHINode *ShadowBound::getLoopCarriedPhi(Instruction *I) {
+  if (!LoopI || !isa<GetElementPtrInst>(I) || ReliedUpon.count(I))
+    return nullptr;
+  Loop *L = LoopI->getLoopFor(I->getParent());
+  if (!L)
+    return nullptr;
+  PHINode *P = nullptr;
+  for (User *U : I->users()) {
+    if (isa<ICmpInst>(U))
+      continue;
+    auto *UP = dyn_cast<PHINode>(U);
+    if (!UP || (P && P != UP))
+      return nullptr;
+    P = UP;
+  }
+  if (!P || P->getParent() != L->getHeader() || getSource(P) != getSource(I))
+    return nullptr;
+  // The bounds come from the source, which must be available at the header:
+  // a source defined outside the loop that dominates I dominates the header.
+  if (auto *SrcI = dyn_cast<Instruction>(getSource(I)))
+    if (L->contains(SrcI))
+      return nullptr;
+  return P;
 }
 
 // The single user of I if it is a select choosing between I and another
@@ -2217,12 +2270,13 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   for (auto &I : BC.Insts) {
     IRB.SetInsertPoint(getCheckInsertPt(I));
     SelectInst *Sel = getOnlySelectUser(I);
-    bool OnlyStored = isOnlyStored(I);
+    bool OnlyStored = isOnlyStoredOrCompared(I);
+    PHINode *Carried = getLoopCarriedPhi(I);
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
 
-    Value *Addr = IRB.CreatePtrToInt(I, int64Type);
+    Value *Addr = IRB.CreatePtrToInt(Carried ? (Value *)Carried : I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
     // Same upper-bound rule as the shadow check, access width included.
     Value *CmpEnd =
@@ -2309,8 +2363,9 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(getCheckInsertPt(I));
     SelectInst *Sel = getOnlySelectUser(I);
-    bool OnlyStored = isOnlyStored(I);
-    Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
+    bool OnlyStored = isOnlyStoredOrCompared(I);
+    PHINode *Carried = getLoopCarriedPhi(I);
+    Value *Ptr = IRB.CreatePtrToInt(Carried ? (Value *)Carried : I, int64Type);
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
 
