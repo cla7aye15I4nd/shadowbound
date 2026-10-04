@@ -13,6 +13,9 @@ cp /root/config/shadowbound.cfg /root/cpu2017/config
 cd /root/cpu2017
 umount /mnt
 
+## Source fixes for code that forms out-of-bounds pointers (see src.alt/README.md)
+/root/src.alt/install.sh /root/cpu2017
+
 ## Set up environment
 source shrc
 runcpu -c native -a runsetup intrate_no_fortran fprate_no_fortran

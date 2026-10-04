@@ -1,0 +1,19 @@
+--- magick/cache.c
++++ magick/cache.c
+@@ -4710,8 +4710,14 @@
+     return(MagickTrue);
+   offset=(MagickOffsetType) nexus_info->region.y*cache_info->columns+
+     nexus_info->region.x;
+-  status=nexus_info->pixels == (cache_info->pixels+offset) ? MagickTrue :
+-    MagickFalse;
++  /*
++    Compare addresses as integers: for a region with negative x/y (virtual
++    pixels around the image), cache_info->pixels+offset is a pointer before
++    the start of the pixel buffer, which C does not allow to be formed and
++    ShadowBound reports.
++  */
++  status=(size_t) nexus_info->pixels == (size_t) cache_info->pixels+
++    (size_t) offset*sizeof(*cache_info->pixels) ? MagickTrue : MagickFalse;
+   return(status);
+ }
+ 
