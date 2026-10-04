@@ -48,7 +48,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build clang lld python3 ccache \
-            libpcre2-dev zlib1g-dev libssl-dev unzip curl perl
+            libpcre2-dev zlib1g-dev libssl-dev libcrypt-dev unzip curl perl
 
       - name: Free up disk space
         run: |
