@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     autoconf \
     autogen \
     automake \
+    binutils-dev \
     bison \
     build-essential \
     clang \
@@ -21,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     ninja-build \
     jq \
     less \
+    libcrypt-dev \
     libgmp-dev \
     libmpfr-dev \
     libtool \
@@ -43,12 +45,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir /shadowbound
 
-RUN cd /shadowbound && \
-    git clone --depth 1 https://sourceware.org/git/binutils-gdb.git binutils -b binutils-2_41-release && \
-    cd binutils && mkdir build && cd build && \
-    ../configure --enable-gold --enable-plugins --disable-werror && \
-    make -j`nproc`
-
 ## Install Shadowbound
 COPY llvm-project /shadowbound/llvm-project
 RUN cd /shadowbound/llvm-project && \
@@ -57,12 +53,13 @@ RUN cd /shadowbound/llvm-project && \
     cmake -G Ninja \
       -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
       -DLLVM_USE_LINKER=lld \
-      -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include \
-      -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" \
+      -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=/usr/include \
+      -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt" \
       -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
       -DCOMPILER_RT_SANITIZERS_TO_BUILD="shadowbound;memp" \
+      -DCOMPILER_RT_INCLUDE_TESTS=OFF \
       ../llvm && \
-    ninja clang clang_rt.shadowbound-x86_64 clang_rt.shadowbound_cxx-x86_64 clang_rt.memp-x86_64
+    ninja clang lld clang_rt.shadowbound-x86_64 clang_rt.shadowbound_cxx-x86_64 clang_rt.memp-x86_64
 
 ## Install FFmalloc
 COPY ffmalloc /shadowbound/ffmalloc

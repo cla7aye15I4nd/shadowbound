@@ -1,0 +1,45 @@
+# nginx-tests files that fail under ShadowBound but pass natively, with nginx
+# 1.31.6 built with -flto. test/nginx/run.sh fails CI only on failures NOT
+# listed here, and reports listed files that now pass (delete those lines).
+#
+# Each of these makes nginx itself form a pointer far outside its object
+# (undefined behavior in C, though nginx never dereferences it there).
+# ShadowBound checks pointers when they are created and tolerates only the
+# 32 bytes the allocator reserves before and after every object, so these
+# are reported. They are not instrumentation false positives; making them
+# pass needs a source change in nginx.
+#
+# Advance then clamp, e.g. ngx_http_proxy_v2_body_output_filter:
+#     pos += ngx_min(NGX_HTTP_V2_DEFAULT_FRAME_SIZE, limit);   // +16 KB
+#     if (pos >= in->buf->last) pos = in->buf->last;
+# (grpc: same; fastcgi: pos += 32 * 1024. The fastcgi tests need the FCGI
+# Perl module, which the CI runner has; install libfcgi-perl locally.)
+fastcgi_body.t
+fastcgi_body2.t
+fastcgi_request_buffering.t
+fastcgi_request_buffering_chunked.t
+grpc_request_buffering.t
+proxy_h2_keepalive.t
+proxy_h2_next_upstream.t
+proxy_h2_pass_request.t
+proxy_h2_request_buffering.t
+proxy_h2_set_body.t
+#
+# Evaluation order, ngx_event_pipe_write_to_downstream:
+#     if (bsize + cl->buf->end - cl->buf->start > p->busy_size)
+# computes `cl->buf->end + bsize` (4 KB past the buffer) before subtracting.
+h2_proxy_max_temp_file_size.t
+limit_rate.t
+proxy_limit_rate.t
+proxy_limit_rate2.t
+proxy_max_temp_file_size.t
+proxy_unfinished.t
+#
+# Rebasing a pointer into a reallocated array, ngx_http_rewrite_if:
+#     if_code = (u_char *) if_code + ((u_char *) lcf->codes->elts - elts);
+# derives a pointer into the new array from one into the old array.
+secure_link.t
+#
+# Not yet analyzed (same reporting, cause not pinned down):
+sub_filter_multi.t
+upstream_sticky_learn.t

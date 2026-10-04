@@ -668,16 +668,13 @@ static void addSanitizers(const Triple &TargetTriple,
         bool Recover = CodeGenOpts.SanitizeRecover.has(Mask);
         ShadowBoundOptions Opts(Recover);
 
-        MPM.addPass(ModuleShadowBoundPass(Opts));
-        FunctionPassManager FPM;
-        FPM.addPass(ShadowBoundPass(Opts));
-        if (Level != OptimizationLevel::O0) {
-          FPM.addPass(DCEPass());
-          FPM.addPass(EarlyCSEPass());
-          FPM.addPass(SimplifyCFGPass());
-          FPM.addPass(InstCombinePass());
+        // With -flto the checks are inserted at link time, on the merged
+        // module, where the interprocedural analysis sees every caller.
+        if (CodeGenOpts.PrepareForLTO || CodeGenOpts.PrepareForThinLTO) {
+          MPM.addPass(ShadowBoundLTOPrepPass(Opts));
+          return;
         }
-        MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
+        addShadowBoundPasses(MPM, Opts, Level != OptimizationLevel::O0);
       }
     };
     ODefPass(SanitizerKind::ShadowBound);

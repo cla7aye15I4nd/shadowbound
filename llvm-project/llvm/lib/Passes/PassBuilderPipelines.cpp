@@ -71,6 +71,7 @@
 #include "llvm/Transforms/Instrumentation/InstrProfiling.h"
 #include "llvm/Transforms/Instrumentation/MemProfiler.h"
 #include "llvm/Transforms/Instrumentation/PGOInstrumentation.h"
+#include "llvm/Transforms/Instrumentation/ShadowBound.h"
 #include "llvm/Transforms/Scalar/ADCE.h"
 #include "llvm/Transforms/Scalar/AlignmentFromAssumptions.h"
 #include "llvm/Transforms/Scalar/AnnotationRemarks.h"
@@ -78,6 +79,7 @@
 #include "llvm/Transforms/Scalar/CallSiteSplitting.h"
 #include "llvm/Transforms/Scalar/ConstraintElimination.h"
 #include "llvm/Transforms/Scalar/CorrelatedValuePropagation.h"
+#include "llvm/Transforms/Scalar/DCE.h"
 #include "llvm/Transforms/Scalar/DFAJumpThreading.h"
 #include "llvm/Transforms/Scalar/DeadStoreElimination.h"
 #include "llvm/Transforms/Scalar/DivRemPairs.h"
@@ -1400,6 +1402,39 @@ PassBuilder::buildThinLTOPreLinkDefaultPipeline(OptimizationLevel Level) {
   return MPM;
 }
 
+void llvm::addShadowBoundPasses(ModulePassManager &MPM,
+                                ShadowBoundOptions Options, bool Optimize) {
+  MPM.addPass(ModuleShadowBoundPass(Options));
+  // Computed once for the whole module before any function is instrumented;
+  // the function pass reads the cached result.
+  MPM.addPass(RequireAnalysisPass<ShadowBoundIPOAnalysis, Module>());
+  FunctionPassManager FPM;
+  FPM.addPass(ShadowBoundPass(Options));
+  if (Optimize) {
+    FPM.addPass(DCEPass());
+    FPM.addPass(EarlyCSEPass());
+    FPM.addPass(SimplifyCFGPass());
+    FPM.addPass(InstCombinePass());
+  }
+  MPM.addPass(createModuleToFunctionPassAdaptor(std::move(FPM)));
+  MPM.addPass(InvalidateAnalysisPass<ShadowBoundIPOAnalysis>());
+}
+
+PreservedAnalyses ShadowBoundLTOPass::run(Module &M,
+                                          ModuleAnalysisManager &AM) {
+  auto *Flag = mdconst::extract_or_null<ConstantInt>(
+      M.getModuleFlag(kShadowBoundLTOMarker));
+  if (!Flag || Flag->isZero())
+    return PreservedAnalyses::all();
+
+  // Bit 1 of the flag: some input was compiled with -fsanitize-recover.
+  ShadowBoundOptions Options(/*Recover=*/Flag->getZExtValue() & 2,
+                             /*LTOPostLink=*/true);
+  ModulePassManager MPM;
+  addShadowBoundPasses(MPM, Options, Optimize);
+  return MPM.run(M, AM);
+}
+
 ModulePassManager PassBuilder::buildThinLTODefaultPipeline(
     OptimizationLevel Level, const ModuleSummaryIndex *ImportSummary) {
   ModulePassManager MPM;
@@ -1436,6 +1471,9 @@ ModulePassManager PassBuilder::buildThinLTODefaultPipeline(
     // globals in the object file.
     MPM.addPass(EliminateAvailableExternallyPass());
     MPM.addPass(GlobalDCEPass());
+    // Instrument this module if it was compiled with ShadowBound. Under ThinLTO
+    // the IPO facts cover the module's own (internalized) functions only.
+    MPM.addPass(ShadowBoundLTOPass(/*Optimize=*/false));
     return MPM;
   }
 
@@ -1449,6 +1487,9 @@ ModulePassManager PassBuilder::buildThinLTODefaultPipeline(
   // Now add the optimization pipeline.
   MPM.addPass(buildModuleOptimizationPipeline(
       Level, ThinOrFullLTOPhase::ThinLTOPostLink));
+
+  // Instrument this module if it was compiled with ShadowBound.
+  MPM.addPass(ShadowBoundLTOPass(/*Optimize=*/true));
 
   // Emit annotation remarks.
   addAnnotationRemarksPass(MPM);
@@ -1488,6 +1529,9 @@ PassBuilder::buildLTODefaultPipeline(OptimizationLevel Level,
     // Run a second time to clean up any type tests left behind by WPD for use
     // in ICP.
     MPM.addPass(LowerTypeTestsPass(nullptr, nullptr, true));
+
+    // Instrument the merged module if any input asked for ShadowBound.
+    MPM.addPass(ShadowBoundLTOPass(Level != OptimizationLevel::O0));
 
     for (auto &C : FullLinkTimeOptimizationLastEPCallbacks)
       C(MPM, Level);
@@ -1570,6 +1614,9 @@ PassBuilder::buildLTODefaultPipeline(OptimizationLevel Level,
     // in ICP (which is performed earlier than this in the regular LTO
     // pipeline).
     MPM.addPass(LowerTypeTestsPass(nullptr, nullptr, true));
+
+    // Instrument the merged module if any input asked for ShadowBound.
+    MPM.addPass(ShadowBoundLTOPass(Level != OptimizationLevel::O0));
 
     for (auto &C : FullLinkTimeOptimizationLastEPCallbacks)
       C(MPM, Level);
@@ -1752,6 +1799,9 @@ PassBuilder::buildLTODefaultPipeline(OptimizationLevel Level,
 
   if (PTO.CallGraphProfile)
     MPM.addPass(CGProfilePass());
+
+  // Instrument the merged module if any input asked for ShadowBound.
+  MPM.addPass(ShadowBoundLTOPass(/*Optimize=*/true));
 
   for (auto &C : FullLinkTimeOptimizationLastEPCallbacks)
     C(MPM, Level);

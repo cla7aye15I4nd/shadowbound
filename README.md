@@ -27,7 +27,7 @@ make -j`nproc`
 ## Build LLVM
 cd llvm-project
 mkdir build && cd build
-cmake -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" -DLLVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm
+cmake -DLLVM_TARGETS_TO_BUILD="X86" -DLLVM_BINUTILS_INCDIR=../../binutils/include -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt" -DLLVM_BUILD_TESTS=ON -DCMAKE_BUILD_TYPE=Release -DCLANG_ENABLE_OPAQUE_POINTERS=OFF -G "Unix Makefiles" ../llvm
 make -j`nproc`
 
 ## Build FFmalloc
@@ -52,6 +52,23 @@ If you want to customize the allocator in ShadowBound, you can use `-fsanitize=s
 ```bash
 clang -fsanitize=shadowbound-instrument-only -O2 test/test.c -L$PWD/ffmalloc -lffmalloc_st_perf
 ```
+
+### Link-time optimization (recommended)
+
+With `-flto`, ShadowBound instruments the program at link time, on the merged
+module, instead of once per source file. Its interprocedural analysis then sees
+every caller of every function, and removes the checks on pointers that are
+provably never heap pointers (for example, a function only ever called with
+stack or global buffers). This replaces the per-program pattern files that the
+out-of-tree `analyzer/` used to generate for `-shadowbound-pattern-opt-file`.
+
+```bash
+clang -fsanitize=shadowbound -flto -fuse-ld=lld -O2 a.c b.c -o prog
+```
+
+`-flto=thin` works too; there the analysis covers each module's internal
+functions. `-mllvm -shadowbound-*` options on the link command line are forwarded
+to the link-time instrumentation.
 
 ## Evaluation
 

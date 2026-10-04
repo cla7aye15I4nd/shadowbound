@@ -5,7 +5,7 @@ set -euo pipefail
 
 : "${TARGET:?set TARGET to native|shadowbound|shadowbound-ffmalloc|shadowbound-markus}"
 
-pushd nginx-1.22.1 >/dev/null
+pushd nginx >/dev/null
 ./"$TARGET"/sbin/nginx
 ok=0
 for _ in $(seq 1 30); do

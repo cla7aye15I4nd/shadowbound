@@ -106,8 +106,24 @@ bool InitShadow() {
     bool map = type == MappingDesc::SHADOW;
     bool protect = type == MappingDesc::INVALID;
     CHECK(!(map && protect));
-    if (!map && !protect)
+    if (!map && !protect) {
       CHECK(type == MappingDesc::APP);
+      // The heap lives here and every pointer in this range is treated as a
+      // heap pointer. With ASLR on, the kernel may load the program (or a
+      // library) into it; if randomization could not be turned off (see
+      // DisableAslrIfNeeded), say so instead of crashing later.
+      if (!CheckMemoryRangeAvailability(start, size)) {
+        Report("ERROR: ShadowBound: the heap range [%p, %p) is already in use, "
+               "most likely because address-space randomization placed the "
+               "program there and could not be disabled (personality("
+               "ADDR_NO_RANDOMIZE) is not permitted, e.g. in an unprivileged "
+               "container). Run it with randomization off: `setarch -R "
+               "<program>`, `sysctl kernel.randomize_va_space=0`, or "
+               "`docker run --privileged`.\n",
+               (void *)start, (void *)end);
+        return false;
+      }
+    }
     if (map) {
       if (!CheckMemoryRangeAvailability(start, size))
         return false;

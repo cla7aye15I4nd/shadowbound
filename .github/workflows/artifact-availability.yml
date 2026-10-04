@@ -1,21 +1,18 @@
 name: artifact-availability
 
-# Guarantee the main experiments stay runnable ("available"). Builds the
-# toolchain base image, then builds and smoke-tests the Nginx and Chakra
-# artifact images. Heavy (full toolchain build); runs on artifact/toolchain
+# Guarantee the main experiment stays runnable ("available"). Builds the
+# toolchain base image, then builds and smoke-tests the Nginx artifact image. Heavy (full toolchain build); runs on artifact/toolchain
 # changes and on demand, with Docker layer caching.
 on:
   push:
     branches: [main, shadowbound-artifact-release]
     paths:
       - 'artifact/nginx/**'
-      - 'artifact/chakra/**'
       - 'Dockerfile'
       - '.github/workflows/artifact-availability.yml'
   pull_request:
     paths:
       - 'artifact/nginx/**'
-      - 'artifact/chakra/**'
       - 'Dockerfile'
       - '.github/workflows/artifact-availability.yml'
   workflow_dispatch:
@@ -38,16 +35,14 @@ jobs:
           cache-from: type=gha,scope=base
           cache-to: type=gha,scope=base,mode=max
 
+      # Plain `docker build`: the buildx builder above (docker-container
+      # driver) cannot see the base image that was loaded into the local
+      # daemon, and tries to pull shadowbound-base:ci from Docker Hub.
       - name: Build Nginx artifact image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: artifact/nginx/Dockerfile
-          load: true
-          build-args: BASE_IMAGE=shadowbound-base:ci
-          tags: shadowbound-nginx:ci
-          cache-from: type=gha,scope=nginx
-          cache-to: type=gha,scope=nginx,mode=max
+        run: |
+          docker build -f artifact/nginx/Dockerfile \
+            --build-arg BASE_IMAGE=shadowbound-base:ci \
+            -t shadowbound-nginx:ci .
 
       - name: Disable ASLR (fixed shadow/allocator mappings)
         run: sudo sysctl -w kernel.randomize_va_space=0
@@ -59,31 +54,3 @@ jobs:
             docker run --rm --privileged -e TARGET="$t" shadowbound-nginx:ci /root/smoke.sh
             echo "::endgroup::"
           done
-
-  chakra:
-    runs-on: ubuntu-26.04
-    timeout-minutes: 350
-    steps:
-      - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
-
-      - name: Build Chakra artifact image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: artifact/chakra/Dockerfile
-          load: true
-          tags: shadowbound-chakra:ci
-          cache-from: type=gha,scope=chakra
-          cache-to: type=gha,scope=chakra,mode=max
-
-      - name: Disable ASLR
-        run: sudo sysctl -w kernel.randomize_va_space=0
-
-      - name: Smoke-test Chakra builds run
-        run: |
-          # Both ch binaries must at least start and evaluate a trivial script.
-          docker run --rm --privileged shadowbound-chakra:ci \
-            bash -lc 'echo "print(1+1);" > /tmp/t.js && \
-              /ChakraCore/build/native/Release/ch /tmp/t.js && \
-              /ChakraCore/build/shadowbound/Release/ch /tmp/t.js'

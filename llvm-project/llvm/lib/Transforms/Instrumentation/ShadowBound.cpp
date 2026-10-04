@@ -2,6 +2,8 @@
 //------------===//
 
 #include "llvm/Transforms/Instrumentation/ShadowBound.h"
+#include "llvm/ADT/SetVector.h"
+#include "llvm/ADT/Statistic.h"
 #include "llvm/ADT/StringSet.h"
 #include "llvm/Analysis/CFG.h"
 #include "llvm/Analysis/LoopInfo.h"
@@ -9,8 +11,11 @@
 #include "llvm/Analysis/PostDominators.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/Analysis/ScalarEvolutionExpressions.h"
+#include "llvm/Analysis/ValueTracking.h"
 #include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/Constant.h"
+#include "llvm/IR/InstIterator.h"
+#include "llvm/IR/IntrinsicInst.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/MDBuilder.h"
 #include "llvm/IR/Operator.h"
@@ -22,6 +27,7 @@
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/Identification.h"
 #include "llvm/Transforms/Utils/ModuleUtils.h"
+#include "llvm/Transforms/Utils/ScalarEvolutionExpander.h"
 #include <algorithm>
 #include <fstream>
 #include <functional>
@@ -34,6 +40,20 @@ using BuilderTy = IRBuilder<TargetFolder>;
 
 #define DEBUG_TYPE "shadowbound"
 
+STATISTIC(NumRuntimeChecks, "Number of shadow-memory bounds checks emitted");
+STATISTIC(NumClusterChecks, "Number of clustered shadow-memory bound loads");
+STATISTIC(NumBuiltinChecks, "Number of checks against a statically known size");
+STATISTIC(NumNonHeapElided,
+          "Number of checks dropped because the source is never a heap pointer");
+STATISTIC(NumIntermediateElided,
+          "Number of checks dropped on pointers only used to derive checked "
+          "pointers");
+STATISTIC(NumStructHeuristicElided,
+          "Number of checks dropped by the struct-field heuristic");
+STATISTIC(NumIPONonHeapArgs, "Number of arguments proven never heap pointers");
+STATISTIC(NumIPONonHeapRets,
+          "Number of functions proven to never return a heap pointer");
+
 // Please use this macro instead of assert()
 #define ASSERT(X)                                                              \
   do {                                                                         \
@@ -43,7 +63,10 @@ using BuilderTy = IRBuilder<TargetFolder>;
     }                                                                          \
   } while (0)
 
+// The runtime allocator keeps kReservedBytes after and kFrontReservedBytes
+// before every heap object, inside its shadow bounds.
 static const int kReservedBytes = 0x20;
+static const int kFrontReservedBytes = 0x20;
 
 static const uint64_t kShadowBase = ~0x7ULL;
 static const uint64_t kShadowMask = ~0x400000000007ULL;
@@ -126,6 +149,25 @@ static cl::opt<std::string> ClWhiteList("shadowbound-whitelist",
                                         cl::desc("whitelist file"), cl::Hidden,
                                         cl::init(""));
 
+static cl::opt<bool> ClNonHeapOpt(
+    "shadowbound-nonheap-opt",
+    cl::desc("drop checks whose source is provably never a heap pointer, "
+             "using the interprocedural shadowbound-ipo analysis"),
+    cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClIntermediateOpt(
+    "shadowbound-intermediate-opt",
+    cl::desc("do not check pointers that are only used to derive other "
+             "checked pointers"),
+    cl::Hidden, cl::init(true));
+
+static cl::opt<bool> ClStructHeuristic(
+    "shadowbound-struct-heuristic",
+    cl::desc("UNSOUND: trust pointers loaded from a struct field that an "
+             "allocation sized by a loaded length is stored into (the "
+             "\"struct\" pattern of the old out-of-tree analyzer)"),
+    cl::Hidden, cl::init(false));
+
 static cl::opt<bool> ClDumpIR("shadowbound-dump-ir", cl::desc("dump IR"), cl::Hidden,
                               cl::init(false));
 
@@ -134,6 +176,12 @@ const char kShadowBoundInitName[] = "__shadowbound_init";
 const char kShadowBoundReportName[] = "__shadowbound_report";
 const char kShadowBoundAbortName[] = "__shadowbound_abort";
 const char kShadowBoundSetShadowName[] = "__shadowbound_set_shadow";
+
+// Module flag value bits written by the LTO pre-link step.
+static constexpr uint32_t kLTOFlagEnabled = 1;
+static constexpr uint32_t kLTOFlagRecover = 2;
+
+const char llvm::kShadowBoundLTOMarker[] = "shadowbound-lto";
 
 namespace {
 
@@ -214,8 +262,9 @@ enum PtrUsage {
 };
 class ShadowBound {
 public:
-  ShadowBound(Module &M, const ShadowBoundOptions &Options)
-      : Options(Options) {
+  ShadowBound(Module &M, const ShadowBoundOptions &Options,
+              const ShadowBoundIPOInfo *IPO)
+      : IPO(IPO), Options(Options) {
     initializeModule(M);
   }
 
@@ -243,6 +292,7 @@ private:
   bool isAccessMember(Instruction *I);
   bool isAccessMemberBoost(Instruction *I, ScalarEvolution &SE);
   void structPointerOptimizae(Function &F, ScalarEvolution &SE);
+  void ipoOptimize(Function &F);
   bool patternMatch(Function &F, Instruction *I, PatternBase *P);
   void patternOptimize(Function &F);
   void dependencyOptimize(Function &F, DominatorTree &DT,
@@ -251,7 +301,7 @@ private:
                     DominatorTree &DT, PostDominatorTree &PDT);
   void collectMonoLoop(Function &F, LoopInfo &LI, ScalarEvolution &SE);
   bool monotonicLoopOptimize(Function &F, Value *Addr, Loop *L,
-                             ScalarEvolution &SE);
+                             ScalarEvolution &SE, DominatorTree &DT);
 
   SmallVector<BitCastInst *, 16> dependencyOptimizeForBc(Function &F,
                                                          DominatorTree &DT,
@@ -273,6 +323,12 @@ private:
                            SmallVector<Instruction *, 16> &Insts,
                            ObjectSizeOffsetEvaluator &ObjSizeEval);
 
+  void dropIntermediateChecks();
+  Instruction *getCheckInsertPt(Instruction *I);
+  SelectInst *getOnlySelectUser(Instruction *I);
+  PHINode *getLoopCarriedPhi(Instruction *I);
+  Value *guardBySelect(SelectInst *S, Instruction *I, Value *Cmp,
+                       BuilderTy &IRB);
   void commitInstrument(Function &F);
   void commitBuiltInCheck(Function &F, BuiltinCheck &Check);
   void commitClusterCheck(Function &F, ClusterCheck &Check);
@@ -282,7 +338,9 @@ private:
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
 
   Value *makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr, Value *End,
-                         uint64_t NeededSize);
+                         uint64_t NeededSize, bool OnlyStored = false);
+  static bool isOnlyStoredOrCompared(Instruction *I);
+  uint64_t getAccessSize(Instruction *I);
   void getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                           BuilderTy &IRB);
   void getPointerBegin(Value *Ptr, Value *&Begin, BuilderTy &IRB);
@@ -307,6 +365,9 @@ private:
   // Directions whose check can be dropped because a dominating check on the
   // same base already covers them (redundant-check elimination).
   DenseMap<Value *, OffsetDir> DroppedDir;
+  // Checks that another check was dropped (fully or one direction) in favour
+  // of; they must stay even if they look redundant otherwise.
+  SmallPtrSet<Instruction *, 16> ReliedUpon;
   DenseMap<Value *, Value *> SourceCache;
   DenseMap<Value *, PtrUsage> PtrUsageCache;
   DenseMap<Loop *, MonoLoop *> MonoLoopMap;
@@ -326,6 +387,11 @@ private:
   Function *ReportFn;
   Function *AbortFn;
   Function *SetShadowFn;
+
+  // Interprocedural facts, when the shadowbound-ipo analysis was run on the
+  // module beforehand (it is not available from a lone function pass).
+  const ShadowBoundIPOInfo *IPO;
+  LoopInfo *LoopI = nullptr;
 
   ShadowBoundOptions Options;
 };
@@ -528,8 +594,8 @@ template <class T> T getOptOrDefault(const cl::opt<T> &Opt, T Default) {
 }
 } // end anonymous namespace
 
-ShadowBoundOptions::ShadowBoundOptions(bool Recover)
-    : Recover(getOptOrDefault(ClKeepGoing, Recover)) {}
+ShadowBoundOptions::ShadowBoundOptions(bool Recover, bool LTOPostLink)
+    : Recover(getOptOrDefault(ClKeepGoing, Recover)), LTOPostLink(LTOPostLink) {}
 
 // The pass reads pointee types (getPointerElementType) everywhere, so it only
 // works on typed pointers.
@@ -542,7 +608,15 @@ PreservedAnalyses ShadowBoundPass::run(Function &F,
   if (!hasTypedPointers(*F.getParent()))
     return PreservedAnalyses::all();
 
-  ShadowBound ShadowBound(*F.getParent(), Options);
+  // At link time only code that was compiled with ShadowBound is instrumented.
+  if (Options.LTOPostLink && !F.hasFnAttribute(kShadowBoundLTOMarker))
+    return PreservedAnalyses::all();
+
+  const ShadowBoundIPOInfo *IPO =
+      FAM.getResult<ModuleAnalysisManagerFunctionProxy>(F)
+          .getCachedResult<ShadowBoundIPOAnalysis>(*F.getParent());
+
+  ShadowBound ShadowBound(*F.getParent(), Options, IPO);
   if (ShadowBound.sanitizeFunction(F, FAM))
     return PreservedAnalyses::none();
   return PreservedAnalyses::all();
@@ -638,6 +712,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
   auto &DT = AM.getResult<DominatorTreeAnalysis>(F);
   auto &PDT = AM.getResult<PostDominatorTreeAnalysis>(F);
   auto &LI = AM.getResult<LoopAnalysis>(F);
+  LoopI = &LI;
   auto &TLI = AM.getResult<TargetLibraryAnalysis>(F);
 
   ObjectSizeOpts EvalOpts;
@@ -646,6 +721,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
 
   // Collect all instructions to instrument
   collectToInstrument(F, ObjSizeEval, SE);
+  ipoOptimize(F);
 
   dependencyOptimize(F, DT, PDT, SE);
   loopOptimize(F, LI, SE, DT, PDT);
@@ -659,6 +735,7 @@ bool ShadowBound::sanitizeFunction(Function &F,
   // Instrument GEP and BC
   collectChunkCheck(F, LI, ObjSizeEval, SE, DT);
 
+  dropIntermediateChecks();
   commitInstrument(F);
 
   if (std::accumulate(Counter, Counter + kCheckTypeEnd, 0) > 0) {
@@ -818,16 +895,26 @@ PtrUsage ShadowBound::GetPtrUsage(Instruction *I) {
         continue;
       }
 
-      SawUse = true;
+      // A prefetch is only a cache hint: it never faults and reads nothing
+      // the program sees, so its address need not be in bounds. x264 (SPEC
+      // 525.x264_r) prefetches &mv[l][top_4x4 - 1] for the top macroblock
+      // row, about 1.2 KB before the array.
+      if (auto *II = dyn_cast<IntrinsicInst>(UI))
+        if (II->getIntrinsicID() == Intrinsic::prefetch)
+          continue;
 
-      if (isDerefInstruction(UI, V))
-        continue;
-
+      // Casts, GEPs, phis and selects only forward the pointer; whether it is
+      // used is decided by their users.
       if (isa<BitCastInst>(UI) || isa<GetElementPtrInst>(UI) ||
           isa<PHINode>(UI) || isa<SelectInst>(UI)) {
         WorkList.push_back(UI);
         continue;
       }
+
+      SawUse = true;
+
+      if (isDerefInstruction(UI, V))
+        continue;
 
       if (isEscapeInstruction(UI, V)) {
         Result = kPtrEscape;
@@ -973,6 +1060,30 @@ void ShadowBound::patternOptimize(Function &F) {
   BcToInstrument.swap(NewBcToInstrument);
 }
 
+void ShadowBound::ipoOptimize(Function &F) {
+  // Bounds live only in the heap's shadow, and a check on a source outside the
+  // heap is skipped at run time (getPointerIsApp). Drop such checks statically
+  // when the source can be proven to never be a heap pointer: a stack or global
+  // object locally, or an argument / call result via the IPO facts.
+  const ShadowBoundIPOInfo NoIPO;
+  const ShadowBoundIPOInfo &Info = IPO ? *IPO : NoIPO;
+  auto Elide = [&](Instruction *I) {
+    Value *Src = getSource(I);
+    if (ClNonHeapOpt && Info.isNonHeap(Src)) {
+      ++NumNonHeapElided;
+      return true;
+    }
+    if (Info.isTrustedStructField(F, Src)) {
+      ++NumStructHeuristicElided;
+      return true;
+    }
+    return false;
+  };
+
+  llvm::erase_if(GepToInstrument, Elide);
+  llvm::erase_if(BcToInstrument, Elide);
+}
+
 void ShadowBound::structPointerOptimizae(Function &F, ScalarEvolution &SE) {
   if (!ClReserveOpt)
     return;
@@ -1014,6 +1125,7 @@ ShadowBound::dependencyOptimizeForBc(Function &F, DominatorTree &DT,
                 DL->getTypeStoreSize(J->getType()->getPointerElementType());
             if (ISize <= JSize) {
               optimized = true;
+              ReliedUpon.insert(J);
               break;
             }
           }
@@ -1066,13 +1178,17 @@ ShadowBound::dependencyOptimizeForGep(Function &F, DominatorTree &DT,
 
       // OffI <= OffJ always  &&  J checks the upper bound.
       if ((JDir & kOffsetPositive) &&
-          SE.getSignedRangeMax(OffI).sle(SE.getSignedRangeMin(OffJ)))
+          SE.getSignedRangeMax(OffI).sle(SE.getSignedRangeMin(OffJ))) {
         Drop |= kOffsetPositive;
+        ReliedUpon.insert(J);
+      }
 
       // OffI >= OffJ always  &&  J checks the lower bound.
       if ((JDir & kOffsetNegative) &&
-          SE.getSignedRangeMin(OffI).sge(SE.getSignedRangeMax(OffJ)))
+          SE.getSignedRangeMin(OffI).sge(SE.getSignedRangeMax(OffJ))) {
         Drop |= kOffsetNegative;
+        ReliedUpon.insert(J);
+      }
     }
 
     DroppedDir[I] = Drop;
@@ -1494,23 +1610,87 @@ void ShadowBound::collectChunkCheckImpl(
 #endif
 }
 
+// Replace the per-iteration check of a monotonic induction pointer with a single
+// bound check before the loop. Sound because the accessed addresses of an affine
+// add-recurrence are monotonic, so they all lie in [min, max] of the first and
+// last iteration's addresses; bounding those two covers every iteration. Returns
+// true (and drops the per-iteration check) only when SCEV can prove the range.
 bool ShadowBound::monotonicLoopOptimize(Function &F, Value *Addr, Loop *Lop,
-                                            ScalarEvolution &SE) {
-  auto *SCEVPtr = SE.getSCEV(Addr);
-  auto *ML = MonoLoopMap[Lop];
-  ASSERT(ML != nullptr);
+                                        ScalarEvolution &SE, DominatorTree &DT) {
+  auto *GEP = dyn_cast<GetElementPtrInst>(Addr);
+  if (!GEP)
+    return false;
 
-  if (auto *ARE = dyn_cast<SCEVAddRecExpr>(SCEVPtr)) {
-    [[maybe_unused]] auto *Start = ARE->getStart();
-    [[maybe_unused]] auto *Step = ARE->getStepRecurrence(SE);
+  // Only the one-directional case fits a single monotonic range cleanly.
+  // (Directions are not computed until collectChunkCheck, so compute it here.)
+  setOffsetDir(GEP, SE);
+  OffsetDir Dir = getOffsetDir(GEP);
+  if (Dir != kOffsetPositive && Dir != kOffsetNegative)
+    return false;
 
-    LLVM_DEBUG(dbgs() << "[IndGep]\n");
-    LLVM_DEBUG(dbgs() << "Addr: " << *Addr << "\n");
-    LLVM_DEBUG(dbgs() << "Start: " << *Start << "\n");
-    LLVM_DEBUG(dbgs() << "Step: " << *Step << "\n");
+  auto *ARE = dyn_cast<SCEVAddRecExpr>(SE.getSCEV(Addr));
+  if (!ARE || ARE->getLoop() != Lop || !ARE->isAffine())
+    return false;
+
+  const SCEV *BTC = SE.getBackedgeTakenCount(Lop);
+  if (isa<SCEVCouldNotCompute>(BTC))
+    return false;
+  BasicBlock *PH = Lop->getLoopPreheader();
+  if (!PH)
+    return false;
+
+  // Shadow bounds come from the (loop-invariant) source pointer; it must be
+  // available in the preheader.
+  Value *Src = getSource(Addr);
+  if (auto *SrcI = dyn_cast<Instruction>(Src))
+    if (!DT.dominates(SrcI, PH->getTerminator()))
+      return false;
+
+  const SCEV *Start = ARE->getStart();
+  const SCEV *Last = ARE->evaluateAtIteration(BTC, SE);
+  ConstantRange StepR = SE.getSignedRange(ARE->getStepRecurrence(SE));
+
+  const SCEV *MinS, *MaxS;
+  if (StepR.getSignedMin().isNonNegative()) {
+    MinS = Start;
+    MaxS = Last;
+  } else if (StepR.getSignedMax().isNegative()) {
+    MinS = Last;
+    MaxS = Start;
+  } else {
+    return false; // step sign not provable
   }
 
-  return false;
+  Instruction *IP = PH->getTerminator();
+  SCEVExpander Exp(SE, *DL, "shadowboundbound");
+  if (!Exp.isSafeToExpandAt(MinS, IP) || !Exp.isSafeToExpandAt(MaxS, IP))
+    return false;
+
+  Value *MinP = Exp.expandCodeFor(MinS, Addr->getType(), IP);
+  Value *MaxP = Exp.expandCodeFor(MaxS, Addr->getType(), IP);
+
+  BuilderTy IRB(IP->getParent(), IP->getIterator(), TargetFolder(*DL));
+  Value *SrcInt = IRB.CreatePtrToInt(Src, int64Type);
+  Value *MinInt = IRB.CreatePtrToInt(MinP, int64Type);
+  Value *MaxInt = IRB.CreatePtrToInt(MaxP, int64Type);
+
+  // Guard on the source being a heap pointer, then fetch its bounds once and
+  // bound both extremes of the accessed range.
+  Value *IsApp = getPointerIsApp(SrcInt, IRB);
+  IRB.SetInsertPoint(SplitBlockAndInsertIfThen(IsApp, IP, false));
+
+  uint64_t NeededSize =
+      DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
+  Value *Begin = nullptr, *End = nullptr;
+  getPointerBeginEnd(SrcInt, Begin, End, IRB);
+  Value *CmpLo = IRB.CreateICmpULT(MinInt, Begin);
+  Value *CmpHi = makeOverflowCmp(IRB, MaxInt, End, NeededSize);
+  CreateTrapBB(IRB, IRB.CreateOr(CmpLo, CmpHi), true);
+
+  Counter[kClusterCheck]++;
+  ++NumClusterChecks;
+  ++NumRuntimeChecks;
+  return true;
 }
 
 void ShadowBound::loopOptimize(Function &F, LoopInfo &LI,
@@ -1532,7 +1712,7 @@ void ShadowBound::loopOptimize(Function &F, LoopInfo &LI,
       // optimized it. The previous code unconditionally dropped the induction
       // step GEP whenever the loop bound was not itself a GEP, leaving the
       // loop body with no bounds check at all.
-      if (monotonicLoopOptimize(F, GEP, Loop, SE))
+      if (monotonicLoopOptimize(F, GEP, Loop, SE, DT))
         continue;
     }
 
@@ -1686,9 +1866,9 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
   // if (BC > Base + BackSize - NeededSize)
   //   report_overflow();
 
-  Instruction *InsertPt = BC->hasOneUser() && !isa<PHINode>(BC->user_back())
-                              ? BC->user_back()
-                              : BC->getInsertionPointAfterDef();
+  Instruction *InsertPt = getCheckInsertPt(BC);
+  SelectInst *Sel = getOnlySelectUser(BC);
+  bool OnlyStored = isOnlyStoredOrCompared(BC);
 
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
@@ -1709,8 +1889,8 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
       DL->getTypeStoreSize(BC->getType()->getPointerElementType());
   ASSERT(NeededSize > kReservedBytes);
 
-  Value *Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
-  CreateTrapBB(IRB, Cmp, true);
+  Value *Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize, OnlyStored);
+  CreateTrapBB(IRB, guardBySelect(Sel, BC, Cmp, IRB), true);
 }
 
 void ShadowBound::instrumentGep(Function &F, Value *Src,
@@ -1725,14 +1905,17 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   // if (GEP < Begin || GEP + NeededSize > End)
   //   report_overflow();
 
-  Instruction *InsertPt = GEP->hasOneUser() && !isa<PHINode>(GEP->user_back())
-                              ? GEP->user_back()
-                              : GEP->getInsertionPointAfterDef();
+  Instruction *InsertPt = getCheckInsertPt(GEP);
+  SelectInst *Sel = getOnlySelectUser(GEP);
+  bool OnlyStored = isOnlyStoredOrCompared(GEP);
+  PHINode *Carried = getLoopCarriedPhi(GEP);
+  uint64_t AccessSize = getAccessSize(GEP);
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-  Value *CmpPtr = IRB.CreatePtrToInt(GEP, int64Type);
+  Value *CmpPtr =
+      IRB.CreatePtrToInt(Carried ? (Value *)Carried : GEP, int64Type);
 
   {
     // FIXME: This block can be removed?
@@ -1748,16 +1931,13 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
     getPointerBeginEnd(Ptr, Begin, End, IRB);
     Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
 
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-    Value *CmpEnd = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
+    Value *CmpEnd =
+        makeOverflowCmp(IRB, CmpPtr, End, AccessSize, OnlyStored);
     Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   } else if (getOffsetDir(GEP) == kOffsetPositive) {
     getPointerEnd(Ptr, End, IRB);
 
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-    Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
+    Cmp = makeOverflowCmp(IRB, CmpPtr, End, AccessSize, OnlyStored);
   } else if (getOffsetDir(GEP) == kOffsetNegative) {
     getPointerBegin(Ptr, Begin, IRB);
 
@@ -1765,11 +1945,89 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   }
 
   ASSERT(Cmp != nullptr);
-  CreateTrapBB(IRB, Cmp, true);
+  CreateTrapBB(IRB, guardBySelect(Sel, GEP, Cmp, IRB), true);
+}
+
+// True if I's value is only written to memory, returned or compared, never
+// accessed or used to derive another pointer here. Such a pointer is still
+// checked, but only has to be at most one past the end:
+//  * stored/returned: where it is loaded and used later it is a new source,
+//    checked against its own bounds; an access at offset 0 without a GEP
+//    lands at worst in the 32-byte reserve;
+//  * compared: a loop bound (`last = first + n`) keeps every access of the
+//    loop below it, so bound <= end keeps them in the object. Its check must
+//    stay (unrolled loops rely on it, see shadowbound-19), but requiring room
+//    for a whole element at the bound itself rejected `first + n` for
+//    elements larger than the reserve.
+// Pointers passed to a call keep the full check: the cast to the callee's type
+// promises an access of that size (shadowbound-11). Must be asked before the
+// check adds its own users of I.
+bool ShadowBound::isOnlyStoredOrCompared(Instruction *I) {
+  if (I->use_empty())
+    return false;
+  for (const Use &U : I->uses()) {
+    User *Usr = U.getUser();
+    if (auto *SI = dyn_cast<StoreInst>(Usr)) {
+      if (SI->getValueOperand() != I || SI->getPointerOperand() == I)
+        return false;
+    } else if (!isa<ReturnInst>(Usr) && !isa<ICmpInst>(Usr)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// How many bytes from GEP I must be in bounds. Normally the size of I's
+// pointee type, but with typed pointers that type can be an artifact: SPEC
+// 520.omnetpp_r's CommentElement::setLocid accesses the 32-byte std::string
+// at offset 0x70, and the optimizer expresses &this->locid as
+// `getelementptr %class.NEDElement, %this, i64 1` (sizeof(NEDElement) is
+// 0x70), so the 112-byte NEDElement type demanded 0xe0 bytes of a 0xb0-byte
+// object. If I is only cast or indexed further, what is accessed through it is
+// what its users access: casts to smaller types are not checked themselves
+// (isShrinkBitCast) and rely on I covering their size; derived GEPs are
+// checked themselves or rely on the reserve, which makeOverflowCmp always
+// requires. Casts that isShrinkBitCast drops for other reasons (unions,
+// unsized or flexible types) keep the full size. Must be asked before the
+// check adds its own users of I.
+uint64_t ShadowBound::getAccessSize(Instruction *I) {
+  Type *ElemTy = I->getType()->getPointerElementType();
+  uint64_t Full = DL->getTypeStoreSize(ElemTy);
+  if (!isa<GetElementPtrInst>(I) || I->use_empty() || isUnionType(ElemTy))
+    return Full;
+  if (auto *STy = dyn_cast<StructType>(ElemTy))
+    if (isFlexibleStructure(STy))
+      return Full;
+  uint64_t Need = 1;
+  for (User *U : I->users()) {
+    if (isa<GetElementPtrInst>(U))
+      continue;
+    auto *BC = dyn_cast<BitCastInst>(U);
+    if (!BC || !BC->getDestTy()->isPointerTy())
+      return Full;
+    Type *DstTy = BC->getDestTy()->getPointerElementType();
+    if (!DstTy->isSized() || isUnionType(DstTy))
+      return Full;
+    if (auto *STy = dyn_cast<StructType>(DstTy))
+      if (isFlexibleStructure(STy))
+        return Full;
+    Need = std::max<uint64_t>(Need, DL->getTypeStoreSize(DstTy));
+  }
+  return std::min(Need, Full);
 }
 
 Value *ShadowBound::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
-                                        Value *End, uint64_t NeededSize) {
+                                        Value *End, uint64_t NeededSize,
+                                        bool OnlyStored) {
+  // A pointer that is only stored, returned or compared is not accessed here:
+  // it only has to be at most one past the end (see isOnlyStoredOrCompared). Requiring room for a whole element
+  // rejected std::vector's `++_M_finish` when the vector became full with
+  // elements larger than kReservedBytes (SPEC 520.omnetpp_r, 96-byte
+  // InifileReader::KeyValue1). Where it is loaded and used later, the loaded
+  // pointer is a new source and is checked against its own bounds there.
+  if (OnlyStored)
+    return IRB.CreateICmpUGT(CmpPtr, End);
+
   // An N-byte access at CmpPtr is in bounds only if CmpPtr + N <= End, so the
   // violation condition is CmpPtr + N > End. (The old code used CmpPtr > End,
   // which let a pointer sit exactly at the end of the chunk and then read the
@@ -1845,13 +2103,161 @@ void ShadowBound::CreateTrapBB(BuilderTy &IRB, Value *Cond, bool Abort) {
   }
 }
 
+// Drop the check on a pointer whose only users are GEPs that are checked
+// themselves. Its value is never dereferenced or escapes, and every
+// pointer derived from it is checked against the same source object (with the
+// directions of all steps on the way, this one included), so its own check
+// adds nothing. It is also the one that misfires: optimizations reassociate
+// `xff + len - 1` into `(xff - 1) + len`, and the intermediate `xff - 1` (a GEP
+// without `inbounds`, legally out of bounds) sits before the object when `xff`
+// is its first byte. nginx's X-Forwarded-For parser aborted on exactly this.
+//
+// A pointer stays checked if any user is not in the final checked set: the
+// other filters drop a derived pointer's check precisely because its operand
+// is checked. Checks other checks were dropped in favour of stay too.
+void ShadowBound::dropIntermediateChecks() {
+  if (!ClIntermediateOpt)
+    return;
+
+  SmallPtrSet<Instruction *, 32> Checked;
+  for (auto *C : Checks) {
+    if (C->Type == kClusterCheck)
+      Checked.insert(((ClusterCheck *)C)->Insts.begin(),
+                     ((ClusterCheck *)C)->Insts.end());
+    else if (C->Type == kRuntimeCheck)
+      Checked.insert(((RuntimeCheck *)C)->Insts.begin(),
+                     ((RuntimeCheck *)C)->Insts.end());
+    else
+      Checked.insert(((BuiltinCheck *)C)->Insts.begin(),
+                     ((BuiltinCheck *)C)->Insts.end());
+  }
+
+  auto IsIntermediate = [&](Instruction *I) {
+    if (I->use_empty() || ReliedUpon.count(I))
+      return false;
+    // Only GEP users: a GEP's check covers every direction its offset path
+    // from the source can take (this step's included), whereas a bitcast's
+    // check is an access-size check on the upper bound only.
+    for (User *U : I->users()) {
+      auto *UI = dyn_cast<GetElementPtrInst>(U);
+      if (!UI || !Checked.count(UI))
+        return false;
+    }
+    ++NumIntermediateElided;
+    return true;
+  };
+
+  for (auto *C : Checks) {
+    if (C->Type == kClusterCheck)
+      llvm::erase_if(((ClusterCheck *)C)->Insts, IsIntermediate);
+    else if (C->Type == kRuntimeCheck)
+      llvm::erase_if(((RuntimeCheck *)C)->Insts, IsIntermediate);
+    else
+      llvm::erase_if(((BuiltinCheck *)C)->Insts, IsIntermediate);
+  }
+}
+
+// Where to check pointer I: where it is used, not where it is computed.
+// Optimizations hoist address computations above the condition guarding their
+// use; x264's `pl ? MbQ->qpc[pl-1] : MbQ->qp` computes &qpc[-1] (pl-1 zero-
+// extended, 16 GB past the object) before testing pl, and checking it there
+// aborted a program that never touches it. So the check goes before the first
+// user when all users are in one block, unless that block is in a deeper loop
+// (checking once outside the loop is cheaper; the definition is kept then).
+Instruction *ShadowBound::getCheckInsertPt(Instruction *I) {
+  // A pointer that only feeds a select is used where the select's result is
+  // (see guardBySelect).
+  if (SelectInst *S = getOnlySelectUser(I))
+    return getCheckInsertPt(S);
+  if (PHINode *P = getLoopCarriedPhi(I))
+    return &*P->getParent()->getFirstInsertionPt();
+
+  Instruction *Def = I->getInsertionPointAfterDef();
+  BasicBlock *UseBB = nullptr;
+  for (User *U : I->users()) {
+    auto *UI = dyn_cast<Instruction>(U);
+    if (!UI || isa<PHINode>(UI) || (UseBB && UI->getParent() != UseBB))
+      return Def;
+    UseBB = UI->getParent();
+  }
+  if (!UseBB || UseBB == I->getParent())
+    return I->hasOneUser() ? I->user_back() : Def;
+  if (LoopI && LoopI->getLoopDepth(UseBB) > LoopI->getLoopDepth(I->getParent()))
+    return Def;
+  for (Instruction &X : *UseBB)
+    if (X.getOperandList() && llvm::is_contained(X.operands(), I))
+      return &X;
+  return Def;
+}
+
+// The loop-header phi through which I reaches the next iteration, if I is a
+// loop's pointer increment that is otherwise only compared. Such a pointer is
+// only accessed in the next iteration, and only if the loop's exit test let it
+// in: `for (; first != last; ++first) first->~T();` ends with first == last,
+// one past the array, which the exit test keeps out of the body. Checked at
+// the increment, with room for a whole element, it aborted for elements
+// larger than kReservedBytes (SPEC 520.omnetpp_r, 72-byte
+// ValueIterator::Item). So the check goes on the phi, at the loop header:
+// every value the body uses is checked against the same object. Not done for a
+// check that another check was dropped in favour of, or if the phi's source
+// object differs.
+PHINode *ShadowBound::getLoopCarriedPhi(Instruction *I) {
+  if (!LoopI || !isa<GetElementPtrInst>(I) || ReliedUpon.count(I))
+    return nullptr;
+  Loop *L = LoopI->getLoopFor(I->getParent());
+  if (!L)
+    return nullptr;
+  PHINode *P = nullptr;
+  for (User *U : I->users()) {
+    if (isa<ICmpInst>(U))
+      continue;
+    auto *UP = dyn_cast<PHINode>(U);
+    if (!UP || (P && P != UP))
+      return nullptr;
+    P = UP;
+  }
+  if (!P || P->getParent() != L->getHeader() || getSource(P) != getSource(I))
+    return nullptr;
+  // The bounds come from the source, which must be available at the header:
+  // a source defined outside the loop that dominates I dominates the header.
+  if (auto *SrcI = dyn_cast<Instruction>(getSource(I)))
+    if (L->contains(SrcI))
+      return nullptr;
+  return P;
+}
+
+// The single user of I if it is a select choosing between I and another
+// pointer. Optimizations turn `c ? *a : *b` into `*(c ? a : b)` and compute
+// both addresses unconditionally (x264 again: `cmove` between &qp and the
+// out-of-object &qpc[pl-1]).
+SelectInst *ShadowBound::getOnlySelectUser(Instruction *I) {
+  if (!I->hasOneUser())
+    return nullptr;
+  auto *S = dyn_cast<SelectInst>(I->user_back());
+  if (!S || S->getCondition() == I)
+    return nullptr;
+  return S;
+}
+
+// Restrict a check on I to the case where the select it feeds picked it: the
+// other arm's address is never used, so it need not be in bounds. S is
+// getOnlySelectUser(I), taken before the check's own instructions add users.
+Value *ShadowBound::guardBySelect(SelectInst *S, Instruction *I, Value *Cmp,
+                                  BuilderTy &IRB) {
+  if (!S)
+    return Cmp;
+  return IRB.CreateAnd(Cmp, IRB.CreateICmpEQ(S, I));
+}
+
 void ShadowBound::commitInstrument(Function &F) {
   for (auto *C_ : Checks) {
     BaseCheck &C = *C_;
     if (C.Type == kBuiltInCheck) {
-      commitBuiltInCheck(F, (BuiltinCheck &)C);
+      if (!((BuiltinCheck &)C).Insts.empty())
+        commitBuiltInCheck(F, (BuiltinCheck &)C);
     } else if (C.Type == kClusterCheck) {
-      commitClusterCheck(F, (ClusterCheck &)C);
+      if (!((ClusterCheck &)C).Insts.empty())
+        commitClusterCheck(F, (ClusterCheck &)C);
     } else if (C.Type == kRuntimeCheck) {
       commitRuntimeCheck(F, (RuntimeCheck &)C);
     } else {
@@ -1869,6 +2275,7 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
     return;
 
   Counter[kBuiltInCheck]++;
+  NumBuiltinChecks += BC.Insts.size();
 
   Value *Src = BC.Src;
   Instruction *InsertPt =
@@ -1883,26 +2290,35 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   Value *Offset = BC.Offset;
 
   Value *Ptr = IRB.CreatePtrToInt(Src, int64Type);
-  // Object base = Src - Offset; object end = base + Size.
-  Value *PtrBegin = IRB.CreateSub(Ptr, Offset);
-  Value *PtrEnd = IRB.CreateAdd(PtrBegin, Size);
+  // Object base = Src - Offset; object end = base + Size. The allocator places
+  // kReservedBytes after every heap object, which the shadow bounds include,
+  // so the end used here includes them too. Checks run when a pointer is
+  // created, not when it is dereferenced: comparing against the exact end
+  // rejected the legal one-past-the-end pointer of a loop like
+  // `p = malloc(n); for (...) p += len;` once LTO inlined the allocation next
+  // to it (nginx's ngx_init_setproctitle). This matches the shadow check.
+  Value *ObjBegin = IRB.CreateSub(Ptr, Offset);
+  Value *PtrEnd = IRB.CreateAdd(IRB.CreateAdd(ObjBegin, Size),
+                                ConstantInt::get(int64Type, kReservedBytes));
+  // Likewise the front reserve, which the shadow's lower bound includes.
+  Value *PtrBegin = IRB.CreateSub(
+      ObjBegin, ConstantInt::get(int64Type, kFrontReservedBytes));
 
   for (auto &I : BC.Insts) {
-    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
+    IRB.SetInsertPoint(getCheckInsertPt(I));
+    SelectInst *Sel = getOnlySelectUser(I);
+    bool OnlyStored = isOnlyStoredOrCompared(I);
+    PHINode *Carried = getLoopCarriedPhi(I);
+    uint64_t NeededSize = getAccessSize(I);
 
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(I->getType()->getPointerElementType());
-    Value *NeededSizeVal = ConstantInt::get(int64Type, NeededSize);
-
-    Value *Addr = IRB.CreatePtrToInt(I, int64Type);
+    Value *Addr = IRB.CreatePtrToInt(Carried ? (Value *)Carried : I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
-    // Always account for the access width: an N-byte access at Addr is in
-    // bounds only if Addr + N <= PtrEnd.
+    // Same upper-bound rule as the shadow check, access width included.
     Value *CmpEnd =
-        IRB.CreateICmpUGT(IRB.CreateAdd(Addr, NeededSizeVal), PtrEnd);
+        makeOverflowCmp(IRB, Addr, PtrEnd, NeededSize, OnlyStored);
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
-    CreateTrapBB(IRB, Cmp, true);
+    CreateTrapBB(IRB, guardBySelect(Sel, I, Cmp, IRB), true);
   }
 }
 
@@ -1912,6 +2328,8 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
 
   ASSERT(CC.Type == kClusterCheck);
   Counter[kClusterCheck]++;
+  ++NumClusterChecks;
+  NumRuntimeChecks += CC.Insts.size();
 
   Value *Src = CC.Src;
   Instruction *InsertPt = CC.InsertPt;
@@ -1978,10 +2396,12 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
   }
 
   for (auto *I : CC.Insts) {
-    IRB.SetInsertPoint(I->getInsertionPointAfterDef());
-    Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(I->getType()->getPointerElementType());
+    IRB.SetInsertPoint(getCheckInsertPt(I));
+    SelectInst *Sel = getOnlySelectUser(I);
+    bool OnlyStored = isOnlyStoredOrCompared(I);
+    PHINode *Carried = getLoopCarriedPhi(I);
+    uint64_t NeededSize = getAccessSize(I);
+    Value *Ptr = IRB.CreatePtrToInt(Carried ? (Value *)Carried : I, int64Type);
 
     // A bitcast is an access-size (upper) check; a GEP checks the direction(s)
     // its offset can take.
@@ -1989,12 +2409,13 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
     bool NeedLower = !isa<BitCastInst>(I) && (getOffsetDir(I) & kOffsetNegative);
 
     Value *UpperCmp = NeedUpper
-                          ? makeOverflowCmp(IRB, Ptr, End, NeededSize)
+                          ? makeOverflowCmp(IRB, Ptr, End, NeededSize,
+                                            OnlyStored)
                           : ConstantInt::getFalse(IRB.getContext());
     Value *LowerCmp = NeedLower ? IRB.CreateICmpULT(Ptr, Begin)
                                 : ConstantInt::getFalse(IRB.getContext());
     Value *NotIn = IRB.CreateOr(UpperCmp, LowerCmp);
-    CreateTrapBB(IRB, NotIn, true);
+    CreateTrapBB(IRB, guardBySelect(Sel, I, NotIn, IRB), true);
   }
 }
 
@@ -2004,6 +2425,7 @@ void ShadowBound::commitRuntimeCheck(Function &F, RuntimeCheck &RC) {
 
   ASSERT(RC.Type == kRuntimeCheck);
   Counter[kRuntimeCheck] += RC.Insts.size();
+  NumRuntimeChecks += RC.Insts.size();
 
   Value *Src = RC.Src;
 
@@ -2025,4 +2447,289 @@ ShadowBound::readRegister(Function &F, BuilderTy &IRB, StringRef Reg) {
   LLVMContext &C = M->getContext();
   MDNode *MD = MDNode::get(C, {MDString::get(C, Reg)});
   return IRB.CreateCall(readReg, {MetadataAsValue::get(C, MD)});
+}
+//===----------------------------------------------------------------------===//
+// LTO support
+//===----------------------------------------------------------------------===//
+
+PreservedAnalyses ShadowBoundLTOPrepPass::run(Module &M,
+                                              ModuleAnalysisManager &AM) {
+  if (!hasTypedPointers(M)) {
+    M.getContext().emitError(
+        "ShadowBound requires typed pointers; compile with "
+        "-Xclang -no-opaque-pointers");
+    return PreservedAnalyses::all();
+  }
+
+  // Max: if any input asks for recovery, the merged module recovers.
+  uint32_t Flag = kLTOFlagEnabled | (Options.Recover ? kLTOFlagRecover : 0);
+  M.addModuleFlag(Module::Max, kShadowBoundLTOMarker, Flag);
+
+  // Mark the functions of this translation unit, so that at link time code
+  // from inputs built without ShadowBound is left alone.
+  for (Function &F : M)
+    if (!F.isDeclaration())
+      F.addFnAttr(kShadowBoundLTOMarker);
+
+  PreservedAnalyses PA;
+  PA.preserveSet<CFGAnalyses>();
+  return PA;
+}
+
+//===----------------------------------------------------------------------===//
+// Interprocedural non-heap analysis
+//===----------------------------------------------------------------------===//
+
+AnalysisKey ShadowBoundIPOAnalysis::Key;
+
+bool ShadowBoundIPOInfo::invalidate(Module &, const PreservedAnalyses &PA,
+                                    ModuleAnalysisManager::Invalidator &) {
+  return !PA.getChecker<ShadowBoundIPOAnalysis>().preservedWhenStateless();
+}
+
+bool ShadowBoundIPOInfo::isNonHeap(const Value *V) const {
+  SmallPtrSet<const Value *, 16> Visited;
+  SmallVector<const Value *, 16> Worklist;
+
+  Worklist.push_back(V);
+  while (!Worklist.empty()) {
+    const Value *V = Worklist.pop_back_val();
+    if (!Visited.insert(V).second)
+      continue;
+
+    // Pointer arithmetic and casts keep the underlying object.
+    if (auto *GEP = dyn_cast<GEPOperator>(V)) {
+      Worklist.push_back(GEP->getPointerOperand());
+      continue;
+    }
+    if (auto *BC = dyn_cast<BitCastOperator>(V)) {
+      Worklist.push_back(BC->getOperand(0));
+      continue;
+    }
+    if (auto *Phi = dyn_cast<PHINode>(V)) {
+      for (const Value *In : Phi->incoming_values())
+        Worklist.push_back(In);
+      continue;
+    }
+    if (auto *Sel = dyn_cast<SelectInst>(V)) {
+      Worklist.push_back(Sel->getTrueValue());
+      Worklist.push_back(Sel->getFalseValue());
+      continue;
+    }
+
+    // Stack and global objects; null/undef point at no object.
+    if (isa<AllocaInst>(V) || isa<GlobalValue>(V) ||
+        isa<ConstantPointerNull>(V) || isa<UndefValue>(V))
+      continue;
+
+    if (auto *A = dyn_cast<Argument>(V)) {
+      if (NonHeapArgs.count(A))
+        continue;
+      return false;
+    }
+
+    if (auto *CB = dyn_cast<CallBase>(V)) {
+      // A call that returns one of its arguments (`returned`, launder, ...).
+      if (const Value *Ret = getArgumentAliasingToReturnedPointer(CB, false)) {
+        Worklist.push_back(Ret);
+        continue;
+      }
+      if (const Function *Callee = CB->getCalledFunction())
+        if (NonHeapReturns.count(Callee))
+          continue;
+      return false;
+    }
+
+    // Loads, inttoptr, unknown constants, ...: may be a heap pointer.
+    return false;
+  }
+
+  return true;
+}
+
+// Every caller of F is a direct call in this module, so the arguments F
+// receives are exactly the ones its call sites pass.
+static bool hasOnlyKnownCallers(const Function &F) {
+  if (F.isDeclaration() || !F.hasLocalLinkage())
+    return false;
+  for (const Use &U : F.uses()) {
+    auto *CB = dyn_cast<CallBase>(U.getUser());
+    if (!CB || !CB->isCallee(&U) ||
+        CB->getFunctionType() != F.getFunctionType())
+      return false;
+  }
+  return true;
+}
+
+bool ShadowBoundIPOInfo::isTrustedStructField(Function &F, Value *Src) const {
+  if (TrustedStructFields.empty())
+    return false;
+  auto *LI = dyn_cast<LoadInst>(Src);
+  if (!LI)
+    return false;
+  std::unique_ptr<StructMemberIdent> SMI(
+      findStructMember(&F, LI->getPointerOperand()));
+  return SMI && TrustedStructFields.count({SMI->getName(), SMI->getIndex()});
+}
+
+// The size is computed from exactly one loaded value (e.g. `s->len * 4`).
+static bool isSizedByOneLoad(Value *Size) {
+  SmallPtrSet<Value *, 16> Visited;
+  SmallVector<Value *, 16> Worklist{Size};
+  LoadInst *Found = nullptr;
+  while (!Worklist.empty()) {
+    Value *V = Worklist.pop_back_val();
+    if (!Visited.insert(V).second)
+      continue;
+    if (auto *LI = dyn_cast<LoadInst>(V)) {
+      if (Found && Found != LI)
+        return false;
+      Found = LI;
+      continue;
+    }
+    if (auto *I = dyn_cast<Instruction>(V))
+      for (Value *Op : I->operands())
+        Worklist.push_back(Op);
+  }
+  return Found != nullptr;
+}
+
+// Port of analyzer/src/harness/struct.cpp: a field is trusted if the result of
+// malloc / new[] whose size comes from one loaded length is stored into it, on
+// every path after the allocation.
+static void collectTrustedStructFields(Module &M, ModuleAnalysisManager &AM,
+                                       ShadowBoundIPOInfo &Info) {
+  auto &FAM = AM.getResult<FunctionAnalysisManagerModuleProxy>(M).getManager();
+  const DataLayout &DL = M.getDataLayout();
+
+  for (Function &F : M) {
+    if (F.isDeclaration())
+      continue;
+    DominatorTree *DT = nullptr;
+    PostDominatorTree *PDT = nullptr;
+
+    for (Instruction &I : instructions(F)) {
+      auto *CB = dyn_cast<CallBase>(&I);
+      Function *Callee = CB ? CB->getCalledFunction() : nullptr;
+      if (!Callee || CB->arg_size() != 1 ||
+          (Callee->getName() != "malloc" && Callee->getName() != "_Znam"))
+        continue;
+      if (!isSizedByOneLoad(CB->getArgOperand(0)))
+        continue;
+      if (!DT) {
+        DT = &FAM.getResult<DominatorTreeAnalysis>(F);
+        PDT = &FAM.getResult<PostDominatorTreeAnalysis>(F);
+      }
+
+      // Follow the allocation through casts and constant-offset GEPs to the
+      // stores that save it.
+      SmallPtrSet<Value *, 16> Visited;
+      SmallVector<Value *, 16> Worklist{CB};
+      while (!Worklist.empty()) {
+        Value *V = Worklist.pop_back_val();
+        if (!Visited.insert(V).second)
+          continue;
+        for (User *U : V->users()) {
+          if (isa<BitCastInst>(U)) {
+            Worklist.push_back(U);
+          } else if (auto *GEP = dyn_cast<GetElementPtrInst>(U)) {
+            APInt Off(DL.getIndexTypeSizeInBits(GEP->getType()), 0);
+            if (GEP->accumulateConstantOffset(DL, Off))
+              Worklist.push_back(GEP);
+          } else if (auto *ST = dyn_cast<StoreInst>(U)) {
+            if (ST->getValueOperand() != V || !DT->dominates(CB, ST) ||
+                !PDT->dominates(ST, CB))
+              continue;
+            std::unique_ptr<StructMemberIdent> SMI(
+                findStructMember(&F, ST->getPointerOperand()));
+            if (SMI)
+              Info.TrustedStructFields.insert(
+                  {SMI->getName(), SMI->getIndex()});
+          }
+        }
+      }
+    }
+  }
+}
+
+ShadowBoundIPOInfo ShadowBoundIPOAnalysis::run(Module &M,
+                                               ModuleAnalysisManager &AM) {
+  ShadowBoundIPOInfo Info;
+  if (ClStructHeuristic)
+    collectTrustedStructFields(M, AM, Info);
+  if (!ClNonHeapOpt)
+    return Info;
+
+  // The functions that directly call each function.
+  DenseMap<const Function *, SmallSetVector<Function *, 4>> Callers;
+  for (Function &F : M)
+    for (Instruction &I : instructions(F))
+      if (auto *CB = dyn_cast<CallBase>(&I))
+        if (Function *Callee = CB->getCalledFunction())
+          Callers[Callee].insert(&F);
+
+  // Optimistic start: assume every candidate fact holds, then remove the ones
+  // a call site or return contradicts until nothing changes (greatest
+  // fixpoint). Removing a fact can only turn more values into "maybe heap", so
+  // this terminates, and what survives is consistent with every call edge.
+  for (Function &F : M) {
+    if (hasOnlyKnownCallers(F))
+      for (Argument &A : F.args())
+        if (A.getType()->isPointerTy())
+          Info.NonHeapArgs.insert(&A);
+    if (!F.isDeclaration() && F.hasExactDefinition() &&
+        F.getReturnType()->isPointerTy())
+      Info.NonHeapReturns.insert(&F);
+  }
+
+  // Facts about a value in function D depend on D's argument facts and on the
+  // return facts of D's callees. So when a fact of F is removed, the functions
+  // to re-examine are F itself (argument removed) or F's callers (return
+  // removed).
+  SetVector<Function *> Dirty;
+  for (Function &F : M)
+    if (!F.isDeclaration())
+      Dirty.insert(&F);
+
+  while (!Dirty.empty()) {
+    Function *D = Dirty.pop_back_val();
+
+    // Re-check D's return.
+    if (Info.NonHeapReturns.count(D)) {
+      for (BasicBlock &BB : *D)
+        if (auto *RI = dyn_cast<ReturnInst>(BB.getTerminator()))
+          if (!Info.isNonHeap(RI->getReturnValue())) {
+            Info.NonHeapReturns.erase(D);
+            for (Function *Caller : Callers.lookup(D))
+              Dirty.insert(Caller);
+            break;
+          }
+    }
+
+    // Re-check the arguments D passes to its callees.
+    for (Instruction &I : instructions(*D)) {
+      auto *CB = dyn_cast<CallBase>(&I);
+      if (!CB)
+        continue;
+      Function *Callee = CB->getCalledFunction();
+      if (!Callee || Callee->isDeclaration())
+        continue;
+      for (Argument &A : Callee->args()) {
+        if (!Info.NonHeapArgs.count(&A))
+          continue;
+        if (!Info.isNonHeap(CB->getArgOperand(A.getArgNo()))) {
+          Info.NonHeapArgs.erase(&A);
+          Dirty.insert(Callee);
+        }
+      }
+    }
+  }
+
+  NumIPONonHeapArgs += Info.NonHeapArgs.size();
+  NumIPONonHeapRets += Info.NonHeapReturns.size();
+  LLVM_DEBUG(dbgs() << "[shadowbound-ipo] non-heap args: "
+                    << Info.NonHeapArgs.size()
+                    << ", non-heap returns: " << Info.NonHeapReturns.size()
+                    << "\n");
+  return Info;
 }

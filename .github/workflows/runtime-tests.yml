@@ -1,24 +1,35 @@
 name: runtime-tests
 
-# Build the ShadowBound compiler AND its runtime (compiler-rt odef), then run
-# the runtime PoC suite in test/runtime/, which links and executes programs to
-# check the allocator/interceptor fixes.
+# Build the ShadowBound compiler AND its runtime (compiler-rt shadowbound), then
+# run the runtime PoC suite in test/runtime/, which links and executes programs
+# to check the allocator/interceptor fixes, and the nginx end-to-end test
+# (latest nginx under the official nginx-tests suite, plus a short wrk run).
 
 on:
   push:
     branches: [shadowbound-runtime-fixes, main]
     paths:
-      - 'llvm-project/compiler-rt/lib/odef/**'
+      - 'llvm-project/compiler-rt/lib/shadowbound/**'
       - 'llvm-project/compiler-rt/lib/memp/**'
       - 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp'
+      - 'llvm-project/llvm/include/llvm/Transforms/Instrumentation/ShadowBound.h'
+      - 'llvm-project/llvm/lib/Passes/**'
+      - 'llvm-project/clang/lib/CodeGen/**'
+      - 'llvm-project/clang/lib/Driver/**'
       - 'test/runtime/**'
+      - 'test/nginx/**'
       - '.github/workflows/runtime-tests.yml'
   pull_request:
     paths:
-      - 'llvm-project/compiler-rt/lib/odef/**'
+      - 'llvm-project/compiler-rt/lib/shadowbound/**'
       - 'llvm-project/compiler-rt/lib/memp/**'
       - 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp'
+      - 'llvm-project/llvm/include/llvm/Transforms/Instrumentation/ShadowBound.h'
+      - 'llvm-project/llvm/lib/Passes/**'
+      - 'llvm-project/clang/lib/CodeGen/**'
+      - 'llvm-project/clang/lib/Driver/**'
       - 'test/runtime/**'
+      - 'test/nginx/**'
       - '.github/workflows/runtime-tests.yml'
   workflow_dispatch:
 
@@ -36,7 +47,8 @@ jobs:
       - name: Install build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build clang lld python3 ccache
+          sudo apt-get install -y cmake ninja-build clang lld python3 ccache \
+            libpcre2-dev zlib1g-dev libssl-dev libcrypt-dev unzip curl perl
 
       - name: Free up disk space
         run: |
@@ -46,7 +58,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.ccache
-          key: ccache-rt-${{ hashFiles('llvm-project/compiler-rt/lib/odef/*.cpp', 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp') }}
+          key: ccache-rt-${{ hashFiles('llvm-project/compiler-rt/lib/shadowbound/*.cpp', 'llvm-project/llvm/lib/Transforms/Instrumentation/ShadowBound.cpp') }}
           restore-keys: |
             ccache-rt-
             ccache-llvm15-
@@ -59,7 +71,7 @@ jobs:
             -DLLVM_USE_LINKER=lld \
             -DLLVM_CCACHE_BUILD=ON \
             -DLLVM_TARGETS_TO_BUILD=X86 \
-            -DLLVM_ENABLE_PROJECTS="clang;compiler-rt" \
+            -DLLVM_ENABLE_PROJECTS="clang;lld;compiler-rt" \
             -DCLANG_ENABLE_OPAQUE_POINTERS=OFF \
             -DLLVM_PARALLEL_LINK_JOBS=1 \
             -DLLVM_INCLUDE_BENCHMARKS=OFF \
@@ -74,7 +86,7 @@ jobs:
             -DCOMPILER_RT_BUILD_ORC=OFF
 
       - name: Build clang, tools and runtime
-        run: ninja -C build clang opt FileCheck not count compiler-rt
+        run: ninja -C build clang lld opt FileCheck not count compiler-rt
 
       - name: Disable ASLR (ShadowBound uses fixed shadow/allocator mappings)
         run: sudo sysctl -w kernel.randomize_va_space=0
@@ -84,6 +96,11 @@ jobs:
           SHADOWBOUND_BUILD: ${{ github.workspace }}/build
         run: |
           python3 llvm-project/llvm/utils/lit/lit.py -v test/runtime/
+
+      - name: Nginx (latest) under nginx-tests and wrk
+        env:
+          SHADOWBOUND_BUILD: ${{ github.workspace }}/build
+        run: test/nginx/run.sh "$RUNNER_TEMP/nginx"
 
       - name: Build FFmalloc (shadowbound-instrument-only allocator)
         run: make -C ffmalloc -j"$(nproc)"
