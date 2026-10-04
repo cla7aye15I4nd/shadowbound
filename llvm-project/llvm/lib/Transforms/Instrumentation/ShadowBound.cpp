@@ -15,6 +15,7 @@
 #include "llvm/Bitcode/BitcodeWriter.h"
 #include "llvm/IR/Constant.h"
 #include "llvm/IR/InstIterator.h"
+#include "llvm/IR/IntrinsicInst.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/MDBuilder.h"
 #include "llvm/IR/Operator.h"
@@ -336,7 +337,8 @@ private:
   void instrumentGep(Function &F, Value *Src, GetElementPtrInst *GEP);
 
   Value *makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr, Value *End,
-                         uint64_t NeededSize);
+                         uint64_t NeededSize, bool OnlyStored = false);
+  static bool isOnlyStored(Instruction *I);
   void getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                           BuilderTy &IRB);
   void getPointerBegin(Value *Ptr, Value *&Begin, BuilderTy &IRB);
@@ -891,16 +893,26 @@ PtrUsage ShadowBound::GetPtrUsage(Instruction *I) {
         continue;
       }
 
-      SawUse = true;
+      // A prefetch is only a cache hint: it never faults and reads nothing
+      // the program sees, so its address need not be in bounds. x264 (SPEC
+      // 525.x264_r) prefetches &mv[l][top_4x4 - 1] for the top macroblock
+      // row, about 1.2 KB before the array.
+      if (auto *II = dyn_cast<IntrinsicInst>(UI))
+        if (II->getIntrinsicID() == Intrinsic::prefetch)
+          continue;
 
-      if (isDerefInstruction(UI, V))
-        continue;
-
+      // Casts, GEPs, phis and selects only forward the pointer; whether it is
+      // used is decided by their users.
       if (isa<BitCastInst>(UI) || isa<GetElementPtrInst>(UI) ||
           isa<PHINode>(UI) || isa<SelectInst>(UI)) {
         WorkList.push_back(UI);
         continue;
       }
+
+      SawUse = true;
+
+      if (isDerefInstruction(UI, V))
+        continue;
 
       if (isEscapeInstruction(UI, V)) {
         Result = kPtrEscape;
@@ -1854,6 +1866,7 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
 
   Instruction *InsertPt = getCheckInsertPt(BC);
   SelectInst *Sel = getOnlySelectUser(BC);
+  bool OnlyStored = isOnlyStored(BC);
 
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
@@ -1874,7 +1887,7 @@ void ShadowBound::instrumentBitCast(Function &F, Value *Src,
       DL->getTypeStoreSize(BC->getType()->getPointerElementType());
   ASSERT(NeededSize > kReservedBytes);
 
-  Value *Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
+  Value *Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize, OnlyStored);
   CreateTrapBB(IRB, guardBySelect(Sel, BC, Cmp, IRB), true);
 }
 
@@ -1892,6 +1905,7 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
 
   Instruction *InsertPt = getCheckInsertPt(GEP);
   SelectInst *Sel = getOnlySelectUser(GEP);
+  bool OnlyStored = isOnlyStored(GEP);
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
@@ -1914,14 +1928,15 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-    Value *CmpEnd = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
+    Value *CmpEnd =
+        makeOverflowCmp(IRB, CmpPtr, End, NeededSize, OnlyStored);
     Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   } else if (getOffsetDir(GEP) == kOffsetPositive) {
     getPointerEnd(Ptr, End, IRB);
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-    Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize);
+    Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize, OnlyStored);
   } else if (getOffsetDir(GEP) == kOffsetNegative) {
     getPointerBegin(Ptr, Begin, IRB);
 
@@ -1932,8 +1947,35 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   CreateTrapBB(IRB, guardBySelect(Sel, GEP, Cmp, IRB), true);
 }
 
+// True if I's value is only written to memory or returned, never accessed or
+// used to derive another pointer here. Must be asked before the check adds
+// its own users of I.
+bool ShadowBound::isOnlyStored(Instruction *I) {
+  if (I->use_empty())
+    return false;
+  for (User *U : I->users()) {
+    if (auto *SI = dyn_cast<StoreInst>(U)) {
+      if (SI->getValueOperand() != I || SI->getPointerOperand() == I)
+        return false;
+    } else if (!isa<ReturnInst>(U)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 Value *ShadowBound::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
-                                        Value *End, uint64_t NeededSize) {
+                                        Value *End, uint64_t NeededSize,
+                                        bool OnlyStored) {
+  // A pointer that is only stored or returned is not accessed here: it only
+  // has to be at most one past the end. Requiring room for a whole element
+  // rejected std::vector's `++_M_finish` when the vector became full with
+  // elements larger than kReservedBytes (SPEC 520.omnetpp_r, 96-byte
+  // InifileReader::KeyValue1). Where it is loaded and used later, the loaded
+  // pointer is a new source and is checked against its own bounds there.
+  if (OnlyStored)
+    return IRB.CreateICmpUGT(CmpPtr, End);
+
   // An N-byte access at CmpPtr is in bounds only if CmpPtr + N <= End, so the
   // violation condition is CmpPtr + N > End. (The old code used CmpPtr > End,
   // which let a pointer sit exactly at the end of the chunk and then read the
@@ -2175,6 +2217,7 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
   for (auto &I : BC.Insts) {
     IRB.SetInsertPoint(getCheckInsertPt(I));
     SelectInst *Sel = getOnlySelectUser(I);
+    bool OnlyStored = isOnlyStored(I);
 
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
@@ -2182,7 +2225,8 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
     Value *Addr = IRB.CreatePtrToInt(I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
     // Same upper-bound rule as the shadow check, access width included.
-    Value *CmpEnd = makeOverflowCmp(IRB, Addr, PtrEnd, NeededSize);
+    Value *CmpEnd =
+        makeOverflowCmp(IRB, Addr, PtrEnd, NeededSize, OnlyStored);
     Value *Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
 
     CreateTrapBB(IRB, guardBySelect(Sel, I, Cmp, IRB), true);
@@ -2265,6 +2309,7 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
   for (auto *I : CC.Insts) {
     IRB.SetInsertPoint(getCheckInsertPt(I));
     SelectInst *Sel = getOnlySelectUser(I);
+    bool OnlyStored = isOnlyStored(I);
     Value *Ptr = IRB.CreatePtrToInt(I, int64Type);
     uint64_t NeededSize =
         DL->getTypeStoreSize(I->getType()->getPointerElementType());
@@ -2275,7 +2320,8 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
     bool NeedLower = !isa<BitCastInst>(I) && (getOffsetDir(I) & kOffsetNegative);
 
     Value *UpperCmp = NeedUpper
-                          ? makeOverflowCmp(IRB, Ptr, End, NeededSize)
+                          ? makeOverflowCmp(IRB, Ptr, End, NeededSize,
+                                            OnlyStored)
                           : ConstantInt::getFalse(IRB.getContext());
     Value *LowerCmp = NeedLower ? IRB.CreateICmpULT(Ptr, Begin)
                                 : ConstantInt::getFalse(IRB.getContext());
