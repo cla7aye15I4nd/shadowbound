@@ -340,6 +340,7 @@ private:
   Value *makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr, Value *End,
                          uint64_t NeededSize, bool OnlyStored = false);
   static bool isOnlyStoredOrCompared(Instruction *I);
+  uint64_t getAccessSize(Instruction *I);
   void getPointerBeginEnd(Value *Ptr, Value *&Begin, Value *&End,
                           BuilderTy &IRB);
   void getPointerBegin(Value *Ptr, Value *&Begin, BuilderTy &IRB);
@@ -1908,6 +1909,7 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
   SelectInst *Sel = getOnlySelectUser(GEP);
   bool OnlyStored = isOnlyStoredOrCompared(GEP);
   PHINode *Carried = getLoopCarriedPhi(GEP);
+  uint64_t AccessSize = getAccessSize(GEP);
   BuilderTy IRB(InsertPt->getParent(), InsertPt->getIterator(),
                 TargetFolder(*DL));
 
@@ -1929,17 +1931,13 @@ void ShadowBound::instrumentGep(Function &F, Value *Src,
     getPointerBeginEnd(Ptr, Begin, End, IRB);
     Value *CmpBegin = IRB.CreateICmpULT(CmpPtr, Begin);
 
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
     Value *CmpEnd =
-        makeOverflowCmp(IRB, CmpPtr, End, NeededSize, OnlyStored);
+        makeOverflowCmp(IRB, CmpPtr, End, AccessSize, OnlyStored);
     Cmp = IRB.CreateOr(CmpBegin, CmpEnd);
   } else if (getOffsetDir(GEP) == kOffsetPositive) {
     getPointerEnd(Ptr, End, IRB);
 
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(GEP->getType()->getPointerElementType());
-    Cmp = makeOverflowCmp(IRB, CmpPtr, End, NeededSize, OnlyStored);
+    Cmp = makeOverflowCmp(IRB, CmpPtr, End, AccessSize, OnlyStored);
   } else if (getOffsetDir(GEP) == kOffsetNegative) {
     getPointerBegin(Ptr, Begin, IRB);
 
@@ -1977,6 +1975,45 @@ bool ShadowBound::isOnlyStoredOrCompared(Instruction *I) {
     }
   }
   return true;
+}
+
+// How many bytes from GEP I must be in bounds. Normally the size of I's
+// pointee type, but with typed pointers that type can be an artifact: SPEC
+// 520.omnetpp_r's CommentElement::setLocid accesses the 32-byte std::string
+// at offset 0x70, and the optimizer expresses &this->locid as
+// `getelementptr %class.NEDElement, %this, i64 1` (sizeof(NEDElement) is
+// 0x70), so the 112-byte NEDElement type demanded 0xe0 bytes of a 0xb0-byte
+// object. If I is only cast or indexed further, what is accessed through it is
+// what its users access: casts to smaller types are not checked themselves
+// (isShrinkBitCast) and rely on I covering their size; derived GEPs are
+// checked themselves or rely on the reserve, which makeOverflowCmp always
+// requires. Casts that isShrinkBitCast drops for other reasons (unions,
+// unsized or flexible types) keep the full size. Must be asked before the
+// check adds its own users of I.
+uint64_t ShadowBound::getAccessSize(Instruction *I) {
+  Type *ElemTy = I->getType()->getPointerElementType();
+  uint64_t Full = DL->getTypeStoreSize(ElemTy);
+  if (!isa<GetElementPtrInst>(I) || I->use_empty() || isUnionType(ElemTy))
+    return Full;
+  if (auto *STy = dyn_cast<StructType>(ElemTy))
+    if (isFlexibleStructure(STy))
+      return Full;
+  uint64_t Need = 1;
+  for (User *U : I->users()) {
+    if (isa<GetElementPtrInst>(U))
+      continue;
+    auto *BC = dyn_cast<BitCastInst>(U);
+    if (!BC || !BC->getDestTy()->isPointerTy())
+      return Full;
+    Type *DstTy = BC->getDestTy()->getPointerElementType();
+    if (!DstTy->isSized() || isUnionType(DstTy))
+      return Full;
+    if (auto *STy = dyn_cast<StructType>(DstTy))
+      if (isFlexibleStructure(STy))
+        return Full;
+    Need = std::max<uint64_t>(Need, DL->getTypeStoreSize(DstTy));
+  }
+  return std::min(Need, Full);
 }
 
 Value *ShadowBound::makeOverflowCmp(BuilderTy &IRB, Value *CmpPtr,
@@ -2272,9 +2309,7 @@ void ShadowBound::commitBuiltInCheck(Function &F, BuiltinCheck &BC) {
     SelectInst *Sel = getOnlySelectUser(I);
     bool OnlyStored = isOnlyStoredOrCompared(I);
     PHINode *Carried = getLoopCarriedPhi(I);
-
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(I->getType()->getPointerElementType());
+    uint64_t NeededSize = getAccessSize(I);
 
     Value *Addr = IRB.CreatePtrToInt(Carried ? (Value *)Carried : I, int64Type);
     Value *CmpBegin = IRB.CreateICmpULT(Addr, PtrBegin);
@@ -2365,9 +2400,8 @@ void ShadowBound::commitClusterCheck(Function &F, ClusterCheck &CC) {
     SelectInst *Sel = getOnlySelectUser(I);
     bool OnlyStored = isOnlyStoredOrCompared(I);
     PHINode *Carried = getLoopCarriedPhi(I);
+    uint64_t NeededSize = getAccessSize(I);
     Value *Ptr = IRB.CreatePtrToInt(Carried ? (Value *)Carried : I, int64Type);
-    uint64_t NeededSize =
-        DL->getTypeStoreSize(I->getType()->getPointerElementType());
 
     // A bitcast is an access-size (upper) check; a GEP checks the direction(s)
     // its offset can take.
