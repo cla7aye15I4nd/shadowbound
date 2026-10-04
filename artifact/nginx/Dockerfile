@@ -24,29 +24,31 @@ RUN cd nginx && \
 
 # Whole-program instrumentation at link time (-flto). This replaces the
 # pattern file config/nginx.json, which was generated for nginx 1.22.1.
+# configure runs with the default compiler: its feature tests execute the
+# programs they build, and ShadowBound programs need address-space
+# randomization off, which `docker build` cannot provide. The compiler is
+# switched at make time (nginx links with $(CC) as well).
 RUN cd nginx && \
-    ./configure --prefix=shadowbound \
-        --with-cc="$SCC -fsanitize=shadowbound -flto -fuse-ld=lld" \
-        --with-cc-opt="-Wno-unused-command-line-argument" && \
-    make -j`nproc` && \
+    ./configure --prefix=shadowbound && \
+    make CC="$SCC -fsanitize=shadowbound -flto -fuse-ld=lld -Wno-unused-command-line-argument" -j`nproc` && \
     make install
 
-# The allocator must be on nginx's LINK line. nginx links with $(CC) plus the
-# configure-time --with-ld-opt; it ignores a make-time LDFLAGS and -l in CFLAGS
-# only reaches compile steps. So pass the allocator via --with-ld-opt.
+# The allocator must be on nginx's LINK line: nginx links with $(CC) plus the
+# configure-time --with-ld-opt (it ignores a make-time LDFLAGS). But configure
+# must not run programs that use the allocator or the ShadowBound runtime
+# (both map fixed address ranges, which needs randomization off; see above),
+# so configure plainly and append the allocator to the generated link line.
 RUN cd nginx && \
-    ./configure --prefix=shadowbound-ffmalloc \
-        --with-cc="$SCC -fsanitize=shadowbound-instrument-only" \
-        --with-ld-opt="-L$SHADOWBOUND/ffmalloc -lffmalloc_st_perf -Wl,-rpath=$SHADOWBOUND/ffmalloc" && \
-    make -j`nproc` && \
+    ./configure --prefix=shadowbound-ffmalloc && \
+    sed -i 's|-Wl,-E$|-Wl,-E -L'"$SHADOWBOUND"'/ffmalloc -lffmalloc_st_perf -Wl,-rpath='"$SHADOWBOUND"'/ffmalloc|' objs/Makefile && \
+    make CC="$SCC -fsanitize=shadowbound-instrument-only" -j`nproc` && \
     make install
 
 # setup.sh installs MarkUs under $SHADOWBOUND/markus/markus-allocator.
 RUN cd nginx && \
-    ./configure --prefix=shadowbound-markus \
-        --with-cc="$SCC -fsanitize=shadowbound-instrument-only" \
-        --with-ld-opt="-L$SHADOWBOUND/markus/markus-allocator/lib -lgc -lgccpp -Wl,-rpath=$SHADOWBOUND/markus/markus-allocator/lib" && \
-    make -j`nproc` && \
+    ./configure --prefix=shadowbound-markus && \
+    sed -i 's|-Wl,-E$|-Wl,-E -L'"$SHADOWBOUND"'/markus/markus-allocator/lib -lgc -lgccpp -Wl,-rpath='"$SHADOWBOUND"'/markus/markus-allocator/lib|' objs/Makefile && \
+    make CC="$SCC -fsanitize=shadowbound-instrument-only" -j`nproc` && \
     make install
 
 COPY artifact/nginx/eval.sh /root/eval.sh
